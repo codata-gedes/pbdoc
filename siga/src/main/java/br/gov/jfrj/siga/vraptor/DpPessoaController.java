@@ -38,6 +38,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
@@ -254,10 +255,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				funcao.setIdFuncao(idFuncaoPesquisa);
 				dpPessoa.setFuncaoConfianca(funcao);
 			}
-			if (cpfPesquisa != null && !"".equals(cpfPesquisa)) {
+			if (cpfPesquisa != null && !isBlank(cpfPesquisa)) {
 				dpPessoa.setCpf(Long.valueOf(cpfPesquisa.replace(".", "").replace("-", "")));
 			}
-			dpPessoa.setBuscarFechadas(Boolean.TRUE);
 			dpPessoa.setId(Long.valueOf(0));
 			setItens(CpDao.getInstance().consultarPorFiltro(dpPessoa, paramoffset, 15));
 			result.include("itens", getItens());
