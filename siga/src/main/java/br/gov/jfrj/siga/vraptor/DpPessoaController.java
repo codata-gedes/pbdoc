@@ -24,6 +24,9 @@
  */
 package br.gov.jfrj.siga.vraptor; 
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -38,7 +41,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
@@ -237,8 +239,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				paramoffset = 0;
 			}
 			dpPessoa.setIdOrgaoUsu(idOrgaoUsu);
-			dpPessoa.setNome(Texto.removeAcento(nome != null ? nome : ""));
-			dpPessoa.setEmail(Texto.removeAcento(emailPesquisa != null ? emailPesquisa : ""));
+			dpPessoa.setNome(isNotBlank(nome) ? Texto.removeAcento(nome) : EMPTY);
+			dpPessoa.setEmail(isNotBlank(emailPesquisa) ? Texto.removeAcento(emailPesquisa) : EMPTY);
 			dpPessoa.setIdentidade(identidadePesquisa);
 			if(idCargoPesquisa != null) {
 				DpCargo cargo = new DpCargo();
@@ -255,8 +257,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				funcao.setIdFuncao(idFuncaoPesquisa);
 				dpPessoa.setFuncaoConfianca(funcao);
 			}
-			if (cpfPesquisa != null && !isBlank(cpfPesquisa)) {
-				dpPessoa.setCpf(Long.valueOf(cpfPesquisa.replace(".", "").replace("-", "")));
+			if (isNotBlank(cpfPesquisa)) {
+				dpPessoa.setCpf(Long.valueOf(cpfPesquisa.replace(".", EMPTY).replace("-", EMPTY)));
 			}
 			dpPessoa.setId(Long.valueOf(0));
 			setItens(CpDao.getInstance().consultarPorFiltro(dpPessoa, paramoffset, 15));
