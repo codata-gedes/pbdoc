@@ -414,7 +414,8 @@ public class CpDao extends ModeloDao {
 	public CpOrgaoUsuario consultarPorSigla(final CpOrgaoUsuario o) {
 		final Query query = em().createNamedQuery("consultarSiglaOrgaoUsuario");
 		query.setParameter("sigla", o.getSiglaOrgaoUsu());
-
+		query.setParameter("acronimo", o.getAcronimoOrgaoUsu());
+		
 		query.setHint("org.hibernate.cacheable", true);
 		query.setHint("org.hibernate.cacheRegion", CACHE_QUERY_HOURS);
 
