@@ -79,6 +79,14 @@ var appMesa = new Vue({
 				if (this.filtrados[i].errormsg) return true;
 			}
 			return false;
+		},
+		
+		mesaVazia: function() {
+		  if (!this.grupos || this.grupos.length == 0) {
+		    return true;
+		  }
+		  
+		  return !this.grupos.some(g => (g.grupoCounterUser && g.grupoCounterUser > 0) || (g.grupoCounterLota && g.grupoCounterLota > 0));
 		}
 	},
 	watch: {
