@@ -179,15 +179,14 @@
 					</p>
 				</div>
 			</div>
-				<div class="row mt-3"
-					v-if="!carregando && !errormsg && mesaVazia">
-					<div class="col col-12">
-						<p class="alert alert-warning">
-							<strong>Atenção!</strong> Nenhum documento na mesa.
-						</p>
-					</div>
+			<div class="row mt-3"
+				v-if="!carregando && !errormsg && mesaVazia">
+				<div class="col col-12">
+					<p class="alert alert-warning">
+						<strong>Atenção!</strong> Nenhum documento na mesa.
+					</p>
 				</div>
-		
+			</div>
 			<div class="row mt-2" style="min-height: 50vh;">
 				<div class="col-sm-12">
 					<template v-for="g in filtrados">
