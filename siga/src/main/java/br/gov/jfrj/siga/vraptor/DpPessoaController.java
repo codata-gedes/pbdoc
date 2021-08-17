@@ -735,7 +735,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			
 			Integer tamanho = 0;
 			if (paramTamanho == null) {
-				tamanho = getItens().size();
+				tamanho = dao().consultarQuantidadeDpPessoaSemIdentidade(dpPessoa);	
 			} else {
 				tamanho = paramTamanho;
 			}
