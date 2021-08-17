@@ -1283,32 +1283,49 @@ public class CpDao extends ModeloDao {
 	}
 
 	public Query queryConsultarPorFiltroDpPessoaSemIdentidadeComListaDeLotacaoOuListaDeUsuario(double quantidadeDeLotacaoOuUsuario, boolean apenasContarItens) {
-		Query query;
-		String queryTemp = "";
+
 		double quantidadeDeClausulaIN = Math.ceil(Double.valueOf(quantidadeDeLotacaoOuUsuario) / 1000);
-		if (quantidadeDeClausulaIN <= 0)
+		if (quantidadeDeClausulaIN <= 0) {
 			quantidadeDeClausulaIN = 1;
-
-		if (apenasContarItens)
-			queryTemp = "select count(pes) from DpPessoa pes";
-		else
-			queryTemp = "from DpPessoa pes ";
-
-		queryTemp += "  where (pes.cpfPessoa = :cpf or :cpf = 0)" + " and pes.orgaoUsuario.idOrgaoUsu = :idOrgaoUsu"
-				+ "  and (";
-		for (int i = 1; i <= quantidadeDeClausulaIN; i++) {
-			if (i > 1)
-				queryTemp += " or ";
-			queryTemp += " pes.lotacao.idLotacao in (:idLotacaoLista" + i + ") or pes.idPessoa in (:idPessoaLista" + i + ")";
 		}
-		queryTemp += ")"
-					+ " and pes.dataFimPessoa = null"
-					+ " and not exists (select ident.dpPessoa.idPessoaIni from CpIdentidade ident where pes.idPessoaIni = ident.dpPessoa.idPessoaIni)"
-					+ "  order by pes.lotacao.nomeLotacao, pes.nomePessoaAI, pes.cpfPessoa";
 
-		query = em().createQuery(queryTemp);
+		final StringBuilder query = new StringBuilder();
+		boolean ordenar = false;
+		if (apenasContarItens) {
+			query.append("select count(pes) from DpPessoa pes ");
+		} else {
+			query.append("from DpPessoa pes ");
+			ordenar = true;
+		}
 
-		return query;
+		query.append("where (:cpf = 0L or pes.cpfPessoa = :cpf) ")
+				.append(" and (:idOrgaoUsu = 0L or pes.orgaoUsuario.idOrgaoUsu = :idOrgaoUsu) ")
+				.append(" and ( ");
+
+		for (int i = 1; i <= quantidadeDeClausulaIN; i++) {
+			if (i > 1) {
+				query.append(" or ");
+			}
+			query.append(" pes.lotacao.idLotacao in (:idLotacaoLista")
+					.append(i)
+					.append(") or pes.idPessoa in (:idPessoaLista")
+					.append(i)
+					.append(")");
+		}
+
+		query.append(")")
+				.append(" and pes.dataFimPessoa = null")
+				.append(" and not exists ( ")
+				.append("  select ident.dpPessoa.idPessoaIni ")
+				.append("  from CpIdentidade ident ")
+				.append("  where pes.idPessoaIni = ident.dpPessoa.idPessoaIni ")
+				.append(")");
+
+		if (ordenar) {
+			query.append("  order by pes.lotacao.nomeLotacao, pes.nomePessoaAI, pes.cpfPessoa");
+		}
+
+		return em().createQuery(query.toString());
 	}
 
 	@SuppressWarnings("unchecked")

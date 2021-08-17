@@ -730,12 +730,12 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				dpPessoa.setCpf(Long.valueOf(cpfPesquisa.replace(".", "").replace("-", "")));
 			}
 			dpPessoa.setBuscarFechadas(Boolean.TRUE);
-			setItens(CpDao.getInstance().consultarPorFiltroSemIdentidade(dpPessoa, paramoffset, 15));			
+			setItens(CpDao.getInstance().consultarPorFiltroSemIdentidade(dpPessoa, paramoffset, 15));
 			result.include("itens", getItens());
 			
 			Integer tamanho = 0;
 			if (paramTamanho == null) {
-				tamanho = dao().consultarQuantidadeDpPessoaSemIdentidade(dpPessoa);	
+				tamanho = dao().consultarQuantidadeDpPessoaSemIdentidade(dpPessoa);
 			} else {
 				tamanho = paramTamanho;
 			}
