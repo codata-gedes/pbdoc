@@ -676,8 +676,7 @@ public class ExDao extends CpDao {
 		IMontadorQuery montadorQuery = carregarPlugin();
 
 		long tempoIni = System.nanoTime();
-		Query query = em().createQuery(
-				montadorQuery.montaQueryConsultaporFiltro(flt, false));
+		Query query = em().createQuery(montadorQuery.montaQueryConsultaporFiltro(flt, false));
 		preencherParametros(flt, query);
 
 		if (offset > 0) {
@@ -688,8 +687,6 @@ public class ExDao extends CpDao {
 		}
 		List l = query.getResultList();
 		long tempoTotal = System.nanoTime() - tempoIni;
-		// System.out.println("consultarPorFiltroOtimizado: " +
-		// tempoTotal/1000000 + " ms -> " + query + ", resultado: " + l);
 		return l;
 	}
 
