@@ -726,7 +726,7 @@
 						</div>
 					</div>
 					<button id="btnBuscar" type="button" value="Buscar" class="btn btn-primary" onclick="submitBusca('${siga_cliente}')">
-						<span id="buscandoSpinner" class="spinner-border d-none" role="status"></span> Pesquisar Documentos
+						<span id="buscandoSpinner" class="spinner-border d-none" role="status"></span> Buscar
 					</button>
 					<c:if
 						test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA;DOC;FE:Ferramentas;LD:Listar Documentos')}">
