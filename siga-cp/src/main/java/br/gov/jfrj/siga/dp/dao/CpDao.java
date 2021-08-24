@@ -57,6 +57,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.DateUtils;
@@ -2202,11 +2203,26 @@ public class CpDao extends ModeloDao {
 		return em().createQuery(q).getSingleResult();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<CpOrgaoUsuario> listarOrgaosUsuarios() {
-		return findAndCacheByCriteria(CACHE_QUERY_HOURS, CpOrgaoUsuario.class);
+		return this.listarOrgaosUsuarios((com.querydsl.core.types.Predicate) null);
 	}
-	
+
+	public List<CpOrgaoUsuario> listarOrgaosUsuariosAtivos() {
+		return this.listarOrgaosUsuarios(qCpOrgaoUsuario.hisAtivo.eq(1));
+	}
+
+	public List<CpOrgaoUsuario> listarOrgaosUsuarios(com.querydsl.core.types.Predicate... predicate) {
+		final JPAQuery<CpOrgaoUsuario> query = new JPAQueryFactory(em())
+				.select(qCpOrgaoUsuario)
+				.from(qCpOrgaoUsuario);
+
+		if (predicate != null) {
+			query.where(predicate);
+		}
+
+		return query.orderBy(qCpOrgaoUsuario.nmOrgaoUsu.asc()).fetch();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<DpUnidadeDTO> lotacaoPorOrgaos(Long[] orgaos) {				
 		List<Long> idOrgaos = Arrays.asList(orgaos);

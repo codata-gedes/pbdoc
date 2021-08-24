@@ -24,8 +24,8 @@
  */
 package br.gov.jfrj.siga.vraptor; 
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,6 +44,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
+
+import com.google.common.collect.Iterables;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Controller;
@@ -219,10 +221,12 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		result.include("temPermissaoParaExportarDados", temPermissaoParaExportarDados());
 		
 		if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
-			list = dao().listarOrgaosUsuarios();
+			list = dao().listarOrgaosUsuariosAtivos();
 			result.include("orgaosUsu", list);
 			if (idOrgaoUsu == null) {
-				carregarCombos(null, list.get(1).getId(), null, null, null, null, null, 0, Boolean.FALSE);
+				final CpOrgaoUsuario primeiroOrgaoUsuario = Iterables.getFirst(list, null);
+				final Long primeiroIdOrgaoUsuario = primeiroOrgaoUsuario != null ? primeiroOrgaoUsuario.getId() : null;
+				carregarCombos(null, primeiroIdOrgaoUsuario, null, null, null, null, null, 0, Boolean.FALSE);
 			}
 		} else {
 			ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
