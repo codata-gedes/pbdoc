@@ -614,10 +614,10 @@ public class ExDocumentoController extends ExController {
 			if (exDocumentoDTO.getNivelAcesso() == null) {
 				final ExNivelAcesso nivelDefault = getNivelAcessoDefault(exDocumentoDTO);
 				if (nivelDefault != null) {
-					exDocumentoDTO.setNivelAcesso(nivelDefault
-							.getIdNivelAcesso());
+					exDocumentoDTO.setNivelAcesso(nivelDefault.getIdNivelAcesso());
 				} else {
-					if ( Boolean.valueOf(System.getProperty("siga.doc.acesso.limitado"))) {
+					String isAcessoLimitado = System.getProperty("siga.doc.acesso.limitado");
+					if (isAcessoLimitado == null || Boolean.valueOf(isAcessoLimitado)) {
 						exDocumentoDTO.setNivelAcesso(ExNivelAcesso.ID_LIMITADO_AO_ORGAO);
 					} else {
 						exDocumentoDTO.setNivelAcesso(ExNivelAcesso.ID_PUBLICO);
