@@ -222,7 +222,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			list = dao().listarOrgaosUsuarios();
 			result.include("orgaosUsu", list);
 			if (idOrgaoUsu == null) {
-				carregarCombos(null, list.get(0).getId(), null, null, null, null, null, 0, Boolean.FALSE);
+				carregarCombos(null, list.get(1).getId(), null, null, null, null, null, 0, Boolean.FALSE);
 			}
 		} else {
 			ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -556,7 +556,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		cpOrgaoUsuario.setSiglaOrgaoUsu("");
 		l.setOrgaoUsuario(cpOrgaoUsuario);
 		listaLotacao.add(l);
-		if (idOrgaoUsu != null && idOrgaoUsu != 0)
+		if (idOrgaoUsu != CpConfiguracaoBL.ID_ORGAO_ROOT)
 			listaLotacao.addAll(CpDao.getInstance().consultarPorFiltro(lotacao));
 		result.include("listaLotacao", listaLotacao);
 
