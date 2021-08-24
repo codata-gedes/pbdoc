@@ -65,7 +65,7 @@
 								<label>ID</label>
 								<c:choose>
 								    <c:when test="${empty id}">
-								        <input type="text" id="id" name="id" value="${id}" maxlength="5" size="5" onKeypress="return verificaNumero(event);" class="form-control"/>
+								        <input type="text" id="id" name="id" value="${id}" maxlength="6" size="6" onKeypress="return verificaNumero(event);" class="form-control"/>
 								        <input type="hidden" name="acao" value="i"/>
 								    </c:when>    
 								    <c:otherwise>
