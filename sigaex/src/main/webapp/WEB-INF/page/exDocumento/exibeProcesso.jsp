@@ -100,10 +100,6 @@
 	});
 	
 	function removerBotoes() {
-		if($('#radioPDFSemMarcas').hasClass('active') && '${siga_cliente}' == 'GOVSP' && window.parent.painel.document.getElementById("print") != null) {
-			window.parent.painel.document.getElementById("print").remove();
-			window.parent.painel.document.getElementById("download").remove();
-		}
 		if(window.parent.painel.document.getElementById("openFile") != null) {
 			window.parent.painel.document.getElementById("openFile").remove();
 		}
@@ -254,12 +250,6 @@
 							<span style="white-space: nowrap;">
 							<input type="radio" id="radioPDF" name="formato" value="pdf" accesskey="p" onclick="exibir(htmlAtual,pdfAtual,'');">
 								<u>P</u>DF -  <a id="pdflink" accesskey="a"> <u>a</u>brir</a>
-							</input>
-							</span>
-							<span class="pl-2"></span>			
-							<span style="white-space: nowrap;">
-							<input type="radio" id="radioPDFSemMarcas" name="formato" accesskey="s" value="pdfsemmarcas" onclick="exibir(htmlAtual,pdfAtual,'semmarcas/');">
-								PDF <u>s</u>em marcas - <a id="pdfsemmarcaslink" accesskey="b"> a<u>b</u>rir</a>
 							</input>
 							</span>
 						</div>
@@ -429,12 +419,8 @@
 										<u>P</u>DF
 	<!-- 									</a> -->
 							</a>
-							<a class="btn btn-primary btn-sm notActive" data-toggle="formato" data-title="pdfsemmarcas" id="radioPDFSemMarcas" name="pdfsemmarcas" value="pdfsemmarcas" accesskey="p" onclick="toggleBotaoHtmlPdf($(this)); exibir(htmlAtual,pdfAtual,'semmarcas/');">
-										PDF Sem Marcas
-							</a>
 						</div>
 						<a class="btn-btn-primary btn-sm d-none" id="pdflink" accesskey="a"><u>a</u>brir PDF</a>
-						<a class="btn-btn-primary btn-sm d-none" id="pdfsemmarcaslink" accesskey="b">a<u>b</u>rir PDF</a>
 						<input type="hidden" name="formato" id="radio" value="html">
 					</div>
 					<button type="button" class="btn btn-secondary btn-sm" id="TelaCheia" data-toggle="button" aria-pressed="false" autocomplete="off"
@@ -461,7 +447,6 @@
 		$(document).ready(function() {
 			//se exibindo documentos reordenados, não permite visualização PDF						
 			$('#radioPDF').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Indisponível enquanto documento estiver reordenado').removeAttr('onclick').css({'cursor':'not-allowed', 'color':'rgba(0, 0, 0, 0.3)', 'border':'1px solid rgba(0, 0, 0, 0.3)'});		
-			$('#radioPDFSemMarcas').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Indisponível enquanto documento estiver reordenado').removeAttr('onclick').css({'cursor':'not-allowed', 'color':'rgba(0, 0, 0, 0.3)', 'border':'1px solid rgba(0, 0, 0, 0.3)'});
 		});
 	</script>
 </c:if>
@@ -522,18 +507,8 @@
 		
 		if ('${siga_cliente}' == 'GOVSP') {
 			document.getElementById('pdflink').href = path + refPDF + '&sigla=${sigla}';
-			
-			if ($('#radioPDFSemMarcas').hasClass('active')) {
-				document.getElementById('pdfsemmarcaslink').href = path + refPDF
-					+ "&semmarcas=1";
-			}
 		} else {
 			document.getElementById('pdflink').href = path + refPDF;
-		}
-		
-		if (document.getElementById('radioPDFSemMarcas') != null) {
-			document.getElementById('pdfsemmarcaslink').href = path + refPDF
-					+ "&semmarcas=1";
 		}
 	}
 
@@ -554,7 +529,6 @@
 			
 			if ($('#radioHTML').hasClass('active') && refHTML != '') {
 				$('#pdflink').addClass('d-none');
-				$('#pdfsemmarcaslink').addClass('d-none');
 				ifr.src = path + refHTML + refSiglaDocPrincipal;
 				ifrp.style.border = "0px solid black";
 				ifrp.style.borderBottom = "0px solid black";
@@ -563,15 +537,8 @@
 				else if (ifr.attachEvent)
 					ifr.attachEvent("onload", resize);
 			} else {
-				if ($('#radioPDFSemMarcas').hasClass('active')) {
-					$('#pdfsemmarcaslink').removeClass('d-none');
-					$('#pdflink').addClass('d-none');
-					ifr.src = path + refPDF + "&semmarcas=1";
-				} else {
-					$('#pdflink').removeClass('d-none');
-					$('#pdfsemmarcaslink').addClass('d-none');
-					ifr.src = path + refPDF + refSiglaDocPrincipal;
-				}
+				$('#pdflink').removeClass('d-none');
+				ifr.src = path + refPDF + refSiglaDocPrincipal;
 				
 				if(!refPDF.includes("completo=1")) {
 					var url = ifr.src;
@@ -593,10 +560,7 @@
 				else if (ifr.attachEvent)
 					ifr.attachEvent("onload", resize);
 			} else {
-				if (document.getElementById('radioPDFSemMarcas').checked)
-					ifr.src = path + refPDF + "&semmarcas=1"
-				else
-					ifr.src = path + refPDF;
+				ifr.src = path + refPDF;
 				
 				if(!refPDF.includes("completo=1")) {
 					var url = ifr.src;
