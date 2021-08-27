@@ -3131,7 +3131,7 @@ Pede deferimento.</span><br/><br/><br/>
                 <div style="font-family: Arial; font-size: 10pt;">
                 <p>&nbsp;</p>
                 [@corpoBIE]
-                    [#if vocativo??]
+                    [#if vocativo?has_content]
                         <p align="left" style="font-size: ${tl}; TEXT-INDENT: 2cm">${vocativo!},</p>
                     [/#if]
                     [@letra tamanho=tl]${texto_oficio!}[/@letra]
