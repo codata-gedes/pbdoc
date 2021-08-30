@@ -3120,8 +3120,8 @@ Pede deferimento.</span><br/><br/><br/>
                             [#if endereco_dest??]
                                 <tr><td>[@letra tamanho=tl]<p>[@fixcrlf var=endereco_dest! /]</p>[/@letra]</td></tr>
                             [/#if]
-                            [#if (doc.exClassificacao.descrClassificacao)??]
-                                <tr><td>[@letra tamanho=tl]<p><br/>Assunto: ${(doc.exClassificacao.descrClassificacao)!}</p>[/@letra]</td></tr>
+                            [#if (doc.descrDocumento)??]
+                                <tr><td>[@letra tamanho=tl]<p><br/>Assunto: ${(doc.descrDocumento)!}</p>[/@letra]</td></tr>
                             [/#if]
                         </table>
                     </td>
@@ -4214,7 +4214,7 @@ Pede deferimento.</span><br/><br/><br/>
     [@estiloBrasaoCentralizado tipo=_tipo tamanhoLetra=tl formatarOrgao=false numeracaoCentralizada=false incluirMioloDJE=false]
               <table style="float:none;" width="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF">
                   <tr>
-                     <td align="left" style="text-align: justify; font-family: Arial; font-size: ${tl};"><br/>Assunto: ${assunto}</td>
+                     <td align="left" style="text-align: justify; font-family: Arial; font-size: ${tl};"><br/>Assunto: ${(doc.descrDocumento)!}</td>
                   </tr>
               </table>
             <br/>
