@@ -468,7 +468,7 @@
 					<div class="row  js-siga-sp-documento-analisa-alteracao">
 						<div class="col-sm-8">
 							<div class="form-group">
-								<label>Descrição</label>
+								<label><fmt:message key="documento.assunto"/></label>
 								<textarea name="exDocumentoDTO.descrDocumento" cols="80" rows="2" id="descrDocumento" class="form-control" oninput="updateURL()">${exDocumentoDTO.descrDocumento}</textarea>
 								<small class="form-text text-muted">(preencher o campo acima com palavras-chave, sempre usando substantivos, gênero masculino e
 									singular).</small>
