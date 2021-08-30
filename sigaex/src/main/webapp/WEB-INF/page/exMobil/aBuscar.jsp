@@ -990,8 +990,8 @@ function limpaCampos()
 								<div class="row">
 									<div class="col-sm-6">
 										<div class="form-group">
-											<label><fmt:message key="tela.pesquisa.classificacao"/></label>	
-											<siga:selecao titulo="Classificação:" propriedade="classificacao" tema="simple" modulo="sigaex" urlAcao="buscar" urlSelecionar="selecionar"/>
+											<label><fmt:message key="documento.tipo.documental"/></label>	
+											<siga:selecao titulo="Tipo Documental:" propriedade="classificacao" tema="simple" modulo="sigaex" urlAcao="buscar" urlSelecionar="selecionar"/>
 										</div>
 									</div>
 								</div>	
