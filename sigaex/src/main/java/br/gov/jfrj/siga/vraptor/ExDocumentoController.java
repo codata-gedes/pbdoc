@@ -1576,8 +1576,7 @@ public class ExDocumentoController extends ExController {
 		}
 
 		if (doc.getExClassificacao() == null) {
-			throw new AplicacaoException(
-					"É necessário informar a classificação documental.");
+			throw new AplicacaoException(String.format("É necessário informar o %s", ExClassificacaoController.TIPO_DOCUMENTAL.toLowerCase()));
 		}
 
 	}
@@ -1748,11 +1747,9 @@ public class ExDocumentoController extends ExController {
 						getLotaTitular(), null, null, null,
 						exDocumentoDTO.getDoc().getExClassificacao(), null,
 						CpTipoConfiguracao.TIPO_CONFIG_CRIAR)) {
-					throw new AplicacaoException(
-							"Usuário não possui permissão de criar documento da classificação "
-									+ exDocumentoDTO.getDoc()
-											.getExClassificacao()
-											.getCodificacao());
+					throw new AplicacaoException(String.format("Usuário não possui permissão de criar documento do %s %s", 
+							ExClassificacaoController.TIPO_DOCUMENTAL.toLowerCase(), 
+							exDocumentoDTO.getDoc().getExClassificacao().getCodificacao()));
 				}
 
 				throw new AplicacaoException("Operação não permitida");
@@ -1775,9 +1772,11 @@ public class ExDocumentoController extends ExController {
 					&& (exDocumentoDTO.getDescrClassifNovo() == null || exDocumentoDTO
 							.getDescrClassifNovo().trim().length() == 0)) {
 				throw new AplicacaoException(
-						"Quando a classificação selecionada não traz informação para criação de vias, o "
-								+ "sistema exige que, antes de gravar o documento, seja informada uma sugestão de "
-								+ "classificação para ser incluída na próxima revisão da tabela de classificações.");
+						 String.format("Quando o %s selecionado não traz informação para criação de vias,"
+						 		+ " o sistema exige que, antes de gravar o documento, seja informada uma sugestão de %s "
+						 		+ "para ser incluído na próxima revisão da tabela de classificações.", 
+						 		ExClassificacaoController.TIPO_DOCUMENTAL.toLowerCase(), 
+						 		ExClassificacaoController.TIPO_DOCUMENTAL.toLowerCase()));
 			}
 
 			if (exDocumentoDTO.getDoc().getDescrDocumento() != null

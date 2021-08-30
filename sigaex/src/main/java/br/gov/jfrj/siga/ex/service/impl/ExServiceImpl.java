@@ -73,6 +73,7 @@ import br.gov.jfrj.siga.model.ContextoPersistencia;
 import br.gov.jfrj.siga.parser.PessoaLotacaoParser;
 import br.gov.jfrj.siga.parser.SiglaParser;
 import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
+import br.gov.jfrj.siga.vraptor.ExClassificacaoController;
 import br.gov.jfrj.siga.vraptor.ExMobilSelecao;
 
 @WebService(serviceName = "ExService", endpointInterface = "br.gov.jfrj.siga.ex.service.ExService", targetNamespace = "http://impl.service.ex.siga.jfrj.gov.br/")
@@ -472,7 +473,7 @@ public class ExServiceImpl implements ExService {
 							+ tipoDocumento.getDescricao());
 
 				if ((classificacaoStr == null || classificacaoStr.isEmpty()) && !modelo.isClassificacaoAutomatica())
-					throw new AplicacaoException("A Classificação não foi informada.");
+					throw new AplicacaoException(String.format("O %s não foi informado.", ExClassificacaoController.TIPO_DOCUMENTAL));
 
 				if (modelo.isClassificacaoAutomatica())
 					classificacao = modelo.getExClassificacao();
@@ -480,8 +481,8 @@ public class ExServiceImpl implements ExService {
 					classificacao = dao().consultarExClassificacao(classificacaoStr);
 
 				if (classificacao == null)
-					throw new AplicacaoException(
-							"Não foi possível encontrar uma classificação com o código informado.");
+					throw new AplicacaoException(String.format("Não foi possível encontrar um %s com o código informado", 
+							ExClassificacaoController.TIPO_DOCUMENTAL));
 				else
 					classificacao = classificacao.getClassificacaoAtual();
 
