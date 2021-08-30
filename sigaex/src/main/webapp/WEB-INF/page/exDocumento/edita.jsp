@@ -429,7 +429,7 @@
 						<div class="col-sm-5">
 							<div class="form-group">
 							<input type="hidden" name="campos" value="classificacaoSel.id" /> 
-								<label>Classificação</label>
+								<label><fmt:message key="documento.tipo.documental"/></label>
 								<siga:span id="classificacao" depende="forma;modelo">
 									<!-- OI -->
 									<siga:selecao desativar="${desativarClassif}" modulo="sigaex" propriedade="classificacao"
