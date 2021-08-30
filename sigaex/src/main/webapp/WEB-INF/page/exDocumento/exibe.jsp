@@ -1050,7 +1050,7 @@
                     parseDescricao('descricao');
            		 </script>
 							<p>
-								<b>Classificação:</b> ${docVO.classificacaoDescricaoCompleta}
+								<b><fmt:message key="documento.tipo.documental"/>:</b> ${docVO.classificacaoDescricaoCompleta}
 							</p>
 							<c:if test="${not empty docVO.dadosComplementares}">${docVO.dadosComplementares}</c:if>
 
