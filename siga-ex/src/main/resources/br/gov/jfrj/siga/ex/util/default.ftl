@@ -2822,7 +2822,7 @@ Pede deferimento.</span><br/><br/><br/>
                 <p align="left">
                      De: [#if (doc.nmLotacao)??]${doc.nmLotacao}[#else]${(doc.titular.lotacao.nomeLotacao)!}[/#if]<br/> 
                      Para: ${(doc.destinatarioString)!}<br>
-                     Assunto: ${(doc.exClassificacao.descrClassificacao)!}</p>
+                     Assunto: ${(doc.descrDocumento)!}</p>
         <span style="font-size: ${tl}"> ${texto!} </span>
                 <p style="align: justify; TEXT-INDENT: 2cm">${fecho}</p>
         [/@estiloBrasaoCentralizado]
