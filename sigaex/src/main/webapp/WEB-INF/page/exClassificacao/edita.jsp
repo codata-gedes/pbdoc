@@ -5,6 +5,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
 <%@ taglib uri="http://localhost/functiontag" prefix="f"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 
 
@@ -95,10 +96,10 @@
 	<c:choose>
 		<c:when test="${acao == 'editar_classificacao'}">
 			<c:set var="titulo_pagina"
-				value="Editar Classificação - ${exClassificacao.codificacao}"></c:set>
+				value="Editar Tipo Documental - ${exClassificacao.codificacao}"></c:set>
 		</c:when>
 		<c:otherwise>
-			<c:set var="titulo_pagina" value="Nova Classificação"></c:set>
+			<c:set var="titulo_pagina" value="Novo Tipo Documental"></c:set>
 		</c:otherwise>
 	</c:choose>
 
