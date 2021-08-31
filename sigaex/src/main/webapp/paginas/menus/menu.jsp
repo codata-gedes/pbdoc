@@ -157,8 +157,7 @@
 				<c:if
 					test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA:Sistema Integrado de Gestão Administrativa;DOC:Módulo de Documentos;FE:Ferramentas;PC:Plano de Classificação')}">
 					<li><a class="dropdown-item"
-						href="/sigaex/app/expediente/classificacao/listar">Classificação
-							Documental</a></li>
+						href="/sigaex/app/expediente/classificacao/listar"><fmt:message key="documento.tipo.documental"/></a></li>
 				</c:if>
 				<c:if
 					test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA:Sistema Integrado de Gestão Administrativa;DOC:Módulo de Documentos;FE:Ferramentas;TT:Tabela de Temporalidade')}">
@@ -258,7 +257,7 @@
 				<c:if
 					test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA:Sistema Integrado de Gestão Administrativa;DOC:Módulo de Documentos;REL:Gerar relatórios;CLSD:Classificação Documental')}">
 					<li class="dropdown-submenu"><a href="javascript:void(0);"
-						class="dropdown-item dropdown-toggle">Classificação Documental</a>
+						class="dropdown-item dropdown-toggle"><fmt:message key="documento.tipo.documental"/></a>
 						<ul class="dropdown-menu">
 							<c:if
 								test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA:Sistema Integrado de Gestão Administrativa;DOC:Módulo de Documentos;REL:Gerar relatórios;CLSD:Classificação Documental;CLASS:Relação de classificações')}">
