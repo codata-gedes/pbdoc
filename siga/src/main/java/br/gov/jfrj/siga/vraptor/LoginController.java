@@ -90,7 +90,6 @@ public class LoginController extends SigaController {
 		
 		result.include("fAviso", "21-11-2019".equals(df.format(c.getTime())));
 		result.include("avisoMensagem", "Prezado usuário, o sistema SP Sem Papel passa por instabilidade e a equipe técnica está trabalhando para solucionar o mais rápido possível, assim que restabelecido essa mensagem sairá do ar.");
-		result.include("versao", manifest.get("Siga-Versao"));
 		result.include("cont", cont);
 	}
 

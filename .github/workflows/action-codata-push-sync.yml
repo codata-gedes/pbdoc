@@ -1,0 +1,15 @@
+name: CODATA push Synchronization
+on: push
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Push to CODATA
+        run: |
+          git config --global user.name '${{ secrets.CODATA_SYNC_NAME }}'
+          git config --global user.email '${{ secrets.CODATA_SYNC_EMAIL }}'
+          git remote set-url origin https://${{ secrets.CODATA_SYNC_USERNAME }}:${{ secrets.CODATA_SYNC_PASSWORD }}@${{ secrets.CODATA_SYNC_REMOTE_URL }}/${{ secrets.CODATA_SYNC_REMOTE_REPOSITORY_PATH }}
+          git push

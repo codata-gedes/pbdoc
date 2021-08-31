@@ -107,16 +107,19 @@
 									</button>																														
 								</div>
 							</c:if>
-							<div class="row pt-3">
+							<div class="row mt-5">
 								<div class="col">
 									<div class="text-center">
 										<button type="submit" class="btn btn-lg btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> Entrar</button>								
-										<div class="mt-4">
+										<div class="mt-3">
 											<c:if test="${siga_cliente != 'GOVSP'}">
 												<a href="/siga/public/app/usuario/incluir_usuario"
 													class="btn btn-secondary btn-block mb-2"><fmt:message key = "usuario.sounovo"/></a> 
 											</c:if>
-											<a href="/siga/public/app/usuario/esqueci_senha" class="btn btn-link btn-block"><strong>Esqueci minha senha</strong></a>
+											<div class="d-flex justify-content-between">
+												<a href="/siga/public/app/usuario/esqueci_senha" class="btn btn-sm btn-link"><strong>Esqueci Minha Senha</strong></a>
+												<a href="//portal.pbdoc.pb.gov.br" target="_blank" class="btn btn-sm btn-link">Sobre o PBdoc</a>
+											</div>
 										</div>
 										
 										<c:choose>
@@ -127,19 +130,6 @@
 												<a href="/siga/public/app/loginSSO"class="btn btn-lg btn-dark btn-block">${siga_cliente_sso_btn_txt}</a>
 											</c:when>
 										</c:choose>
-										
-										<c:if test="${siga_cliente ne 'GOVSP'}">
-											<div class="mt-3">
-											    <div class="d-flex justify-content-between">
-											    	   	<div>
-											    		Versão: ${versao}
-											    	    </div>
-											    	    <div>
-											    		<a class="text-top" href="https://portal.pbdoc.pb.gov.br/" target="_blank" class="btn btn-link">Sobre o PBdoc</a> 
-											    	    </div>
-											    </div>
-											</div>
-										</c:if>
 									</div>
 								</div>
 							</div>

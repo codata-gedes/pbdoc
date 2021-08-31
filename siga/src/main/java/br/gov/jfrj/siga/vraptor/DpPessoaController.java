@@ -29,8 +29,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,7 +83,7 @@ import br.gov.jfrj.siga.model.Selecionavel;
 @Controller
 public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPessoa, DpPessoaDaoFiltro> {
 
-	private static final Logger LOG = Logger.getLogger(DpPessoaController.class);
+	private static final Logger log = Logger.getLogger(DpPessoaController.class);
 	
 	private Long orgaoUsu;
 	private DpLotacaoSelecao lotacaoSel;
@@ -358,7 +358,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	    					("CORPORATIVO.DP_PESSOA_UNIQUE_PESSOA_ATIVA".equalsIgnoreCase(((ConstraintViolationException)e.getCause()).getConstraintName()))) {
 						result.include(SigaModal.ALERTA, SigaModal.mensagem("Ocorreu um problema no cadastro da pessoa"));
 	    			} else {
-	    				LOG.error("Erro ao ativar pessoa " + pessoa + ": " + e.getMessage(), e);
+	    				log.error("Erro ao ativar pessoa " + pessoa + ": " + e.getMessage(), e);
 	    				throw new AplicacaoException("Erro na gravação", 0, e);
 	    			}
 				}
@@ -791,7 +791,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Post
 	@Path("app/pessoa/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa,
-			Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa) throws UnsupportedEncodingException {
+			Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa) throws IOException {
 
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 
@@ -829,11 +829,22 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			List<DpPessoa> lista = CpDao.getInstance().consultarPessoaComOrgaoFuncaoCargo(dpPessoa);
 			
 			if (lista.size() > 0) {
-				InputStream inputStream = null;
-				StringBuffer texto = new StringBuffer();
-				texto.append(
-						"Sigla do Órgão;Cargo;Função de Confiança;Sigla da Unidade;Nome;Data de Nascimento;CPF;E-mail;Usuário;RG;Órgão Expedidor;UF;Data de Expedição;Status"
-								+ System.lineSeparator());
+				StringBuilder texto = new StringBuilder()
+						.append("Sigla do Órgão;")
+						.append("Cargo;")
+						.append("Função de Confiança;")
+						.append("Sigla da Unidade;")
+						.append("Nome;")
+						.append("Data de Nascimento;")
+						.append("CPF;")
+						.append("E-mail;")
+						.append("Usuário;")
+						.append("RG;")
+						.append("Órgão Expedidor;")
+						.append("UF;")
+						.append("Data de Expedição;")
+						.append("Status")
+						.append(System.lineSeparator());
 
 				for (DpPessoa p : lista) {
 					texto.append(p.getOrgaoUsuario().getSiglaOrgaoUsu() + ";");
@@ -853,9 +864,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 					texto.append(System.lineSeparator());
 				}
 
-				inputStream = new ByteArrayInputStream(texto.toString().getBytes("ISO-8859-1"));
-
-				return new InputStreamDownload(inputStream, "text/csv", "pessoas.csv");
+				try (InputStream inputStream = new ByteArrayInputStream(texto.toString().getBytes())) {
+					return new InputStreamDownload(inputStream, "text/csv", "pessoas.csv");
+				}
 			} else {
 				if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {					
 					result.include("orgaosUsu", dao().listarOrgaosUsuarios());					

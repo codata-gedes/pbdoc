@@ -24,8 +24,14 @@
  */
 package br.gov.jfrj.siga.model.dao;
 
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang.StringUtils.EMPTY;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -33,6 +39,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
@@ -41,6 +48,9 @@ import br.gov.jfrj.siga.model.ContextoPersistencia;
 public abstract class ModeloDao {
 
 	private static final Logger log = Logger.getLogger(ModeloDao.class);
+
+	private static final char WHITESPACE_CHAR = ' ';
+	private static final char PERCENT_SIGN_CHAR = '%';
 
 	protected String cacheRegion = null;
 
@@ -204,4 +214,48 @@ public abstract class ModeloDao {
 		EntityManager em = em();
 		return em != null && em.isOpen() && em.getTransaction() != null && em.getTransaction().isActive();
 	}
+
+	protected String queryParamOuStringVazia(Optional<String> p) {
+		return p.map(StringUtils::trimToEmpty)
+				.map(StringUtils::upperCase)
+				.map(valor -> valor.replace(WHITESPACE_CHAR, PERCENT_SIGN_CHAR))
+				.orElse(EMPTY);
+	}
+
+	protected String queryParamOuStringVazia(String p) {
+		return this.queryParamOuStringVazia(ofNullable(p));
+	}
+
+	protected Long queryParamOuZeroLong(Optional<Long> p) {
+		return p.orElse(0L);
+	}
+
+	protected Long queryParamOuZeroLong(Long p) {
+		return p != null ? p : 0L;
+	}
+
+	protected Integer queryParamOuZeroInteger(Optional<Integer> p) {
+		return p.orElse(0);
+	}
+
+	protected Integer queryParamOuZeroInteger(Integer p) {
+		return p != null ? p : 0;
+	}
+
+	protected BigInteger queryParamOuZeroBigInteger(Optional<BigInteger> p) {
+		return p.orElse(BigInteger.ZERO);
+	}
+
+	protected BigInteger queryParamOuZeroBigInteger(BigInteger p) {
+		return p != null ? p : BigInteger.ZERO;
+	}
+
+	protected BigDecimal queryParamOuZeroBigDecimal(Optional<BigDecimal> p) {
+		return p.orElse(BigDecimal.ZERO);
+	}
+
+	protected BigDecimal queryParamOuZeroBigDecimal(BigDecimal p) {
+		return p != null ? p : BigDecimal.ZERO;
+	}
+
 }

@@ -8,6 +8,8 @@
 <%@ attribute name="incluirJs"%>
 <%@ attribute name="incluirBS" required="false"%>
 
+<c:set var="siga_version" scope="request" value="${f:env('TAG_GIT')}" />
+
 <!--[if gte IE 5.5]><script language="JavaScript" src="/siga/javascript/jquery.ienav.js" type="text/javascript"></script><![endif]-->
 
 <c:choose>
@@ -100,18 +102,16 @@
 								<img src="/siga/imagens/pbdoc.png" style="max-width: 12rem;"/>
 							</a>
 						</div>
-						<c:if test="${not empty versao}">
-							<div class="versao">
-								<small>v${versao}</small>
-							</div>
-						</c:if>
+						<div class="versao">
+							<small>${siga_version}</small>
+						</div>
 					</div>
 					<div class="col-md-4 align-self-center">
 						<a href="//codata.pb.gov.br/" role="link" target="_blank"><img class="mx-auto d-block" src="/siga/imagens/codata.png" style="max-width: 12rem;"></a>
 					</div>
 					<div class="col-md-4 align-self-center">
 						<a href="//paraiba.pb.gov.br/" role="link" target="_Blank"><img class="mx-auto d-block" src="/siga/imagens/governo-paraiba.svg" alt="Governo do Estado da Paraíba" style="max-width: 10rem;"></a></p>
-					</div>			
+					</div>
 				</div>
 			</div>
 		</div>

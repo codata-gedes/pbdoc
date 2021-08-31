@@ -24,6 +24,7 @@
 package br.gov.jfrj.siga.dp.dao;
 
 import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
@@ -1393,49 +1394,16 @@ public class CpDao extends ModeloDao {
 
 	@SuppressWarnings("unchecked")
 	public List<DpPessoa> consultarPessoaComOrgaoFuncaoCargo(final DpPessoa pes) {
-		try {
-			final Query query;
-
-			query = em().createNamedQuery("consultarPessoaComOrgaoFuncaoCargo");
-
-			query.setParameter("nome", pes.getNomePessoa().toUpperCase().replace(' ', '%'));
-			query.setParameter("identidade", pes.getIdentidade());
-
-			if (pes.getEmailPessoa() != null) {
-				query.setParameter("email", pes.getEmailPessoa().toUpperCase().replace(' ', '%'));
-			}
-
-			if (pes.getCpfPessoa() != null && !"".equals(pes.getCpfPessoa())) {
-				query.setParameter("cpf", Long.valueOf(pes.getCpfPessoa()));
-			} else {
-				query.setParameter("cpf", 0L);
-			}
-
-			if (pes.getOrgaoUsuario() != null)
-				query.setParameter("idOrgaoUsu", pes.getOrgaoUsuario().getId());
-			else
-				query.setParameter("idOrgaoUsu", 0L);
-
-			if (pes.getLotacao() != null)
-				query.setParameter("lotacao", pes.getLotacao().getId());
-			else
-				query.setParameter("lotacao", 0L);
-
-			if (pes.getCargo() != null)
-				query.setParameter("cargo", pes.getCargo().getId());
-			else
-				query.setParameter("cargo", 0L);
-
-			if (pes.getFuncaoConfianca() != null)
-				query.setParameter("funcao", pes.getFuncaoConfianca().getId());
-			else
-				query.setParameter("funcao", 0L);
-
-			final List<DpPessoa> l = query.getResultList();
-			return l;
-		} catch (final NullPointerException e) {
-			return null;
-		}
+		return em().createNamedQuery("consultarPessoaComOrgaoFuncaoCargo")
+			.setParameter("nome", queryParamOuStringVazia(pes.getNomePessoa()))
+			.setParameter("identidade", queryParamOuStringVazia(pes.getIdentidade()))
+			.setParameter("email", queryParamOuStringVazia(pes.getEmailPessoa()))
+			.setParameter("cpf", queryParamOuZeroLong(pes.getCpfPessoa()))
+			.setParameter("idOrgaoUsu", queryParamOuZeroLong(ofNullable(pes.getOrgaoUsuario()).map(CpOrgaoUsuario::getId)))
+			.setParameter("lotacao", queryParamOuZeroLong(ofNullable(pes.getLotacao()).map(DpLotacao::getId)))
+			.setParameter("cargo", queryParamOuZeroLong(ofNullable(pes.getCargo()).map(DpCargo::getId)))
+			.setParameter("funcao", queryParamOuZeroLong(ofNullable(pes.getFuncaoConfianca()).map(DpFuncaoConfianca::getId)))
+			.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
