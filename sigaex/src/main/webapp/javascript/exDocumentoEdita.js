@@ -95,6 +95,7 @@ function validar(silencioso) {
 	personalizacaoJuntar();
 	
 	var descr = document.getElementsByName('exDocumentoDTO.descrDocumento')[0].value;
+	var classificacao = document.getElementById('formulario_exDocumentoDTO.classificacaoSel_id');
 	var eletroHidden = document.getElementById('eletronicoHidden');
 	var eletro1 = document.getElementById('eletronicoCheck1');
 	var eletro2 = document.getElementById('eletronicoCheck2');
@@ -106,6 +107,10 @@ function validar(silencioso) {
 	if (descricaoAutomatica == null && (descr == null || descr == "")) {
 		aviso("Preencha o campo Descrição antes de gravar o documento.",
 				silencioso);
+		return false;
+	}
+	if (classificacao == null || classificacao.value == "") {
+		aviso("Preencha o campo 'Tipo Documental' antes de gravar o documento.", silencioso);
 		return false;
 	}
 	if ((temCossignatarios && temCossignatarios.value === 'true') && (!subscritor || !subscritor.value)) {
