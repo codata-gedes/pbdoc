@@ -8,7 +8,7 @@ import br.gov.jfrj.siga.base.SigaMessages;
 
 public enum TipoResponsavelEnum {
 	
-	MATRICULA(1, SigaMessages.getMessage("usuario.matricula")),
+	MATRICULA(1, SigaMessages.getMessage("usuario.usuario")),
 	LOTACAO(2, SigaMessages.getMessage("usuario.lotacao")),
 	EXTERNO(3, SigaMessages.getMessage("responsavel.externo")),
 	CAMPO_LIVRE(4, SigaMessages.getMessage("responsavel.campo.livre"));
