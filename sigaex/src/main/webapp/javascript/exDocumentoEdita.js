@@ -105,8 +105,7 @@ function validar(silencioso) {
 	var temCossignatarios = document.getElementById('temCossignatarios');
 	var descricaoAutomatica = document.getElementById('descricaoAutomatica');
 	if (descricaoAutomatica == null && (descr == null || descr == "")) {
-		aviso("Preencha o campo Descrição antes de gravar o documento.",
-				silencioso);
+		aviso("Preencha o campo 'Assunto' antes de gravar o documento.", silencioso);
 		return false;
 	}
 	if (classificacao == null || classificacao.value == "") {

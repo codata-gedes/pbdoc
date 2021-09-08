@@ -696,7 +696,7 @@
 
 					<div class="form-row">
 						<div class="form-group col-md-6">
-							<label for="classificacao"><fmt:message key="tela.pesquisa.classificacao"/></label>
+							<label for="classificacao"><fmt:message key="documento.tipo.documental"/></label>
 							<siga:selecao propriedade="classificacao" modulo="sigaex" tema="simple"
 								urlAcao="buscar" urlSelecionar="selecionar" />
 

@@ -5,6 +5,7 @@
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
 <%@ taglib uri="http://localhost/functiontag" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 
 
@@ -50,7 +51,7 @@
 	<div class="container-fluid">
 		<div class="card bg-light mb-3">
 			<div class="card-header">
-				<h5>Pesquisa de Classificação Documental</h5>
+				<h5>Pesquisa de <fmt:message key="documento.tipo.documental"/></h5>
 			</div>
 
 			<div class="card-body">
@@ -65,7 +66,7 @@
 
 					<div class="row">
 						<div class="col">
-							<h5>Dados da Classificação</h5>
+							<h5>Dados do <fmt:message key="documento.tipo.documental"/></h5>
 						</div>
 					</div>
 					

@@ -315,7 +315,7 @@
 										<th class="text-left">Tempo</th>
 										<th class="text-left"><fmt:message key="usuario.lotacao"/></th>
 										<th class="text-left">Evento</th>
-										<th class="text-left">Descrição</th>
+										<th class="text-left"><fmt:message key="documento.assunto"/></th>
 									</tr>
 								</thead>
 								<c:set var="evenorodd" value="odd" />
@@ -1025,7 +1025,7 @@
 								<b>Modelo:</b> ${docVO.modelo}
 							</p>
 							<p id="descricao">
-								<b>Descrição:</b> ${docVO.descrDocumento}
+								<b><fmt:message key="documento.assunto"/>:</b> ${docVO.descrDocumento}
 							</p>
 							<script language="javascript">
                     function parseDescricao(id){
@@ -1050,7 +1050,7 @@
                     parseDescricao('descricao');
            		 </script>
 							<p>
-								<b>Classificação:</b> ${docVO.classificacaoDescricaoCompleta}
+								<b><fmt:message key="documento.tipo.documental"/>:</b> ${docVO.classificacaoDescricaoCompleta}
 							</p>
 							<c:if test="${not empty docVO.dadosComplementares}">${docVO.dadosComplementares}</c:if>
 

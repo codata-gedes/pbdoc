@@ -1258,7 +1258,7 @@ public class ExBL extends CpBL {
 
 			if (fReclassif) {
 				mov.setExClassificacao(novaClassif);
-				mov.setDescrMov("Classificação documental alterada para " + novaClassif.getDescricaoSimples()
+				mov.setDescrMov("Tipo documental alterado para " + novaClassif.getDescricaoSimples()
 						+ " | Motivo: " + motivo);
 			} else
 				mov.setDescrMov(motivo);
@@ -2941,15 +2941,15 @@ public class ExBL extends CpBL {
 
 		if (doc.getExClassificacao() == null)
 			throw new AplicacaoException(
-					"Não é possível finalizar documento sem que seja informada a classificação documental.");
+					"Não é possível finalizar documento sem que seja informada o tipo documental.");
 
 		if (classificacaoValidaModelo != null && classificacaoValidaModelo.isAtivo()
 				&& !doc.getExClassificacao().equivale(classificacaoValidaModelo))
 			throw new AplicacaoException(
-					"Classificação documental do modelo foi alterada. Edite e grave o documento para atualizá-lo.");
+					"Tipo documental do modelo foi alterado. Edite e grave o documento para atualizá-lo.");
 
 		if (doc.getExClassificacao().getAtual() == null)
-			throw new AplicacaoException("Classificação documental encerrada. Edite o documento para escolher outra.");
+			throw new AplicacaoException("Tipo documental encerrado. Edite o documento para escolher outra.");
 
 		if (doc.getExModelo() != null && doc.getExModelo().isFechado()) {
 			throw new AplicacaoException("Este modelo não está mais em uso. Selecione outro na tela de edição");
@@ -6651,13 +6651,13 @@ public class ExBL extends CpBL {
 		if (filhos.size() > 0
 				&& m.calcularNivel(exClassDest.getCodificacao()) > m.calcularNivel(exClassOrigem.getCodificacao())) {
 			throw new AplicacaoException(
-					"O nível do destino é maior do que o nível da origem! Os filhos não caberão na hierarquia da classificação documental!");
+					"O nível do destino é maior do que o nível da origem! Os filhos não caberão na hierarquia do tipo documental!");
 		}
 
 		ExClassificacao classExistente = dao().consultarPorSigla(exClassDest);
 		if (classExistente != null) {
 			throw new AplicacaoException(
-					"A classificação destino já existe! <br/><br/>" + classExistente.getCodificacao());
+					"O tipo documental destino já existe! <br/><br/>" + classExistente.getCodificacao());
 		}
 
 		String mascaraDestino = m.getMscFilho(exClassDest.getCodificacao(), true);
@@ -6853,7 +6853,7 @@ public class ExBL extends CpBL {
 			}
 
 			throw new AplicacaoException(
-					"não é possível excluir a classificação documental, pois estáassociada ao(s) seguinte(s) modelo(s):<br/><br/>"
+					"não é possível excluir o tipo documental, pois está associado ao(s) seguinte(s) modelo(s):<br/><br/>"
 							+ sb.toString());
 		}
 

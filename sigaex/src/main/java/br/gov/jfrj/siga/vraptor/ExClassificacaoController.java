@@ -60,6 +60,8 @@ public class ExClassificacaoController
 	private static final String ACESSO_SIGA_DOC_FE_PC = "DOC:Módulo de Documentos;FE:Ferramentas;PC:Plano de Classificação";
 	private String[] nivelSelecionado;
 	private Integer nivelAlterado;
+	
+	public static final String TIPO_DOCUMENTAL = "Tipo Documental";
 
 	/**
 	 * @deprecated CDI eyes only
@@ -160,9 +162,9 @@ public class ExClassificacaoController
 		ExClassificacao exClass = buscarExClassificacao(codificacao);
 
 		if (exClass == null && !acao.equals("nova_classificacao")) {
-			throw new AplicacaoException(
-					"A classificação documental não está disponível: "
-							+ codificacao);
+			throw new AplicacaoException(String.format("O %s não está disponível: %s", 
+							 TIPO_DOCUMENTAL.toLowerCase(), 
+							 codificacao));
 		}
 
 		result.include("exClassificacao", exClass);
@@ -190,17 +192,16 @@ public class ExClassificacaoController
 
 		if (Utils.empty(exClassificacao.getCodificacao())
 				|| Utils.empty(exClassificacao.getDescrClassificacao())) {
-			throw new AplicacaoException(
-					"Preencha o código da classificação e a descrição!");
+			throw new AplicacaoException(String.format("Preencha o código do %s e a descrição!", 
+					TIPO_DOCUMENTAL.toLowerCase()));
 		}
 
 		if (acao.equals("nova_classificacao")) {
 			ExClassificacao exClassExistente = buscarExClassificacao(exClassificacao
 					.getCodificacao());
 			if (exClassExistente != null) {
-				throw new AplicacaoException(
-						"A classificação documental já existe: "
-								+ exClassExistente.getCodificacao());
+				throw new AplicacaoException(String.format("O %s já existe: %s", 
+						TIPO_DOCUMENTAL.toLowerCase(), exClassExistente.getCodificacao()));
 			}
 		}
 
@@ -244,12 +245,12 @@ public class ExClassificacaoController
 
 			}
 
-			setMensagem("Classificação salva!");
+			setMensagem(String.format("%s salvo!", TIPO_DOCUMENTAL));
 			result.redirectTo("editar?codificacao="
 					+ exClassificacao.getCodificacao()
 					+ "&acao=editar_classificacao");
 		} catch (Exception e) {
-			throw new Exception("Não foi possível gravar classificação no banco de dados.", e);
+			throw new Exception("Não foi possível gravar no banco de dados.", e);
 		}
 	}
 
@@ -265,8 +266,8 @@ public class ExClassificacaoController
 					.excluirExClassificacao(exClass, getIdentidadeCadastrante());
 			result.redirectTo(this).lista();
 		} catch (Exception e) {
-			throw new Exception(
-					"Não foi possível excluir classificação do banco de dados.", e);
+			throw new Exception(String.format("Não foi possível excluir %s do banco de dados. %s", 
+					TIPO_DOCUMENTAL.toLowerCase(), e.getMessage()));
 		}
 	}
 
@@ -287,7 +288,7 @@ public class ExClassificacaoController
 			ExClassificacao exClassAntiga = buscarExClassificacao(codificacao);
 			ExVia via = idVia != null ? dao().consultar(idVia, ExVia.class, false) : new ExVia();
 			if (exClassAntiga == null){
-				throw new AplicacaoException("Erro ao obter a classificação");
+				throw new AplicacaoException(String.format("Erro ao obter o %s", TIPO_DOCUMENTAL)); 
 			}
 			ExClassificacao exClassNovo = Ex.getInstance().getBL()
 					.getCopia(exClassAntiga);
@@ -384,7 +385,7 @@ public class ExClassificacaoController
 
 			ExClassificacao exClassAntiga = buscarExClassificacao(codificacao);
 			if (exClassAntiga == null) {
-				throw new AplicacaoException("Erro ao obter a classificação");
+				throw new AplicacaoException(String.format("Erro ao obter o %s", TIPO_DOCUMENTAL));
 			}
 
 			ExClassificacao exClassNovo = Ex.getInstance().getBL()
