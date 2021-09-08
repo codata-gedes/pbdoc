@@ -91,6 +91,26 @@ function gravarDoc() {
 	frm.submit();
 }
 
+function gravarDocEAssinar() {
+	clearTimeout(saveTimer);
+	if (!validar(false)) {
+		triggerAutoSave();
+		return false;
+	}
+	frm.action = 'gravarAssinar';
+	window.customOnsubmit = function() {
+		return true;
+	};
+	if (typeof (frm.submitsave) != "undefined")
+		frm.submit = frm.submitsave;
+
+	// Dispara a função onSave() do editor, caso exista
+	if (typeof (onSave) == "function")
+		onSave();
+		
+	frm.submit();
+}
+
 function validar(silencioso) {
 	personalizacaoJuntar();
 	
