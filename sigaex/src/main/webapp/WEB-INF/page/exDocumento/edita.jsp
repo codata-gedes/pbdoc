@@ -68,6 +68,7 @@
 				<input type="hidden" name="jsonHierarquiaDeModelos" value="${jsonHierarquiaDeModelos}" />
 				<input type="hidden" name="cliente" id="cliente" value="${siga_cliente}">
 				<input type="hidden" id="visualizador" value="${f:resource('/sigaex.pdf.visualizador') }"/>
+				<input type="hidden" id="gravarAssinar" name="exDocumentoDTO.assinar" value="false" />
 				<c:choose>
 					<c:when	test="${(exDocumentoDTO.doc.eletronico) && (exDocumentoDTO.doc.numExpediente != null)}">
 						<c:set var="estiloTipo" value="display: none" />
@@ -577,7 +578,7 @@
 				<div class="row mt-4">
 					<div class="col-sm-8"> 
 						<button id="btnGravar" type="button" onclick="javascript: gravarDoc(); return false;" name="gravar" class="btn btn-primary" accesskey="g" title="Apenas grava o documento podendo continuar a Edição"><u>G</u>ravar</button> 
-						<button type="button" onclick="javascript: gravarDocEAssinar(); return false;" name="finalizareGravar" class="btn btn-primary" accesskey="f" title="Finalizar documento em definitivo e em seguida realizar assinatura digital"><u>F</u>inalizar e Assinar</button>
+						<button type="button" onclick="javascript: gravarAssinarDoc(); return false;" name="finalizareGravar" class="btn btn-primary" accesskey="f" title="Finalizar documento em definitivo e em seguida realizar assinatura digital"><u>F</u>inalizar e Assinar</button>
 						<c:if test='${exDocumentoDTO.tipoDocumento == "interno"}'>
 							<c:if test="${not empty exDocumentoDTO.modelo.nmArqMod or exDocumentoDTO.modelo.conteudoTpBlob == 'template/freemarker'}">
 								<button type="button" name="ver_doc" onclick="javascript: popitup_documento(false); return false;" class="btn btn-info ${hide_only_GOVSP}" accesskey="v"><u>V</u>er Documento</button>

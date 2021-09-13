@@ -1695,21 +1695,14 @@ public class ExDocumentoController extends ExController {
 	}
 
 	@Transacional
-	@Post({"/app/expediente/doc/gravar", "/app/expediente/doc/gravarAssinar"})
+	@Post("/app/expediente/doc/gravar")
 	public void gravar(final ExDocumentoDTO exDocumentoDTO,
 			final String[] vars, final String[] campos,
 			final UploadedFile arquivo, String jsonHierarquiaDeModelos) {
 		
 		final Ex ex = Ex.getInstance();
 		final ExBL exBL = ex.getBL();
-		final String pathAssinar = request.getServletPath(); 
 		
-		boolean assinar = false;
-		
-		if (pathAssinar.contains("/app/expediente/doc/gravarAssinar")) {
-			assinar = true;
-		}
-
 		try {
 			buscarDocumentoOuNovo(true, exDocumentoDTO);
 			if (exDocumentoDTO.getDoc() == null) {
@@ -1930,7 +1923,7 @@ public class ExDocumentoController extends ExController {
 							.getDtRegDocDDMMYY());
 			result.use(Results.http()).body(body);
 		} else {
-			if (assinar == true) {
+			if (exDocumentoDTO.isAssinar()) {
 				final String url = MessageFormat.format(
 						"assinar?sigla={0}{1}",
 						exDocumentoDTO.getDoc().getSigla(),

@@ -229,6 +229,8 @@ public class ExDocumentoDTO {
 	private List<ExTipoDocumento> tiposDocumento;
 	
 	private List<ExNivelAcesso> listaNivelAcesso;
+	
+	private boolean assinar;
 
 	public ExDocumentoDTO() {
 		classificacaoSel = new ExClassificacaoSelecao();
@@ -1020,6 +1022,14 @@ public class ExDocumentoDTO {
     
     public List<ExNivelAcesso> getListaNivelAcesso() {
 		return listaNivelAcesso;
+	}
+
+	public boolean isAssinar() {
+		return assinar;
+	}
+
+	public void setAssinar(boolean assinar) {
+		this.assinar = assinar;
 	}
 
 }

@@ -70,45 +70,33 @@ function sbmt(id) {
 
 // <c:set var="url" value="gravar" />
 function gravarDoc() {
-	
-	clearTimeout(saveTimer);
-	if (!validar(false)) {
-		triggerAutoSave();
-		return false;
-	}
-	frm.action = 'gravar';
-	window.customOnsubmit = function() {
-		return true;
-	};
-	if (typeof (frm.submitsave) != "undefined")
-		frm.submit = frm.submitsave;
-
-	// Dispara a função onSave() do editor, caso exista
-	if (typeof (onSave) == "function")
-		onSave();
-
-	document.getElementById("btnGravar").disabled = true;
-	frm.submit();
+    gravar(false);
 }
 
-function gravarDocEAssinar() {
-	clearTimeout(saveTimer);
-	if (!validar(false)) {
-		triggerAutoSave();
-		return false;
-	}
-	frm.action = 'gravarAssinar';
-	window.customOnsubmit = function() {
-		return true;
-	};
-	if (typeof (frm.submitsave) != "undefined")
-		frm.submit = frm.submitsave;
+function gravarAssinarDoc() {
+    gravar(true);
+}
 
-	// Dispara a função onSave() do editor, caso exista
-	if (typeof (onSave) == "function")
-		onSave();
-		
-	frm.submit();
+function gravar(assinar) {
+    clearTimeout(saveTimer);
+    if (!validar(false)) {
+        triggerAutoSave();
+        return false;
+    }
+    frm.action = 'gravar';
+    window.customOnsubmit = function() {
+        return true;
+    };
+    if (typeof (frm.submitsave) != "undefined")
+        frm.submit = frm.submitsave;
+
+    // Dispara a função onSave() do editor, caso exista
+    if (typeof (onSave) == "function")
+        onSave();
+
+    document.getElementById("btnGravar").disabled = true;
+    document.getElementById("gravarAssinar").value = assinar ? "true" : "false";
+    frm.submit();
 }
 
 function validar(silencioso) {
