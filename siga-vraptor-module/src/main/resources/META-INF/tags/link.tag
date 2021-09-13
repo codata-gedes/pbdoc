@@ -20,14 +20,12 @@
 <%@ attribute name="explicacao"%>
 <%@ attribute name="post"%>
 
-
-
 <c:choose>
 	<c:when test="${siga_cliente == 'GOVSP'}">
 		<c:set var="btnClass" value="btn btn-sm btn-light" />
 	</c:when>
 	<c:otherwise>
-		<c:set var="btnClass" value="btn btn-sm btn-dark text-white" />
+		<c:set var="btnClass" value="btn btn-sm btn-link" />
 	</c:otherwise>
 </c:choose>
 
@@ -72,6 +70,7 @@
 	<c:if test="${empty url}">${img}${title}</c:if>
 	${pre}
 	<c:if test="${not empty url}">
+		<li>
 		<c:choose>
 			<c:when test="${not empty modal}">
 				<a id="${linkId}"
@@ -112,6 +111,7 @@
 				</c:choose>
 			</c:otherwise>
 		</c:choose>
+		</li>
 	</c:if>
 	${pos}
 </c:if>

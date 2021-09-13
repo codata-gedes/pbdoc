@@ -18,14 +18,14 @@
 </c:if>
 
 <c:if test="${empty linkInline}">
-	<div class="gt-table-action-list ${classeCss}" style="${estilo}">
+	<ul class="gt-table-action-list nav ${classeCss}" style="${estilo}">
 </c:if>
 
 <jsp:doBody/>
 
 <c:if test="${empty linkInline}">
-	</div>
+	</ul>
 </c:if>
-<c:remove var="linkSeparator" scope="request" />
 
+<c:remove var="linkSeparator" scope="request" />
 <c:remove var="linkInline" scope="request" />
