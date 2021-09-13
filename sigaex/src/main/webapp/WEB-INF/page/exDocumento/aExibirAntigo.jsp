@@ -226,12 +226,12 @@
 										</siga:links>
 									</td>
 									<c:if test="${exibirCompleto != 'true' and mov.duracaoSpan > 0}">
-										<td class="duracaoborderbottom text-center bg-white" rowspan="${mov.duracaoSpan}">
+										<td class="duracaoborderbottom text-center" rowspan="${mov.duracaoSpan}">
 											${mov.duracao}
 										</td>
 									</c:if>
 									<c:if test="${exibirCompleto == 'true' and mov.duracaoSpanExibirCompleto > 0}">
-										<td class="duracaoborderbottom text-center bg-white" rowspan="${mov.duracaoSpanExibirCompleto}">
+										<td class="duracaoborderbottom text-center" rowspan="${mov.duracaoSpanExibirCompleto}">
 											${mov.duracao}
 										</td>
 									</c:if>
