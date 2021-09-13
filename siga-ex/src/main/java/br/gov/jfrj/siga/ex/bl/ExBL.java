@@ -3380,6 +3380,8 @@ public class ExBL extends CpBL {
 				if (doc.getLotaCadastrante() == null)
 					doc.setLotaCadastrante(doc.getCadastrante().getLotacao());
 			}
+			if (doc.getLotaTitular() == null)
+				doc.setLotaTitular(lotaTitular);
 			if (doc.getDtRegDoc() == null) {
 				doc.setDtRegDoc(dt);
 			}
@@ -5209,12 +5211,10 @@ public class ExBL extends CpBL {
 				throw new AplicacaoException("O documento não pode ser reprocessado, pois já está assinado");
 			}
 
-			if ((doc.getExModelo() != null && ("template/freemarker".equals(doc
-					.getExModelo().getConteudoTpBlob()) || doc.getExModelo()
-					.getNmArqMod() != null))
+			if ((doc.getExModelo() != null && ("template/freemarker".equals(doc.getExModelo().getConteudoTpBlob()) || doc.getExModelo().getNmArqMod() != null))
 					|| doc.getExTipoDocumento().getIdTpDoc() == ExTipoDocumento.TIPO_DOCUMENTO_INTERNO_FOLHA_DE_ROSTO) {
-				if (doc.getConteudoBlobForm() != null) {
-				}
+//				if (doc.getConteudoBlobForm() != null) {
+//				}
 				if (gravar && transacao) {
 					iniciarAlteracao();
 				}
