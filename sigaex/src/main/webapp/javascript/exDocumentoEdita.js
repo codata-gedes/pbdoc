@@ -70,25 +70,33 @@ function sbmt(id) {
 
 // <c:set var="url" value="gravar" />
 function gravarDoc() {
-	
-	clearTimeout(saveTimer);
-	if (!validar(false)) {
-		triggerAutoSave();
-		return false;
-	}
-	frm.action = 'gravar';
-	window.customOnsubmit = function() {
-		return true;
-	};
-	if (typeof (frm.submitsave) != "undefined")
-		frm.submit = frm.submitsave;
+    gravar(false);
+}
 
-	// Dispara a função onSave() do editor, caso exista
-	if (typeof (onSave) == "function")
-		onSave();
+function gravarAssinarDoc() {
+    gravar(true);
+}
 
-	document.getElementById("btnGravar").disabled = true;
-	frm.submit();
+function gravar(assinar) {
+    clearTimeout(saveTimer);
+    if (!validar(false)) {
+        triggerAutoSave();
+        return false;
+    }
+    frm.action = 'gravar';
+    window.customOnsubmit = function() {
+        return true;
+    };
+    if (typeof (frm.submitsave) != "undefined")
+        frm.submit = frm.submitsave;
+
+    // Dispara a função onSave() do editor, caso exista
+    if (typeof (onSave) == "function")
+        onSave();
+
+    document.getElementById("btnGravar").disabled = true;
+    document.getElementById("gravarAssinar").value = assinar ? "true" : "false";
+    frm.submit();
 }
 
 function validar(silencioso) {
@@ -177,71 +185,6 @@ function aviso(msg, silencioso, elemento) {
 		avisoVermelho('O documento não pôde ser salvo: ' + msg);
 	else
 		sigaModal.alerta(msg).focus(elemento);
-}
-
-// <c:set var="url" value="excluirpreench" />
-function removePreench() {
-	$("[name='btnAlterar']").prop( "disabled", true );
-	$("[name='btnRemover']").prop( "disabled", true );
-
-	// Dispara a função onSave() do editor, caso exista
-	if (typeof (onSave) == "function") {
-		onSave();
-	}
-	frm.action = 'excluirpreench';
-	frm.submit();
-}
-
-// <c:set var="url" value="alterarpreench" />
-function alteraPreench() {
-	$("[name='btnAlterar']").prop( "disabled", true );
-	$("[name='btnRemover']").prop( "disabled", true );
-	
-	// Dispara a função onSave() do editor, caso exista
-	if (typeof (onSave) == "function") {
-		onSave();
-	}
-	frm.action = 'alterarpreench';
-	frm.submit();
-}
-
-// <c:set var="url" value="carregarpreench" />
-function carregaPreench() {
-	if (document.getElementById('preenchimento').value == 0) {
-		frm.btnRemover.disabled = "true";
-		frm.btnAlterar.disabled = "true";
-	} else {
-		// Dispara a função onSave() do editor, caso exista
-		if (typeof (onSave) == "function") {
-			onSave();
-		}
-		frm.btnAlterar.disabled = "true";
-		frm.btnRemover.disabled = "false";
-		frm.action = 'carregarpreench';
-		frm.submit();
-	}
-}
-
-// <c:set var="url" value="gravarpreench" />
-function adicionaPreench() {
-	var result = '';
-	while ((result == '') && (result != null)) {
-		result = prompt(
-				'Digite o nome do padrão de preenchimento a ser criado para esse modelo:',
-				'');
-		if (result == '')
-			alert('O nome do padrão de preenchimento não pode ser vazio');
-		else if (result != null) {
-			// Dispara a função onSave() do editor, caso exista
-			if (typeof (onSave) == "function") {
-				onSave();
-			}
-			document.getElementsByName('exDocumentoDTO.nomePreenchimento')[0].value = result;
-			frm.action = 'gravarpreench';
-			frm.submit();
-		}
-	}
-
 }
 
 // <c:set var="urlPdf" value="preverPdf" />

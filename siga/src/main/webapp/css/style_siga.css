@@ -90,9 +90,14 @@ table.table {
 	background-color: white;
 }
 
-.gt-table-action-list a.link-tag {
-	margin-top: 0;
+ul.gt-table-action-list.nav {
+	display: block;
 }
+
+ul.gt-table-action-list.nav li {
+    display: inline-block;
+}
+
 .disabled {
 	opacity: 0.6;
 	filter: alpha(opacity=60); /* For IE8 and earlier */

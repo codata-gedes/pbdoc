@@ -234,7 +234,7 @@
 				<c:set var="ocultarCodigo" value="${true}" />
 				<c:if test='${param.popup!="true"}'>
 					<c:set var="acoes" value="${m.acoesOrdenadasPorNome}" />
-					<siga:links classeCss="btn-group btn-group-xs">
+					<siga:links>
 						<c:forEach var="acao" items="${acoes}">
 							<siga:link icon="${acao.icone}" title="${acao.nomeNbsp}"
 								pre="${acao.pre}" pos="${acao.pos}"

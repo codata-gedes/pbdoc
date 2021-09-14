@@ -68,6 +68,7 @@
 				<input type="hidden" name="jsonHierarquiaDeModelos" value="${jsonHierarquiaDeModelos}" />
 				<input type="hidden" name="cliente" id="cliente" value="${siga_cliente}">
 				<input type="hidden" id="visualizador" value="${f:resource('/sigaex.pdf.visualizador') }"/>
+				<input type="hidden" id="gravarAssinar" name="exDocumentoDTO.assinar" value="false" />
 				<c:choose>
 					<c:when	test="${(exDocumentoDTO.doc.eletronico) && (exDocumentoDTO.doc.numExpediente != null)}">
 						<c:set var="estiloTipo" value="display: none" />
@@ -383,44 +384,6 @@
 					</div>
 				</div>
 				</c:if>	
-				<c:if test='${ exDocumentoDTO.tipoDocumento == "interno"  && !ehPublicoExterno}'>
-				<div class="row inline">					
-					<div class="col-sm-12">
-				  		<div class="form-group">
-				    		<label><fmt:message key="documento.preenchimento.automatico"/></label>
-				    		<div class="row">
-				      			<div class="col col-xl-4 col-lg-12">
-							        <select id="preenchimento" name="exDocumentoDTO.preenchimento" onchange="javascript:carregaPreench()" class="form-control siga-select2">
-										<c:forEach items="${exDocumentoDTO.preenchimentos}" var="item">
-											<option value="${item.idPreenchimento}"
-												${item.idPreenchimento == exDocumentoDTO.preenchimento ? 'selected' : ''}>
-												${item.nomePreenchimento}</option>
-										</c:forEach>
-									</select>
-				      			</div>
-				      			<div class="col col-xl-8 col-lg-12">
-							        <c:if test="${empty exDocumentoDTO.preenchimento or exDocumentoDTO.preenchimento==0}">
-										<c:set var="desabilitaBtn"> disabled </c:set>
-									</c:if> 
-									<button type="button" name="btnAlterar" onclick="javascript:alteraPreench()" class="btn btn-sm btn-secondary ml-2 p-2" ${desabilitaBtn}>
-										<i class="far fa-edit"></i>
-										<span class="${hide_only_GOVSP}">Alterar</span>
-									</button>
-									<button type="button" name="btnRemover" onclick="javascript:removePreench()" class="btn btn-sm btn-secondary ml-2 p-2" ${desabilitaBtn}>
-										<i class="far fa-trash-alt"></i>
-										<span class="${hide_only_GOVSP}">Remover</span>
-									</button>
-									<button type="button"  name="btnAdicionar" onclick="javascript:adicionaPreench()" class="btn btn-sm btn-secondary ml-2 p-2">
-										<i class="fas fa-plus"></i>
-										<span class="${hide_only_GOVSP}">Adicionar</span>
-									</button>
-				      			</div>
-				    		</div>
-				  		</div>
-				  </div>
-				</div>
-				
-			</c:if>
 				<div id="tr_personalizacao" style="display: ${exDocumentoDTO.modelo.exClassificacao!=null? 'none': ''};">
 					<div class="row  ${hide_only_GOVSP}">
 						<c:if test="${exDocumentoDTO.modelo.exClassificacao!=null}">
@@ -575,8 +538,9 @@
 					</c:if>
 				</c:if>	
 				<div class="row mt-4">
-					<div class="col-sm-8">
-						<button id="btnGravar" type="button" onclick="javascript: gravarDoc(); return false;" name="gravar" class="btn btn-primary" accesskey="o"><u>O</u>K</button> 
+					<div class="col-sm-8"> 
+						<button id="btnGravar" type="button" onclick="javascript: gravarDoc(); return false;" name="gravar" class="btn btn-primary" accesskey="g" title="Apenas grava o documento podendo continuar a Edição"><u>G</u>ravar</button> 
+						<button type="button" onclick="javascript: gravarAssinarDoc(); return false;" name="finalizareGravar" class="btn btn-primary" accesskey="f" title="Finalizar documento em definitivo e em seguida realizar assinatura digital"><u>F</u>inalizar e Assinar</button>
 						<c:if test='${exDocumentoDTO.tipoDocumento == "interno"}'>
 							<c:if test="${not empty exDocumentoDTO.modelo.nmArqMod or exDocumentoDTO.modelo.conteudoTpBlob == 'template/freemarker'}">
 								<button type="button" name="ver_doc" onclick="javascript: popitup_documento(false); return false;" class="btn btn-info ${hide_only_GOVSP}" accesskey="v"><u>V</u>er Documento</button>
@@ -654,6 +618,3 @@
 <script type="text/javascript" src="/siga/javascript/select2/select2.min.js"></script>
 <script type="text/javascript" src="/siga/javascript/select2/i18n/pt-BR.js"></script>
 <script type="text/javascript" src="/siga/javascript/siga.select2.js"></script>
-<script type="text/javascript">
-	$(document.getElementById('preenchimento')).select2({theme: "bootstrap"});	
-</script>
