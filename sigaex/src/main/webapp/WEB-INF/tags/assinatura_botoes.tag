@@ -35,6 +35,7 @@
 					onclick="javascript: AssinarDocumentos(false, ${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA:Sistema Integrado de Gestão Administrativa;DOC:Módulo de Documentos;ASS:Assinatura digital;POL:Política ICP-Brasil')});"
 					class="btn btn-primary mr-2" role="button"> Assinar <i class="fa fa-signature"></i> </a> 
 			</c:if>
+
 			<c:if test="${not empty autenticar and autenticar}">
 				<a id="bot-autenticar" accesskey="u" href="#"
 					onclick="javascript: AssinarDocumentos(true, ${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA;DOC;ASS;POL')});"
