@@ -253,7 +253,7 @@ public class ExMovimentacaoVO extends ExVO {
 							Ex.getInstance().getComp().podeExcluirAnexo(titular, lotaTitular, mov.mob(), mov));
 					addAcao(null, "Cancelar", "/app/expediente/mov", "cancelar",
 							Ex.getInstance().getComp().podeCancelarAnexo(titular, lotaTitular, mov.mob(), mov));
-					addAcao(null, "Assinar/Autenticar", "/app/expediente/mov", "exibir", true, null, "&popup=true",
+					addAcao(null, "Assinar", "/app/expediente/mov", "exibir", true, null, "&popup=true",
 							null, null, null);
 
 					addAcao("script_key", "Autenticar", "/app/expediente/mov", "autenticar_mov",
