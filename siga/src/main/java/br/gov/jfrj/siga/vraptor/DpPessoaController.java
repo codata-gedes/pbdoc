@@ -506,98 +506,89 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	public void carregarCombos(final Long id, final Long idOrgaoUsu, final String nmPessoa, final String dtNascimento,
 			final String cpf, final String email, final String cpfPesquisa, final Integer paramoffset,
 			Boolean retornarEnvioEmail) {
-		if (idOrgaoUsu == null && nmPessoa == null && dtNascimento == null && cpf == null && email == null && cpfPesquisa == null && paramoffset == 0) {
+		result.include("request", getRequest());
+		result.include("id", id);
+		result.include("idOrgaoUsu", idOrgaoUsu);
+		result.include("nmPessoa", nmPessoa);
+		result.include("dtNascimento", dtNascimento);
+		result.include("cpf", cpf);
+		result.include("email", email);
+		result.include("cpfPesquisa", cpfPesquisa);
+		setItemPagina(15);
+		result.include("currentPageNumber", calculaPaginaAtual(paramoffset));
+		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
+		if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+			List<CpOrgaoUsuario> list1 = new ArrayList<CpOrgaoUsuario>();
+			list = dao().consultaCpOrgaoUsuario();
 
-			if (retornarEnvioEmail != null && retornarEnvioEmail) {
-				result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/enviaEmail.jsp");
-			} else {
-				result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/lista.jsp");
-			}
-
-		} else {
-			result.include("request", getRequest());
-			result.include("id", id);
-			result.include("idOrgaoUsu", idOrgaoUsu);
-			result.include("nmPessoa", nmPessoa);
-			result.include("dtNascimento", dtNascimento);
-			result.include("cpf", cpf);
-			result.include("email", email);
-			result.include("cpfPesquisa", cpfPesquisa);
-			setItemPagina(15);
-			result.include("currentPageNumber", calculaPaginaAtual(paramoffset));
-			List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
-			if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
-				List<CpOrgaoUsuario> list1 = new ArrayList<CpOrgaoUsuario>();
-				list = dao().consultaCpOrgaoUsuario();
-
-				for (CpOrgaoUsuario cpOrgaoUsuario : list) {
-					if (!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(cpOrgaoUsuario.getSiglaOrgaoUsu())) {
-						list1.add(cpOrgaoUsuario);
-					}
+			for (CpOrgaoUsuario cpOrgaoUsuario : list) {
+				if (!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(cpOrgaoUsuario.getSiglaOrgaoUsu())) {
+					list1.add(cpOrgaoUsuario);
 				}
-				result.include("orgaosUsu", list1);
-			} else {
-				CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
-				list.add(ou);
-				result.include("orgaosUsu", list);
 			}
+			result.include("orgaosUsu", list1);
+		} else {
+			CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
+			list.add(ou);
+			result.include("orgaosUsu", list);
+		}
+		
+		if (retornarEnvioEmail == null || !retornarEnvioEmail) {
+			DpCargoDaoFiltro cargo = new DpCargoDaoFiltro();
+			cargo.setNome("");
+			cargo.setIdOrgaoUsu(idOrgaoUsu);
+			List<DpCargo> lista = new ArrayList<DpCargo>();
+			DpCargo c = new DpCargo();
+			c.setId(0L);
+			c.setDescricao("Selecione");
+			lista.add(c);
+			lista.addAll((List<DpCargo>) CpDao.getInstance().consultarPorFiltro(cargo));
+			result.include("listaCargo", lista);
+		}	
+		
+		DpLotacaoDaoFiltro lotacao = new DpLotacaoDaoFiltro();
+		lotacao.setNome("");
+		lotacao.setIdOrgaoUsu(idOrgaoUsu);
+		List<DpLotacao> listaLotacao = new ArrayList<DpLotacao>();
+		DpLotacao l = new DpLotacao();
+		l.setNomeLotacao("Selecione");
+		l.setId(0L);
+		l.setSiglaLotacao("");
+		CpOrgaoUsuario cpOrgaoUsuario = new CpOrgaoUsuario();
+		cpOrgaoUsuario.setIdOrgaoUsu(0L);
+		cpOrgaoUsuario.setSiglaOrgaoUsu("");
+		l.setOrgaoUsuario(cpOrgaoUsuario);
+		listaLotacao.add(l);
+		if (idOrgaoUsu != null && idOrgaoUsu.longValue() != CpConfiguracaoBL.ID_ORGAO_ROOT) {
+			listaLotacao.addAll(CpDao.getInstance().consultarPorFiltro(lotacao));
+		}
+		result.include("listaLotacao", listaLotacao);
 
-			if (retornarEnvioEmail == null || !retornarEnvioEmail) {
-				DpCargoDaoFiltro cargo = new DpCargoDaoFiltro();
-				cargo.setNome("");
-				cargo.setIdOrgaoUsu(idOrgaoUsu);
-				List<DpCargo> lista = new ArrayList<DpCargo>();
-				DpCargo c = new DpCargo();
-				c.setId(0L);
-				c.setDescricao("Selecione");
-				lista.add(c);
-				lista.addAll((List<DpCargo>) CpDao.getInstance().consultarPorFiltro(cargo));
-				result.include("listaCargo", lista);
-			}
+		if (retornarEnvioEmail == null || !retornarEnvioEmail) {
+			DpFuncaoConfiancaDaoFiltro funcao = new DpFuncaoConfiancaDaoFiltro();
+			funcao.setNome("");
+			funcao.setIdOrgaoUsu(idOrgaoUsu);
+			List<DpFuncaoConfianca> listaFuncao = new ArrayList<DpFuncaoConfianca>();
+			DpFuncaoConfianca f = new DpFuncaoConfianca();
+			f.setNomeFuncao("Selecione");
+			f.setIdFuncao(0L);
+			listaFuncao.add(f);
+			listaFuncao.addAll(CpDao.getInstance().consultarPorFiltro(funcao));
+			result.include("listaFuncao", listaFuncao);
+		}
+		
+		if (retornarEnvioEmail == null || !retornarEnvioEmail) {
+			/*Carrega lista UF*/
+			List<CpUF> ufList = dao().consultarUF();
+			result.include("ufList",ufList);
+		}
 
-			DpLotacaoDaoFiltro lotacao = new DpLotacaoDaoFiltro();
-			lotacao.setNome("");
-			lotacao.setIdOrgaoUsu(idOrgaoUsu);
-			List<DpLotacao> listaLotacao = new ArrayList<DpLotacao>();
-			DpLotacao l = new DpLotacao();
-			l.setNomeLotacao("Selecione");
-			l.setId(0L);
-			l.setSiglaLotacao("");
-			CpOrgaoUsuario cpOrgaoUsuario = new CpOrgaoUsuario();
-			cpOrgaoUsuario.setIdOrgaoUsu(0L);
-			cpOrgaoUsuario.setSiglaOrgaoUsu("");
-			l.setOrgaoUsuario(cpOrgaoUsuario);
-			listaLotacao.add(l);
-			if (idOrgaoUsu != CpConfiguracaoBL.ID_ORGAO_ROOT)
-				listaLotacao.addAll(CpDao.getInstance().consultarPorFiltro(lotacao));
-			result.include("listaLotacao", listaLotacao);
-
-			if (retornarEnvioEmail == null || !retornarEnvioEmail) {
-				DpFuncaoConfiancaDaoFiltro funcao = new DpFuncaoConfiancaDaoFiltro();
-				funcao.setNome("");
-				funcao.setIdOrgaoUsu(idOrgaoUsu);
-				List<DpFuncaoConfianca> listaFuncao = new ArrayList<DpFuncaoConfianca>();
-				DpFuncaoConfianca f = new DpFuncaoConfianca();
-				f.setNomeFuncao("Selecione");
-				f.setIdFuncao(0L);
-				listaFuncao.add(f);
-				listaFuncao.addAll(CpDao.getInstance().consultarPorFiltro(funcao));
-				result.include("listaFuncao", listaFuncao);
-			}
-
-			if (retornarEnvioEmail == null || !retornarEnvioEmail) {
-				/*Carrega lista UF*/
-				List<CpUF> ufList = dao().consultarUF();
-				result.include("ufList", ufList);
-			}
-
-			if (paramoffset == null) {
-				result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/edita.jsp");
-			} else if (retornarEnvioEmail != null && retornarEnvioEmail) {
-				result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/enviaEmail.jsp");
-			} else {
-				result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/lista.jsp");
-			}
+		if (paramoffset == null) {
+			result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/edita.jsp");
+		} else if (retornarEnvioEmail != null && retornarEnvioEmail) {
+			result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/enviaEmail.jsp");
+		} else {
+			result.use(Results.page()).forwardTo("/WEB-INF/page/dpPessoa/lista.jsp");
 		}
 	}
 
