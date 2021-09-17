@@ -51,14 +51,18 @@ public interface ZipItem {
 
 		public static final ZipItem porNomeItem(String nomeItemComExtensao) {
 			String nome = FilenameUtils.getBaseName(nomeItemComExtensao);
-			String extensao = FilenameUtils.getExtension(nomeItemComExtensao);
-			ZipItem.Tipo tipo = valueOf(extensao.toUpperCase());
+			ZipItem.Tipo tipo = porNomeItemPadrao(nomeItemComExtensao);
 
-			// Para nomes personalizados
+			// Tipo com arquivos de nomes personalizados
 			if (!DOC_NOME_PADRAO_ITEM.equals(nome)) {
 				return tipo.comNome(nome);
 			}
 			return tipo;
+		}
+
+		public static final ZipItem.Tipo porNomeItemPadrao(String nomeItemComExtensao) {
+			String extensao = FilenameUtils.getExtension(nomeItemComExtensao);
+			return valueOf(extensao.toUpperCase());
 		}
 
 	}

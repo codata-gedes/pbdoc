@@ -33,20 +33,20 @@ public abstract class ZipServico {
 
 	private ZipServico() {}
 
-	private static File referenciaArquivo(ExArquivoFilesystem ExArquivoFilesystem) {
+	private static File referenciaArquivo(ExArquivoFilesystem exArquivo) {
 		try {
 			Path caminhoBase = ZipPropriedades.getInstance().obterCaminhoBase();
-			File arquivo = ExArquivoFilesystem.getPathConteudo(caminhoBase).toFile();
-			FileUtils.forceMkdir(arquivo.getParentFile());
-			log.debugf("Capturando referência para arquivo #%d %s", ExArquivoFilesystem.getId(), arquivo.getAbsolutePath());
-			return arquivo;
+			File zipFile = exArquivo.getPathConteudo(caminhoBase).toFile();
+			FileUtils.forceMkdir(zipFile.getParentFile());
+			log.debugf("Capturando referência para arquivo #%d %s", exArquivo.getId(), zipFile.getAbsolutePath());
+			return zipFile;
 		} catch (Exception e) {
-			throw new AplicacaoException("Não foi possível fazer referência ao arquivo do documento " + ExArquivoFilesystem.getId() + " no sistema de arquivos", CODIGO_ERRO_ZIP_SERVICO, e);
+			throw new AplicacaoException("Não foi possível fazer referência ao arquivo do documento " + exArquivo.getId() + " no sistema de arquivos", CODIGO_ERRO_ZIP_SERVICO, e);
 		}
 	}
 
-	public static List<String> nomesItens(@NotNull ExArquivoFilesystem ExArquivoFilesystem) {
-		byte[] zipBytes = ler(ExArquivoFilesystem);
+	public static List<String> nomesItens(@NotNull ExArquivoFilesystem exArquivo) {
+		byte[] zipBytes = ler(exArquivo);
 		return nomesItens(zipBytes);
 	}
 
@@ -73,8 +73,8 @@ public abstract class ZipServico {
 		return itens;
 	}
 
-	public static byte[] lerItem(@NotNull ExArquivoFilesystem ExArquivoFilesystem, @NotNull ZipItem item) {
-		byte[] zipBytes = ler(ExArquivoFilesystem);
+	public static byte[] lerItem(@NotNull ExArquivoFilesystem exArquivo, @NotNull ZipItem item) {
+		byte[] zipBytes = ler(exArquivo);
 		return lerItem(zipBytes, item);
 	}
 
@@ -82,27 +82,27 @@ public abstract class ZipServico {
 		return descompactarStream(zipBytes, item);
 	}
 
-	public static byte[] ler(@NotNull ExArquivoFilesystem ExArquivoFilesystem) {
+	public static byte[] ler(@NotNull ExArquivoFilesystem exArquivo) {
 		try {
-			File zip = referenciaArquivo(ExArquivoFilesystem);
-			if (!zip.exists()) {
+			File zipFile = referenciaArquivo(exArquivo);
+			if (!zipFile.exists()) {
 				return null;
 			}
-			return FileUtils.readFileToByteArray(zip);
+			return FileUtils.readFileToByteArray(zipFile);
 		} catch (Exception e) {
-			throw new AplicacaoException("Não foi possível ler os dados do documento " + ExArquivoFilesystem.getId() + " no sistema de arquivos", CODIGO_ERRO_ZIP_SERVICO, e);
+			throw new AplicacaoException("Não foi possível ler os dados do documento " + exArquivo.getId() + " no sistema de arquivos", CODIGO_ERRO_ZIP_SERVICO, e);
 		}
 	}
 
-	public static void gravarItem(@NotNull ExArquivoFilesystem ExArquivoFilesystem, byte[] itemBytes, @NotNull ZipItem item) {
+	public static void gravarItem(@NotNull ExArquivoFilesystem exArquivo, byte[] itemBytes, @NotNull ZipItem item) {
 		// Capturando dados do ZIP original (se existir) e atualizando seus itens
-		byte[] originalZipBytes = ler(ExArquivoFilesystem);
+		byte[] originalZipBytes = ler(exArquivo);
 		byte[] novoZipBytes = criarOuAtualizarZipComItem(originalZipBytes, itemBytes, item);
-		gravar(ExArquivoFilesystem, novoZipBytes);
+		gravar(exArquivo, novoZipBytes);
 	}
 
-	public static void gravar(@NotNull ExArquivoFilesystem ExArquivoFilesystem, @NotNull byte[] zipBytes) {
-		File zipFile = referenciaArquivo(ExArquivoFilesystem);
+	public static void gravar(@NotNull ExArquivoFilesystem exArquivo, @NotNull byte[] zipBytes) {
+		File zipFile = referenciaArquivo(exArquivo);
 		try {
 			if (zipBytes == null) {
 				apagarArquivo(zipFile);
@@ -111,13 +111,13 @@ public abstract class ZipServico {
 				FileUtils.writeByteArrayToFile(zipFile, zipBytes, false);
 			}
 		} catch (Exception e) {
-			throw new AplicacaoException("Não foi possível gravar arquivo do documento " + ExArquivoFilesystem.getId() + " no sistema de arquivos", CODIGO_ERRO_ZIP_SERVICO, e);
+			throw new AplicacaoException("Não foi possível gravar arquivo do documento " + exArquivo.getId() + " no sistema de arquivos", CODIGO_ERRO_ZIP_SERVICO, e);
 		}
 	}
 
-	public static void apagar(@NotNull ExArquivoFilesystem ExArquivoFilesystem) {
-		File zip = referenciaArquivo(ExArquivoFilesystem);
-		apagarArquivo(zip);
+	public static void apagar(@NotNull ExArquivoFilesystem exArquivo) {
+		File zipFile = referenciaArquivo(exArquivo);
+		apagarArquivo(zipFile);
 	}
 
 	private static void apagarArquivo(File referencia) {
