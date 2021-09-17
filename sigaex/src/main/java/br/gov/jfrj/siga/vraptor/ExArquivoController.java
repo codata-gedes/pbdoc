@@ -22,12 +22,18 @@
  */
 package br.gov.jfrj.siga.vraptor;
 
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
+import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -45,6 +51,7 @@ import br.com.caelum.vraptor.observer.download.Download;
 import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 import br.gov.jfrj.itextpdf.Documento;
 import br.gov.jfrj.siga.Service;
+import br.gov.jfrj.siga.armazenamento.zip.ZipItem;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.bluc.service.BlucService;
@@ -68,6 +75,16 @@ import br.gov.jfrj.siga.vraptor.builder.ExInputStreamDownload;
 
 @Controller
 public class ExArquivoController extends ExController {
+
+	private static final SortedSet<String> HASHES_PERMITIDOS_VALIDACAO;
+	static {
+		final SortedSet<String> hashesPermitidosValidacao = new TreeSet<>(CASE_INSENSITIVE_ORDER);
+		hashesPermitidosValidacao.add("SHA1");
+		hashesPermitidosValidacao.add("SHA-256");
+		hashesPermitidosValidacao.add("SHA-512");
+		hashesPermitidosValidacao.add("MD5");
+		HASHES_PERMITIDOS_VALIDACAO = Collections.unmodifiableSortedSet(hashesPermitidosValidacao);
+	}
 
 	private static final String TEXT_HTML = "text/html";
 	private static final String APPLICATION_PDF = "application/pdf";
@@ -96,23 +113,21 @@ public class ExArquivoController extends ExController {
 		try {
 			final String servernameport = getRequest().getServerName() + ":" + getRequest().getServerPort();
 			final String contextpath = getRequest().getContextPath();
+			final String acceptHeader = getRequest().getHeader("Accept");
+
 			final boolean pacoteAssinavel = (certificadoB64 != null);
-			final boolean fB64 = getRequest().getHeader("Accept") != null
-					&& getRequest().getHeader("Accept").startsWith("text/vnd.siga.b64encoded");
-			final boolean fJSON = getRequest().getHeader("Accept") != null
-					&& getRequest().getHeader("Accept").startsWith("application/json");
-			final boolean isPdf = arquivo.endsWith(".pdf");
-			final boolean isHtml = arquivo.endsWith(".html");
+			final boolean fB64 = startsWithIgnoreCase(acceptHeader, "text/vnd.siga.b64encoded");
+			final boolean isPdf = endsWithIgnoreCase(arquivo, ".pdf");
+			final boolean isHtml = endsWithIgnoreCase(arquivo, ".html");
+
 			boolean estampar = !semmarcas;
 			final boolean somenteHash = (hash != null) || (HASH_ALGORITHM != null);
 			if (somenteHash) {
 				if (hash == null)
 					hash = HASH_ALGORITHM;
 				if (hash != null) {
-					if (!(hash.equals("SHA1") || hash.equals("SHA-256") || hash.equals("SHA-512")
-							|| hash.equals("MD5"))) {
-						throw new AplicacaoException(
-								"Algoritmo de hash inválido. Os permitidos são: SHA1, SHA-256, SHA-512 e MD5.");
+					if (!HASHES_PERMITIDOS_VALIDACAO.contains(hash)) {
+						throw new AplicacaoException("Algoritmo de hash inválido. Os permitidos são: " + HASHES_PERMITIDOS_VALIDACAO + ".");
 					}
 				}
 				completo = false;
@@ -144,8 +159,7 @@ public class ExArquivoController extends ExController {
 						+ getTitular().getSigla() + "/" + getLotaTitular().getSiglaCompleta() + ".");
 			}
 			final ExMovimentacao mov = Documento.getMov(mob, arquivo);
-			final boolean isArquivoAuxiliar = mov != null && mov.getExTipoMovimentacao().getId()
-					.equals(ExTipoMovimentacao.TIPO_MOVIMENTACAO_ANEXACAO_DE_ARQUIVO_AUXILIAR);
+			final boolean isArquivoAuxiliar = mov != null && mov.getExTipoMovimentacao().getId().equals(ExTipoMovimentacao.TIPO_MOVIMENTACAO_ANEXACAO_DE_ARQUIVO_AUXILIAR);
 			final boolean imutavel = (mov != null) && !completo && !estampar && !somenteHash && !pacoteAssinavel;
 			String cacheControl = "private";
 			final Integer grauNivelAcesso = mob.doc().getExNivelAcesso().getGrauNivelAcesso();
@@ -153,15 +167,15 @@ public class ExArquivoController extends ExController {
 					|| ExNivelAcesso.NIVEL_ACESSO_ENTRE_ORGAOS == grauNivelAcesso) {
 				cacheControl = "public";
 			}
-			byte ab[] = null;
 			if (isArquivoAuxiliar) {
-				ab = mov.getConteudoBlobInicializarOuAtualizarCache();
-				return new InputStreamDownload(makeByteArrayInputStream(ab, fB64), APPLICATION_OCTET_STREAM,
-						mov.getNmArqMov().replaceAll(",", "").replaceAll(";", ""));
+				final String nomeArquivo = mov.getNmArqMov();
+				final String nomeArquivoEscapado = nomeArquivo.replaceAll(",", "").replaceAll(";", "");
+				final ZipItem.Tipo tipo = ZipItem.Tipo.porNomeItemPadrao(nomeArquivo);
+				final ByteArrayInputStream bais = makeByteArrayInputStream(mov.getConteudoBlob(tipo), fB64);
+				return new InputStreamDownload(bais, APPLICATION_OCTET_STREAM, nomeArquivoEscapado);
 			}
-
+			byte ab[] = null;
 			if ((isPdf || isHtml) && completo && mob != null && mov == null) {
-				DocumentosSiglaArquivoGet act = new DocumentosSiglaArquivoGet();
 				DocumentosSiglaArquivoGetRequest req = new DocumentosSiglaArquivoGetRequest();
 				DocumentosSiglaArquivoGetResponse resp = new DocumentosSiglaArquivoGetResponse();
 				req.sigla = mob.getSigla();

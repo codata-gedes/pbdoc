@@ -110,7 +110,6 @@ import br.gov.jfrj.siga.bluc.service.ValidateResponse;
 import br.gov.jfrj.siga.cp.CpConfiguracao;
 import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
-import br.gov.jfrj.siga.cp.CpTipoMarcadorEnum;
 import br.gov.jfrj.siga.cp.CpToken;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpBL;
@@ -958,7 +957,7 @@ public class ExBL extends CpBL {
 					mob, dtMov, subscritor, null, titular, lotaTitular, null);
 
 			mov.setNmArqMov(nmArqMov);
-			mov.setConteudoBlob(ZipItem.Tipo.porNomeItem(nmArqMov), conteudo);
+			mov.setConteudoBlob(ZipItem.Tipo.porNomeItemPadrao(nmArqMov), conteudo);
 
 			gravarMovimentacao(mov);
 
@@ -1005,7 +1004,7 @@ public class ExBL extends CpBL {
 					lotaCadastrante, mob, dtMov, subscritor, null, titular, lotaTitular, null);
 
 			mov.setNmArqMov(nmArqMov);
-			mov.setConteudoBlob(ZipItem.Tipo.porNomeItem(nmArqMov), conteudo);
+			mov.setConteudoBlob(ZipItem.Tipo.porNomeItemPadrao(nmArqMov), conteudo);
 
 			gravarMovimentacao(mov);
 			for (ExMovimentacao m : cancelar) {
