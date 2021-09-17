@@ -3373,15 +3373,18 @@ public class ExBL extends CpBL {
 			// System.out.println(System.currentTimeMillis() + " - INI gravar");
 			iniciarAlteracao();
 
-			if (doc.getCadastrante() == null)
+			if (doc.getCadastrante() == null) {
 				doc.setCadastrante(cadastrante);
+			}
 			if (doc.getLotaCadastrante() == null) {
 				doc.setLotaCadastrante(lotaTitular);
-				if (doc.getLotaCadastrante() == null)
+				if (doc.getLotaCadastrante() == null) {
 					doc.setLotaCadastrante(doc.getCadastrante().getLotacao());
+				}
 			}
-			if (doc.getLotaTitular() == null)
+			if (doc.getLotaTitular() == null) {
 				doc.setLotaTitular(lotaTitular);
+			}
 			if (doc.getDtRegDoc() == null) {
 				doc.setDtRegDoc(dt);
 			}
@@ -5211,10 +5214,13 @@ public class ExBL extends CpBL {
 				throw new AplicacaoException("O documento não pode ser reprocessado, pois já está assinado");
 			}
 
-			if ((doc.getExModelo() != null && ("template/freemarker".equals(doc.getExModelo().getConteudoTpBlob()) || doc.getExModelo().getNmArqMod() != null))
-					|| doc.getExTipoDocumento().getIdTpDoc() == ExTipoDocumento.TIPO_DOCUMENTO_INTERNO_FOLHA_DE_ROSTO) {
-//				if (doc.getConteudoBlobForm() != null) {
-//				}
+			final boolean hasModelo = doc.getExModelo() != null;
+			final boolean isModeloFreeMarker = hasModelo && "template/freemarker".equals(doc.getExModelo().getConteudoTpBlob());
+			final boolean isModeloArquivo = hasModelo && StringUtils.isNotBlank(doc.getExModelo().getNmArqMod());
+			final boolean isTipoDocumentoInternoFolhaDeRosto = doc.getExTipoDocumento().getIdTpDoc() == ExTipoDocumento.TIPO_DOCUMENTO_INTERNO_FOLHA_DE_ROSTO;
+
+			if (isModeloFreeMarker || isModeloArquivo || isTipoDocumentoInternoFolhaDeRosto) {
+
 				if (gravar && transacao) {
 					iniciarAlteracao();
 				}
