@@ -204,8 +204,8 @@ public class CpMarcador extends AbstractCpMarcador {
 //	final static public long MARCADOR_DEMANDA_JUDICIAL_MEDIA = 1009;
 //
 //	final static public long MARCADOR_DEMANDA_JUDICIAL_ALTA = 1010;
-
-	final static public int ID_MARCADOR_CANCELADO = 10;
+//
+//	final static public int ID_MARCADOR_CANCELADO = 10;
 
 	public static ActiveRecord<CpMarcador> AR = new ActiveRecord<>(CpMarcador.class);
 
