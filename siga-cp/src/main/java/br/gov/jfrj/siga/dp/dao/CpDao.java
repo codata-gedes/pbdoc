@@ -25,6 +25,7 @@ package br.gov.jfrj.siga.dp.dao;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
@@ -149,24 +150,24 @@ public class CpDao extends ModeloDao {
 	@SuppressWarnings("unchecked")
 	public List<CpOrgao> consultarPorFiltro(final CpOrgaoDaoFiltro o,
 			final int offset, final int itemPagina) {
-		try {
-			final Query query = em().createNamedQuery("consultarPorFiltroCpOrgao");
-			if (offset > 0) {
-				query.setFirstResult(offset);
-			}
-			if (itemPagina > 0) {
-				query.setMaxResults(itemPagina);
-			}
-			String s = o.getNome();
-			if (s != null)
-				s = s.replace(' ', '%');
-			query.setParameter("nome", s);
 
-			final List<CpOrgao> l = query.getResultList();
-			return l;
-		} catch (final NullPointerException e) {
-			return null;
+		final String paramNome = ofNullable(o)
+				.map(CpOrgaoDaoFiltro::getNome)
+				.map(nome -> nome.replace(' ', '%'))
+				.orElse(EMPTY);
+
+		final Query query = em().createNamedQuery("consultarPorFiltroCpOrgao")
+				.setParameter("nome", paramNome);
+
+		if (offset > 0) {
+			query.setFirstResult(offset);
 		}
+		if (itemPagina > 0) {
+			query.setMaxResults(itemPagina);
+		}
+
+		final List<CpOrgao> orgaos = query.getResultList();
+		return orgaos;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -323,18 +324,16 @@ public class CpDao extends ModeloDao {
 	}
 
 	public int consultarQuantidade(final CpOrgaoDaoFiltro o) {
-		try {
-			final Query query = em().createNamedQuery("consultarQuantidadeCpOrgao");
-			String s = o.getNome();
-			if (s != null)
-				s = s.replace(' ', '%');
-			query.setParameter("nome", s);
+		final String paramNome = ofNullable(o)
+				.map(CpOrgaoDaoFiltro::getNome)
+				.map(nome -> nome.replace(' ', '%'))
+				.orElse(EMPTY);
 
-			final int l = ((Long) query.getSingleResult()).intValue();
-			return l;
-		} catch (final NullPointerException e) {
-			return 0;
-		}
+		final Number count = (Number) em().createNamedQuery("consultarQuantidadeCpOrgao")
+				.setParameter("nome", paramNome)
+				.getSingleResult();
+
+		return count.intValue();
 	}
 
 	public List consultarPorFiltro(final DaoFiltro o) throws Exception {
