@@ -51,7 +51,7 @@
 			
 			<c:if test="${assinarComSenha || autenticarComSenha}">
 				<div class="custom-control custom-radio">
-					<input class="custom-control-input" type="radio" 
+					<input class="custom-control-input" type="radio" checked
 						   accesskey="c" name="radioProviderAssinatura" id="ad_password_0" 
 						   <c:if test="${SenhaChecked}">checked</c:if> /> 
 					<label class="custom-control-label" for="ad_password_0">Senha</label>
@@ -74,14 +74,14 @@
 				</div>
 			</c:if>
 			
-			<c:if test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA;DOC;ASS')}">
+			<!-- <c:if test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA;DOC;ASS')}">
 				<div class="custom-control custom-radio">
 					<input class="custom-control-input" type="radio" 
 						accesskey="d" name="radioProviderAssinatura" id="ad_certificado_0" 
 						<c:if test="${CertificadoChecked}">checked</c:if> /> 
 					<label class="custom-control-label" for="ad_certificado_0">Certificado Digital</label>
 				</div>
-			</c:if>
+			</c:if> -->
 		</div>
 		
 		<div class="col">	
