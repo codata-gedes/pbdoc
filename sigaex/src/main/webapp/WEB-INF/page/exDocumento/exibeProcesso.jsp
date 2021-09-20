@@ -299,7 +299,7 @@
 								<c:forEach var="arqNumerado" items="${arqsNum}">
 									<tr>										
 										<td style="display: none;">
-											${arqNumerado.arquivo.idDoc}	
+											${arqNumerado.arquivo.id}	
 										</td>
 										<td>
 											<a target="_blank" title="${fn:substring(tooltipResumo,0,fn:length(tooltipResumo)-4)}" href="/sigaex/app/arquivo/exibir?arquivo=${arqNumerado.referenciaPDF}">

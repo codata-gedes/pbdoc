@@ -115,10 +115,13 @@ public class ExDocumentoVO extends ExVO {
 		 * 16/01/2020 - Data da ultima assinatura
 		 */
 		this.dataPrimeiraAssinatura = doc.getDtPrimeiraAssinaturaDDMMYY();
-		
-		
-		/*this.dataPrimeiraAssinatura = this.obterDataPrimeiraAssinatura(doc);*/
-		this.subscritorString = doc.getSubscritorString() + " (" + doc.getSubscritor().getLotacao().getSiglaLotacao() + "/" + doc.getSubscritor().getOrgaoUsuario().getSiglaOrgaoUsuarioCompleta() +")";
+
+		if (doc.getSubscritor() != null) {
+			this.subscritorString = doc.getSubscritorString() + " (" + doc.getSubscritor().getLotacao().getSiglaLotacao() + "/" + doc.getSubscritor().getOrgaoUsuario().getSiglaOrgaoUsuarioCompleta() +")";
+		} else {
+			this.subscritorString = "";
+		}
+
 		this.cadastranteString = doc.getCadastranteString();
 		if (doc.getLotaCadastrante() != null)
 			this.lotaCadastranteString = "(" + doc.getLotaCadastrante().getSigla() + " / " + doc.getOrgaoUsuario().getSiglaOrgaoUsuarioCompleta() + ")";

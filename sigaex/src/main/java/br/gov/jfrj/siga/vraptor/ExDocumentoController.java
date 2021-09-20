@@ -667,12 +667,6 @@ public class ExDocumentoController extends ExController {
 			}
 		}
 
-		if (exDocumentoDTO.getTipoDocumento() != null
-				&& exDocumentoDTO.getTipoDocumento().equals("externo")) {
-			exDocumentoDTO.setIdMod(((ExModelo) dao()
-					.consultarAtivoPorIdInicial(ExModelo.class, 28L))
-					.getIdMod());
-		}
 		carregarBeans(exDocumentoDTO, mobilPaiSel);
 
 		if (exDocumentoDTO.getMobilPaiSel().getId() != null) {
