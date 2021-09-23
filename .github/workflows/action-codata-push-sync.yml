@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 10
       - name: Push to CODATA
         run: |
           git config --global user.name '${{ secrets.CODATA_SYNC_NAME }}'
