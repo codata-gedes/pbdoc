@@ -27,7 +27,7 @@
 						<img src="${pageContext.request.contextPath}/imagens/brasao_sp.png" class="rounded float-left" width="80px"/>
 					</c:when>
 					<c:otherwise>
-						<img src="${pageContext.request.contextPath}/imagens/brasaoColoridoTRF2.png" class="rounded float-left" width="80px"/>
+						<img src="${pageContext.request.contextPath}/imagens/paraiba.png" class="rounded float-left" width="80px"/>
 					</c:otherwise>
 					</c:choose>
 					<h4><b>${f:resource('/siga.cabecalho.titulo')}</b></h4>
