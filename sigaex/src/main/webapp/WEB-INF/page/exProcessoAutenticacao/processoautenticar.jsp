@@ -16,7 +16,7 @@
 				<div class="card bg-light mb-3" >
 					<div class="card-header">
 						<h5>
-							Autenticação de Processos
+							<fmt:message key="tela.validacao"/> de Processos
 						</h5>
 					</div>
 					<div class="card-body">
@@ -54,7 +54,7 @@
 				    <h5>Informações Gerais</h5>
 				  </div>
 				  <div class="card-body">
-				    <p>Para utilizar a Confirmação da Autenticidade do Protocolo é
+				    <p>Para utilizar a Confirmação da Validação do Protocolo é
 					obrigatório informar o código do Protocolo.</p>
 					<p>
 						<u>Preenchimento do campo Código do Protocolo</u>

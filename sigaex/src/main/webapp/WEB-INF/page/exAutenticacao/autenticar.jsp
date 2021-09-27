@@ -16,7 +16,7 @@
 				<div class="card bg-light mb-3" >
 					<div class="card-header">
 						<h5>
-							Autenticação de Documentos
+							<fmt:message key="tela.validacao"/> de Documentos
 						</h5>
 					</div>
 					<div class="card-body">
@@ -54,7 +54,7 @@
 				    <h5>Informações Gerais</h5>
 				  </div>
 				  <div class="card-body">
-				    <p>Para utilizar a Confirmação da Autenticidade do Documento é
+				    <p>Para utilizar a Confirmação da Validação do Documento é
 					obrigatório informar o número do documento que se encontra no rodapé
 					do documento a ser consultado.</p>
 					<p>
