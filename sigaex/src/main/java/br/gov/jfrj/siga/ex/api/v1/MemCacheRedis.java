@@ -63,6 +63,8 @@ public class MemCacheRedis implements IMemCache {
 	public void store(String sha1, byte[] ba) {
 		try (Jedis jedis = poolMaster.getResource()) {
 			jedis.set(SafeEncoder.encode(sha1), ba);
+		} catch (Exception e) {
+			
 		}
 	}
 
