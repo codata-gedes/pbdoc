@@ -8,11 +8,13 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.util.SafeEncoder;
+import org.jboss.logging.Logger;
 
 public class MemCacheRedis implements IMemCache {
 	private static JedisPool poolMaster;
 	private static JedisPool poolSlave;
-
+	private static final Logger log = Logger.getLogger(MemCacheRedis.class);
+	
 	static {
 		redisConfig();
 	}
@@ -64,7 +66,7 @@ public class MemCacheRedis implements IMemCache {
 		try (Jedis jedis = poolMaster.getResource()) {
 			jedis.set(SafeEncoder.encode(sha1), ba);
 		} catch (Exception e) {
-			
+			log.info("Exceção: " + e);
 		}
 	}
 
