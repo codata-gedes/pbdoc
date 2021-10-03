@@ -18,7 +18,10 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.ex;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 import java.io.Serializable;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -31,6 +34,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -57,6 +61,10 @@ import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
 @BatchSize(size = 500)
 @Table(name = "siga.ex_mobil")
 public class ExMobil extends AbstractExMobil implements Serializable, Selecionavel, Comparable {
+
+	private static final String PIPE = "|";
+	private static final Pattern PATTERN_TMP_DOC = Pattern.compile("^TMP-?([0-9]{1,10})");
+	private static final String PATTERN_DOC_FINALIZADO = "^(?<orgao>%s)?-?(?<especie>[A-Za-z]{3})?-?(?:(?<sonumero>[0-9]{1,8})|(?:(?<ano>\\d{4}?)/?)(?<numero>[0-9]{1,8})(?<subnumero>\\.?[0-9]{1,3})??)(?:(?<via>(?:-?[a-zA-Z]{1})|(?:-[0-9]{1,2}))|(?:-?V(?<volume>[0-9]{1,2})))?$";
 
 	/**
 	 * 
@@ -360,37 +368,32 @@ public class ExMobil extends AbstractExMobil implements Serializable, Selecionav
 	 */
 	public void setSigla(String sigla) {
 		sigla = sigla.trim().toUpperCase();
-		if (sigla != null && sigla.contains(":"))
+		if (sigla != null && sigla.contains(":")) {
 			sigla = sigla.split(":")[0];
+		}
 
 		Map<String, CpOrgaoUsuario> mapAcronimo = new TreeMap<String, CpOrgaoUsuario>();
 		for (CpOrgaoUsuario ou : ExDao.getInstance().listarOrgaosUsuarios()) {
 			mapAcronimo.put(ou.getAcronimoOrgaoUsu(), ou);
 			mapAcronimo.put(ou.getSiglaOrgaoUsu(), ou);
 		}
-		String acronimos = "";
-		for (String s : mapAcronimo.keySet()) {
-			acronimos += "|" + s;
-		}
-
-		final Pattern p2 = Pattern.compile("^TMP-?([0-9]{1,10})");
 
 		// Edson: testes unitários para esta regex:
 		// https://regex101.com/r/NJidBr/2
 		// Ao acessar, clique em "Switch to unit tests"
-		final Pattern p1 = Pattern.compile("^(?<orgao>" + acronimos
-				+ ")?-?(?<especie>[A-Za-z]{3})?-?(?:(?<sonumero>[0-9]{1,8})|(?:(?<ano>\\d{4}?)/?)(?<numero>[0-9]{1,8})(?<subnumero>\\.?[0-9]{1,3})??)(?:(?<via>(?:-?[a-zA-Z]{1})|(?:-[0-9]{1,2}))|(?:-?V(?<volume>[0-9]{1,2})))?$");
-		final Matcher m2 = p2.matcher(sigla);
-		final Matcher m1 = p1.matcher(sigla);
+		final String acronimos = mapAcronimo.keySet().stream().collect(Collectors.joining(PIPE, PIPE, EMPTY));
+		final Pattern patternDocFinalizado = Pattern.compile(String.format(PATTERN_DOC_FINALIZADO, acronimos));
+		final Matcher m2 = PATTERN_TMP_DOC.matcher(sigla);
+		final Matcher m1 = patternDocFinalizado.matcher(sigla);
 
 		if (getExDocumento() == null) {
-			final ExDocumento doc = new ExDocumento();
-			setExDocumento(doc);
+			setExDocumento(new ExDocumento());
 		}
 
 		if (m2.find()) {
-			if (m2.group(1) != null)
-				getExDocumento().setIdDoc(new Long(m2.group(1)));
+			if (m2.group(1) != null) {
+				getExDocumento().setIdDoc(Long.valueOf(m2.group(1)));
+			}
 			return;
 		}
 
@@ -416,44 +419,43 @@ public class ExMobil extends AbstractExMobil implements Serializable, Selecionav
 
 						getExDocumento().setOrgaoUsuario(orgaoUsuario);
 					}
-				} catch (final Exception ce) {
-
+				} catch (final Exception e) {
+					log.warn("Não foi possível identificar o órgão do usuário", e);
 				}
 			}
 
 			if (especie != null) {
-				try {
-					ExFormaDocumento formaDoc = new ExFormaDocumento();
-					formaDoc.setSiglaFormaDoc(especie);
-					formaDoc = ExDao.getInstance().consultarPorSigla(formaDoc);
-					if (formaDoc != null)
-						getExDocumento().setExFormaDocumento(formaDoc);
-				} catch (final Exception ce) {
-					throw new Error(ce);
+				ExFormaDocumento formaDoc = new ExFormaDocumento();
+				formaDoc.setSiglaFormaDoc(especie);
+				formaDoc = ExDao.getInstance().consultarPorSigla(formaDoc);
+				if (formaDoc != null) {
+					getExDocumento().setExFormaDocumento(formaDoc);
 				}
 			}
 
-			if (ano != null)
+			if (ano != null) {
 				getExDocumento().setAnoEmissao(Long.parseLong(ano));
+			}
 			// else {
 			// Date dt = new Date();
 			// getExDocumento().setAnoEmissao((long) dt.getYear());
 			// }
-			if (numero != null)
+			if (numero != null) {
 				getExDocumento().setNumExpediente(Long.parseLong(numero));
+			}
 			if (sonumero != null) {
 				getExDocumento().setNumExpediente(Long.parseLong(sonumero));
-				getExDocumento().setAnoEmissao((long) new Date().getYear() + 1900);
-
+				getExDocumento().setAnoEmissao(Long.valueOf(Year.now().getValue()));
 			}
 
 			// Numero de sequencia do documento filho
 			//
 			if (subnumero != null) {
 				String vsNumSubdocumento = subnumero.toUpperCase();
-				if (vsNumSubdocumento.contains("."))
+				if (vsNumSubdocumento.contains(".")) {
 					vsNumSubdocumento = vsNumSubdocumento.substring(vsNumSubdocumento.indexOf(".") + 1);
-				Integer vshNumSubdocumento = new Integer(vsNumSubdocumento);
+				}
+				Integer vshNumSubdocumento = Integer.valueOf(vsNumSubdocumento);
 				if (vshNumSubdocumento != 0) {
 					try {
 						String siglaPai = (orgao == null ? (getExDocumento().getOrgaoUsuario() != null
@@ -470,7 +472,7 @@ public class ExMobil extends AbstractExMobil implements Serializable, Selecionav
 						ExDocumento docFilho = mobPai.doc().getMobilGeral().getSubdocumento(vshNumSubdocumento);
 						setExDocumento(docFilho);
 					} catch (Exception e) {
-						// e.printStackTrace();
+						log.warn("Não foi possível identificar número de sequência de subdocumento.", e);
 					}
 				}
 			}
@@ -484,23 +486,22 @@ public class ExMobil extends AbstractExMobil implements Serializable, Selecionav
 				Integer vshNumVia;
 				final String alfabeto = "ABCDEFGHIJLMNOPQRSTUZ";
 				final int vi = (alfabeto.indexOf(vsNumVia)) + 1;
-				if (vi <= 0)
-					vshNumVia = new Integer(vsNumVia);
+				if (vi <= 0) {
+					vshNumVia = Integer.valueOf(vsNumVia);
+				}
 				else {
-					vshNumVia = (new Integer(vi).intValue());
+					vshNumVia = (Integer.valueOf(vi).intValue());
 					setExTipoMobil(ExDao.getInstance().consultar(ExTipoMobil.TIPO_MOBIL_VIA, ExTipoMobil.class, false));
 				}
 				setNumSequencia(vshNumVia);
 			} else {
 				if (volume != null) {
 					String vsNumVolume = volume.toUpperCase();
-					Integer vshNumVolume = new Integer(vsNumVolume);
-					setExTipoMobil(
-							ExDao.getInstance().consultar(ExTipoMobil.TIPO_MOBIL_VOLUME, ExTipoMobil.class, false));
+					Integer vshNumVolume = Integer.valueOf(vsNumVolume);
+					setExTipoMobil(ExDao.getInstance().consultar(ExTipoMobil.TIPO_MOBIL_VOLUME, ExTipoMobil.class, false));
 					setNumSequencia(vshNumVolume);
 				} else {
-					setExTipoMobil(
-							ExDao.getInstance().consultar(ExTipoMobil.TIPO_MOBIL_GERAL, ExTipoMobil.class, false));
+					setExTipoMobil(ExDao.getInstance().consultar(ExTipoMobil.TIPO_MOBIL_GERAL, ExTipoMobil.class, false));
 				}
 			}
 		}

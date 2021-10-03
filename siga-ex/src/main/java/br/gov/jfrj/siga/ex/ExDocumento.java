@@ -1,5 +1,7 @@
 package br.gov.jfrj.siga.ex;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 /*******************************************************************************
  * Copyright (c) 2006 - 2011 SJRJ.
  * 
@@ -393,40 +395,37 @@ public class ExDocumento extends AbstractExDocumento implements Serializable, Ca
 	 * @throws Exception
 	 */
 	public String getConteudoBlobHtmlStringComReferencias() {
-		String sHtml = getConteudoBlobHtmlString();
+		String html = getConteudoBlobHtmlString();
+		if (isBlank(html)) {
+			return null;
+		}
+
 		ProcessadorReferencias pr = new ProcessadorReferencias();
 		pr.ignorar(getSigla());
-		sHtml = pr.marcarReferencias(sHtml);
+		html = pr.marcarReferencias(html);
 
 		// Verifica se todos os subscritores assinaram o documento
 		try {
 			for (DpPessoa subscritor : getSubscritorECosignatarios()) {
 				if (isEletronico() && !isAssinadoPelaPessoaComTokenOuSenha(subscritor)) {
-					String comentarioInicio = "<!-- INICIO SUBSCRITOR "
-							+ subscritor.getId() + " -->";
-					String comentarioFim = "<!-- FIM SUBSCRITOR "
-							+ subscritor.getId() + " -->";
+					final String comentarioInicio = "<!-- INICIO SUBSCRITOR " + subscritor.getId() + " -->";
+					final String comentarioFim = "<!-- FIM SUBSCRITOR " + subscritor.getId() + " -->";
 
-					if (sHtml.contains(comentarioInicio) && sHtml.contains(comentarioFim)) {
-						String blocoSubscritor = sHtml.substring(
-								sHtml.indexOf(comentarioInicio)
-										+ comentarioInicio.length(),
-								sHtml.indexOf(comentarioFim));
+					if (html.contains(comentarioInicio) && html.contains(comentarioFim)) {
+						final String blocoSubscritor = html.substring(
+								html.indexOf(comentarioInicio) + comentarioInicio.length(),
+								html.indexOf(comentarioFim)
+						);
 
-						StringBuilder sb = new StringBuilder();
-						sb.append("<span style=\"color:#CD3700;\">");
-						sb.append(blocoSubscritor);
-						sb.append("</span>");
-
-						sHtml = sHtml.replace(blocoSubscritor, sb).toString();
+						final String sb = "<span style=\"color:#CD3700;\">" + blocoSubscritor + "</span>";
+						html = html.replace(blocoSubscritor, sb);
 					}
 				}
 			}
 		} catch (Exception e) {
-			// FIXME handle exception
 			log.error("Não foi possível verificar se todos os subscritores assinaram o documento", e);
 		}
-		return sHtml;
+		return html;
 	}
 
 	/**

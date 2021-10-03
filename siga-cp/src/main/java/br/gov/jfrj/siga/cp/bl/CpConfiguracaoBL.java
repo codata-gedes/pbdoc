@@ -740,15 +740,14 @@ public class CpConfiguracaoBL {
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@SuppressWarnings("static-access")
-	public Boolean podeUtilizarServicoPorConfiguracao(DpPessoa titular, DpLotacao lotaTitular, String servicoPath) {
+	public boolean podeUtilizarServicoPorConfiguracao(DpPessoa titular, DpLotacao lotaTitular, String servicoPath) {
 		try {
-			if (titular == null || lotaTitular == null)
+			if (titular == null || lotaTitular == null) {
 				return false;
+			}
 
 			CpServico srv = null;
 			CpServico srvPai = null;
@@ -766,8 +765,7 @@ public class CpConfiguracaoBL {
 					srv.setCpServicoPai(srvPai);
 					srvRecuperado = dao().consultarPorSigla(srv);
 					if (srvRecuperado == null) {
-						CpTipoServico tpsrv = dao().consultar(CpTipoServico.TIPO_CONFIG_SISTEMA, CpTipoServico.class,
-								false);
+						CpTipoServico tpsrv = dao().consultar(CpTipoServico.TIPO_CONFIG_SISTEMA, CpTipoServico.class, false);
 						String sDesc = (asParts.length > 1 ? asParts[1] : "");
 						srv.setDscServico(sDesc);
 						srv.setCpServicoPai(srvPai);

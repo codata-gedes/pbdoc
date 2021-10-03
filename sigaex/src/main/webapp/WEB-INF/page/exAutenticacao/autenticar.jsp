@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
@@ -16,7 +16,7 @@
 				<div class="card bg-light mb-3" >
 					<div class="card-header">
 						<h5>
-							Autenticação de Documentos
+							<fmt:message key="tela.validacao"/> de Documentos
 						</h5>
 					</div>
 					<div class="card-body">
@@ -40,7 +40,7 @@
 							</div>
 							<div class="row">
 								<div class="col">
-									<button type="submit" class="btn btn-lg btn-primary btn-block"><i class="fas fa-stamp"></i> Autenticar</button>
+									<button type="submit" class="btn btn-lg btn-primary btn-block"><i class="fas fa-stamp"></i> <fmt:message key="botao.validar"/></button>
 								</div>
 							</div>
 						</form>
@@ -54,7 +54,7 @@
 				    <h5>Informações Gerais</h5>
 				  </div>
 				  <div class="card-body">
-				    <p>Para utilizar a Confirmação da Autenticidade do Documento é
+				    <p>Para utilizar a Confirmação da Validação do Documento é
 					obrigatório informar o número do documento que se encontra no rodapé
 					do documento a ser consultado.</p>
 					<p>
