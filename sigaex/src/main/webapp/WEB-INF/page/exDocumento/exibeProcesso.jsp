@@ -242,14 +242,14 @@
 							<siga:link icon="wrench" title="Preferência:" test="${true}" url="" />
 							<span class="pl-2"></span>			
 							<span style="white-space: nowrap;">
-							<input type="radio" id="radioHTML" name="formato" value="html" accesskey="h" checked="checked" onclick="exibir(htmlAtual,pdfAtual,'');">
+							<input type="radio" id="radioHTML" name="formato" value="html" accesskey="h" checked="checked">
 								<u>H</u>TML&nbsp;
 							</input>
 							</span>
 							<span class="pl-2"></span>			
 							<span style="white-space: nowrap;">
-							<input type="radio" id="radioPDF" name="formato" value="pdf" accesskey="p" onclick="exibir(htmlAtual,pdfAtual,'');">
-								<u>P</u>DF -  <a id="pdflink" accesskey="a"> <u>a</u>brir</a>
+							<input type="radio" id="radioPDF" name="formato" value="pdf" accesskey="p">
+								<u>P</u>DF - <a id="pdflink" accesskey="a" onclick="exibir(htmlAtual,pdfAtual,'');" target="_blank"> <u>a</u>brir</a>
 							</input>
 							</span>
 						</div>
@@ -278,7 +278,7 @@
 							</c:if>
 						</span>		
 						<c:if test="${mob.doc.podeReordenar()}">				
-							<div class="menu-ordenacao"">
+							<div class="menu-ordenacao">
 								Clique e arraste os itens tracejados para reordená-los<br />							
 								<form action="${pageContext.request.contextPath}/app/expediente/doc/reordenar" id="formReordenarDocs" class="form" method="POST">									
 									<input type="hidden" name="idDocumentos" id="inputHiddenIdDocs" />													
@@ -552,7 +552,7 @@
 		} else {
 			// Para TRF2 com radio buttons
 			if (document.getElementById('radioHTML').checked && refHTML != '') {
-				ifr.src = path + refHTML;
+				ifr.src = window.open(path + refHTML);
 				ifrp.style.border = "0px solid black";
 				ifrp.style.borderBottom = "0px solid black";
 				if (ifr.addEventListener)
@@ -560,7 +560,7 @@
 				else if (ifr.attachEvent)
 					ifr.attachEvent("onload", resize);
 			} else {
-				ifr.src = path + refPDF;
+				ifr.src = window.open(path + refPDF);
 				
 				if(!refPDF.includes("completo=1")) {
 					var url = ifr.src;
