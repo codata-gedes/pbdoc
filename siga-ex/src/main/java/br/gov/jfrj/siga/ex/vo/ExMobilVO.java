@@ -369,13 +369,15 @@ public class ExMobilVO extends ExVO {
 					"ciencia",
 					Ex.getInstance().getComp()
 							.podeFazerCiencia(titular, lotaTitular, mob));
-			
-//			if (mob.temAnexos()) {
-//				addAcao("script_key", "Assinar Anexos " + (mob.isVia() ? "da Via" : "do Volume"),
-//						"/app/expediente/mov", "assinarAnexos", true, null,
-//						"assinandoAnexosGeral=true&sigla=" + getSigla(), null,
-//						null, null);
-//			}
+
+			/*			
+			if (mob.temAnexos()) {
+				addAcao("script_key", "Assinar Anexos " + (mob.isVia() ? "da Via" : "do Volume"),
+						"/app/expediente/mov", "assinarAnexos", true, null,
+						"assinandoAnexosGeral=true&sigla=" + getSigla(), null,
+						null, null);
+			}
+			*/
 		}
 		addAcao("page_white_error", "Desentranhar", "/app/expediente/mov",
 				"cancelar_juntada", Ex.getInstance().getComp()
