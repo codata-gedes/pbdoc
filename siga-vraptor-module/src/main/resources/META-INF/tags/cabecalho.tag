@@ -129,9 +129,9 @@ ${meta}
 	</c:when>
 	<c:otherwise>
 		<meta name="theme-color" content="bg-primary">
-				<c:set var="thead_color" value="thead-light" scope="request" />
-									
-		<c:set var="ico_siga" value="siga.ico" />
+		<c:set var="thead_color" value="thead-light" scope="request" />
+
+		<c:set var="ico_siga" value="${f:resourceOrDefault('/siga.favicon', '/siga/imagens/siga.ico')}" />
 		<c:set var="menu_class" value="bg-danger" /> 
 		<c:set var="sub_menu_class" value="bg-dark text-white" />
 		
@@ -154,8 +154,7 @@ ${meta}
 </c:choose>
 
 <link rel="stylesheet" href="/siga/css/style_siga.css" type="text/css" media="screen, projection">
-<link rel="shortcut icon" href="/siga/imagens/${ico_siga}" />
-
+<link rel="shortcut icon" href="${ico_siga}" />
 
 <c:catch>
 	<c:if test="${desabilitarComplementoHEAD != 'sim'}">

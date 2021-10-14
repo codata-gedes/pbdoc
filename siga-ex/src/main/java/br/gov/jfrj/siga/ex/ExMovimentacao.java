@@ -393,22 +393,19 @@ public class ExMovimentacao extends AbstractExMovimentacao implements
 	public int compareTo(final ExMovimentacao mov) {
 		try {
 			int i = 0;
-			if (this.getDtTimestamp() != null) {
-				i = this.getDtTimestamp().compareTo(mov.getDtTimestamp());
-			} else if(this.getDtIniMov() != null) {
-				i = this.getDtIniMov().compareTo(mov.getDtIniMov());
-			}	
-			
-			if (i != 0)
-				return i;
-			
-			if (getExTipoMovimentacao() != null && mov.getExTipoMovimentacao() != null) {
-				i = tpMovDesempatePosicao(getExTipoMovimentacao().getId()).compareTo(
-						tpMovDesempatePosicao(mov.getExTipoMovimentacao().getId()));
-				if (i != 0)
-					return i;
+			if (getDtIniMov() != null) {
+				i = getDtIniMov().compareTo(mov.getDtIniMov());
 			}
-			
+			if (i != 0) {
+				return i;
+			}
+			if (getExTipoMovimentacao() != null && mov.getExTipoMovimentacao() != null) {
+				i = tpMovDesempatePosicao(getExTipoMovimentacao().getId())
+						.compareTo(tpMovDesempatePosicao(mov.getExTipoMovimentacao().getId()));
+				if (i != 0) {
+					return i;
+				}
+			}
 			i = getIdMov().compareTo(mov.getIdMov());
 			return i;
 		} catch (final Exception ex) {

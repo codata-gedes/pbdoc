@@ -18,6 +18,8 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.jee;
 
+import static org.apache.commons.lang3.StringUtils.stripToNull;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -91,6 +93,14 @@ public class SigaLibsEL {
 
 	public static Object resource(String name) {
 		return Contexto.resource(name);
+	}
+
+	public static Object resourceOrDefault(String name, Object fallback) {
+		Object resource = Contexto.resource(name);
+		if (String.class.isInstance(resource)) {
+			resource = stripToNull(resource.toString());
+		}
+		return resource == null ? fallback : resource;
 	}
 
 	public static String env(String env) {
