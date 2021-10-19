@@ -33,6 +33,9 @@
 			<h2>
 				<c:if test="${empty ocultarCodigo}">
 					${docVO.sigla}
+					<c:if test="${docVO.doc ne null}">
+						<small class="text-muted" title="Identificador Incremental Interno Único (ID)">#${docVO.doc.id}</small>
+					</c:if>
 				</c:if>
 				<a class="btn btn-secondary float-right" name="voltar" href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${docVO.sigla}" accesskey="r">Volta<u>r</u></a>
 			</h2>

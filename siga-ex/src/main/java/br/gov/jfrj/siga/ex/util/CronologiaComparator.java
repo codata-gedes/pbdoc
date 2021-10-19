@@ -6,24 +6,47 @@ import br.gov.jfrj.siga.ex.ExMovimentacao;
 
 public class CronologiaComparator implements Comparator<ExMovimentacao> {
 
+	public static final CronologiaComparator INSTANCE = new CronologiaComparator();
+
 	public int compare(ExMovimentacao o1, ExMovimentacao o2) {
 		try {
-			int i = o2.getDtTimestamp().compareTo(o1.getDtTimestamp());
-			if (i != 0)
-				return i;
-			
-			if (o1.getExTipoMovimentacao() != null && o2.getExTipoMovimentacao() != null) {
-				i = ExMovimentacao.tpMovDesempatePosicao(o1.getExTipoMovimentacao().getId()).compareTo(
-						ExMovimentacao.tpMovDesempatePosicao(o2.getExTipoMovimentacao().getId()));
-				if (i != 0)
-					return i;
+			int i = 0;
+
+			// Pela data
+			if (o2.getDtTimestamp() != null) {
+				i = o2.getDtTimestamp().compareTo(o1.getDtTimestamp());
+			} else if (o2.getDtIniMov() != null) {
+				i = o2.getDtIniMov().compareTo(o1.getDtIniMov());
 			}
-			
-			i = o1.getIdMov().compareTo(o2.getIdMov());
+
+			if (i != 0) {
+				return i;
+			}
+
+			// Por uma estar cancelada e a outra não
+			if (o1.isCancelada() && !o2.isCancelada()) {
+				return Integer.MAX_VALUE;
+			}
+			if (!o1.isCancelada() && o2.isCancelada()) {
+				return Integer.MIN_VALUE;
+			}
+
+			// Pelo tipo da movimentação
+			if (o1.getExTipoMovimentacao() != null && o2.getExTipoMovimentacao() != null) {
+				i = ExMovimentacao.tpMovDesempatePosicao(
+						o1.getExTipoMovimentacao().getId(),
+						o2.getExTipoMovimentacao().getId()
+				);
+				if (i != 0) {
+					return i;
+				}
+			}
+
+			// Pela ID
+			i = o2.getIdMov().compareTo(o1.getIdMov());
 			return i;
 		} catch (final Exception ex) {
 			return 0;
 		}
 	}
 }
-

@@ -33,8 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.SortNatural;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.SigaCalendar;
@@ -135,7 +134,7 @@ public class GcInformacao extends Objeto {
 	@JoinColumn(name = "ID_GRUPO")
 	private CpPerfil grupo;
 
-	@Sort(type = SortType.NATURAL)
+	@SortNatural
 	@ManyToMany
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.PERSIST})
 	@JoinTable(name = "GC_TAG_X_INFORMACAO", schema = "SIGAGC", joinColumns = @JoinColumn(name = "id_informacao"), inverseJoinColumns = @JoinColumn(name = "id_tag"))
@@ -154,7 +153,7 @@ public class GcInformacao extends Objeto {
 	@JoinColumn(name = "ID_ARQUIVO")
 	private GcArquivo arq;
 
-	// @Sort(type = SortType.NATURAL)
+	// @SortNatural
 	// @OneToMany(mappedBy = "inf")
 	// @OneToMany
 	// @Where(clause = "id_tp_marca = 3")
@@ -163,7 +162,7 @@ public class GcInformacao extends Objeto {
 	private java.util.List<GcMarca> marcas;
 	// public java.util.Set<GcMarca> marcas;
 
-	@Sort(type = SortType.NATURAL)
+	@SortNatural
 	@OneToMany(mappedBy = "inf")
 	private SortedSet<GcMovimentacao> movs;
 

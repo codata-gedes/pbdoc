@@ -19,6 +19,8 @@
 <%@ attribute name="modal"%>
 <%@ attribute name="explicacao"%>
 <%@ attribute name="post"%>
+<%@ attribute name="sufixoItemDesbotado"%>
+<%@ attribute name="sufixoItemDesbotadoHint"%>
 
 <c:choose>
 	<c:when test="${siga_cliente == 'GOVSP'}">
@@ -70,7 +72,7 @@
 	<c:if test="${empty url}">${img}${title}</c:if>
 	${pre}
 	<c:if test="${not empty url}">
-		<li>
+		<li class="ml-3">
 		<c:choose>
 			<c:when test="${not empty modal}">
 				<a id="${linkId}"
@@ -111,6 +113,9 @@
 				</c:choose>
 			</c:otherwise>
 		</c:choose>
+		<c:if test="${not empty sufixoItemDesbotado}">
+			<small class="text-muted" title="${sufixoItemDesbotadoHint}">${sufixoItemDesbotado}</small>
+		</c:if>
 		</li>
 	</c:if>
 	${pos}

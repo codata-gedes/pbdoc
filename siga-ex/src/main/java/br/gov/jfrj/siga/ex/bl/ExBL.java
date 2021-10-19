@@ -58,6 +58,7 @@ import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.proxy.HibernateProxy;
@@ -2045,6 +2046,10 @@ public class ExBL extends CpBL {
 			// Hash de auditoria
 			//
 			final byte[] pdf = movAlvo.getConteudoBlobPdf();
+			if (ArrayUtils.isEmpty(pdf)) {
+				throw new IllegalStateException("Documento da movimentação ID #" + movAlvo.getIdMov() + " não foi encontrado para adicionar hashing do Bluc Service");
+			}
+
 			byte[] sha256 = BlucService.calcSha256(pdf);
 			String cpf = subscritor.getCpfPessoa().toString();
 			acrescentarHashDeAuditoria(mov, sha256,
@@ -5597,7 +5602,7 @@ public class ExBL extends CpBL {
 		}
 	}
 
-	private final int HASH_TIMEOUT_MILLISECONDS = 5000;
+	private static final int HASH_TIMEOUT_MILLISECONDS = 16000;
 
 	private static class TimestampPostRequest implements ISwaggerRequest {
 		String system;

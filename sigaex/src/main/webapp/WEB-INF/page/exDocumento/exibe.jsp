@@ -215,7 +215,11 @@
 				<input type="hidden" id="visualizador" value="${f:resource('/sigaex.pdf.visualizador') }"/>
 			</form>
 			<h2>
-				<c:if test="${empty ocultarCodigo}">${docVO.sigla}
+				<c:if test="${empty ocultarCodigo}">
+					${docVO.sigla}
+					<c:if test="${docVO.doc ne null}">
+						<small class="text-muted" title="Identificador Incremental Interno Único (ID)">#${docVO.doc.id}</small>
+					</c:if>
 				</c:if>
 				<button type="button" name="voltar" onclick="${(empty param.linkVolta) ? 'javascript:window.location.href=\'/siga\';' : 'javascript:'.concat(param.linkVolta) }" class="btn btn-secondary float-right ${hide_only_TRF2}" accesskey="r">Volta<u>r</u></button>				
 			</h2>
@@ -332,21 +336,38 @@
 													</c:if>>
 												${mov.descricao}
 												<c:if test='${mov.idTpMov != 2}'> ${mov.complemento} </c:if>
-												<c:set var="assinadopor" value="${true}" />
 												<siga:links
 														buttons="${false}"
 														inline="${true}">
 														<c:forEach var="acao" items="${mov.acoes}">
-															<siga:link title="${acao.nomeNbsp}" pre="${acao.pre}"
+															<siga:link
+																title="${acao.nomeNbsp}"
+																pre="${acao.pre}"
 																pos="${acao.pos}"
 																url="${pageContext.request.contextPath}${acao.url}"
-																test="${acao.pode}" explicacao="${acao.explicacao}" popup="${acao.popup}"
-																confirm="${acao.msgConfirmacao}" ajax="${acao.ajax}"
-																idAjax="${mov.idMov}" classe="${acao.classe}" post="${acao.post}" />
-															<c:if test='${assinadopor and mov.idTpMov == 2}'> ${mov.complemento}
-																<c:set var="assinadopor" value="${false}" />
-															</c:if>
+																test="${acao.pode}"
+																explicacao="${acao.explicacao}"
+																popup="${acao.popup}"
+																confirm="${acao.msgConfirmacao}"
+																ajax="${acao.ajax}"
+																idAjax="${mov.idMov}"
+																classe="${acao.classe}"
+																post="${acao.post}"
+																sufixoItemDesbotado="${
+																	not empty acao.params['movDocId']
+																		? '#'.concat(acao.params['movDocId'])
+																		: null
+																}"
+																sufixoItemDesbotadoHint="Identificador Incremental Interno Único (ID)"
+															/>
 														</c:forEach>
+														<c:if test="${mov.idTpMov == 2}">
+															<div class="pl-4">
+																<div class="movimentacao-complemento pl-3">
+																	<small class="text-muted">${mov.complemento}</small>
+																</div>
+															</div>
+														</c:if>
 												</siga:links>
 											</td>
 										</tr>
