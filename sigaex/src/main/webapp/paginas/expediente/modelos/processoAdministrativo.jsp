@@ -129,7 +129,7 @@
 		<table align="center" width="85%" border="1" cellspacing="1"
 			bgcolor="#000000">
 			<tr>
-				<td bgcolor="#FFFFFF" align="center"><b>OBJETO</b></td>
+				<td bgcolor="#FFFFFF" align="center"><b>ASSUNTO</b></td>
 			</tr>
 			<tr>
 				<td bgcolor="#FFFFFF" align="center"><br />
@@ -142,18 +142,6 @@
 		<br>
 		<br>
 
-		<table align="center" width="60%" border="1" cellspacing="1"
-			bgcolor="#000000">
-			<tr>
-				<td bgcolor="#FFFFFF" align="center"><b>ARQUIVADO</b><BR />
-				<BR />
-				CX______________/________________/20____<br />
-				<br />
-				<br />
-				<br />
-				</td>
-			</tr>
-		</table>
 		<!-- INICIO PRIMEIRO RODAPE
 		<c:import url="/paginas/expediente/modelos/inc_rodapeClassificacaoDocumental.jsp" />
 		FIM PRIMEIRO RODAPE -->
