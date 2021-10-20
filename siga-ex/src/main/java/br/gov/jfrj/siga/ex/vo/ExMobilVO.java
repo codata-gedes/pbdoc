@@ -41,7 +41,7 @@ import br.gov.jfrj.siga.ex.bl.ExParte;
 import br.gov.jfrj.siga.ex.logic.ExPodeAnotar;
 import br.gov.jfrj.siga.ex.logic.ExPodeMarcar;
 
-public class 	 extends ExVO {
+public class ExMobilVO extends ExVO {
 
 	Logger log = Logger.getLogger(ExMobilVO.class.getCanonicalName());
 	ExMobil mob;
