@@ -41,7 +41,7 @@ import br.gov.jfrj.siga.ex.bl.ExParte;
 import br.gov.jfrj.siga.ex.logic.ExPodeAnotar;
 import br.gov.jfrj.siga.ex.logic.ExPodeMarcar;
 
-public class ExMobilVO extends ExVO {
+public class 	 extends ExVO {
 
 	Logger log = Logger.getLogger(ExMobilVO.class.getCanonicalName());
 	ExMobil mob;
@@ -370,14 +370,14 @@ public class ExMobilVO extends ExVO {
 					Ex.getInstance().getComp()
 							.podeFazerCiencia(titular, lotaTitular, mob));
 
-			/*			
+						
 			if (mob.temAnexos()) {
 				addAcao("script_key", "Assinar Anexos " + (mob.isVia() ? "da Via" : "do Volume"),
 						"/app/expediente/mov", "assinarAnexos", true, null,
 						"assinandoAnexosGeral=true&sigla=" + getSigla(), null,
 						null, null);
 			}
-			*/
+			
 		}
 		addAcao("page_white_error", "Desentranhar", "/app/expediente/mov",
 				"cancelar_juntada", Ex.getInstance().getComp()
