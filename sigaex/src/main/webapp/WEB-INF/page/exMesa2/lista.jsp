@@ -226,7 +226,7 @@
 													v-bind:class="usuarioPosse ? 'col-8' : 'col-9'">
 												<fmt:message key="usuario.mesavirtual.codigo"/></th>
 											<th scope="col" class="d-none d-md-block"
-											 	v-bind:class="usuarioPosse ? 'col-3' : 'col-4'">Descrição</th>
+											 	v-bind:class="usuarioPosse ? 'col-3' : 'col-4'">Assunto</th>
 											<th scope="col" class="col-md-1"
 												v-bind:class="usuarioPosse ? 'col-2' : 'col-3'">Origem</th>
 											<th v-if="usuarioPosse" scope="col" class="col-md-1 col-2"><fmt:message key="documento.atendente"/></th>

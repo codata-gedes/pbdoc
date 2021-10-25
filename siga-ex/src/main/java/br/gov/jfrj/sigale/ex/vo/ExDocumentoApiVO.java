@@ -377,7 +377,7 @@ public class ExDocumentoApiVO extends ExApiVO {
 		vo.addAcao("note_add", "_Anotar", "/app/expediente/mov", "anotar",
 				Ex.getInstance().getComp().podeFazerAnotacao(titular, lotaTitular, mob));
 
-		vo.addAcao("folder_user", "Definir Perfil", "/app/expediente/mov", "vincularPapel",
+		vo.addAcao("folder_user", "Definir Acompanhamento", "/app/expediente/mov", "vincularPapel",
 				Ex.getInstance().getComp().podeFazerVinculacaoPapel(titular, lotaTitular, mob));
 
 		vo.addAcao("folder_star", "Definir Marcador", "/app/expediente/mov", "marcar",
@@ -411,7 +411,7 @@ public class ExDocumentoApiVO extends ExApiVO {
 		if (doc.isFinalizado() && doc.getNumExpediente() != null) {
 			// documentos finalizados
 			if (mob.temAnexos()) {
-				vo.addAcao("script_key", "Assinar Anexos Gerais", "/app/expediente/mov", "assinarAnexos", true, null,
+				vo.addAcao("script_key", "Assinar Anexos da Via", "/app/expediente/mov", "assinarAnexos", true, null,
 						"assinandoAnexosGeral=true&sigla=" + getSigla(), null, null, null);
 			}
 		}
@@ -437,7 +437,7 @@ public class ExDocumentoApiVO extends ExApiVO {
 
 		// test="${exibirCompleto != true}" />
 		int numUltMobil = doc.getNumUltimoMobil();
-		vo.addAcao("eye", "Ver _Mais", "/app/expediente/doc", "exibirAntigo",
+		vo.addAcao("eye", "Histórico", "/app/expediente/doc", "exibirAntigo",
 				Ex.getInstance().getComp().podeExibirInformacoesCompletas(titular, lotaTitular, mob) && !exibirAntigo,
 				numUltMobil < 20 ? ""
 						: "Exibir todos os " + numUltMobil
