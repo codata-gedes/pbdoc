@@ -24,6 +24,7 @@
 		</div>
 	</div>
 
+	<script type="text/javascript" src="/siga/javascript/siga.js"></script>
 	<script type="text/javascript" src="/sigaex/javascript/vue.min.js"></script>
 
 	<script type="text/javascript" language="Javascript1.1">
