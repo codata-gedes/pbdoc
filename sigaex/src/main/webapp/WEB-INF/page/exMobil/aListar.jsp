@@ -453,8 +453,7 @@
 							<div id="divUltMovResp" style="display:"
 								class="form-group col-md-4">
 								<label for="ultMovTipoResp"><fmt:message key="tela.pesquisa.pessoa"/></label>
-								<siga:selecao propriedade="ultMovResp" tema="simple"
-									paramList="buscarFechadas=true" modulo="siga" />
+								<siga:selecao propriedade="ultMovResp" tema="simple" modulo="siga" />
 							</div>
 							<div id="divUltMovLotaResp" style="display: none"
 								class="form-group col-md-4">
