@@ -1234,6 +1234,11 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 			&& ((mob.doc().getSubscritor() != null && mob.doc().getSubscritor().equivale(titular)) || mob.doc().isCossignatario(titular)))
 			return true;
 		
+		//condições para assinatura digital de cosignatários em documentos físicos
+		if (mob.doc().isCossignatario(titular) && mob.doc().isFinalizado() && !mob.doc().isAssinadoPeloSubscritorComTokenOuSenha()) {	
+			return false;
+		} 
+		
 		// Se o subscritor ou algum cossignatário requer solicitação de assinatura, não deve permitir assinar sem ela
 /*		if (!mob.doc().isAssinaturaSolicitada()) {
 			if (!getConf().podePorConfiguracao(mob.doc().getSubscritor(), CpTipoConfiguracao.TIPO_CONFIG_PODE_ASSINAR_SEM_SOLICITACAO))
