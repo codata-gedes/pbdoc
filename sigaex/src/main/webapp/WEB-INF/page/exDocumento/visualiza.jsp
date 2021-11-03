@@ -950,10 +950,10 @@
 							</p>
 						</tags:collapse>
 					</div>
-
+					<c:if test="${docVO.podeAnexarArquivoAuxiliar}">
 						<div class="card-sidebar card bg-light mb-3">
 							<tags:collapse title="Arquivos Auxiliares" id="ArqAuxiliares" collapseMode="${collapse_ArqAuxiliares}">
-								<c:if test="${docVO.podeAnexarArquivoAuxiliar}">
+								
 									<p>
 										<a title="Anexar um novo arquivo auxiliar" class="btn btn-sm btn-secondary"
 											href="${linkTo[ExMovimentacaoController].anexarArquivoAuxiliar}?sigla=${sigla}"
@@ -962,7 +962,7 @@
 											Incluir Arquivo
 										</a>
 									</p>
-								</c:if>
+								
 								<c:forEach var="mov" items="${m.movs}">
 									<c:if test="${mov.idTpMov == 64 and not mov.cancelada}">
 										<p>
@@ -1000,7 +1000,7 @@
 								</c:forEach>
 							</tags:collapse>
 						</div>
-	
+					</c:if>
 						<div class="gt-sidebar-content">
 							<div id="gc"></div>
 						</div>
