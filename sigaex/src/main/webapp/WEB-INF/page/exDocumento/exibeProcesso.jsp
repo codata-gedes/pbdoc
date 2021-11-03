@@ -145,11 +145,11 @@
 
 		if (ifr && !window.opera) {
 			ifr.style.display = "block";
-			if (ifr.contentDocument && ifr.contentDocument.body.offsetHeight) //ns6 syntax
-				ifr.height = ifr.contentDocument.body.offsetHeight
-						+ FFextraHeight;
-			else if (ifr.Document && ifr.Document.body.scrollHeight) //ie5+ syntax
+			if (ifr.contentDocument && ifr.contentDocument.body && ifr.contentDocument.body.offsetHeight) { // ns6 syntax
+				ifr.height = ifr.contentDocument.body.offsetHeight + FFextraHeight;
+			} else if (ifr.Document && ifr.Document.body && ifr.Document.body.scrollHeight) { // ie5+ syntax
 				ifr.height = ifr.Document.body.scrollHeight;
+			}
 		}
 	}
 
@@ -174,7 +174,21 @@
 
 		redimensionar();
 		resize();
-	}				
+	}
+
+	function verificarMensagem(url) {
+		if(url.includes("file=")) {
+			const errorMessage = window.parent.painel.document.getElementById('errorMessage');
+			if(errorMessage && errorMessage.textContent) {
+				document.getElementById('painel').src = decodeURIComponent(url.substring(url.indexOf("file=") + 5));
+			} else {
+				const textLayer = window.parent.painel.document.getElementsByClassName("textLayer");
+				if(textLayer.length == 0) {
+					setTimeout(() => verificarMensagem(url), 100);
+				}
+			}
+		}
+	}
 </script>
 
 <!-- main content bootstrap -->
@@ -242,14 +256,14 @@
 							<siga:link icon="wrench" title="Preferência:" test="${true}" url="" />
 							<span class="pl-2"></span>			
 							<span style="white-space: nowrap;">
-							<input type="radio" id="radioHTML" name="formato" value="html" accesskey="h" checked="checked">
+							<input type="radio" id="radioHTML" name="formato" value="html" accesskey="h" checked="checked" onclick="exibir(htmlAtual,pdfAtual,'');">
 								<u>H</u>TML&nbsp;
 							</input>
 							</span>
 							<span class="pl-2"></span>			
 							<span style="white-space: nowrap;">
-							<input type="radio" id="radioPDF" name="formato" value="pdf" accesskey="p">
-								<u>P</u>DF - <a id="pdflink" accesskey="a" onclick="exibir(htmlAtual,pdfAtual,'');" target="_blank"> <u>a</u>brir</a>
+							<input type="radio" id="radioPDF" name="formato" value="pdf" accesskey="p" onclick="exibir(htmlAtual,pdfAtual,'');">
+								<u>P</u>DF<a id="pdflink" accesskey="a" class="btn btn-link" target="_blank"><u>a</u>brir <i class="fas fa-external-link-alt"></i></a>
 							</input>
 							</span>
 						</div>
@@ -430,7 +444,7 @@
 				</div>
 			</c:if>
 			<div id="paipainel" style="margin: 0px; padding: 0px; border: 0px; clear: both;overflow:hidden;">
-				<iframe style="visibility: visible; margin: 0px; padding: 0px; min-height: 20em;" name="painel" id="painel" src="" align="right" width="100%" onload="$(document).ready(function () {resize();});redimensionar();removerBotoes();verificarMensagem(this.src)" frameborder="0" scrolling="no"></iframe>
+				<iframe style="visibility: visible; margin: 0px; padding: 0px; min-height: 80em;" name="painel" id="painel" src="" align="right" width="100%" onload="$(document).ready(function () {resize();});redimensionar();removerBotoes();verificarMensagem(this.src)" frameborder="0" scrolling="no"></iframe>
 			</div>
 		</div>
 	</div>
@@ -541,7 +555,6 @@
 				ifr.src = path + refPDF + refSiglaDocPrincipal;
 				
 				if(!refPDF.includes("completo=1")) {
-					var url = ifr.src;
 					ifr.src = montarUrlDocPDF(ifr.src, "${f:resource('/sigaex.pdf.visualizador')}");
 				}
 				
@@ -552,7 +565,7 @@
 		} else {
 			// Para TRF2 com radio buttons
 			if (document.getElementById('radioHTML').checked && refHTML != '') {
-				ifr.src = window.open(path + refHTML);
+				ifr.src = path + refHTML;
 				ifrp.style.border = "0px solid black";
 				ifrp.style.borderBottom = "0px solid black";
 				if (ifr.addEventListener)
@@ -560,10 +573,9 @@
 				else if (ifr.attachEvent)
 					ifr.attachEvent("onload", resize);
 			} else {
-				ifr.src = window.open(path + refPDF);
+				ifr.src = path + refPDF;
 				
 				if(!refPDF.includes("completo=1")) {
-					var url = ifr.src;
 					ifr.src = montarUrlDocPDF(ifr.src, "${f:resource('/sigaex.pdf.visualizador')}");
 				}
 				ifrp.style.border = "0px solid black";
@@ -580,21 +592,6 @@
 				resize();
 			}, 100);
 		});
-	}
-	
-	function verificarMensagem(url) {
-		if(url.includes("file=")) {
-			if((window.parent.painel.document.getElementById('errorMessage') != null &&
-					window.parent.painel.document.getElementById('errorMessage').textContent != "" )) {
-				document.getElementById('painel').src = decodeURIComponent(url.substring(url.indexOf("file=")+5));
-			} else {
-				if(window.parent.painel.document.getElementsByClassName("textLayer").length == 0) {
-					setTimeout(function() {
-						verificarMensagem(url);
-					}, 100);
-				}
-			}
-		}	
 	}
 
 	exibir(window.htmlAtual, window.pdfAtual);
