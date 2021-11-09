@@ -86,7 +86,6 @@ import br.gov.jfrj.itextpdf.ConversorHtml;
 import br.gov.jfrj.itextpdf.Documento;
 import br.gov.jfrj.siga.Service;
 import br.gov.jfrj.siga.armazenamento.zip.ZipItem;
-import br.gov.jfrj.siga.armazenamento.zip.ZipServico;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Correio;
 import br.gov.jfrj.siga.base.CurrentRequest;
@@ -186,7 +185,6 @@ public class ExBL extends CpBL {
 	private static final String MODELO_FOLHA_DE_ROSTO_EXPEDIENTE_INTERNO = "Folha de Rosto - Expediente Interno";
 	private static final String MODELO_FOLHA_DE_ROSTO_PROCESSO_ADMINISTRATIVO_INTERNO = "Folha de Rosto - Processo Administrativo Interno";
 	private static final String SHA1 = "1.3.14.3.2.26";
-	private static final String MIME_TYPE_PKCS7 = "application/pkcs7-signature";
 	
 	private final ThreadLocal<SortedSet<ExMobil>> threadAlteracaoParcial = new ThreadLocal<SortedSet<ExMobil>>();
 
@@ -1588,8 +1586,7 @@ public class ExBL extends CpBL {
 			mov = criarNovaMovimentacao(tpMovAssinatura, cadastrante, lotaCadastrante, doc.getMobilGeral(), dtMov,
 					usuarioDoToken, null, null, null, null);
 
-			ZipServico.gravar(mov, cms);
-			mov.setConteudoTpMov(MIME_TYPE_PKCS7);
+			mov.setConteudoBlob(ZipItem.Tipo.P7S, cms);
 			mov.setDescrMov(sNome);
 			gravarMovimentacao(mov);
 
@@ -2304,11 +2301,10 @@ public class ExBL extends CpBL {
 
 			mov.setExMovimentacaoRef(movAlvo);
 
-			ZipServico.gravar(mov, cms);
-			mov.setConteudoTpMov(MIME_TYPE_PKCS7);
+			mov.setConteudoBlob(ZipItem.Tipo.P7S, cms);
 			mov.setDescrMov(sNome);
-
 			gravarMovimentacao(mov);
+
 			concluirAlteracao(mov);
 		} catch (final AplicacaoException e) {
 			cancelarAlteracao();
