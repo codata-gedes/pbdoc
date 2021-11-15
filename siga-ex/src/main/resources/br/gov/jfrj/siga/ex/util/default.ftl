@@ -63,7 +63,7 @@
   [#elseif mov.subscritor?? && doc.subscritor?? && mov.subscritor.idPessoa == doc.subscritor.idPessoa && doc.nmFuncao??]
     ${doc.nmFuncao} 
   [#elseif (mov.titular.funcaoConfianca.nomeFuncao)??]
-    ${mov.titular.funcaoConfianca.nomeFuncao} ${(mov.titular.idPessoa != mov.subscritor.idPessoa)?string('EM EXERCÍCIO', '')} 
+    ${mov.titular.funcaoConfianca.nomeFuncao} ${(mov.titular.idPessoa != mov.subscritor.idPessoa)?string('EM EXERCÍCIO DA FUNÇÃO', '')} 
   [#elseif (mov.subscritor.funcaoConfianca.nomeFuncao)??]
     ${mov.subscritor.funcaoConfianca.nomeFuncao} 
   [#else]
@@ -2450,7 +2450,7 @@ Pede deferimento.</span><br/><br/><br/>
                 ${doc.nmFuncao}
             [#elseif (doc.titular.funcaoConfianca.nomeFuncao)??]
                 ${doc.titular.funcaoConfianca.nomeFuncao}
-                [#if (doc.titular.idPessoa)! != (doc.subscritor.idPessoa)!] EM EXERCÍCIO [/#if]
+                [#if (doc.titular.idPessoa)! != (doc.subscritor.idPessoa)!] EM EXERCÍCIO DA FUNÇÃO [/#if]
             [#elseif (doc.subscritor.funcaoConfianca.nomeFuncao)??]
                 ${doc.subscritor.funcaoConfianca.nomeFuncao}
             [#else]
@@ -2489,7 +2489,7 @@ Pede deferimento.</span><br/><br/><br/>
                             ${mov.nmFuncao}
                         [#elseif (mov.titular.funcaoConfianca.nomeFuncao)??]
                             ${mov.titular.funcaoConfianca.nomeFuncao} 
-                                [#if substituicao!false && ((doc.titular.idPessoa)!-1) != ((doc.subscritor.idPessoa)!-1)] EM EXERCÍCIO [/#if]
+                                [#if substituicao!false && ((doc.titular.idPessoa)!-1) != ((doc.subscritor.idPessoa)!-1)] EM EXERCÍCIO DA FUNÇÃO [/#if]
                         [#elseif (mov.subscritor.funcaoConfianca.nomeFuncao)??]
                             ${mov.subscritor.funcaoConfianca.nomeFuncao}
                         [#else]
@@ -2535,7 +2535,7 @@ Pede deferimento.</span><br/><br/><br/>
     [#elseif funcSubscrDoc??]
         ${funcSubscrDoc}
     [#elseif (mov.titular.funcaoConfianca.nomeFuncao)??]
-        ${mov.titular.funcaoConfianca.nomeFuncao} ${(mov.titular.idPessoa != mov.subscritor.idPessoa)?string('EM EXERCÍCIO', '')}
+        ${mov.titular.funcaoConfianca.nomeFuncao} ${(mov.titular.idPessoa != mov.subscritor.idPessoa)?string('EM EXERCÍCIO DA FUNÇÃO', '')}
     [#elseif (mov.subscritor.funcaoConfianca.nomeFuncao)??]
         ${mov.subscritor.funcaoConfianca.nomeFuncao}
     [#else]
