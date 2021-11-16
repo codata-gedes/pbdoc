@@ -39,6 +39,8 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 	
 	
 	private boolean buscarFechadas;
+	private boolean buscarSubstitutos;
+	
 	private String situacaoFuncionalPessoa;
 	
 	public String getSituacaoFuncionalPessoa() {
@@ -55,6 +57,14 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 
 	public void setBuscarFechadas(boolean buscarFechadas) {
 		this.buscarFechadas = buscarFechadas;
+	}
+	
+	public boolean isBuscarSubstitutos() {
+		return buscarSubstitutos;
+	}
+	
+	public void setBuscarSubstitutos(boolean buscarSubstitutos) {
+		this.buscarSubstitutos = buscarSubstitutos;
 	}
 
 	public Long getIdOrgaoUsu() {

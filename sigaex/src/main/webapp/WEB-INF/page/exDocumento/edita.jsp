@@ -291,7 +291,7 @@
 						<div class="col-sm-8">
 							<div class="form-group">
 								<label><fmt:message key="documento.titular"/></label>
-								<siga:selecao propriedade="titular" inputName="exDocumentoDTO.titular" tema="simple" modulo="siga" />
+								<siga:selecao propriedade="titular" paramList="buscarSubstitutos=true" inputName="exDocumentoDTO.titular" tema="simple" modulo="siga" />
 							</div>
 						</div>
 					</div>

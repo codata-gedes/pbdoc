@@ -1333,29 +1333,33 @@ public class CpDao extends ModeloDao {
 	public List<DpPessoa> consultarPorFiltro(final DpPessoaDaoFiltro flt, final int offset, final int itemPagina) {
 		try {
 			final Query query;
-
-			if (!flt.isBuscarFechadas()) {
+			
+			if (flt.isBuscarFechadas()) {
+				query = em().createNamedQuery("consultarPorFiltroDpPessoaInclusiveFechadas");
+			} else if (flt.isBuscarSubstitutos()) {
+				query = em().createNamedQuery("consultarPorFiltroDpPessoaSubstitutos");
+			} else {
 				query = em().createNamedQuery("consultarPorFiltroDpPessoa");
 				if(flt.getId() != null && !"".equals(flt.getId())) {
 					query.setParameter("id", Long.valueOf(flt.getId()));
 				} else {
 					query.setParameter("id", 0L);
 				}
-			} else
-				query = em().createNamedQuery("consultarPorFiltroDpPessoaInclusiveFechadas");
+			}
 
+			
 			if (offset > 0) {
 				query.setFirstResult(offset);
 			}
 			if (itemPagina > 0) {
 				query.setMaxResults(itemPagina);
 			}
-
+			
 			query.setParameter("nome", stripToEmpty(flt.getNome()).toUpperCase().replace(' ', '%'));
 			query.setParameter("identidade", stripToEmpty(flt.getIdentidade()));
 			query.setParameter("email", stripToEmpty(flt.getEmail()));
 
-			if (!flt.isBuscarFechadas()) {
+			if (!flt.isBuscarFechadas() && !flt.isBuscarSubstitutos()) {
 				String situacaoFuncionalPessoa = flt.getSituacaoFuncionalPessoa();
 				if (situacaoFuncionalPessoa != null && situacaoFuncionalPessoa.length() == 0)
 					situacaoFuncionalPessoa = null;
