@@ -39,6 +39,7 @@ import br.gov.jfrj.siga.ex.ExDocumento;
 import br.gov.jfrj.siga.ex.ExMarca;
 import br.gov.jfrj.siga.ex.ExMobil;
 import br.gov.jfrj.siga.ex.ExMovimentacao;
+import br.gov.jfrj.siga.ex.ExTipoDestinacao;
 import br.gov.jfrj.siga.ex.ExTipoMovimentacao;
 import br.gov.jfrj.siga.ex.bl.Ex;
 import br.gov.jfrj.siga.ex.bl.ExBL;
@@ -136,7 +137,23 @@ public class ExDocumentoVO extends ExVO {
 				this.classificacaoDescricaoCompleta = doc.getExClassificacaoAtual()
 				.getDescricaoCompleta();
 		}
+		
+		// destinatário é o destinatário da última movimentação do tipo tramite/recebimento
+		if (mob.getExMovimentacaoSet() != null && mob.getExMovimentacaoSet().size() > 1 && 
+				(mob.getExMovimentacaoSet().last().getIdTpMov() == ExTipoMovimentacao.TIPO_MOVIMENTACAO_TRANSFERENCIA || 
+				mob.getExMovimentacaoSet().last().getIdTpMov() == ExTipoMovimentacao.TIPO_MOVIMENTACAO_RECEBIMENTO)) {
+			ExMovimentacao ultimaMovimentacao = mob.getExMovimentacaoSet().last();
+			
+			if (ultimaMovimentacao.getResp() != null) {
+				doc.setDestinatario(ultimaMovimentacao.getResp());
+			} else {
+				doc.setLotaDestinatario(ultimaMovimentacao.getLotaResp());
+				doc.setDestinatario(null);
+			}
+		} 
+		
 		this.destinatarioString = doc.getDestinatarioString();
+		
 		if (doc.getExNivelAcessoAtual() != null)
 			this.nmNivelAcesso = doc.getExNivelAcessoAtual().getNmNivelAcesso();
 		this.listaDeAcessos = doc.getListaDeAcessos();
