@@ -46,7 +46,6 @@
 							url : '/sigaex/app/expediente/mov/mostrar_anexos_assinados?sigla=${mobilVO.sigla}',
 							success : function(data) {
 								$('#tableAssinados').html(data);
-								window.setTimeout(mostraBotaoAssinatura, 300);
 							}
 						});
 			} else
