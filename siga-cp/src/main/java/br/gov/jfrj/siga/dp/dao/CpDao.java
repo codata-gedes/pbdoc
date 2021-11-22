@@ -1338,6 +1338,7 @@ public class CpDao extends ModeloDao {
 				query = em().createNamedQuery("consultarPorFiltroDpPessoaInclusiveFechadas");
 			} else if (flt.isBuscarSubstitutos()) {
 				query = em().createNamedQuery("consultarPorFiltroDpPessoaSubstitutos");
+				query.setParameter("id", Long.valueOf(flt.getId()));
 			} else {
 				query = em().createNamedQuery("consultarPorFiltroDpPessoa");
 				if(flt.getId() != null && !"".equals(flt.getId())) {
@@ -1347,7 +1348,6 @@ public class CpDao extends ModeloDao {
 				}
 			}
 
-			
 			if (offset > 0) {
 				query.setFirstResult(offset);
 			}

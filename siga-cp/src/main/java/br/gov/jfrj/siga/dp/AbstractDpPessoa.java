@@ -130,7 +130,7 @@ import br.gov.jfrj.siga.sinc.lib.Desconsiderar;
 				+ ", pes.idPessoa having pes.idPessoa = (select max(a.idPessoa) from DpPessoa a where a.idPessoaIni = pes.idPessoaIni)"
 				+ ") order by pes.nomePessoaAI"),
 		@NamedQuery(name = "consultarPorFiltroDpPessoaSubstitutos", query = "from DpPessoa pes"
-				+ " where idPessoa in (select t1.substituto.idPessoa from DpSubstituicao t1 inner join DpPessoa t2 on t2.idPessoa = t1.titular.idPessoa) "
+				+ " where idPessoa in (select t1.substituto.idPessoa from DpSubstituicao t1 inner join DpPessoa t2 on t2.idPessoa = t1.titular.idPessoa where t1.titular.idPessoa = :id) "
 				+ " and ((pes.nomePessoaAI like upper('%' || :nome || '%')) or ((pes.sesbPessoa || pes.matricula) like upper('%' || :nome || '%')))"
 				+ " and (:cpf is null or :cpf = 0L or pes.cpfPessoa = :cpf) "
 				+ "  	and (:idOrgaoUsu = null or :idOrgaoUsu = 0L or pes.orgaoUsuario.idOrgaoUsu = :idOrgaoUsu)"
