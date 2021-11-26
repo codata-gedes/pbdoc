@@ -799,10 +799,12 @@ public class ExMobil extends AbstractExMobil implements Serializable, Selecionav
 							break;
 						}
 
-			for (long t : tpMovsReversao)
-				if (mov.getExTipoMovimentacao().getIdTpMov() == t) {
-					movReturn = null;
-					break;
+			if (tpMovsReversao != null) {
+				for (long t : tpMovsReversao)
+					if (mov.getExTipoMovimentacao().getIdTpMov() == t) {
+						movReturn = null;
+						break;
+					}
 				}
 		}
 		return movReturn;
