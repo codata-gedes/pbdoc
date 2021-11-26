@@ -151,8 +151,15 @@ $(function(){
 				<div class="row">
 					<div class="col col-3">
 						<div class="form-group mb-0">
-							<label>Data da devolução</label> 
-							<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control campoData" autocomplete="off"/>					 
+							<label>Data da devolução</label>
+							<c:choose>
+								<c:when test="${empty dtDevolucaoMovString}">
+									<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control campoData" autocomplete="off"/>
+								</c:when>
+								<c:when test="${not empty dtDevolucaoMovString}">
+									<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control" readonly="true" autocomplete="off"/>
+								</c:when>
+							</c:choose>
 						</div>
 					</div>
 				</div>				

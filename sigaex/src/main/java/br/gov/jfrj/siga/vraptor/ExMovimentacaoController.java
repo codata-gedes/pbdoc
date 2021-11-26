@@ -1837,7 +1837,7 @@ public class ExMovimentacaoController extends ExController {
 			final List<ExTipoDespacho> tiposDespacho, final String descrMov,
 			final DpLotacaoSelecao lotaResponsavelSel,
 			final DpPessoaSelecao responsavelSel,
-			final CpOrgaoSelecao cpOrgaoSel, final String dtDevolucaoMovString,
+			final CpOrgaoSelecao cpOrgaoSel, String dtDevolucaoMovString,
 			final String obsOrgao, final String protocolo) {
 
 		this.setPostback(postback);
@@ -1882,10 +1882,17 @@ public class ExMovimentacaoController extends ExController {
 			throw new AplicacaoException(
 					"Não é possível fazer despacho nem transferência");
 		}
+		
+		// set dtDevolucaoMovString baseado na data fim do tramite.
+		ExMobil mob = builder.getMob();
+		ExMovimentacao ultimaMovimentacao = mob.getUltimaMovimentacao(new long[] { ExTipoMovimentacao.TIPO_MOVIMENTACAO_TRANSFERENCIA}, null, mob, false, null);
+		if (ultimaMovimentacao != null && ultimaMovimentacao.getDtFimMov() != null) {
+			dtDevolucaoMovString = ultimaMovimentacao.getDtFimMovDDMMYYYY().toString();
+		}
 
 		result.include("ehPublicoExterno", AcessoConsulta.ehPublicoExterno(getTitular()));
 		result.include("doc", doc);
-		result.include("mob", builder.getMob());
+		result.include("mob", mob);
 		result.include("postback", this.getPostback());
 		result.include("sigla", sigla);
 		result.include("tiposDespacho", this.getTiposDespacho(builder.getMob()));
