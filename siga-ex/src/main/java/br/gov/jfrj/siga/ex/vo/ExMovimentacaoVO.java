@@ -252,13 +252,11 @@ public class ExMovimentacaoVO extends ExVO {
 					final DpPessoa cadastranteDoc = documento.getCadastrante();
 					final boolean usuarioAtualMesmoCadastranteDoc = cadastrante.getId() == cadastranteDoc.getId();
 					final boolean usuarioAtualCossignatarioDoc = documento.isCossignatario(cadastrante);
-					final boolean isAnexoAssinado = mov.isAssinada();
-					
 					if (usuarioAtualMesmoCadastranteDoc || usuarioAtualCossignatarioDoc) {
 						addAcao(null, "Excluir", "/app/expediente/mov", "excluir", Ex.getInstance().getComp().podeExcluirAnexo(titular, lotaTitular, mov.mob(), mov));
 						addAcao(null, "Cancelar", "/app/expediente/mov", "cancelar", Ex.getInstance().getComp().podeCancelarAnexo(titular, lotaTitular, mov.mob(), mov));
 						addAcao("script_key", "Autenticar", "/app/expediente/mov", "autenticar_mov", Ex.getInstance().getComp().podeAutenticarMovimentacao(titular, lotaTitular, mov), null, "&popup=true&autenticando=true", null, null, null);
-						
+
 						final boolean podeAssinar = Ex.getInstance().getComp().podeAssinarAnexo(cadastrante, mov.mob(), mov);
 						addAcao(null, "Assinar", "/app/expediente/mov", "exibir", podeAssinar, null, "&popup=true", null, null, null);
 					}

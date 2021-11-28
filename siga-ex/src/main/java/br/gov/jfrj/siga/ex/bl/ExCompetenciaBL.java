@@ -3074,7 +3074,6 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 				CpTipoConfiguracao.TIPO_CONFIG_CANCELAR_MOVIMENTACAO);
 	}
 
-	
 	/**
 	 * Retorna se é possível assinar uma movimentação mov, de anexação de arquivo. 
 	 * Regras:
@@ -3090,19 +3089,20 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * @throws Exception
 	 */
 	public boolean podeAssinarAnexo(final DpPessoa titular, final ExMobil mob, final ExMovimentacao mov) {
-
-		if (mov.isCancelada())
+		if (mov == null || mov.isCancelada()) {
 			return false;
-		
-		Set<ExMovimentacao> movsComSenha = mov.getApenasAssinaturasComSenha();
-		for (ExMovimentacao exMovimentacao : movsComSenha) {
-			if (exMovimentacao.getCadastrante().getId() == titular.getId())
-				return false;
 		}
-		
+
+		final Set<ExMovimentacao> movsComSenha = mov.getApenasAssinaturasComSenha();
+		for (ExMovimentacao exMovimentacao : movsComSenha) {
+			final DpPessoa cadastranteMov = exMovimentacao.getCadastrante();
+			if (cadastranteMov != null && cadastranteMov.getId() == titular.getId()) {
+				return false;
+			}
+		}
 		return true;
 	}
-	
+
 	/**
 	 * Retorna se é possível cancelar uma movimentação mov, de anexação de
 	 * arquivo. Regras:
