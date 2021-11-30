@@ -613,13 +613,11 @@ public class ExDocumentoVO extends ExVO {
 				Ex.getInstance().getComp()
 						.podeFazerAnotacao(titular, lotaTitular, mob));
 
-		vo.addAcao("folder_user", SigaMessages.getMessage("documento.definir.perfil"), "/app/expediente/mov",
-				"vincularPapel", Ex.getInstance().getComp()
-						.podeFazerVinculacaoPapel(titular, lotaTitular, mob));
-
-//		vo.addAcao("folder_star", "Definir Marcador", "/app/expediente/mov",
-//				"marcar", Ex.getInstance().getComp()
-//						.podeMarcar(titular, lotaTitular, mob));
+		vo.addAcao("folder_user", 
+				SigaMessages.getMessage("documento.definir.perfil"), 
+				"/app/expediente/mov",
+				"vincularPapel", 
+				Ex.getInstance().getComp().podeFazerVinculacaoPapel(titular, lotaTitular, mob));
 
 		vo.addAcao(
 				"cd",

@@ -3366,26 +3366,23 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * significa que, tendo acesso a um documento não eliminado, qualquer
 	 * usuário pode se cadastrar como interessado.
 	 * 
+	 * Quando o móbil é público, o titular deve ser atendente
+	 * 
 	 * @param titular
 	 * @param lotaTitular
 	 * @param mob
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean podeFazerVinculacaoPapel(final DpPessoa titular,
-			final DpLotacao lotaTitular, final ExMobil mob) {
+	public boolean podeFazerVinculacaoPapel(final DpPessoa titular, final DpLotacao lotaTitular, final ExMobil mob) {
 
-
-		if (mob.doc().isCancelado() || mob.doc().isSemEfeito()
-
-
-
-				|| mob.isEliminado())
-			return false;
-
-		return getConf().podePorConfiguracao(titular, lotaTitular,
-				ExTipoMovimentacao.TIPO_MOVIMENTACAO_VINCULACAO_PAPEL,
-				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
+		boolean isDocPublico = mob.getDoc().getExNivelAcesso().getIdNivelAcesso() == ExNivelAcesso.ID_PUBLICO;
+		
+		return (!mob.doc().isCancelado() && !mob.isEliminado() && !mob.doc().isSemEfeito()) && 
+				(!isDocPublico || isDocPublico && isAtendente(titular, lotaTitular, mob)) &&
+				getConf().podePorConfiguracao(titular, lotaTitular,
+						ExTipoMovimentacao.TIPO_MOVIMENTACAO_VINCULACAO_PAPEL,
+						CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
 	}
 
 	/**
