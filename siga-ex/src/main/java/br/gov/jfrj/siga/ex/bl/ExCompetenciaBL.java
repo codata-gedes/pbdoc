@@ -3341,7 +3341,8 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * eliminado, não estar em trânsito, não ser geral e não haver configuração
 	 * impeditiva, o que significa que, tendo acesso a um documento não
 	 * eliminado fora de trânsito, qualquer usuário pode fazer anotação.
-
+	 * 
+	 * Quando o móbil é público, o titular deve ser atendente
 	 * 
 	 * @param titular
 	 * @param lotaTitular
@@ -3349,12 +3350,12 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean podeFazerAnotacao(final DpPessoa titular,
-			final DpLotacao lotaTitular, final ExMobil mob) {
+	public boolean podeFazerAnotacao(final DpPessoa titular, final DpLotacao lotaTitular, final ExMobil mob) {
+		boolean isDocPublico = mob.getDoc().getExNivelAcesso().getIdNivelAcesso() == ExNivelAcesso.ID_PUBLICO;
 
-		return (!mob.isEmTransitoInterno() && !mob.isEliminado() && !mob
-				.isGeral())
-				&& getConf().podePorConfiguracao(titular, lotaTitular,
+		return (!mob.isEmTransitoInterno() && !mob.isEliminado() && !mob.isGeral()) && 
+				(!isDocPublico || isDocPublico && isAtendente(titular, lotaTitular, mob)) &&
+				getConf().podePorConfiguracao(titular, lotaTitular,
 						ExTipoMovimentacao.TIPO_MOVIMENTACAO_ANOTACAO,
 						CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
 	}
@@ -3794,7 +3795,7 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * </ul>
 	 */
 	public static boolean isAtendente(final DpPessoa titular,
-			final DpLotacao lotaTitular, final ExMobil mob) throws Exception {
+			final DpLotacao lotaTitular, final ExMobil mob) {
 		if (mob.isGeral()) {
 			for (ExMobil m : mob.doc().getExMobilSet()) {
 				if (!m.isGeral() && isAtendente(titular, lotaTitular, m))
