@@ -3941,6 +3941,7 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * <li>Móbil tem de ser geral</li>
 	 * <li>Móbil não pode ter sido eliminado</li>
 	 * <li>Móbil não pode estar cancelado</li>
+	 * <li>Quando o móbil é público, o titular deve ser atendente</li>
 	 * <li>Não pode haver configuração impeditiva</li>
 	 ** 
 	 * @param titular
@@ -3949,14 +3950,21 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean podeReclassificar(final DpPessoa titular,
-			final DpLotacao lotaTitular, final ExMobil mob) {
-
-		return (!mob.doc().isPendenteDeAssinatura() && mob.isGeral() && !mob.isCancelada()
-				&& !mob.isEliminado() && getConf().podePorConfiguracao(titular,
-				lotaTitular,
-				ExTipoMovimentacao.TIPO_MOVIMENTACAO_RECLASSIFICACAO,
-				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR));
+	public boolean podeReclassificar(final DpPessoa titular, final DpLotacao lotaTitular, final ExMobil mob) {
+		try {
+			boolean isDocPublico = mob.getDoc().getExNivelAcesso().getIdNivelAcesso() == ExNivelAcesso.ID_PUBLICO;
+			
+			return (!mob.doc().isPendenteDeAssinatura() && 
+					mob.isGeral() && 
+					!mob.isCancelada() && 
+					!mob.isEliminado() && 
+					(!isDocPublico || isDocPublico && isAtendente(titular, lotaTitular, mob)) &&
+					getConf().podePorConfiguracao(titular, lotaTitular, 
+							ExTipoMovimentacao.TIPO_MOVIMENTACAO_RECLASSIFICACAO, 
+							CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR));
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
 	/**
