@@ -1427,32 +1427,40 @@ public class CpDao extends ModeloDao {
 		try {
 			final Query query;
 
-			if (!flt.isBuscarFechadas()) {
+			if (flt.isBuscarFechadas()) {
+				query = em().createNamedQuery("consultarQuantidadeDpPessoaInclusiveFechadas");
+			} else if (flt.isBuscarSubstitutos()) {
+				query = em().createNamedQuery("consultarQuantidadeDpPessoaSubstitutos");
+				query.setParameter("id", Long.valueOf(flt.getId()));
+			} else {
 				query = em().createNamedQuery("consultarQuantidadeDpPessoa");
 				if (flt.getId() != null)
 					query.setParameter("id", flt.getId());
 				else
 					query.setParameter("id", 0L);
-			} else
-				query = em().createNamedQuery("consultarQuantidadeDpPessoaInclusiveFechadas");
-
-			query.setParameter("nome", flt.getNome().toUpperCase().replace(' ', '%'));
+			}
+			
+			query.setParameter("nome", stripToEmpty(flt.getNome()).toUpperCase().replace(' ', '%'));
 			query.setParameter("identidade", stripToEmpty(flt.getIdentidade()));
+			query.setParameter("email", stripToEmpty(flt.getEmail()));
 
-			if (!flt.isBuscarFechadas())
-				query.setParameter("situacaoFuncionalPessoa", flt.getSituacaoFuncionalPessoa());
+			if (!flt.isBuscarFechadas() && !flt.isBuscarSubstitutos()) {
+				String situacaoFuncionalPessoa = flt.getSituacaoFuncionalPessoa();
+				if (situacaoFuncionalPessoa != null && situacaoFuncionalPessoa.length() == 0)
+					situacaoFuncionalPessoa = null;
+				query.setParameter("situacaoFuncionalPessoa", situacaoFuncionalPessoa);
+			}
 
 			if (flt.getCpf() != null)
 				query.setParameter("cpf", flt.getCpf());
 			else
 				query.setParameter("cpf", 0L);
 
-			query.setParameter("email", stripToEmpty(flt.getEmail()));
-
 			if (flt.getIdOrgaoUsu() != null)
 				query.setParameter("idOrgaoUsu", flt.getIdOrgaoUsu());
 			else
 				query.setParameter("idOrgaoUsu", 0L);
+			
 			if (flt.getLotacao() != null)
 				query.setParameter("lotacao", flt.getLotacao().getId());
 			else
@@ -1470,7 +1478,7 @@ public class CpDao extends ModeloDao {
 
 			final int l = ((Long) query.getSingleResult()).intValue();
 			return l;
-		} catch (final NullPointerException e) {
+		} catch (final Exception e) {
 			return 0;
 		}
 	}

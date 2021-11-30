@@ -141,6 +141,22 @@ import br.gov.jfrj.siga.sinc.lib.Desconsiderar;
 		      	+ " and (:identidade = '' or (upper(pes.identidade) like upper('%' || :identidade || '%')) ) "
 				+ " and pes.dataFimPessoa = null"
 				+ " order by pes.nomePessoa"),
+		@NamedQuery(name = "consultarQuantidadeDpPessoaSubstitutos", query = "select count(pes)"
+				+ " from DpPessoa pes"
+				+ " where idPessoa in (select t1.substituto.idPessoa from DpSubstituicao t1 inner join DpPessoa t2 on t2.idPessoa = t1.titular.idPessoa where t1.titular.idPessoa = :id) "
+				+ " and ((pes.nomePessoaAI like upper('%' || :nome || '%')) or ((pes.sesbPessoa || pes.matricula) like upper('%' || :nome || '%')))"
+				+ " and (:cpf is null or :cpf = 0L or pes.cpfPessoa = :cpf) "
+				+ "  	and (:idOrgaoUsu = null or :idOrgaoUsu = 0L or pes.orgaoUsuario.idOrgaoUsu = :idOrgaoUsu)"
+				+ "	and (:lotacao is null or :lotacao = 0L or pes.lotacao.idLotacao = :lotacao)"
+				+ " and (:cargo is null or :cargo = 0L or pes.cargo.idCargo = :cargo) "
+		      	+ " and (:funcao is null or :funcao = 0L or pes.funcaoConfianca.idFuncao = :funcao) "
+		      	+ " and (:email = '' or (upper(pes.emailPessoa) like upper('%' || :email || '%')) ) "
+		      	+ " and (:identidade = '' or (upper(pes.identidade) like upper('%' || :identidade || '%')) ) "
+				+ " and pes.dataFimPessoa = null"),
+		@NamedQuery(name = "consultarQuantidadeDpPessoaSubstitutos2", query = "select count(distinct pes.idPessoaIni)"
+				+ " from DpPessoa pes"
+				+ " where idPessoa in (select t1.substituto.idPessoa from DpSubstituicao t1 inner join DpPessoa t2 on t2.idPessoa = t1.titular.idPessoa where t1.titular.idPessoa = :id) "
+		      	+ " group by pes.idPessoaIni"),
 		@NamedQuery(name = "consultarPessoaComOrgaoFuncaoCargo", query = "from DpPessoa pes"
 				+ " left join fetch pes.cargo car "
 				+ " left join fetch pes.funcaoConfianca fun "
