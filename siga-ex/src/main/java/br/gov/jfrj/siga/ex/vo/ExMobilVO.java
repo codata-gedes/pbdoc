@@ -415,8 +415,13 @@ public class ExMobilVO extends ExVO {
 				"sigla=" + mob.getCodigoCompacto(), 
 				null, null, null);
 		
-		addAcao(AcaoVO.builder().nome("Definir " + SigaMessages.getMessage("documento.marca")).icone("folder_star").modal("definirMarcaModal")
-				.exp(new ExPodeMarcar(mob, titular, lotaTitular)).build());
+		addAcao("folder_star",
+				"Definir " + SigaMessages.getMessage("documento.marca"),
+				null,
+				null,
+				Ex.getInstance().getComp().podeMarcar(titular, lotaTitular, mob), 
+				null, null, null, null, null, null,
+				"definirMarcaModal");
 		
 		if (mob.isVia() || mob.isVolume()) {
 			addAcao("attach",

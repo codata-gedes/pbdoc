@@ -3392,7 +3392,9 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * Retorna se é possível vincular uma marca ao documento. Basta não estar
 	 * eliminado o documento e não haver configuração impeditiva, o que
 	 * significa que, tendo acesso a um documento não eliminado, qualquer
-	 * usuário pode colocar marcas.
+	 * usuário pode colocar marcas. 
+	 * 
+	 * Quando o móbil é público, o titular deve ser atendente
 	 * 
 	 * @param titular
 	 * @param lotaTitular
@@ -3400,16 +3402,16 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 * @return
 	 * @throws Exception
 	 */
-//	public boolean podeMarcar(final DpPessoa titular,
-//			final DpLotacao lotaTitular, final ExMobil mob) {
-//		if (mob.doc().isCancelado() || mob.doc().isSemEfeito()
-//				|| mob.isEliminado())
-//			return false;
-//
-//		return getConf().podePorConfiguracao(titular, lotaTitular,
-//				ExTipoMovimentacao.TIPO_MOVIMENTACAO_MARCACAO,
-//				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
-//	}
+	public boolean podeMarcar(final DpPessoa titular, final DpLotacao lotaTitular, final ExMobil mob) {
+		
+		boolean isDocPublico = mob.getDoc().getExNivelAcesso().getIdNivelAcesso() == ExNivelAcesso.ID_PUBLICO;
+
+		return (!mob.isEmTransitoInterno() && !mob.doc().isCancelado() && !mob.isEliminado() && !mob.isGeral() && !mob.doc().isSemEfeito()) && 
+				(!isDocPublico || isDocPublico && isAtendente(titular, lotaTitular, mob)) &&
+				getConf().podePorConfiguracao(titular, lotaTitular,
+						ExTipoMovimentacao.TIPO_MOVIMENTACAO_MARCACAO,
+						CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
+	}
 
 	/**
 	 * Retorna se é possível finalizar o documento ao qual o móbil passado por
