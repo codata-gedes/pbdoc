@@ -335,8 +335,7 @@
 												<c:set var="assinadopor" value="${true}" />
 												<siga:links
 														buttons="${false}"
-														inline="${true}"
-														separator="${not empty mov.descricao and mov.descricao != null}">
+														inline="${true}">
 														<c:forEach var="acao" items="${mov.acoes}">
 															<siga:link title="${acao.nomeNbsp}" pre="${acao.pre}"
 																pos="${acao.pos}"
