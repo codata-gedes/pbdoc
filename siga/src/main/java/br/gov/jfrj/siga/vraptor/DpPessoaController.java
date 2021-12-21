@@ -166,13 +166,13 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		String buscarFechadas = param("buscarFechadas");
 		flt.setBuscarFechadas(buscarFechadas != null ? Boolean.valueOf(buscarFechadas) : false);
 		String buscarSubstitutos = param("buscarSubstitutos");
-		if (buscarSubstitutos.equals(true)) {
-			flt.setBuscarSubstitutos(true);
-			flt.setId(getTitular().getId());
-		} else {
-			flt.setBuscarSubstitutos(false);
-		}
-		
+//		if (buscarSubstitutos.equals(true)) {
+//			flt.setBuscarSubstitutos(true);
+//			flt.setId(getTitular().getId());
+//		} else {
+//			flt.setBuscarSubstitutos(false);
+//		}
+//		
 		flt.setSituacaoFuncionalPessoa("");
 
 		return flt;
