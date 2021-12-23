@@ -24,6 +24,7 @@
  */
 package br.gov.jfrj.siga.vraptor; 
 
+import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -41,6 +42,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
@@ -87,8 +89,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	
 	private Long orgaoUsu;
 	private DpLotacaoSelecao lotacaoSel;
-	private String cpf;
-	//public SigaObjects so;
+
 	/**
 	 * @deprecated CDI eyes only
 	 */
@@ -164,9 +165,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		flt.setIdOrgaoUsu(orgaoUsu);
 
 		String buscarFechadas = param("buscarFechadas");
-		flt.setBuscarFechadas(buscarFechadas != null ? Boolean.valueOf(buscarFechadas) : false);
+		flt.setBuscarFechadas(buscarFechadas != null ? toBoolean(buscarFechadas) : false);
 		String buscarSubstitutos = param("buscarSubstitutos");
-		if (buscarSubstitutos != null && Boolean.valueOf(buscarSubstitutos)) {
+		if (buscarSubstitutos != null && toBoolean(buscarSubstitutos)) {
 		    flt.setBuscarSubstitutos(true);
 		    flt.setId(getTitular().getId());
 		} else {
@@ -194,15 +195,16 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		flt.setIdOrgaoUsu(getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu());
 		flt.setNome(Texto.removeAcentoMaiusculas(flt.getSigla()));
 		flt.setSigla(null);
-		final List pessoas = dao().consultarPorFiltro(flt);
-		if (pessoas != null)
-			if (pessoas.size() == 1)
-				return (DpPessoa) pessoas.get(0);
-		return null;
+
+		final List<DpPessoa> pessoas = dao().consultarPorFiltro(flt);
+		if (CollectionUtils.isEmpty(pessoas)) {
+			return null;
+		}
+		return Iterables.getFirst(pessoas, null);
 	}
-	
+
 	private boolean temPermissaoParaExportarDados() {
-		return Boolean.valueOf(Cp.getInstance().getConf().podeUtilizarServicoPorConfiguracao(getTitular(), getTitular().getLotacao(),"SIGA;GI;CAD_PESSOA;EXP_DADOS"));
+		return toBoolean(Cp.getInstance().getConf().podeUtilizarServicoPorConfiguracao(getTitular(), getTitular().getLotacao(),"SIGA;GI;CAD_PESSOA;EXP_DADOS"));
 	}
 
 	@Get
