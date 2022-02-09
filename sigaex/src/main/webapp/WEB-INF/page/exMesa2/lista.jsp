@@ -39,7 +39,7 @@
 						<label class="form-check-label" for="trazerAnotacoes"><small>Trazer anotações nos docs.</small></label>
 					</div>            
 	            </div>
-	            <div class="form-group my-1 border-bottom">
+	            <div class="form-group my-1 border-bottom" style="display: none;">
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="trazerComposto" v-model="trazerComposto" :disabled="carregando">
 						<label class="form-check-label" for="trazerComposto">
@@ -55,7 +55,7 @@
 						</label>
 					</div>            
 	            </div>
-	            <div class="form-group my-1 border-bottom">
+	            <div class="form-group my-1 border-bottom" style="display: none;">
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="trazerArquivados" v-model="trazerArquivados" :disabled="carregando">
 						<label class="form-check-label" for="trazerArquivados">
