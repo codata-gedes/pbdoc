@@ -76,7 +76,7 @@ public class Correio {
 		List<String> listaServidoresEmail = new ArrayList<>();
 
 		// Só deve enviar e-mails para ambientes reais
-		if (!isAmbienteProducao() || !isAmbienteHomologacao() || !isAmbienteTreinamento()) {
+		if (!isAmbienteProducao() && !isAmbienteHomologacao() && !isAmbienteTreinamento()) {
 			log.info(
 					"E-mail retido em ambiente não real " + getAmbiente().getValor() +
 					"\n\t- Remetente: " + remetente +
