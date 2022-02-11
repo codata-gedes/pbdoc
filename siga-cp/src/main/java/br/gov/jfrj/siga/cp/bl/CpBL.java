@@ -18,6 +18,8 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.cp.bl;
 
+import static br.gov.jfrj.siga.base.Prop.isAmbienteDesenvolvimento;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +39,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.jboss.logging.Logger;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Correio;
@@ -81,6 +84,9 @@ import br.gov.jfrj.siga.gi.service.GiService;
 import br.gov.jfrj.siga.model.dao.ModeloDao;
 
 public class CpBL {
+
+	private static final Logger log = Logger.getLogger(CpBL.class);
+
 	CpCompetenciaBL comp;
 
 	public CpCompetenciaBL getComp() {
@@ -343,14 +349,14 @@ public class CpBL {
 	public CpIdentidade alterarSenhaDeIdentidade(String matricula, String cpf, CpIdentidade idCadastrante,
 			String[] senhaGerada) throws AplicacaoException {
 
-		Long longCpf = CPFUtils.getLongValueValidaSimples(cpf);
+		final Long longCpf = CPFUtils.getLongValueValidaSimples(cpf);
 		final List<DpPessoa> listaPessoas = dao().listarPorCpf(longCpf);
 		if (listaPessoas.isEmpty()) {
 			throw new AplicacaoException("O CPF informado está incorreto, tente novamente!");
 		}
 
 		final long longmatricula = MatriculaUtils.getParteNumericaDaMatricula(matricula);
-		final DpPessoa pessoa = dao().consultarPorCpfMatricula(Long.parseLong(cpf), longmatricula);
+		final DpPessoa pessoa = dao().consultarPorCpfMatricula(longCpf, longmatricula);
 
 		if (pessoa != null && pessoa.getSigla().equals(matricula) && pessoa.getEmailPessoaAtual() != null) {
 
@@ -373,12 +379,13 @@ public class CpBL {
 
 					final String hashNova = GeraMessageDigest.executaHash(novaSenha.getBytes(), "MD5");
 					idNova.setDscSenhaIdentidade(hashNova);
-
 					idNova.setDscSenhaIdentidadeCripto(null);
 					idNova.setDscSenhaIdentidadeCriptoSinc(null);
 
 					dao().iniciarTransacao();
 					dao().gravarComHistorico(idNova, id, dt, idCadastrante);
+					long resultado = dao().unificarSenhasIdentidadesPorCpf(longCpf, idNova.getIdIdentidade(), hashNova);
+					log.infov("Outras pessoas ativas para o usuário {0} que tiveram senha atualizada: {1}", matricula, resultado);
 					dao().commitTransacao();
 
 					if (SigaMessages.isSigaSP()) {
@@ -768,6 +775,8 @@ public class CpBL {
 
 				dao().iniciarTransacao();
 				dao().gravarComHistorico(idNova, id, dt, idCadastrante);
+				long resultado = dao().unificarSenhasIdentidadesPorCpf(id.getDpPessoa().getCpfPessoa(), idNova.getIdIdentidade(), hashNova);
+				log.infov("Outras pessoas ativas para o usuário {0} que tiveram senha atualizada: {1}", nomeUsuario, resultado);
 				dao().commitTransacao();
 				return idNova;
 			} catch (final Exception e) {

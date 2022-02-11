@@ -60,6 +60,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.DateUtils;
@@ -78,6 +79,7 @@ import br.gov.jfrj.siga.cp.CpTipoMarcadorEnum;
 import br.gov.jfrj.siga.cp.CpTipoPapel;
 import br.gov.jfrj.siga.cp.CpToken;
 import br.gov.jfrj.siga.cp.CpUnidadeMedida;
+import br.gov.jfrj.siga.cp.QCpIdentidade;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.cp.bl.SituacaoFuncionalEnum;
@@ -111,6 +113,7 @@ import br.gov.jfrj.siga.dp.QCpContrato;
 import br.gov.jfrj.siga.dp.QCpOrgaoUsuario;
 import br.gov.jfrj.siga.dp.QDpCargo;
 import br.gov.jfrj.siga.dp.QDpFuncaoConfianca;
+import br.gov.jfrj.siga.dp.QDpPessoa;
 import br.gov.jfrj.siga.model.CarimboDeTempo;
 import br.gov.jfrj.siga.model.ContextoPersistencia;
 import br.gov.jfrj.siga.model.Historico;
@@ -2841,5 +2844,30 @@ public class CpDao extends ModeloDao {
 		query.where(predicateAnd);
 		return em().createQuery(query).getResultList();
 	}
-	
+
+	public long unificarSenhasIdentidadesPorCpf(
+			final long cpf,
+			final long idIdentidadeAtualizadaComHistorico,
+			final String dscSenhaIdentidade) {
+
+		final QDpPessoa qDpPessoa = QDpPessoa.dpPessoa;
+		final QCpIdentidade qCpIdentidade = QCpIdentidade.cpIdentidade;
+		return new JPAUpdateClause(em(), qCpIdentidade)
+				.set(qCpIdentidade.dscSenhaIdentidade, dscSenhaIdentidade)
+				.setNull(qCpIdentidade.dscSenhaIdentidadeCripto)
+				.setNull(qCpIdentidade.dscSenhaIdentidadeCriptoSinc)
+				.where(qCpIdentidade.hisAtivo.eq(1)
+						.and(qCpIdentidade.idIdentidade.ne(idIdentidadeAtualizadaComHistorico))
+						.and(
+								JPAExpressions.selectOne()
+										.from(qDpPessoa)
+										.where(qDpPessoa.cpfPessoa.eq(cpf)
+												.and(qDpPessoa.dataFimPessoa.isNull())
+												.and(qDpPessoa.idPessoa.eq(qCpIdentidade.dpPessoa.idPessoa)))
+										.exists()
+						)
+				)
+				.execute();
+	}
+
 }

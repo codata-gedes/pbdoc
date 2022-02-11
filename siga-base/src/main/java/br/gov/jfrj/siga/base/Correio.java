@@ -18,16 +18,17 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.base;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import static br.gov.jfrj.siga.base.Prop.getAmbiente;
+import static br.gov.jfrj.siga.base.Prop.isAmbienteHomologacao;
+import static br.gov.jfrj.siga.base.Prop.isAmbienteProducao;
+import static br.gov.jfrj.siga.base.Prop.isAmbienteTreinamento;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -42,10 +43,11 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.bouncycastle.util.encoders.Base64;
+import org.jboss.logging.Logger;
 
 public class Correio {
 	
-	private static Logger logger = Logger.getLogger("br.gov.jfrj.siga.base.email");
+	private static final Logger log = Logger.getLogger(Correio.class);
 
 	public static void enviar(final String destinatario, final String assunto,
 			final String conteudo) throws Exception {
@@ -73,6 +75,19 @@ public class Correio {
 		
 		List<String> listaServidoresEmail = new ArrayList<>();
 
+		// Só deve enviar e-mails para ambientes reais
+		if (!isAmbienteProducao() || !isAmbienteHomologacao() || !isAmbienteTreinamento()) {
+			log.info(
+					"E-mail retido em ambiente não real " + getAmbiente().getValor() +
+					"\n\t- Remetente: " + remetente +
+					"\n\t- Destinatários: " + Arrays.toString(destinatarios) +
+					"\n\t- Assunto: " + assunto +
+					"\n\t- Conteúdo: " + conteudo +
+					"\n\t- Conteúdo HTML: " + conteudoHTML
+			);
+			return;
+		}
+
 		// lista indisponivel. Tenta ler apenas 1 servidor definido.
 		String servidor = Prop.get("/siga.smtp");
 		
@@ -89,15 +104,13 @@ public class Correio {
 		String causa = " ";
 		for (String servidorEmail : listaServidoresEmail) {
 			try {
-				enviarParaServidor(servidorEmail, remetente, destinatarios,
-						assunto, conteudo, conteudoHTML);
+				enviarParaServidor(servidorEmail, remetente, destinatarios, assunto, conteudo, conteudoHTML);
 				servidorDisponivel = true;
 				break;
 			} catch (Exception e) {
 				if (e.getCause() != null)
 					causa =  ", causa: " + e.getCause().getMessage();
-					logger.warning("Servidor de e-mail '" + servidorEmail
-							+ "' indisponível: " + e.getMessage() + causa);
+					log.warn("Servidor de e-mail '" + servidorEmail + "' indisponível: " + e.getMessage() + causa);
 			}
 		}
 
@@ -231,8 +244,8 @@ public class Correio {
 		tr.sendMessage(msg, msg.getAllRecipients());
 		tr.close();
 
-		logger.log(Level.INFO,"Email enviado para " + Arrays.asList(destSet).toString() + "[" + assunto + "]");
-		logger.log(Level.FINE, "Detalhes do e-mail enviado:"
+		log.info("Email enviado para " + Arrays.asList(destSet).toString() + "[" + assunto + "]");
+		log.debug("Detalhes do e-mail enviado:"
 					+ "\nAssunto: " + assunto
 					+ "\nDe: " + remetente
 					+ "\nPara: " + Arrays.asList(destinatarios).toString()

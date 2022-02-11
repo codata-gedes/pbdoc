@@ -236,4 +236,29 @@ public class Prop {
 		provider.addPublicProperty("/siga.ciencia.preenchimento.obrigatorio", "true");
 		
 	}
+
+	public static Ambiente getAmbiente() {
+		return Ambiente.porValor(get("/siga.ambiente"));
+	}
+
+	public static boolean isAmbiente(final Ambiente ambiente) {
+		return ambiente == getAmbiente();
+	}
+
+	public static boolean isAmbienteProducao() {
+		return isAmbiente(Ambiente.PRODUCAO);
+	}
+
+	public static boolean isAmbienteHomologacao() {
+		return isAmbiente(Ambiente.HOMOLOGACAO);
+	}
+
+	public static boolean isAmbienteTreinamento() {
+		return isAmbiente(Ambiente.TREINAMENTO);
+	}
+
+	public static boolean isAmbienteDesenvolvimento() {
+		return isAmbiente(Ambiente.DESENVOLVIMENTO);
+	}
+
 }
