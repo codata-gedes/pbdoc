@@ -424,3 +424,8 @@ article p em {
 .div-width-min0 { 
     min-width: 0px !important;
 } 
+
+nav.navbar a.nav-link,
+nav.navbar a.nav-link:hover {
+    color: #ffffff !important;
+}
