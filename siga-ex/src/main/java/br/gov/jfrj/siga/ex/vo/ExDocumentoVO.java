@@ -657,8 +657,9 @@ public class ExDocumentoVO extends ExVO {
 
 		vo.addAcao("add", "Criar Via", "/app/expediente/doc", "criar_via", Ex
 				.getInstance().getComp()
-				.podeCriarVia(titular, lotaTitular, mob), null, null, null,
-				null, "once");
+				.podeCriarVia(titular, lotaTitular, mob), 
+				"Esta operação criará uma nova via desse documento. Prosseguir?", 
+				null, null, null, "once");
 
 		vo.addAcao(
 				"add",
