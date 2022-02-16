@@ -504,10 +504,9 @@ public class ExMobilVO extends ExVO {
 						.podeBotaoArquivarIntermediario(titular, lotaTitular,
 								mob), null, null, null, null, "once");
 
-		addAcao("box_delete", "Desar_q. Corrente", "/app/expediente/mov",
-				"reabrir_gravar", Ex.getInstance().getComp()
-						.podeDesarquivarCorrente(titular, lotaTitular, mob),
-				null, null, null, null, "once");
+		addAcao("box_delete", "Desar_q. Corrente", "/app/expediente/mov", "reabrir_gravar", 
+				Ex.getInstance().getComp().podeDesarquivarCorrente(titular, lotaTitular, mob),
+				"Deseja tornar o arquivo corrente?", null, null, null, "once");
 
 		addAcao("package_delete",
 				"Desarq. Intermediário",

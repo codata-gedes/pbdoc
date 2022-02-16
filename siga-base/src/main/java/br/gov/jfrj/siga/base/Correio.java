@@ -19,9 +19,7 @@
 package br.gov.jfrj.siga.base;
 
 import static br.gov.jfrj.siga.base.Prop.getAmbiente;
-import static br.gov.jfrj.siga.base.Prop.isAmbienteHomologacao;
-import static br.gov.jfrj.siga.base.Prop.isAmbienteProducao;
-import static br.gov.jfrj.siga.base.Prop.isAmbienteTreinamento;
+import static br.gov.jfrj.siga.base.Prop.isAmbienteReal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +74,7 @@ public class Correio {
 		List<String> listaServidoresEmail = new ArrayList<>();
 
 		// Só deve enviar e-mails para ambientes reais
-		if (!isAmbienteProducao() && !isAmbienteHomologacao() && !isAmbienteTreinamento()) {
+		if (!isAmbienteReal()) {
 			log.info(
 					"E-mail retido em ambiente não real " + getAmbiente().getValor() +
 					"\n\t- Remetente: " + remetente +

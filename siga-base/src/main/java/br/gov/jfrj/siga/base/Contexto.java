@@ -76,7 +76,17 @@ public class Contexto {
 	}
 
 	public static String urlBase(HttpServletRequest request, boolean considerarPropriedadeSigaBaseUrl) {
-		String baseUrl = stripToNull(Prop.get("/siga.base.url"));
+		final String baseUrl = stripToNull(Prop.get("/siga.base.url"));
+		return urlBase(request, baseUrl, considerarPropriedadeSigaBaseUrl);
+	}
+
+	public static String urlBasePdf(HttpServletRequest request, boolean considerarPropriedadeSigaBaseUrl) {
+		final String baseUrl = ofNullable(stripToNull(Prop.get("/siga.pdf.base.url")))
+				.orElseGet(() -> stripToNull(Prop.get("/siga.base.url")));
+		return urlBase(request, baseUrl, considerarPropriedadeSigaBaseUrl);
+	}
+
+	public static String urlBase(HttpServletRequest request, String baseUrl, boolean considerarPropriedadeSigaBaseUrl) {
 		String visibleSchema = null;
 		if (baseUrl != null) {
 			if (considerarPropriedadeSigaBaseUrl) {

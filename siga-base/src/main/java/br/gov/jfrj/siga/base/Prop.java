@@ -8,6 +8,8 @@ import java.util.List;
 
 public class Prop {
 
+	public static final String DEFAULT_URL = "http://localhost:8080";
+
 	public interface IPropertyProvider {
 		String getProp(String nome);
 
@@ -78,7 +80,9 @@ public class Prop {
 	}
 
 	public static void defineGlobalProperties() {
-		provider.addPublicProperty("/siga.base.url", "http://localhost:8080");
+		provider.addPublicProperty("/siga.base.url", DEFAULT_URL);
+		provider.addPublicProperty("/siga.pdf.base.url", DEFAULT_URL);
+
 		String base = get("/siga.base.url");
 
 		provider.addPublicProperty("/siga.hibernate.dialect");
@@ -259,6 +263,12 @@ public class Prop {
 
 	public static boolean isAmbienteDesenvolvimento() {
 		return isAmbiente(Ambiente.DESENVOLVIMENTO);
+	}
+
+	public static boolean isAmbienteReal() {
+		return isAmbienteProducao()
+				|| isAmbienteHomologacao()
+				|| isAmbienteTreinamento();
 	}
 
 }

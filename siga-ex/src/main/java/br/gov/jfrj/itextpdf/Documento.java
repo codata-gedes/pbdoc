@@ -18,6 +18,7 @@
  ******************************************************************************/
 package br.gov.jfrj.itextpdf;
 
+import static br.gov.jfrj.siga.base.Prop.isAmbienteReal;
 import static br.gov.jfrj.siga.ex.util.ProcessadorHtml.novoHtmlPersonalizado;
 
 import java.io.BufferedWriter;
@@ -42,6 +43,9 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.pdf.PRAcroForm;
 import com.lowagie.text.pdf.PdfContentByte;
@@ -52,9 +56,6 @@ import com.lowagie.text.pdf.PdfOutline;
 import com.lowagie.text.pdf.PdfPageEventHelper;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Contexto;
@@ -81,7 +82,6 @@ import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
  */
 public class Documento {
 
-
 	/**
 	 * 
 	 */
@@ -91,6 +91,8 @@ public class Documento {
 		.compile("^([0-9A-Z\\-\\/]+(?:\\.[0-9]+)?(?:V[0-9]+)?)(:[0-9]+)?(?:\\.pdf|\\.html|\\.zip|\\.rtf)?$");
 
 	private static Log log = LogFactory.getLog(Documento.class);
+
+	public static final String VAR_CONTEXT_PATH = "contextpath";
 
 	public static ExMobil getMobil(String requestURI) throws SecurityException,
 			IllegalAccessException, InvocationTargetException,
@@ -665,11 +667,11 @@ public class Documento {
 		sHtml = sHtml.replace("contextpath", contextpath);
 		return sHtml;
 	}
-	
+
 	public static String realPath() {
-		
+
 		RequestInfo ri = CurrentRequest.get();		
-		String realPath = Contexto.urlBase(ri.getRequest(), false) + ri.getRequest().getContextPath();
+		String realPath = Contexto.urlBasePdf(ri.getRequest(), false) + ri.getRequest().getContextPath();
 		
 		if (realPath.endsWith("/siga-le"))
 			realPath = realPath.replace("/siga-le", "/sigaex");
