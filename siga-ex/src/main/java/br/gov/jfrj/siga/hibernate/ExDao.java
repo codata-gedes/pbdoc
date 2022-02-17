@@ -1391,11 +1391,9 @@ public class ExDao extends CpDao {
 		}
 
 		final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		
 		final Query query = em().createNamedQuery("consultarMovimentacoes");
-		ExMovimentacao mov = consultar(1122650L, ExMovimentacao.class, false);
-
 		query.setParameter("pessoaIni", pes.getIdPessoaIni());
-		// query.setParameter("data", dt);
 		query.setParameter("data", df.format(dt));
 		return query.getResultList();
 	}
