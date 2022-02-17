@@ -441,7 +441,7 @@ public class ExMobilVO extends ExVO {
 
 		addAcao("box_add", "Ar_q. Corrente", "/app/expediente/mov", "arquivar_corrente_gravar", 
 				Ex.getInstance().getComp().podeArquivarCorrente(titular, lotaTitular, mob), 
-				"Deseja arquiar o documento?", 
+				"Deseja arquivar o documento?", 
 				null, null, null, "once  siga-btn-arq-corrente");
 
 		addAcao("building_go",
