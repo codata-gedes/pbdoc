@@ -123,6 +123,9 @@
    height: 100%;
 }
 
+.modal-lg {
+   max-width: 1400px;
+}
 
 </style>
 
