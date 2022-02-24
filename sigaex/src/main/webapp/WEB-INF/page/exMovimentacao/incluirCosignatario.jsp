@@ -95,13 +95,7 @@
 					<c:if test="${siga_cliente != 'GOVSP'}">
 					<div class="row">
 						<div class="col-12 col-lg-6">
-						<siga:selecao titulo="Cossignatário" propriedade="cosignatario" modulo="siga" />
-						</div>
-						<div class="col-12 col-lg-6">
-							<div class="form-group">
-								<label>Função; Lotação; Localidade</label>
-								<input class="form-control" type="text" name="funcaoCosignatario" size="50" value="${funcaoCosignatario}" maxlength="128" />
-							</div>
+							<siga:selecao titulo="Cossignatário" propriedade="cosignatario" modulo="siga" />
 						</div>
 					</div>
 					</c:if>
