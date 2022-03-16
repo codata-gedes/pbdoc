@@ -88,59 +88,6 @@
 				<form name="frm" action="anotar_gravar" method="post">
 					<input type="hidden" name="postback" value="1" /> 
 					<input type="hidden" name="sigla" value="${sigla}" />
-					<div class="row ${hide_only_GOVSP}">
-						<div class="col-md-2 col-sm-3">
-							<div class="form-group">
-								<label for="dtMovString">Data</label>
-								<input class="form-control" type="text" name="dtMovString"
-								value="${dtMovString}" onblur="javascript:verifica_data(this,0);" />
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label>Responsável</label>
-								<siga:selecao tema="simple" propriedade="subscritor" modulo="siga"/>
-							</div>
-						</div>
-						<div class="col-sm-2 mt-4">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" 
-									theme="simple" name="substituicao"  value="${substituicao}" 
-									onclick="javascript:displayTitular(this);" />
-								<label class="form-check-label">Substituto</label>
-							</div>
-						</div>
-					</div>
-					<div class="row ${hide_only_GOVSP}">
-						<div class="col-sm-6">
-							<div class="form-group">
-							<c:choose>
-								<c:when test="${!substituicao}">
-									<div id="tr_titular" style="display: none">
-								</c:when>
-								<c:otherwise>
-									<div id="tr_titular" style="">
-								</c:otherwise>
-							</c:choose>
-									<label>Titular</label>
-									<input class="form-control" type="hidden" name="campos" value="titularSel.id" />
-									<siga:selecao propriedade="titular" tema="simple" modulo="siga"/>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row ${hide_only_GOVSP}">
-						<div class="col-sm">
-							<div class="form-group">
-								<label>Função do Responsável</label>
-								<input class="form-control" type="hidden" name="campos" value="nmFuncaoSubscritor" />
-								<input class="form-control" type="text"
-									name="nmFuncaoSubscritor" value="${nmFuncaoSubscritor}" size="50"
-									maxLength="128" theme="simple" />
-								<small class="form-text text-muted">(opcional)</small>
-							</div>
-						</div>
-					</div>
 					<div class="row">
 						<div class="col-sm">
 							<div class="form-group">
@@ -151,17 +98,6 @@
 							</div>
 						</div>
 					</div>
-					<c:if test="${tipoResponsavel == 3}">
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label>Observação</label>
-									<input class="form-control" type="text" value="${obsOrgao}" size="30" name="obsOrgao" />
-								</div>
-							</div>
-						</div>
-					</c:if>
-
 					<div class="row">
 						<div class="col-sm">
 							<input type="submit" value="Ok" class="btn btn-primary" />
