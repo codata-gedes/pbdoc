@@ -875,7 +875,7 @@ public abstract class AbstractDpPessoa extends DpResponsavel implements
 		this.pessoasPosteriores = pessoasPosteriores;
 	}
 	
-	public boolean getTramitarOutrosOrgaos() {
+	public boolean isTramitarOutrosOrgaos() {
 		return tramitarOutrosOrgaos;
 	}
 	

@@ -405,7 +405,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				result.include("email", pessoa.getEmailPessoa());
 				result.include("idOrgaoUsu", pessoa.getOrgaoUsuario().getId());
 				result.include("nmOrgaousu", pessoa.getOrgaoUsuario().getNmOrgaoUsu());
-				result.include("tramitarOutrosOrgaos", pessoa.getTramitarOutrosOrgaos());
+				result.include("tramitarOutrosOrgaos", pessoa.isTramitarOutrosOrgaos());
 				
 				/*
 				 * Adicao de campos RG
