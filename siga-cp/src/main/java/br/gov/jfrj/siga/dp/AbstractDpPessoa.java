@@ -378,6 +378,9 @@ public abstract class AbstractDpPessoa extends DpResponsavel implements
 	// private Set<DpPessoa> pessoasPosteriores = new HashSet<DpPessoa>(0);
 	private Set<DpPessoa> pessoasPosteriores;
 
+	@Column(name = "TRAMITAR_OUTROS_ORGAOS")
+	private boolean tramitarOutrosOrgaos;
+
 	@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="HIS_IDC_INI")
 	private CpIdentidade hisIdcIni;
@@ -870,6 +873,14 @@ public abstract class AbstractDpPessoa extends DpResponsavel implements
 
 	public void setPessoasPosteriores(Set<DpPessoa> pessoasPosteriores) {
 		this.pessoasPosteriores = pessoasPosteriores;
+	}
+	
+	public boolean getTramitarOutrosOrgaos() {
+		return tramitarOutrosOrgaos;
+	}
+	
+	public void setTramitarOutrosOrgaos(boolean tramitarOutrosOrgaos) {
+		this.tramitarOutrosOrgaos = tramitarOutrosOrgaos;
 	}
 	
 	/*

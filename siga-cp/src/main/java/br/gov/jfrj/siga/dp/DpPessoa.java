@@ -53,7 +53,6 @@ import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.dp.dao.CpDao;
-import br.gov.jfrj.siga.model.ActiveRecord;
 import br.gov.jfrj.siga.model.Assemelhavel;
 import br.gov.jfrj.siga.model.Historico;
 import br.gov.jfrj.siga.model.Selecionavel;
@@ -66,14 +65,10 @@ import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 @SqlResultSetMapping(name = "scalar", columns = @ColumnResult(name = "dt"))
 @Cache(region = CpDao.CACHE_CORPORATIVO, usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class DpPessoa extends AbstractDpPessoa implements Serializable,
-		Selecionavel, Historico, Sincronizavel, Comparable, DpConvertableEntity {
-	/**
-	 * 
-	 */
+		Selecionavel, Historico, Sincronizavel, Comparable<DpPessoa>, DpConvertableEntity {
+
 	private static final long serialVersionUID = -5743631829922578717L;
-	public static final ActiveRecord<DpPessoa> AR = new ActiveRecord<>(
-			DpPessoa.class);
-	
+
 	@Transient
 	private Long idSitConfiguracaoConfManual;
 
@@ -649,10 +644,7 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
         return "";
     }
 
-
-	public int compareTo(Object o) {
-		DpPessoa other = (DpPessoa) o;
-
+	public int compareTo(DpPessoa other) {
 		return getNomePessoa().compareTo(other.getNomePessoa());
 	}
 

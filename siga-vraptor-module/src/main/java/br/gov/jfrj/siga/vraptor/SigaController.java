@@ -54,9 +54,13 @@ import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.dp.DpSubstituicao;
 import br.gov.jfrj.siga.dp.DpVisualizacao;
+import br.gov.jfrj.siga.dp.QCpOrgaoUsuario;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 
 public class SigaController {
+
+	public static final String SIGLA_ORGAO_ROOT = "ZZZ";
+
 	protected SigaObjects so;
 
 	protected Result result;
@@ -413,7 +417,11 @@ public class SigaController {
 	}
 
 	protected List<CpOrgaoUsuario> getOrgaosUsu() throws AplicacaoException {
-		return dao().listarOrgaosUsuarios();
+		final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
+		return dao().listarOrgaosUsuarios(
+				qCpOrgaoUsuario.siglaOrgaoUsu.ne(SIGLA_ORGAO_ROOT)
+						.and(qCpOrgaoUsuario.hisAtivo.eq(1))
+		);
 	}
 	
 	protected Paginador getP() {

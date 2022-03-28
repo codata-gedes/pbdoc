@@ -210,7 +210,10 @@
 						<siga:paginador maxItens="15" maxIndices="10" totalItens="${tamanho}"
 							itens="${itens}" var="pessoa">
 							<tr>
-								<td align="left">${pessoa.descricao}</td>
+								<td ${pessoa.tramitarOutrosOrgaos == true
+									  ? 'title="Usuário pode tramitar para outros órgãos" class="text-danger"'
+									  : 'title="Usuário limitado ao órgão de cadastro"'}"
+								    align="left">${pessoa.descricao}</td>
 								<td align="left">${pessoa.nomeExibicao}</td>							
 								<td align="left"><span data-toggle="tooltip" data-placement="bottom" title="${pessoa.lotacao.siglaLotacao} / ${pessoa.lotacao.nomeLotacao}">${pessoa.lotacao.siglaLotacao}</span></td>
 								<td align="left">${pessoa.cargo.nomeCargo}</td>

@@ -25,6 +25,7 @@
 package br.gov.jfrj.siga.vraptor; 
 
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
+import static org.apache.commons.lang3.BooleanUtils.toBooleanDefaultIfNull;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -404,6 +405,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				result.include("email", pessoa.getEmailPessoa());
 				result.include("idOrgaoUsu", pessoa.getOrgaoUsuario().getId());
 				result.include("nmOrgaousu", pessoa.getOrgaoUsuario().getNmOrgaoUsu());
+				result.include("tramitarOutrosOrgaos", pessoa.getTramitarOutrosOrgaos());
 				
 				/*
 				 * Adicao de campos RG
@@ -607,18 +609,20 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	public void editarGravar(final Long id, final Long idOrgaoUsu, final Long idCargo, final Long idFuncao,
 			final Long idLotacao, final String nmPessoa, final String dtNascimento, final String cpf,
 			final String email, final String identidade, final String orgaoIdentidade, final String ufIdentidade,
-			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail) throws Exception {
-		
+			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail,
+			final Boolean tramitarOutrosOrgaos) throws Exception {
+
 		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_PESSOA:Cadastrar Pessoa");
-		
+
 		try {
-			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao, idLotacao, nmPessoa, dtNascimento, cpf, email, identidade,
-					orgaoIdentidade, ufIdentidade, dataExpedicaoIdentidade, nomeExibicao, enviarEmail);
+			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao,
+					idLotacao, nmPessoa, dtNascimento, cpf, email, identidade, orgaoIdentidade, ufIdentidade,
+					dataExpedicaoIdentidade, nomeExibicao, enviarEmail, toBooleanDefaultIfNull(tramitarOutrosOrgaos, false));
 			this.result.include("mensagem", "Operação realizada com sucesso!");
 		} catch (RegraNegocioException e) {
 			result.include(SigaModal.ALERTA, e.getMessage());
 		}
-		
+
 		lista(0, null, "", "", null, null, null, "", null);
 	}
 
