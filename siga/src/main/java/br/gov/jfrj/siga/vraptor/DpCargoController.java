@@ -131,7 +131,7 @@ public class DpCargoController extends
 	@Get("app/cargo/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {		
 		
-		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
 			CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -185,7 +185,7 @@ public class DpCargoController extends
 				
 			} else {
 				
-				if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+				if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
 					result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 				} else {
 					CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -218,7 +218,7 @@ public class DpCargoController extends
 			}
 		}
 		
-		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
 			CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -298,7 +298,7 @@ public class DpCargoController extends
 
 	@Get("/app/cargo/carregarExcel")
 	public void carregarExcel() {
-		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
 			result.include("nmOrgaousu", getTitular().getOrgaoUsuario().getNmOrgaoUsu());	

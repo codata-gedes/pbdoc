@@ -58,7 +58,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 		result.include("itens", getItens());
 		result.include("tamanho", dao().consultarQuantidade(orgaoUsuario));
 		result.include("nome", nome);
-		if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equalsIgnoreCase(getTitular().getOrgaoUsuario().getSigla())) {
+		if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equalsIgnoreCase(getTitular().getOrgaoUsuario().getSigla()) || !CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equalsIgnoreCase(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaoUsuarioSiglaLogado", getTitular().getOrgaoUsuario().getSigla());
 		}
 		setItemPagina(15);

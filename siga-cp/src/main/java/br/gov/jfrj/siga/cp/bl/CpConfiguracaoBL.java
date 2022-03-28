@@ -68,6 +68,7 @@ public class CpConfiguracaoBL {
 	public static final long CPF_ROOT = 11111111111L;
 	public static final long ID_ORGAO_ROOT = 999999999L;
 	public static final String SIGLA_ORGAO_ROOT = "ZZZ";
+	public static final String SIGLA_ORGAO_CODATA_ROOT = "COD";
 
 	private final static org.jboss.logging.Logger log = org.jboss.logging.Logger.getLogger(CpConfiguracaoBL.class);
 

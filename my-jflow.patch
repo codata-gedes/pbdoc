@@ -3113,7 +3113,7 @@ index 509ec6fddf..b57eee4ad6 100644
 -				&& dpPessoa.getMatricula().equals(MATRICULA_USUARIO_ROOT)
 -				&& dpPessoa.getCpfPessoa().equals(CPF_ROOT)
 -				&& dpPessoa.getDataFim() == null
--				&& dpPessoa.getOrgaoUsuario().getSigla().equals(SIGLA_ORGAO_ROOT)
+-				&& (dpPessoa.getOrgaoUsuario().getSigla().equals(SIGLA_ORGAO_ROOT) || dpPessoa.getOrgaoUsuario().getSigla().equals(SIGLA_ORGAO_CODATA_ROOT))
 -				&& dpPessoa.getOrgaoUsuario().getId().equals(ID_ORGAO_ROOT);
 -	}
 -
