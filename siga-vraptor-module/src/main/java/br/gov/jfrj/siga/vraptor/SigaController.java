@@ -1,6 +1,7 @@
 package br.gov.jfrj.siga.vraptor;
 
 import static br.com.caelum.vraptor.view.Results.http;
+import static java.util.Collections.singletonList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -423,7 +424,15 @@ public class SigaController {
 						.and(qCpOrgaoUsuario.hisAtivo.eq(1))
 		);
 	}
-	
+
+	protected List<CpOrgaoUsuario> getOrgaosPermitidosUsuarioCadastrante() throws AplicacaoException {
+		final DpPessoa cadastrante = getCadastrante();
+		if (!cadastrante.isTramitarOutrosOrgaos()) {
+			return singletonList(cadastrante.getLotacao().getOrgaoUsuario());
+		}
+		return this.getOrgaosUsu();
+	}
+
 	protected Paginador getP() {
 		return p;
 	}
