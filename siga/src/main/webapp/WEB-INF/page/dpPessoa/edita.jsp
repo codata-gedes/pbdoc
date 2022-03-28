@@ -303,7 +303,7 @@
 					<hr>
 					<!-- Alteracao cartao 1057 -->
 					<fieldset class="form-group">					
-						<div class="row bg-">
+						<div class="row bg-light">
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="nmPessoa">RG (Incluindo dígito)</label>
@@ -338,6 +338,23 @@
 								</div>
 							</div>
 						</div>
+						<div class="row bg-light">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="siglaPermissao">Permite tramitar para outros Órgãos</label><br/>
+									<div class="form-check-inline">
+										<label class="form-check-label">
+											<input type="radio" name="tramitarOutrosOrgaos" value="false" id="tramitarOutrosOrgaosSim" ${tramitarOutrosOrgaos == false or tramitarOutrosOrgaos == null ? 'checked' : ''} /> Não
+										</label>
+									</div>							
+									<div class="form-check-inline">
+										<label class="form-check-label">
+											<input type="radio" name="tramitarOutrosOrgaos" value="true" id="tramitarOutrosOrgaosNao" ${tramitarOutrosOrgaos == true ? 'checked' : ''} /> Sim
+										</label>
+									</div>							
+								</div>
+							</div>
+						</div>
 					</fieldset>
 					<!-- Fim da alteracao cartao 1057 -->
 					
@@ -355,7 +372,7 @@
 							</div>
 						</c:if>
 					</div>
-	
+
 					<c:if test="${empty id}">
 						<div class="card mt-2 mb-2">
 							<div class="card-body">

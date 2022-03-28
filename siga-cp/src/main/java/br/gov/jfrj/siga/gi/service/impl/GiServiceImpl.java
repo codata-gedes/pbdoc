@@ -483,7 +483,7 @@ public class GiServiceImpl implements GiService {
 					.getBL()
 					.criarUsuario(null, identidadeCadastrante, idOrgaoUsu, idCargoUsu,
 							idFuncaoUsu, idLotacaoUsu, nmPessoa, dtNascimento,
-							cpf, email, null, null, null, null, null, "true");
+							cpf, email, null, null, null, null, null, "true", false);
 
 			resultado = "Usuário cadastrado com sucesso: " + pes.getSesbPessoa() + pes.getMatricula();
 		} catch (Exception e) {

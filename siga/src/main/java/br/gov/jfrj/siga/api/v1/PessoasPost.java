@@ -108,11 +108,11 @@ public class PessoasPost implements IPessoasPost {
 				String enviarEmail = null;
 				if (req.enviarEmailAcesso) 
 					enviarEmail = req.enviarEmailAcesso.toString();
-	
+
 				DpPessoa pes = new CpBL().criarUsuario(null, so.getIdentidadeCadastrante(), idOrgaoUsu, idCargo, 
 						idFuncao, idLotacao, nmPessoa, dtNascimento, cpf, email, identidade,
-						orgaoIdentidade, ufIdentidade, dataExpedicaoIdentidade, nomeExibicao, enviarEmail);
-	
+						orgaoIdentidade, ufIdentidade, dataExpedicaoIdentidade, nomeExibicao, enviarEmail, false);
+
 				resp.idPessoa = pes.getId().toString();
 				resp.siglaPessoa = pes.getSigla();
 			} catch (RegraNegocioException | AplicacaoException e) {
