@@ -1752,7 +1752,7 @@ public class ExDocumentoController extends ExController {
 				lotaDestina = String.valueOf(exDocumentoDTO.getLotacaoDestinatarioSel().getObjeto()).substring(0, 3);
 			}
 
-			if (!getCadastrante().getTramitarOutrosOrgaos()
+			if (!getCadastrante().isTramitarOutrosOrgaos()
 					&& !equalsIgnoreCase(lotaDestina, getCadastrante().getOrgaoUsuario().getSiglaOrgaoUsu())) {
 				throw new AplicacaoException("Você não tem permissão para enviar documento(s) para outros órgãos");
 			}
