@@ -24,6 +24,9 @@
  */
 package br.gov.jfrj.siga.dp;
 
+import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,11 +35,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
@@ -69,11 +71,16 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
 
 	private static final long serialVersionUID = -5743631829922578717L;
 
+	private static final String PIPE = "|";
+
+	@Transient
+	private Pattern orgaosPattern;
+
 	@Transient
 	private Long idSitConfiguracaoConfManual;
 
 	@Transient
-	private List <List<String>> listaLotacoes = new ArrayList <List<String>>();
+	private List<List<String>> listaLotacoes = new ArrayList<List<String>>();
 
 	public DpPessoa() {
 
@@ -192,32 +199,30 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
 				+ getLotacao().getSiglaCompleta();
 	}
 
-	static Pattern p1 = null;
-
-	public void setSigla(String sigla) {	
-		if (sigla == null) return;
-		
-		if (p1 == null) {
-			Map<String, CpOrgaoUsuario> mapAcronimo = new TreeMap<String, CpOrgaoUsuario>();
-			for (CpOrgaoUsuario ou : CpDao.getInstance().listarOrgaosUsuarios()) {
-				mapAcronimo.put(ou.getAcronimoOrgaoUsu(), ou);
-				mapAcronimo.put(ou.getSiglaOrgaoUsu(), ou);
-			}
-			String acronimos = "";
-			for (String s : mapAcronimo.keySet()) {
-				acronimos += "|" + s;
-			}
-			
-			p1 = Pattern.compile("^(?<orgao>" + acronimos + ")?(?<numero>[0-9]+)$");
+	public void setSigla(final String sigla) {	
+		if (isBlank(sigla)) {
+			return;
 		}
 
-		sigla = sigla.trim().toUpperCase();
+		if (orgaosPattern == null) {
+			final List<CpOrgaoUsuario> todosOrgaosUsuarios = CpDao.getInstance().listarOrgaosUsuarios();
+			final Stream<String> acronimosStream = Stream.concat(
+					todosOrgaosUsuarios.stream().map(CpOrgaoUsuario::getAcronimoOrgaoUsu),
+					todosOrgaosUsuarios.stream().map(CpOrgaoUsuario::getSiglaOrgaoUsu)
+			);
 
-		
-		final Matcher m = p1.matcher(sigla);
-		if (m.find()) {
-			String orgao = m.group("orgao");
-			String numero = m.group("numero");
+			final String patternAcronimos = acronimosStream
+					.distinct()
+					.sorted()
+					.collect(joining(PIPE, "^(?<orgao>", ")?(?<numero>[0-9]+)$"));
+
+			orgaosPattern = Pattern.compile(patternAcronimos);
+		}
+
+		final Matcher matcher = orgaosPattern.matcher(sigla.trim().toUpperCase());
+		if (matcher.find()) {
+			String orgao = matcher.group("orgao");
+			String numero = matcher.group("numero");
 			setSesbPessoa(orgao.toUpperCase());
 			setMatricula(Long.parseLong(numero));
 		}
@@ -449,8 +454,7 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
 	 * 
 	 * @return Retorna as lotações que o cadastrante pode acessar
 	 */
-	public List <List<String>> getLotacoes() {
-		
+	public List<List<String>> getLotacoes() {
 		if (listaLotacoes.size() == 0) {
 			List<CpIdentidade> idsCpf = CpDao.getInstance().consultaIdentidadesCadastrante(getCpfPessoa().toString(), true);
 			for (CpIdentidade identCpf : idsCpf) {
@@ -466,7 +470,6 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
 				listaLotacoes.add(listaUserLota);
 			}
 		}
-
 		return listaLotacoes;
 	}
 	
