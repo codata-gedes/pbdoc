@@ -65,6 +65,7 @@ public class Mesa2 {
 		public String sigla;
 		public String descr;
 		public String origem;
+		public String destino;
 		public String anotacao;
 		public String dataDevolucao;
 		public String tipoDoc;
@@ -153,6 +154,19 @@ public class Mesa2 {
 				} else {
 					r.origem = mobil.doc().getSubscritor().getLotacao()
 							.getSigla();
+				}
+
+				try {
+					if (mobil.doc().getLotaDestinatario().getSiglaLotacao() != null) {
+						r.destino = mobil.doc().getLotaDestinatario().getSiglaLotacao();
+					}else {
+						r.destino = null;
+						
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println(r.destino);
+					System.out.println(e);
 				}
 
 			r.dataDevolucao = "ocultar";
