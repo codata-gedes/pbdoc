@@ -165,8 +165,11 @@ public class SigaApiV1Servlet extends SwaggerServlet implements IPropertyProvide
 				try {
 					String token = AuthJwtFormFilter.extrairAuthorization(context.getRequest());
 					Map<String, Object> decodedToken = AuthJwtFormFilter.validarToken(token);
+					
+					int ttl = Prop.getInt("/siga.jwt.token.ttl");
 					final long now = System.currentTimeMillis() / 1000L;
-					if ((Integer) decodedToken.get("exp") < now + AuthJwtFormFilter.TIME_TO_RENEW_IN_S) {
+				
+					if ((Integer) decodedToken.get("exp") < now + ttl) {
 						// Seria bom incluir o attributo HttpOnly
 						String tokenNew = AuthJwtFormFilter.renovarToken(token);
 						Map<String, Object> decodedNewToken = AuthJwtFormFilter.validarToken(token);

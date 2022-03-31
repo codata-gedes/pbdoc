@@ -9,7 +9,9 @@ import java.util.List;
 public class Prop {
 
 	public static final String DEFAULT_URL = "http://localhost:8080";
-
+	
+	private static final long DEFAULT_TTL_TOKEN = 15 * 60; // 15 minutos em segundos
+	
 	public interface IPropertyProvider {
 		String getProp(String nome);
 
@@ -164,7 +166,7 @@ public class Prop {
 		provider.addPublicProperty("/siga.jwt.cookie.domain", null);
 		provider.addPrivateProperty("/siga.jwt.secret");
 		provider.addPrivateProperty("/siga.autenticacao.senha", provider.getProp("/siga.jwt.secret"));
-		provider.addPublicProperty("/siga.jwt.token.ttl", "3600");
+		provider.addPublicProperty("/siga.jwt.token.ttl", String.valueOf(DEFAULT_TTL_TOKEN));
 		provider.addPublicProperty("/siga.local", null);
 		provider.addPublicProperty("/siga.uf.padrao", null);
 		provider.addPublicProperty("/siga.mensagens", null);

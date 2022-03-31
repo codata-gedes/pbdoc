@@ -21,8 +21,6 @@ import com.auth0.jwt.JWTVerifyException;
 import br.gov.jfrj.siga.base.Prop;
 
 public class AuthJwtFilter implements Filter {
-	static long DEFAULT_TTL_TOKEN = 3600; // default 1 hora
-
 	private FilterConfig filterConfig;
 
 	private Map<String, Object> validarToken(String token)
@@ -39,9 +37,11 @@ public class AuthJwtFilter implements Filter {
 
 	public SigaJwtProvider getProvider() throws SigaJwtProviderException {
 		String password = Prop.get("/siga.jwt.secret");
+		int ttl = Prop.getInt("/siga.jwt.token.ttl");
+		
 		SigaJwtOptions options = new SigaJwtOptionsBuilder()
 				.setPassword(password).setModulo(null)
-				.setTTL(DEFAULT_TTL_TOKEN).build();
+				.setTTL(ttl).build();
 		SigaJwtProvider provider = SigaJwtProvider.getInstance(options);
 		return provider;
 	}
