@@ -164,9 +164,7 @@ public class Mesa2 {
 						
 					}
 				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println(r.destino);
-					System.out.println(e);
+					e.printStackTrace();
 				}
 
 			r.dataDevolucao = "ocultar";

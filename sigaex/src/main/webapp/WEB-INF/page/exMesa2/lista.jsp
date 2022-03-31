@@ -280,7 +280,7 @@
 												<td v-if="usuarioPosse" class="col-md-1 col-2">
 													<small>{{f.lotaPosse}} / {{f.nomePessoaPosse}}</small>
 												</td>												
-												<td class="col-3 d-none d-md-block p-1">
+												<td class="col-2 d-none d-md-block p-1">
 													<span v-if="f.anotacao != null">
 														<a tabindex="0" class="anotacao fas fa-sticky-note text-warning popover-dismiss ml-2" role="button" 
 																data-toggle="popover" data-trigger="hover focus" :data-content="f.anotacao"></a>
