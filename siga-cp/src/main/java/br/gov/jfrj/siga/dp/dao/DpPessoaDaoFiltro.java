@@ -37,9 +37,9 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 	private String email;
 	private String identidade;
 	
-	
 	private boolean buscarFechadas;
 	private boolean buscarSubstitutos;
+	private boolean buscarSemLimitarOrgaoOrigem;
 	
 	private String situacaoFuncionalPessoa;
 	
@@ -58,13 +58,21 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 	public void setBuscarFechadas(boolean buscarFechadas) {
 		this.buscarFechadas = buscarFechadas;
 	}
-	
+
 	public boolean isBuscarSubstitutos() {
 		return buscarSubstitutos;
 	}
-	
+
 	public void setBuscarSubstitutos(boolean buscarSubstitutos) {
 		this.buscarSubstitutos = buscarSubstitutos;
+	}
+
+	public boolean isBuscarSemLimitarOrgaoOrigem() {
+		return buscarSemLimitarOrgaoOrigem;
+	}
+
+	public void setBuscarSemLimitarOrgaoOrigem(boolean buscarSemLimitarOrgaoOrigem) {
+		this.buscarSemLimitarOrgaoOrigem = buscarSemLimitarOrgaoOrigem;
 	}
 
 	public Long getIdOrgaoUsu() {
