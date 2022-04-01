@@ -221,7 +221,7 @@
 								<table v-else class="text-muted table table-sm table-striped table-hover table-borderless">
 									<thead v-if="!carregando">
 										<tr class="table-head d-flex">
-											<th scope="col" class="col-1 d-none d-md-block">Tempo</th> aaa
+											<th scope="col" class="col-1 d-none d-md-block">Tempo</th>
 											<th scope="col" class="col-md-2"
 													v-bind:class="usuarioPosse ? 'col-8' : 'col-9'">
 												<fmt:message key="usuario.mesavirtual.codigo"/></th>

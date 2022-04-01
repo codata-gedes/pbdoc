@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.crivano.swaggerservlet.ISwaggerModel;
@@ -22,6 +23,7 @@ import br.gov.jfrj.siga.cp.model.enm.TipoDePainelEnum;
 import br.gov.jfrj.siga.dp.CpMarcador;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
+import br.gov.jfrj.siga.ex.ExDocumento;
 import br.gov.jfrj.siga.ex.ExMarca;
 import br.gov.jfrj.siga.ex.ExMobil;
 import br.gov.jfrj.siga.ex.ExMovimentacao;
@@ -156,16 +158,10 @@ public class Mesa2 {
 							.getSigla();
 				}
 
-				try {
-					if (mobil.doc().getLotaDestinatario().getSiglaLotacao() != null) {
-						r.destino = mobil.doc().getLotaDestinatario().getSiglaLotacao();
-					}else {
-						r.destino = null;
-						
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					r.destino = Optional.ofNullable(mobil.doc())
+							.map(ExDocumento::getLotaDestinatario)
+							.map(DpLotacao::getSiglaLotacao)
+							.orElse(null);
 
 			r.dataDevolucao = "ocultar";
 
