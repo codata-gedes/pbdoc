@@ -28,6 +28,8 @@ public class DpLotacaoDaoFiltro extends DaoFiltroSelecionavel {
 	private Long idOrgaoUsu;
 
 	private boolean buscarFechadas;
+
+	private boolean buscarSemLimitarOrgaoOrigem;
 	
 	public DpLotacaoDaoFiltro() {}
 	
@@ -42,6 +44,14 @@ public class DpLotacaoDaoFiltro extends DaoFiltroSelecionavel {
 
 	public void setBuscarFechadas(boolean buscarFechadas) {
 		this.buscarFechadas = buscarFechadas;
+	}
+
+	public boolean isBuscarSemLimitarOrgaoOrigem() {
+		return buscarSemLimitarOrgaoOrigem;
+	}
+
+	public void setBuscarSemLimitarOrgaoOrigem(boolean buscarSemLimitarOrgaoOrigem) {
+		this.buscarSemLimitarOrgaoOrigem = buscarSemLimitarOrgaoOrigem;
 	}
 
 	public String getNome() {

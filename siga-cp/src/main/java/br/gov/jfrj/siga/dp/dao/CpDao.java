@@ -26,7 +26,11 @@ package br.gov.jfrj.siga.dp.dao;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.SPACE;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
+import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
 import java.lang.reflect.InvocationTargetException;
@@ -54,11 +58,15 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.QueryHints;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -114,6 +122,7 @@ import br.gov.jfrj.siga.dp.QCpContrato;
 import br.gov.jfrj.siga.dp.QCpOrgaoUsuario;
 import br.gov.jfrj.siga.dp.QDpCargo;
 import br.gov.jfrj.siga.dp.QDpFuncaoConfianca;
+import br.gov.jfrj.siga.dp.QDpLotacao;
 import br.gov.jfrj.siga.dp.QDpPessoa;
 import br.gov.jfrj.siga.model.CarimboDeTempo;
 import br.gov.jfrj.siga.model.ContextoPersistencia;
@@ -133,13 +142,21 @@ public class CpDao extends ModeloDao {
 	public static final String CACHE_HOURS = "hours";
 	public static final String CACHE_SECONDS = "seconds";
 
+	private static final QDpPessoa qDpPessoa = QDpPessoa.dpPessoa;
+	private static final StringExpression qDpPessoaSiglaSemHifen = qDpPessoa.sesbPessoa
+			.append(qDpPessoa.matricula.stringValue());
+	private static final StringExpression qDpPessoaSiglaComHifen = qDpPessoa.sesbPessoa
+			.append("-")
+			.append(qDpPessoa.matricula.stringValue());
+
 	private static final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
 	private static final QCpContrato qCpContrato = QCpContrato.cpContrato;
 	private static final QDpFuncaoConfianca qDpFuncaoConfianca = QDpFuncaoConfianca.dpFuncaoConfianca;
 	private static final QDpCargo qDpCargo = QDpCargo.dpCargo;
+	private static final QDpLotacao qDpLotacao = QDpLotacao.dpLotacao;
 
 	protected final SigaDialect dialeto = SigaDialect.fromSystemProperty();
-	
+
 	private static Map<String, CpServico> cacheServicos = null;
 
 	public static CpDao getInstance() {
@@ -318,7 +335,8 @@ public class CpDao extends ModeloDao {
 	public int consultarQuantidade(final DaoFiltro o) throws Exception, SecurityException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException {
 		Class[] argType = { o.getClass() };
-		return (Integer) this.getClass().getMethod("consultarQuantidade", argType).invoke(this, o);
+		final Number quantidade = (Number) this.getClass().getMethod("consultarQuantidade", argType).invoke(this, o);
+		return quantidade.intValue();
 	}
 
 	public Selecionavel consultarPorSigla(final DaoFiltro o) throws Exception, SecurityException,
@@ -644,35 +662,87 @@ public class CpDao extends ModeloDao {
 		return consultarPorFiltro(o, 0, 0);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<DpLotacao> consultarPorFiltro(final DpLotacaoDaoFiltro o, final int offset, final int itemPagina) {
-		try {
-			final Query query;
+	public List<DpLotacao> consultarPorFiltro(final DpLotacaoDaoFiltro filtro, final int offset, final int tamanhoPagina) {
+		final JPAQuery<DpLotacao> query = queryConsultarPorFiltro(filtro).select(qDpLotacao);
 
-			if (!o.isBuscarFechadas())
-				query = em().createNamedQuery("consultarPorFiltroDpLotacao");
-			else
-				query = em().createNamedQuery("consultarPorFiltroDpLotacaoInclusiveFechadas");
-			if (offset > 0) {
-				query.setFirstResult(offset);
-			}
-			if (itemPagina > 0) {
-				query.setMaxResults(itemPagina);
-			}
-			query.setParameter("nome", o.getNome() == null ? "" : o.getNome().replace(' ', '%'));
-
-			if (o.getIdOrgaoUsu() != null)
-				query.setParameter("idOrgaoUsu", o.getIdOrgaoUsu());
-			else
-				query.setParameter("idOrgaoUsu", 0L);
-
-			query.setHint("org.hibernate.cacheable", true);
-			query.setHint("org.hibernate.cacheRegion", CACHE_QUERY_CONFIGURACAO);
-			final List<DpLotacao> l = query.getResultList();
-			return l;
-		} catch (final NullPointerException e) {
-			return null;
+		if (offset > 0) {
+			query.offset(offset);
 		}
+		if (tamanhoPagina > 0) {
+			query.limit(tamanhoPagina);
+		}
+
+		return query.orderBy(qDpLotacao.nomeLotacaoAI.asc())
+				.setHint(QueryHints.CACHEABLE, true)
+				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
+				.fetch();
+	}
+
+	public long consultarQuantidade(final DpLotacaoDaoFiltro filtro) {
+		return queryConsultarPorFiltro(filtro)
+				.setHint(QueryHints.CACHEABLE, true)
+				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
+				.fetchCount();
+	}
+
+	protected JPAQuery<?> queryConsultarPorFiltro(final DpLotacaoDaoFiltro filtro) {
+		final BooleanBuilder predicates = new BooleanBuilder();
+
+		String textoLike = filtro.getNome();
+		textoLike = stripToEmpty(textoLike);
+		textoLike = normalizeSpace(textoLike);
+		textoLike = replace(textoLike, SPACE, "%");
+		textoLike = replace(textoLike, "-", StringUtils.EMPTY);
+
+		boolean joinOrgao = false;
+		if (filtro.isBuscarFechadas()) {
+			final QDpLotacao subqDpLotacao = new QDpLotacao("subqDpLotacao");
+			final QCpOrgaoUsuario subqCpOrgaoUsuario = new QCpOrgaoUsuario("subqCpOrgaoUsuario");
+			final BooleanBuilder subqPredicates = new BooleanBuilder();
+			final StringExpression siglaOrgaoComLotacao = subqCpOrgaoUsuario.acronimoOrgaoUsu.append(subqDpLotacao.siglaLotacao);
+			if (isNotBlank(textoLike)) {
+				subqPredicates.and(
+						siglaOrgaoComLotacao.startsWithIgnoreCase(textoLike)
+								.or(qDpLotacao.siglaLotacao.likeIgnoreCase("%" + textoLike + "%"))
+								.or(subqDpLotacao.nomeLotacaoAI.likeIgnoreCase("%" + textoLike + "%"))
+				);
+			}
+
+			if (filtro.getIdOrgaoUsu() != null) {
+				subqPredicates.and(subqCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+			}
+
+			final JPQLQuery<Long> subq = JPAExpressions
+					.select(subqDpLotacao.idLotacao.max())
+					.from(subqDpLotacao)
+					.innerJoin(subqDpLotacao.orgaoUsuario, subqCpOrgaoUsuario)
+					.where(subqPredicates)
+					.groupBy(subqDpLotacao.idLotacaoIni);
+
+			predicates.and(qDpLotacao.idLotacao.in(subq));
+		} else {
+			joinOrgao = true;
+			predicates.and(qDpLotacao.dataFimLotacao.isNull());
+
+			final StringExpression siglaOrgaoComLotacao = qCpOrgaoUsuario.acronimoOrgaoUsu.append(qDpLotacao.siglaLotacao);
+			if (isNotBlank(textoLike)) {
+				predicates.and(
+						siglaOrgaoComLotacao.startsWithIgnoreCase(textoLike)
+								.or(qDpLotacao.siglaLotacao.likeIgnoreCase("%" + textoLike + "%"))
+								.or(qDpLotacao.nomeLotacaoAI.likeIgnoreCase("%" + textoLike + "%"))
+				);
+			}
+
+			if (filtro.getIdOrgaoUsu() != null) {
+				predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+			}
+		}
+
+		final JPAQuery<?> query = new JPAQueryFactory(em()).from(qDpLotacao);
+		if (joinOrgao) {
+			query.innerJoin(qDpLotacao.orgaoUsuario, qCpOrgaoUsuario);
+		}
+		return query.where(predicates);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -754,49 +824,29 @@ public class CpDao extends ModeloDao {
 		return em().createQuery(q).getResultList();
 	}
 
-	public Selecionavel consultarPorSigla(final DpLotacaoDaoFiltro flt) {
-		final DpLotacao o = new DpLotacao();
-		o.setSigla(flt.getSigla());
-		if (o.getOrgaoUsuario() == null && flt.getIdOrgaoUsu() != null) {
-			CpOrgaoUsuario cpOrgaoUsu = consultar(flt.getIdOrgaoUsu(), CpOrgaoUsuario.class, false);
-			o.setOrgaoUsuario(cpOrgaoUsu);
+	public Selecionavel consultarPorSigla(final DpLotacaoDaoFiltro filtro) {
+
+		final BooleanBuilder predicates = new BooleanBuilder(qDpLotacao.dataFimLotacao.isNull());
+		if (isNotBlank(filtro.getSigla())) {
+			final BooleanExpression siglaCompletaIniciaCom = qDpLotacao.orgaoUsuario.siglaOrgaoUsu
+					.concat("-")
+					.concat(qDpLotacao.siglaLotacao)
+					.startsWithIgnoreCase(filtro.getSigla());
+
+			final BooleanExpression siglaIniciaCom = qDpLotacao.siglaLotacao.startsWithIgnoreCase(filtro.getSigla());
+
+			predicates.and(siglaCompletaIniciaCom.or(siglaIniciaCom));
 		}
-		DpLotacao lotacao = consultarPorSigla(o);
-		if(lotacao == null && flt.getSigla() != null) {
-			o.setSigla(flt.getSigla().replaceFirst("-", ""));
-			lotacao = consultarPorSigla(o);
+
+		if (!filtro.isBuscarSemLimitarOrgaoOrigem()) {
+			if (filtro.getIdOrgaoUsu() == null) {
+				throw new AplicacaoException("Não foi possível identificar órgão do usuário requisitante.");
+			}
+
+			predicates.and(qDpLotacao.orgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
 		}
-		if (lotacao == null) {
-			o.setSiglaLotacao(flt.getSigla());
-			o.setOrgaoUsuario(null);
-			return consultarPorSigla(o);
-		}
-		return lotacao;
-	}
 
-	public int consultarQuantidade(final DpLotacaoDaoFiltro o) {
-		try {
-			final Query query;
-
-			if (!o.isBuscarFechadas())
-				query = em().createNamedQuery("consultarQuantidadeDpLotacao");
-			else
-				query = em().createNamedQuery("consultarQuantidadeDpLotacaoInclusiveFechadas");
-
-			query.setParameter("nome", o.getNome() != null ? o.getNome().replace(' ', '%') : "%");
-
-			if (o.getIdOrgaoUsu() != null)
-				query.setParameter("idOrgaoUsu", o.getIdOrgaoUsu());
-			else
-				query.setParameter("idOrgaoUsu", 0L);
-
-			query.setHint("org.hibernate.cacheable", true);
-			query.setHint("org.hibernate.cacheRegion", CACHE_QUERY_CONFIGURACAO);
-			final int l = ((Long) query.getSingleResult()).intValue();
-			return l;
-		} catch (final NullPointerException e) {
-			return 0;
-		}
+		return consultarLotacao(predicates);
 	}
 
 	public Selecionavel consultarPorSigla(final CpGrupoDaoFiltro flt) throws AplicacaoException {
@@ -983,6 +1033,32 @@ public class CpDao extends ModeloDao {
 		} catch (final NullPointerException e) {
 			return null;
 		}
+	}
+
+	public DpPessoa consultarPessoa(com.querydsl.core.types.Predicate... predicate) {
+		final JPAQuery<DpPessoa> query = new JPAQueryFactory(em())
+				.select(qDpPessoa)
+				.from(qDpPessoa);
+
+		if (predicate != null) {
+			query.where(predicate);
+		}
+
+		return query.orderBy(qDpPessoa.nomePessoaAI.asc())
+				.fetchFirst();
+	}
+
+	public DpLotacao consultarLotacao(com.querydsl.core.types.Predicate... predicate) {
+		final JPAQuery<DpLotacao> query = new JPAQueryFactory(em())
+				.select(qDpLotacao)
+				.from(qDpLotacao);
+
+		if (predicate != null) {
+			query.where(predicate);
+		}
+
+		return query.orderBy(qDpLotacao.siglaLotacao.asc())
+				.fetchFirst();
 	}
 
 	/**
@@ -1487,14 +1563,21 @@ public class CpDao extends ModeloDao {
 		}
 	}
 
-	public Selecionavel consultarPorSigla(final DpPessoaDaoFiltro flt) {
-		final DpPessoa o = new DpPessoa();
-		o.setSigla(flt.getSigla());
-		/*
-		 * CpOrgaoUsuario cpOrgao = new CpOrgaoUsuario();
-		 * cpOrgao.setIdOrgaoUsu(flt.getIdOrgaoUsu()); o.setOrgaoUsuario(cpOrgao);
-		 */
-		return consultarPorSigla(o);
+	public Selecionavel consultarPorSigla(final DpPessoaDaoFiltro filtro) {
+		final BooleanBuilder predicates = new BooleanBuilder(qDpPessoa.dataFimPessoa.isNull());
+		if (isNotBlank(filtro.getSigla())) {
+			predicates.and(
+					qDpPessoaSiglaSemHifen.eq(filtro.getSigla())
+							.or(qDpPessoaSiglaComHifen.eq(filtro.getSigla()))
+			);
+		}
+		if (!filtro.isBuscarSemLimitarOrgaoOrigem()) {
+			if (filtro.getIdOrgaoUsu() == null) {
+				throw new AplicacaoException("Não foi possível identificar órgão do usuário requisitante.");
+			}
+			predicates.and(qDpPessoa.orgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+		}
+		return consultarPessoa(predicates);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -2209,7 +2292,8 @@ public class CpDao extends ModeloDao {
 
 		return query.setHint(QueryHints.CACHEABLE, true)
 				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
-				.orderBy(qCpOrgaoUsuario.nmOrgaoUsu.asc()).fetch();
+				.orderBy(qCpOrgaoUsuario.nmOrgaoUsu.asc())
+				.fetch();
 	}
 
 	@SuppressWarnings("unchecked")
