@@ -25,7 +25,9 @@
 package br.gov.jfrj.siga.vraptor; 
 
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
+import static org.apache.commons.lang3.BooleanUtils.toBooleanDefaultIfNull;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.ByteArrayInputStream;
@@ -89,6 +91,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	
 	private Long orgaoUsu;
 	private DpLotacaoSelecao lotacaoSel;
+	private boolean semLimiteOrgaoOrigem = true;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -114,13 +117,11 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Get
 	@Post
 	@Path({ "/app/pessoa/buscar", "/app/cosignatario/buscar", "/pessoa/buscar.action", "/cosignatario/buscar.action" })
-	public void buscar(String sigla, String postback, Integer paramoffset, Long idOrgaoUsu, DpLotacaoSelecao lotacaoSel)
-			throws Exception {
-		final DpLotacao lotacaoTitular = getLotaTitular();
-		if (postback == null && lotacaoTitular != null) {
-			orgaoUsu = lotacaoTitular.getIdOrgaoUsuario();
-		} else {
-			orgaoUsu = idOrgaoUsu;
+	public void buscar(String sigla, String postback, Integer paramoffset, Long idOrgaoUsu, DpLotacaoSelecao lotacaoSel) throws Exception {
+
+		this.orgaoUsu = idOrgaoUsu;
+		if (postback == null && getLotaTitular() != null) {
+			this.orgaoUsu = getLotaTitular().getIdOrgaoUsuario();
 		}
 		if (lotacaoSel != null && lotacaoSel.getId() != null && lotacaoSel.getId() > 0) {
 			this.lotacaoSel = lotacaoSel;
@@ -128,19 +129,15 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		this.getP().setOffset(paramoffset);
 
 		if (sigla == null) {
-			sigla = "";
+			sigla = EMPTY;
 		}
-		
-		try {
-		super.aBuscar(sigla, postback);
-		} catch (Exception ex) {
-			throw ex;
-		}
+
+	    super.aBuscar(sigla, postback);
 		result.include("param", getRequest().getParameterMap());
 		result.include("request", getRequest());
 		result.include("itens", getItens());
 		result.include("tamanho", getTamanho());
-		result.include("orgaosUsu", getOrgaosUsu());
+		result.include("orgaosUsu", getOrgaosPermitidosUsuarioCadastrante());
 		result.include("lotacaoSel", lotacaoSel == null ? new DpLotacaoSelecao() : lotacaoSel);
 		result.include("idOrgaoUsu", orgaoUsu);
 		result.include("sigla", sigla);
@@ -158,14 +155,23 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Override
 	protected DpPessoaDaoFiltro createDaoFiltro() {
 		final DpPessoaDaoFiltro flt = new DpPessoaDaoFiltro();
+
 		flt.setNome(Texto.removeAcentoMaiusculas(getNome()));
 		if (lotacaoSel != null) {
 			flt.setLotacao(lotacaoSel.buscarObjeto());
 		}
+
+		flt.setBuscarSemLimitarOrgaoOrigem(this.semLimiteOrgaoOrigem);
 		flt.setIdOrgaoUsu(orgaoUsu);
+		if (flt.getIdOrgaoUsu() == null && !getTitular().isTramitarOutrosOrgaos()) {
+			if (getLotaTitular() == null) {
+				throw new AplicacaoException("Usuário limitado não pode buscar em outros órgãos");
+			}
+			flt.setIdOrgaoUsu(getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu());
+		}
 
 		String buscarFechadas = param("buscarFechadas");
-		flt.setBuscarFechadas(buscarFechadas != null ? toBoolean(buscarFechadas) : false);
+		flt.setBuscarFechadas(toBoolean(buscarFechadas));
 		String buscarSubstitutos = param("buscarSubstitutos");
 		if (buscarSubstitutos != null && toBoolean(buscarSubstitutos)) {
 		    flt.setBuscarSubstitutos(true);
@@ -211,8 +217,13 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Post
 	@Path({ "/public/app/pessoa/selecionar", "/app/pessoa/selecionar", "/app/cosignatario/selecionar",
 			"/pessoa/selecionar.action", "/cosignatario/selecionar.action" })
-	public void selecionar(String sigla) {
-		String resultado = super.aSelecionar(sigla);
+	public void selecionar(final String propriedade, final String sigla) {
+		if (equalsIgnoreCase("destinatario", propriedade)) {
+			this.semLimiteOrgaoOrigem = getTitular().isTramitarOutrosOrgaos();
+		}
+
+		final String resultado = super.aSelecionar(sigla);
+
 		if (resultado == "ajax_retorno") {
 			result.include("sel", getSel());
 			result.use(Results.page()).forwardTo("/WEB-INF/jsp/ajax_retorno.jsp");
@@ -404,6 +415,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				result.include("email", pessoa.getEmailPessoa());
 				result.include("idOrgaoUsu", pessoa.getOrgaoUsuario().getId());
 				result.include("nmOrgaousu", pessoa.getOrgaoUsuario().getNmOrgaoUsu());
+				result.include("tramitarOutrosOrgaos", pessoa.isTramitarOutrosOrgaos());
 				
 				/*
 				 * Adicao de campos RG
@@ -607,18 +619,20 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	public void editarGravar(final Long id, final Long idOrgaoUsu, final Long idCargo, final Long idFuncao,
 			final Long idLotacao, final String nmPessoa, final String dtNascimento, final String cpf,
 			final String email, final String identidade, final String orgaoIdentidade, final String ufIdentidade,
-			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail) throws Exception {
-		
+			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail,
+			final Boolean tramitarOutrosOrgaos) throws Exception {
+
 		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_PESSOA:Cadastrar Pessoa");
-		
+
 		try {
-			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao, idLotacao, nmPessoa, dtNascimento, cpf, email, identidade,
-					orgaoIdentidade, ufIdentidade, dataExpedicaoIdentidade, nomeExibicao, enviarEmail);
+			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao,
+					idLotacao, nmPessoa, dtNascimento, cpf, email, identidade, orgaoIdentidade, ufIdentidade,
+					dataExpedicaoIdentidade, nomeExibicao, enviarEmail, toBooleanDefaultIfNull(tramitarOutrosOrgaos, false));
 			this.result.include("mensagem", "Operação realizada com sucesso!");
 		} catch (RegraNegocioException e) {
 			result.include(SigaModal.ALERTA, e.getMessage());
 		}
-		
+
 		lista(0, null, "", "", null, null, null, "", null);
 	}
 

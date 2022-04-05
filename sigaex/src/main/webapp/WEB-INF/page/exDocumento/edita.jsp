@@ -249,7 +249,7 @@
 											<input type="hidden" name="campos" value="substituicao" />
 											<input type="hidden" name="campos" value="personalizacao" />
 											<input type="hidden" id="temCossignatarios" value="${not empty exDocumentoDTO.doc.cosignatarios}" />
-											<label><fmt:message key="documento.subscritor"/></label>
+											<label><fmt:message key="documento.subscritor"/>&nbsp;<a style="color: red">(obrigatório)</a></label>
 											<siga:selecao propriedade="subscritor" inputName="exDocumentoDTO.subscritor" modulo="siga" tema="simple" />
 										</div>
 									</div>
@@ -290,7 +290,7 @@
 					<div class="row  js-siga-sp-documento-analisa-alteracao">
 						<div class="col-sm-8">
 							<div class="form-group">
-								<label><fmt:message key="documento.titular"/></label>
+								<label><fmt:message key="documento.titular"/>&nbsp;<a style="color: red">(obrigatório)</a></label>
 								<siga:selecao propriedade="titular" paramList="buscarSubstitutos=false" inputName="exDocumentoDTO.titular" tema="simple" modulo="siga" />
 							</div>
 						</div>
@@ -334,7 +334,7 @@
 				<div class="row ${hide_only_GOVSP}">
 					<div class="col-sm-2">
 						<div class="form-group">
-							<label>Destinatário</label>
+							<label>Destinatário&nbsp;<a style="color: red">(obrigatório)</a></label>
 							<select name="exDocumentoDTO.tipoDestinatario" onchange="javascript:sbmt();" class="form-control">
 								<c:forEach items="${exDocumentoDTO.listaTipoDest}" var="item">
 									<option value="${item.key}"
@@ -392,7 +392,7 @@
 						<div class="col-sm-5">
 							<div class="form-group">
 							<input type="hidden" name="campos" value="classificacaoSel.id" /> 
-								<label><fmt:message key="documento.tipo.documental"/></label>
+								<label><fmt:message key="documento.tipo.documental"/>&nbsp;<a style="color: red">(obrigatório)</a></label>
 								<siga:span id="classificacao" depende="forma;modelo">
 									<!-- OI -->
 									<siga:selecao desativar="${desativarClassif}" modulo="sigaex" propriedade="classificacao"
@@ -431,7 +431,7 @@
 					<div class="row  js-siga-sp-documento-analisa-alteracao">
 						<div class="col-sm-8">
 							<div class="form-group">
-								<label><fmt:message key="documento.assunto"/></label>
+								<label><fmt:message key="documento.assunto"/>&nbsp;<a style="color: red">(obrigatório)</a></label>
 								<textarea name="exDocumentoDTO.descrDocumento" cols="80" rows="2" id="descrDocumento" class="form-control" oninput="updateURL()">${exDocumentoDTO.descrDocumento}</textarea>
 								<small class="form-text text-muted">(preencher o campo acima com palavras-chave, sempre usando substantivos, gênero masculino e
 									singular).</small>

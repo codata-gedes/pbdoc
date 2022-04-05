@@ -29,16 +29,7 @@ import br.gov.jfrj.siga.model.ContextoPersistencia;
 public class AuthJwtFormFilter implements Filter {
 
 	public static final String SIGA_JWT_AUTH_COOKIE_NAME = "siga-jwt-auth";
-
-	private static final int TIME_TO_EXPIRE_IN_S = 60 * 60 * 8; // 8h é o tempo
-																// de duração
-	public static final int TIME_TO_RENEW_IN_S = 60 * 60 * 7; // renova
-																// automaticamente
-																// 7h antes de
-																// expirar
-
 	static final String PROVIDER_ISSUER = "sigaidp";
-	static long DEFAULT_TTL_TOKEN = 3600; // default 1 hora
 
 	private FilterConfig filterConfig;
 
@@ -59,13 +50,14 @@ public class AuthJwtFormFilter implements Filter {
 			throw new RuntimeException("Token inválido");
 		}
 		SigaJwtProvider provider = getProvider();
-		return provider.renovarToken(token, TIME_TO_EXPIRE_IN_S);
+		return provider.renovarToken(token, null);
 	}
 
 	public static SigaJwtProvider getProvider() throws SigaJwtProviderException {
 		String password = Prop.get("/siga.jwt.secret");
-		SigaJwtOptions options = new SigaJwtOptionsBuilder().setPassword(password).setModulo(null)
-				.setTTL(TIME_TO_EXPIRE_IN_S).build();
+		int ttl = Prop.getInt("/siga.jwt.token.ttl");
+		
+		SigaJwtOptions options = new SigaJwtOptionsBuilder().setPassword(password).setModulo(null).setTTL(ttl).build();
 		SigaJwtProvider provider = SigaJwtProvider.getInstance(options);
 		return provider;
 	}
@@ -116,21 +108,21 @@ public class AuthJwtFormFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
+		
+		int ttl = Prop.getInt("/siga.jwt.token.ttl");
 
 		try {
 			if (!req.getRequestURI().equals("/sigaex/autenticar.action")) {
 				String token = extrairAuthorization(req);
 				Map<String, Object> decodedToken = validarToken(token);
 				final long now = System.currentTimeMillis() / 1000L;
-				if ((Integer) decodedToken.get("exp") < now + TIME_TO_RENEW_IN_S) {
+				
+				if ((Integer) decodedToken.get("exp") < now + ttl) {
 					// Seria bom incluir o attributo HttpOnly
 					String tokenNew = renovarToken(token);
 					Map<String, Object> decodedNewToken = validarToken(token);
 					Cookie cookie = buildCookie(tokenNew);
 					resp.addCookie(cookie);
-//					Cp.getInstance().getBL().logAcesso(AbstractCpAcesso.CpTipoAcessoEnum.RENOVACAO_AUTOMATICA,
-//							(String) decodedNewToken.get("sub"), (Integer) decodedNewToken.get("iat"),
-//							(Integer) decodedNewToken.get("exp"), HttpRequestUtils.getIpAudit(req));
 				}
 				ContextoPersistencia.setUserPrincipal((String) decodedToken.get("sub"));
 			}

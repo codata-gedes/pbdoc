@@ -3,6 +3,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<display-name>Sistema Integrado de Gestão Administrativa</display-name>
+	<session-config>
+		<session-timeout>15</session-timeout>
+	</session-config>
+	
 
 	<!-- Inicio de WebServer -->
 	<context-param>

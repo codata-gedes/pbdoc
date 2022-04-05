@@ -1,5 +1,9 @@
 package br.gov.jfrj.siga.vraptor;
 
+import static org.apache.commons.lang3.BooleanUtils.toBoolean;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -45,6 +49,7 @@ import br.gov.jfrj.siga.model.Selecionavel;
 public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLotacao, DpLotacaoDaoFiltro> {
 
 	private Long orgaoUsu;
+	private boolean semLimiteOrgaoOrigem = true;
 
 	/**
 	 * @deprecated CDI eyes only
@@ -73,12 +78,11 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	}
 
 	protected void aBuscarJson(String sigla) throws Exception {
-		Long orgaoUsu = getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu();
+		if (sigla == null) {
+			sigla = EMPTY;
+		}
 
-		if (sigla == null)
-			sigla = "";
-
-		aBuscar(sigla, "");
+		aBuscar(sigla, EMPTY);
 
 		try {
 			RetornoJson l = new RetornoJson();
@@ -98,24 +102,29 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get
 	@Post
 	@Path({ "/app/lotacao/buscar", "/lotacao/buscar.action" })
-	public void busca(String sigla, Long idOrgaoUsu, Integer paramoffset, String postback) throws Exception {
-		if (postback == null)
+	public void busca(String propriedade, String sigla, Long idOrgaoUsu, Integer paramoffset, String postback) throws Exception {
+		this.orgaoUsu = idOrgaoUsu;
+		if (equalsIgnoreCase("lotacaoDestinatario", propriedade)) {
+			this.semLimiteOrgaoOrigem = getTitular().isTramitarOutrosOrgaos();
+			if (!this.semLimiteOrgaoOrigem) {
+				this.orgaoUsu = getTitular().getOrgaoUsuario().getId();
+			}
+		} else if (postback == null) {
 			orgaoUsu = getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu();
-		else
-			orgaoUsu = idOrgaoUsu;
+		}
 
 		this.getP().setOffset(paramoffset);
 
-		if (sigla == null)
-			sigla = "";
+		if (sigla == null) {
+			sigla = EMPTY;
+		}
 
 		super.aBuscar(sigla, postback);
-
 		result.include("param", getRequest().getParameterMap());
 		result.include("request", getRequest());
 		result.include("itens", getItens());
 		result.include("tamanho", getTamanho());
-		result.include("orgaosUsu", getOrgaosUsu());
+		result.include("orgaosUsu", getOrgaosPermitidosUsuarioCadastrante());
 		result.include("idOrgaoUsu", orgaoUsu);
 		result.include("sigla", sigla);
 		result.include("postbak", postback);
@@ -126,18 +135,12 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	public DpLotacaoDaoFiltro createDaoFiltro() {
 		final DpLotacaoDaoFiltro flt = new DpLotacaoDaoFiltro();
 		flt.setNome(Texto.removeAcentoMaiusculas(getNome()));
-		/*
-		 * if (param("postback")==null)
-		 * flt.setIdOrgaoUsu(getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu()); else
-		 * flt.setIdOrgaoUsu(paramInteger("orgaoUsu"));
-		 */
+
+		flt.setBuscarSemLimitarOrgaoOrigem(this.semLimiteOrgaoOrigem);
 		flt.setIdOrgaoUsu(orgaoUsu);
-		if (flt.getIdOrgaoUsu() == null && getLotaTitular() != null ) {
-			flt.setIdOrgaoUsu(getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu());
-		}
 
 		String buscarFechadas = param("buscarFechadas");
-		flt.setBuscarFechadas(buscarFechadas != null ? Boolean.valueOf(buscarFechadas) : false);
+		flt.setBuscarFechadas(toBoolean(buscarFechadas));
 
 		return flt;
 	}
@@ -157,7 +160,14 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get
 	@Post
 	@Path({ "/public/app/lotacao/selecionar", "app/lotacao/selecionar", "/lotacao/selecionar.action" })
-	public String selecionar(String sigla) {
+	public String selecionar(final String propriedade, final String sigla) {
+		if (equalsIgnoreCase("lotacaoDestinatario", propriedade)) {
+			this.semLimiteOrgaoOrigem = getTitular().isTramitarOutrosOrgaos();
+			if (!this.semLimiteOrgaoOrigem) {
+				this.orgaoUsu = getTitular().getOrgaoUsuario().getId();
+			}
+		}
+
 		String resultado = super.aSelecionar(sigla);
 		if (getSel() != null) {
 			try {

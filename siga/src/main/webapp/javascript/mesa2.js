@@ -56,7 +56,7 @@ var appMesa = new Vue({
 					a = this.filtrarPorSubstring(
 						a,
 						this.filtro,
-						"grupoNome,tempoRelativo,sigla,codigo,descr,origem,situacao,errormsg,list.nome,dataDevolucao".split(
+						"grupoNome,tempoRelativo,sigla,codigo,descr,origem,destino,situacao,errormsg,list.nome,dataDevolucao".split(
 							","
 						)
 					);
@@ -338,6 +338,7 @@ var appMesa = new Vue({
 				codigo: undefined,
 				descr: undefined,
 				origem: undefined,
+				destino: undefined,
 				situacao: undefined,
 				errormsg: undefined,
 				odd: undefined

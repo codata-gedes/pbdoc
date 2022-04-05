@@ -1,0 +1,1 @@
+ALTER TABLE dp_pessoa ADD COLUMN tramitar_outros_orgaos BOOLEAN DEFAULT false;

@@ -101,8 +101,14 @@ function gravar(assinar) {
 
 function validar(silencioso) {
 	personalizacaoJuntar();
-	
+
+	var responsavelAssinatura = document.getElementsByName('exDocumentoDTO.subscritorSel.sigla'); 
+	var substitutoAtivado = document.getElementsByName('exDocumentoDTO.substituicao');
+	var substitutoAssinatura = document.getElementsByName('exDocumentoDTO.titularSel.sigla');
 	var descr = document.getElementsByName('exDocumentoDTO.descrDocumento')[0].value;
+	var destinatarioLotacao = document.getElementsByName('exDocumentoDTO.lotacaoDestinatarioSel.sigla');
+	var destinatarioUsuario = document.getElementsByName('exDocumentoDTO.destinatarioSel.sigla');
+	var arquivo = document.getElementsByName('arquivo');
 	var classificacao = document.getElementById('formulario_exDocumentoDTO.classificacaoSel_id');
 	var eletroHidden = document.getElementById('eletronicoHidden');
 	var eletro1 = document.getElementById('eletronicoCheck1');
@@ -112,6 +118,19 @@ function validar(silencioso) {
 	var subscritor = document.getElementById('formulario_exDocumentoDTO.subscritorSel_id');
 	var temCossignatarios = document.getElementById('temCossignatarios');
 	var descricaoAutomatica = document.getElementById('descricaoAutomatica');
+	
+	if (substitutoAtivado[0].checked == false) {
+		if (responsavelAssinatura == null || responsavelAssinatura[0].value == "") { 
+			aviso("Preencha o campo 'Responsável pela Assinatura' antes de gravar o documento.", silencioso);
+			return false;
+		}		
+	} 
+	if (substitutoAtivado[0].checked == true) {
+		if (substitutoAssinatura == null || substitutoAssinatura[0].value == "") { 
+			aviso("Preencha o campo 'Substituto Responsável pela Assinatura' antes de gravar o documento.", silencioso);
+			return false;
+		}
+	}
 	if (descricaoAutomatica == null && (descr == null || descr == "")) {
 		aviso("Preencha o campo 'Assunto' antes de gravar o documento.", silencioso);
 		return false;
@@ -119,6 +138,19 @@ function validar(silencioso) {
 	if (classificacao == null || classificacao.value == "") {
 		aviso("Preencha o campo 'Tipo Documental' antes de gravar o documento.", silencioso);
 		return false;
+	}
+
+	if (destinatarioLotacao.length != 0 ) {
+		if (destinatarioLotacao == null || destinatarioLotacao[0].value == "") { 
+			aviso("Preencha o campo 'Destinatário - Lotação' antes de gravar o documento.", silencioso);
+			return false;
+		}
+	}
+	if (destinatarioUsuario.length != 0 ) {
+		if (destinatarioUsuario == null || destinatarioUsuario[0].value == "") { 
+			aviso("Preencha o campo 'Destinatário - Usuário' antes de gravar o documento.", silencioso);
+			return false;
+		}
 	}
 	if ((temCossignatarios && temCossignatarios.value === 'true') && (!subscritor || !subscritor.value)) {
 		aviso("É necessário informar um subscritor, pois o documento possui cossignatários",silencioso);
@@ -147,6 +179,14 @@ function validar(silencioso) {
 		}
     }
 
+
+	if (arquivo.length != 0 ) {
+		if (arquivo == null || arquivo[0].value == "") { 
+			aviso("Faltou 'Escolher o Arquivo' antes de gravar a captura do documento.", silencioso);
+			return false;
+		}
+	}
+	
 	var limite = document
 			.getElementsByName('exDocumentoDTO.tamanhoMaximoDescricao')[0].value;
 	if (document.getElementsByName('exDocumentoDTO.descrDocumento')[0].value.length >= limite) {

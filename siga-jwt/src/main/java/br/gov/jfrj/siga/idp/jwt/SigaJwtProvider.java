@@ -25,7 +25,7 @@ import br.gov.jfrj.siga.base.Prop;
 public class SigaJwtProvider {
 
 	static final String PROVIDER_ISSUER = "sigaidp";
-	private long defaultTTLToken = 3600; // default 1 hora
+	private long defaultTTLToken;
 	private SigaJwtOptions options;
 
 	private SigaJwtProvider(SigaJwtOptions options)

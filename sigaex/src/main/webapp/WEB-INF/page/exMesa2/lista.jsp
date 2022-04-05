@@ -226,9 +226,11 @@
 													v-bind:class="usuarioPosse ? 'col-8' : 'col-9'">
 												<fmt:message key="usuario.mesavirtual.codigo"/></th>
 											<th scope="col" class="d-none d-md-block"
-											 	v-bind:class="usuarioPosse ? 'col-3' : 'col-4'">Assunto</th>
+											 	v-bind:class="usuarioPosse ? 'col-4' : 'col-5'">Assunto</th>
 											<th scope="col" class="col-md-1"
-												v-bind:class="usuarioPosse ? 'col-2' : 'col-3'">Origem</th>
+												v-bind:class="usuarioPosse ? 'col-3' : 'col-4'">Origem</th>
+											<th scope="col" class="col-md-1"
+												v-bind:class="usuarioPosse ? 'col-2' : 'col-3'">Destino</th>
 											<th v-if="usuarioPosse" scope="col" class="col-md-1 col-2"><fmt:message key="documento.atendente"/></th>
 											<th scope="col" class="col-3 d-none d-md-block"><fmt:message key = "usuario.mesavirtual.etiquetas"/></th>
 	<!-- 											<th v-show="gruposTemAlgumErro">Atenção</th> -->
@@ -257,11 +259,11 @@
 													</c:choose>
 													<span class="d-inline d-md-none"> - {{f.descr}}</span>
 												</td>
-												<td class="d-none d-md-block" v-bind:class="usuarioPosse ? 'col-3' : 'col-4'">
+												<td class="d-none d-md-block" v-bind:class="usuarioPosse ? 'col-4' : 'col-5'">
 													<span class="text-break" :title='processDescription(f.descr)' >{{ processDescription(f.descr, 60) }}</span>
 												</td>
 												<td class="col-md-1"
-														v-bind:class="usuarioPosse ? 'col-2' : 'col-3'">
+														v-bind:class="usuarioPosse ? 'col-3' : 'col-4'">
 													<small>
 														<c:if test="${siga_cliente == 'GOVSP'}">
 															<span v-if="f.dataDevolucao == 'ocultar'"></span>
@@ -271,10 +273,14 @@
 														{{f.origem}}
 													</small>
 												</td>
+												<td class="col-md-1"
+														v-bind:class="usuarioPosse ? 'col-2' : 'col-3'">
+													<small>{{f.destino}} </small>
+												</td>	
 												<td v-if="usuarioPosse" class="col-md-1 col-2">
 													<small>{{f.lotaPosse}} / {{f.nomePessoaPosse}}</small>
 												</td>												
-												<td class="col-3 d-none d-md-block p-1">
+												<td class="col-2 d-none d-md-block p-1">
 													<span v-if="f.anotacao != null">
 														<a tabindex="0" class="anotacao fas fa-sticky-note text-warning popover-dismiss ml-2" role="button" 
 																data-toggle="popover" data-trigger="hover focus" :data-content="f.anotacao"></a>

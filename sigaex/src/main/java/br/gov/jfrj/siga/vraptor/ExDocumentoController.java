@@ -22,6 +22,10 @@
  */
 package br.gov.jfrj.siga.vraptor;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -117,10 +121,30 @@ import br.gov.jfrj.siga.vraptor.builder.BuscaDocumentoBuilder;
 @Controller
 public class ExDocumentoController extends ExController {
 
+	private static final Logger log = Logger.getLogger(ExDocumentoController.class);
+
+	private static final long DOCUMENTO_EXTERNO_CAPTURADO_ID = 29L;
+
 	private static final String ERRO_EXCLUIR_ARQUIVO = "Erro ao excluir o arquivo";
 	private static final String ERRO_GRAVAR_ARQUIVO = "Erro ao gravar o arquivo";
+
 	private static final String URL_EXIBIR = "/app/expediente/doc/exibir?sigla={0}";
 	private static final String URL_EDITAR = "/app/expediente/doc/editar?sigla={0}";
+
+	private enum TipoDestinatario {
+		DESTINATARIO(1),
+		ORGAO_INTEGRADO(2),
+		LOTACAO_DESTINATARIO(3),
+		CAMPO_LIVRE(4);
+		
+		private final int value;
+		
+		TipoDestinatario(final int newValue) {
+			value = newValue;
+		}
+
+		public Integer getValue() { return value; }
+	}
 
 	private static final String[] MARCACOES_TEMPLATE_DOCUMENTOS = {
 			"<!-- INICIO NUMERO -->",
@@ -146,8 +170,6 @@ public class ExDocumentoController extends ExController {
 	};
 
 	private String url = null;
-
-	private final static Logger log = Logger.getLogger(ExDocumentoController.class);
 
 	/**
 	 * @deprecated CDI eyes only
@@ -1696,7 +1718,46 @@ public class ExDocumentoController extends ExController {
 		
 		final Ex ex = Ex.getInstance();
 		final ExBL exBL = ex.getBL();
-		
+
+		final long idModelo = exDocumentoDTO.getIdMod();
+		final Integer tipoDestinatario = exDocumentoDTO.getTipoDestinatario();
+		boolean isPresenteDestinatario = true;
+
+		if (DOCUMENTO_EXTERNO_CAPTURADO_ID != idModelo) {
+			final boolean tipoDestinatarioOrgaoIntegradoLotacaoSemSigla =
+					TipoDestinatario.ORGAO_INTEGRADO.getValue() == tipoDestinatario
+					&& (exDocumentoDTO.getLotacaoDestinatarioSel() == null
+							|| isBlank(exDocumentoDTO.getLotacaoDestinatarioSel().getSigla()));
+			final boolean tipoDestinatarioDestinatarioSemSigla =
+					TipoDestinatario.DESTINATARIO.getValue() == tipoDestinatario
+					&& (exDocumentoDTO.getDestinatarioSel() == null
+							|| isBlank(exDocumentoDTO.getDestinatarioSel().getSigla()));
+			final boolean tipoDestinatarioCampoLivreSemNome =
+					TipoDestinatario.CAMPO_LIVRE.getValue() == tipoDestinatario
+					&& isBlank(exDocumentoDTO.getNmDestinatario());
+
+			if (tipoDestinatarioOrgaoIntegradoLotacaoSemSigla ||
+					tipoDestinatarioDestinatarioSemSigla ||
+					tipoDestinatarioCampoLivreSemNome) {
+				isPresenteDestinatario = false;
+			}
+		}
+
+		if (tipoDestinatario != null && isPresenteDestinatario 
+				&& TipoDestinatario.ORGAO_INTEGRADO.getValue() == tipoDestinatario) {
+
+			String lotaDestina = EMPTY;
+			if (exDocumentoDTO.getLotacaoDestinatarioSel() != null
+					&& exDocumentoDTO.getLotacaoDestinatarioSel().getObjeto() != null) {
+				lotaDestina = String.valueOf(exDocumentoDTO.getLotacaoDestinatarioSel().getObjeto()).substring(0, 3);
+			}
+
+			if (!getCadastrante().isTramitarOutrosOrgaos()
+					&& !equalsIgnoreCase(lotaDestina, getCadastrante().getOrgaoUsuario().getSiglaOrgaoUsu())) {
+				throw new AplicacaoException("Você não tem permissão para enviar documento(s) para outros órgãos");
+			}
+		}
+
 		try {
 			buscarDocumentoOuNovo(true, exDocumentoDTO);
 			if (exDocumentoDTO.getDoc() == null) {

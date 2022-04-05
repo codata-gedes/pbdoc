@@ -18,7 +18,10 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.cp.bl;
 
-import static br.gov.jfrj.siga.base.Prop.isAmbienteDesenvolvimento;
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.deleteWhitespace;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.math.NumberUtils.createLong;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,9 +40,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
+
+import com.google.common.base.CharMatcher;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Correio;
@@ -1112,66 +1117,81 @@ public class CpBL {
 	public DpPessoa criarUsuario(final Long id, final CpIdentidade identidadeCadastrante, final Long idOrgaoUsu, final Long idCargo, final Long idFuncao,
 			final Long idLotacao, final String nmPessoa, final String dtNascimento, final String cpf,
 			final String email, final String identidade, final String orgaoIdentidade, final String ufIdentidade,
-			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail) {
-		if (idOrgaoUsu == null || idOrgaoUsu == 0)
+			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail,
+			final boolean tramitarOutrosOrgaos) {
+
+		if (idOrgaoUsu == null || idOrgaoUsu == 0) {
 			throw new AplicacaoException("Órgão não informado");
-		if (idCargo == null || idCargo == 0)
+		}
+
+		if (idCargo == null || idCargo == 0) {
 			throw new AplicacaoException("Cargo não informado");
+		}
 
-		if (idLotacao == null || idLotacao == 0)
+		if (idLotacao == null || idLotacao == 0) {
 			throw new AplicacaoException("Lotação não informado");
+		}
 
-		if (nmPessoa == null || nmPessoa.trim() == "")
+		if (isBlank(nmPessoa)) {
 			throw new AplicacaoException("Nome não informado");
+		}
 
-		if (cpf == null || cpf.trim() == "")
+		if (isBlank(cpf)) {
 			throw new AplicacaoException("CPF não informado");
+		}
 
-		if (email == null || email.trim() == "")
+		if (isBlank(email)) {
 			throw new AplicacaoException("E-mail não informado");
-		
+		}
+
 		if (!Utils.isEmailValido(email)) {			
 			throw new AplicacaoException("E-mail inválido");
 		}
 
-		if (nmPessoa != null && !nmPessoa.matches(Texto.DpPessoa.NOME_REGEX_CARACTERES_PERMITIDOS))
+		if (nmPessoa != null && !nmPessoa.matches(Texto.DpPessoa.NOME_REGEX_CARACTERES_PERMITIDOS)) {
 			throw new AplicacaoException("Nome com caracteres não permitidos");
+		}
 
 		DpPessoa pessoa = new DpPessoa();
-		DpPessoa pessoaAnt = new DpPessoa();
+		DpPessoa pessoaAnt = null;
 		List<CpIdentidade> lista = new ArrayList<CpIdentidade>();
 		
 		if(id != null) {
 			pessoaAnt = CpDao.getInstance().consultar(id, DpPessoa.class, false).getPessoaAtual();
-			
 			if(pessoaAnt != null) {
 				Integer qtde = CpDao.getInstance().quantidadeDocumentos(pessoaAnt);
 				if (qtde > 0 && !idLotacao.equals(pessoaAnt.getLotacao().getId())) {
-					throw new AplicacaoException(
-							"A unidade da pessoa não pode ser alterada, pois existem documentos pendentes");
+					throw new AplicacaoException("A unidade da pessoa não pode ser alterada, pois existem documentos pendentes");
 				}
 				pessoa.setIdInicial(pessoaAnt.getIdInicial());
 				pessoa.setMatricula(pessoaAnt.getMatricula());
-				
 			}
 		}
-		
-		int i = CpDao.getInstance().consultarQtdePorEmailIgualCpfDiferente(Texto.removerEspacosExtra(email).trim().replace(" ", ""),
-				Long.valueOf(cpf.replace("-", "").replace(".", "").trim()), pessoaAnt.getIdPessoaIni() != null ? pessoaAnt.getIdPessoaIni() : 0);
+
+		final Long cpfDigitos = createLong(CharMatcher.DIGIT.retainFrom(cpf));
+		final Long idInicialPessoa = ofNullable(pessoaAnt)
+				.map(DpPessoa::getIdPessoaIni)
+				.orElse(0L);
+
+		int i = CpDao.getInstance()
+				.consultarQtdePorEmailIgualCpfDiferente(
+						deleteWhitespace(email),
+						cpfDigitos,
+						idInicialPessoa
+				);
+
 		if (i > 0) {
 			throw new AplicacaoException("E-mail informado está cadastrado para outro CPF");
 		}
-
 		
-		Date data = new Date(System.currentTimeMillis());
+		Date data = new Date();
 		pessoa.setDataInicio(data);
 		pessoa.setMatricula(0L);
 		pessoa.setSituacaoFuncionalPessoa(SituacaoFuncionalEnum.APENAS_ATIVOS.getValor()[0]);
 		pessoa.setNomeExibicao(nomeExibicao);
 		
 		if (dtNascimento != null && !"".equals(dtNascimento)) {
-			Date dtNasc = new Date();
-			dtNasc = SigaCalendar.converteStringEmData(dtNascimento);
+			Date dtNasc = SigaCalendar.converteStringEmData(dtNascimento);
 
 			Calendar hj = Calendar.getInstance();
 			Calendar dtNasci = new GregorianCalendar();
@@ -1210,6 +1230,7 @@ public class CpBL {
 		pessoa.setNomePessoa(Texto.removerEspacosExtra(nmPessoa).trim());
 		pessoa.setCpfPessoa(Long.valueOf(cpf.replace("-", "").replace(".", "")));
 		pessoa.setEmailPessoa(Texto.removerEspacosExtra(email).trim().replace(" ", "").toLowerCase());
+		pessoa.setTramitarOutrosOrgaos(tramitarOutrosOrgaos);
 		
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 		DpCargo cargo = new DpCargo();
