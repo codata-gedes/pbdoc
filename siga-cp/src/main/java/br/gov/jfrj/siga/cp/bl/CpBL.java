@@ -19,7 +19,9 @@
 package br.gov.jfrj.siga.cp.bl;
 
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.deleteWhitespace;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.math.NumberUtils.createLong;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,9 +40,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
+
+import com.google.common.base.CharMatcher;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Correio;
@@ -1164,12 +1168,18 @@ public class CpBL {
 			}
 		}
 
+		final Long cpfDigitos = createLong(CharMatcher.DIGIT.retainFrom(cpf));
+		final Long idInicialPessoa = ofNullable(pessoaAnt)
+				.map(DpPessoa::getIdPessoaIni)
+				.orElse(0L);
+
 		int i = CpDao.getInstance()
 				.consultarQtdePorEmailIgualCpfDiferente(
-						Texto.removerEspacosExtra(email).trim().replace(" ", ""),
-						Long.valueOf(cpf.replace("-", "").replace(".", "").trim()),
-						ofNullable(pessoaAnt).map(DpPessoa::getIdPessoaIni).orElse(0L)
+						deleteWhitespace(email),
+						cpfDigitos,
+						idInicialPessoa
 				);
+
 		if (i > 0) {
 			throw new AplicacaoException("E-mail informado está cadastrado para outro CPF");
 		}
