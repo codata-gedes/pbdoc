@@ -1240,9 +1240,12 @@ public class CpBL {
 		ou.setIdOrgaoUsu(idOrgaoUsu);
 		ou = CpDao.getInstance().consultarPorId(ou);
 		
-		if (!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadeCadastrante.getCpOrgaoUsuario().getSigla()) || !CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(identidadeCadastrante.getCpOrgaoUsuario().getSigla())){
-			if (!ou.getIdOrgaoUsu().equals(identidadeCadastrante.getCpOrgaoUsuario().getIdOrgaoUsu())) {
-				throw new AplicacaoException("Usuário não pode cadastrar nesse órgão.");
+		if (!CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(identidadeCadastrante.getCpOrgaoUsuario().getSigla())) {
+			
+			if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadeCadastrante.getCpOrgaoUsuario().getSigla())) {
+				if (!ou.getIdOrgaoUsu().equals(identidadeCadastrante.getCpOrgaoUsuario().getIdOrgaoUsu())) {
+					throw new AplicacaoException("Usuário não pode cadastrar nesse órgão.");
+				}
 			}
 		}
 				
