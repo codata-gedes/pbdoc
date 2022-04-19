@@ -34,6 +34,7 @@
 				<c:if test="${empty ocultarCodigo}">
 					${docVO.sigla}
 				</c:if>
+				<a class="btn btn-secondary float-right" name="voltar" href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${docVO.sigla}" accesskey="r">Volta<u>r</u></a>
 			</h2>
 		</div>
 	</div>
