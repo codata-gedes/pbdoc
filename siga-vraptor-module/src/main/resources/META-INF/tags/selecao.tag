@@ -26,6 +26,7 @@
 <%@ attribute name="onblur" required="false"%>
 <%@ attribute name="prefix" required="false"%>
 <%@ attribute name="matricula" required="false"%>
+<%@ attribute name="primeiraVez" required="false" %>
 
 <%@ attribute name="requiredValue" required="false"%>
 
@@ -102,6 +103,10 @@
 
 <c:set var="larguraPopup" value="800" />
 <c:set var="alturaPopup" value="600" />
+
+<c:if test="${primeiraVez != 'sim'}">
+	<c:set var="primeiraVez" value="null" />
+</c:if>
 
 <style type="text/css">
 
@@ -217,12 +222,21 @@ var modalsimulawindow${propriedade} = 	function(url) {
 self.newwindow_${propriedade} = '';
 self.popitup_${propriedade}${tipoSel} = function(sigla) {
 
-	var url =  '/${urlPrefix}${urlBuscar}?propriedade=${propriedade}${tipoSel}&sigla='+encodeURI($.trim(sigla)) +'${selecaoParams}&modal=true';
-	
-	newwindow_${propriedade} = modalsimulawindow${propriedade};
-	
-	modalsimulawindow${propriedade}(url);
+	var primeiraVezArg = '${primeiraVez}'.trim();
+	if (!!primeiraVezArg && primeiraVezArg !== 'null') {
+		primeiraVezArg = 'primeiraVez=' + primeiraVezArg;
+	} else {
+		primeiraVezArg = null;
+	}
 
+	var url =  '/${urlPrefix}${urlBuscar}'
+	  + '?propriedade=${propriedade}${tipoSel}'
+	  + '&sigla='+encodeURI($.trim(sigla)) +'${selecaoParams}'
+	  + '&modal=true'
+	  + (!!primeiraVezArg ? '&' + primeiraVezArg : '');
+
+	newwindow_${propriedade} = modalsimulawindow${propriedade};
+	modalsimulawindow${propriedade}(url);
 	return false;
 }
 

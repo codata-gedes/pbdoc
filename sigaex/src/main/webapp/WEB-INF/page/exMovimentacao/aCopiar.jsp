@@ -98,9 +98,14 @@
 					</c:choose>
 					<div class="row">
 						<div class="col col-12">
-							<siga:selecao titulo="Documento" propriedade="documentoRef"
-								urlAcao="expediente/buscar"
-								urlSelecionar="expediente/selecionar" modulo="sigaex" />
+							<siga:selecao
+							  titulo="Documento"
+							  propriedade="documentoRef"
+							  urlAcao="expediente/buscar"
+							  urlSelecionar="expediente/selecionar"
+							  modulo="sigaex"
+							  primeiraVez="sim"
+							 />
 						</div>
 					</div>
 					<div class="row">

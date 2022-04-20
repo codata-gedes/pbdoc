@@ -24,6 +24,9 @@
  */
 package br.gov.jfrj.siga.hibernate;
 
+import static com.querydsl.core.types.dsl.DateTimeExpression.currentTimestamp;
+import static java.util.Optional.ofNullable;
+
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -48,7 +51,15 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Prop;
@@ -60,6 +71,7 @@ import br.gov.jfrj.siga.dp.CpMarcador;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
+import br.gov.jfrj.siga.dp.QCpMarcador;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 import br.gov.jfrj.siga.ex.AbstractExMovimentacao;
 import br.gov.jfrj.siga.ex.ExClassificacao;
@@ -86,6 +98,10 @@ import br.gov.jfrj.siga.ex.ExTipoMobil;
 import br.gov.jfrj.siga.ex.ExTipoMovimentacao;
 import br.gov.jfrj.siga.ex.ExTpDocPublicacao;
 import br.gov.jfrj.siga.ex.ExVia;
+import br.gov.jfrj.siga.ex.QExDocumento;
+import br.gov.jfrj.siga.ex.QExFormaDocumento;
+import br.gov.jfrj.siga.ex.QExMarca;
+import br.gov.jfrj.siga.ex.QExMobil;
 import br.gov.jfrj.siga.ex.BIE.ExBoletimDoc;
 import br.gov.jfrj.siga.ex.bl.Mesa2.GrupoItem;
 import br.gov.jfrj.siga.ex.util.MascaraUtil;
@@ -102,9 +118,15 @@ import br.gov.jfrj.siga.persistencia.ExModeloDaoFiltro;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class ExDao extends CpDao {
 
-	public static final String CACHE_EX = "ex";
-
 	private static final Logger log = Logger.getLogger(ExDao.class);
+
+	private static final QExMobil qExMobil = QExMobil.exMobil;
+	private static final QExMarca qExMarca = QExMarca.exMarca;
+	private static final QExDocumento qExDocumento = QExDocumento.exDocumento;
+	private static final QCpMarcador qCpMarcador = QCpMarcador.cpMarcador;
+	private static final QExFormaDocumento qExFormaDoc = QExFormaDocumento.exFormaDocumento;
+
+	public static final String CACHE_EX = "ex";
 
 	public static ExDao getInstance() {
 		return ModeloDao.getInstance(ExDao.class);
@@ -489,16 +511,19 @@ public class ExDao extends CpDao {
 		return consultarPorFiltro(flt, 0, 0, titular, lotaTitular);
 	}
 
+	@Deprecated
 	public List consultarPorFiltroOtimizado(final ExMobilDaoFiltro flt) {
 		return consultarPorFiltroOtimizado(flt, 0, 0);
 	}
 
+	@Deprecated
 	public List consultarPorFiltroOtimizado(final ExMobilDaoFiltro flt,
 			final int offset, final int itemPagina) {
 		return consultarPorFiltroOtimizado(flt, 0, 0, new DpPessoa(),
 				new DpLotacao());
 	}
 
+	@Deprecated
 	public List consultarPorFiltroOtimizado(final ExMobilDaoFiltro flt,
 			DpPessoa titular, DpLotacao lotaTitular) {
 		return consultarPorFiltroOtimizado(flt, 0, 0, titular, lotaTitular);
@@ -670,13 +695,13 @@ public class ExDao extends CpDao {
 		}
 	}
 
+	@Deprecated
 	public List consultarPorFiltroOtimizado(final ExMobilDaoFiltro flt,
 			final int offset, final int itemPagina, DpPessoa titular,
 			DpLotacao lotaTitular) {
 
 		IMontadorQuery montadorQuery = carregarPlugin();
 
-		long tempoIni = System.nanoTime();
 		Query query = em().createQuery(montadorQuery.montaQueryConsultaporFiltro(flt, false));
 		preencherParametros(flt, query);
 
@@ -687,15 +712,249 @@ public class ExDao extends CpDao {
 			query.setMaxResults(itemPagina);
 		}
 		List l = query.getResultList();
-		long tempoTotal = System.nanoTime() - tempoIni;
 		return l;
+	}
+
+	public List<Tuple> consultarPorFiltroQdsl(final IExMobilDaoFiltro filtro, final int offset, final int itensPorPagina) {
+
+		final JPAQuery<?> query = queryConsultaPorFiltro(filtro, false);
+		if (offset > 0) {
+			query.offset(offset);
+		}
+		if (itensPorPagina > 0) {
+			query.limit(itensPorPagina);
+		}
+
+		final Integer ordem = ofNullable(filtro.getOrdem()).orElse(0);
+		switch (ordem) {
+		case 1:
+			query.orderBy(
+					qExMarca.dtIniMarca.desc(),
+					qExDocumento.idDoc.desc(),
+					qExMarca.idMarca.desc()
+			);
+			break;
+		case 2:
+			query.orderBy(
+					qExDocumento.anoEmissao.desc(),
+					qExDocumento.numExpediente.desc(),
+					qExMobil.numSequencia.desc(),
+					qExDocumento.idDoc.desc(),
+					qExMarca.idMarca.desc()
+			);
+			break;
+		case 3:
+			query.orderBy(
+					qExDocumento.dtFinalizacao.desc(),
+					qExDocumento.idDoc.desc(),
+					qExMarca.idMarca.desc()
+			);
+			break;
+		case 4:
+			query.orderBy(
+					qExDocumento.idDoc.desc(),
+					qExMarca.idMarca.desc()
+			);
+			break;
+		default:
+			query.orderBy(
+					qExDocumento.dtDoc.desc(),
+					qExDocumento.idDoc.desc(),
+					qExMarca.idMarca.desc()
+			);
+			break;
+		}
+		return query.select(qExDocumento, qExMobil, qExMarca).fetch();
+	}
+
+	public long contarPorFiltroQdsl(final IExMobilDaoFiltro filtro) {
+		final JPAQuery<?> query = queryConsultaPorFiltro(filtro, false);
+		return query.fetchCount();
+	}
+
+	private JPAQuery<?> queryConsultaPorFiltro(final IExMobilDaoFiltro filtro, boolean apenasCount) {
+
+		final JPAQuery<?> query = new JPAQuery<>(em())
+				.from(qExMarca)
+				.innerJoin(qExMarca.exMobil, qExMobil)
+				.innerJoin(qExMobil.exDocumento, qExDocumento);
+
+		final BooleanBuilder predicates = new BooleanBuilder();
+
+		if (filtro.getUltMovIdEstadoDoc() != null && filtro.getUltMovIdEstadoDoc() > 0) {
+			final BooleanExpression existeMarcadorComIdInicialUltimaMovimentacaoIdEstadoDoc = JPAExpressions
+					.selectOne()
+					.from(qCpMarcador)
+					.where(
+							qExMarca.cpMarcador.idMarcador.eq(qCpMarcador.idMarcador)
+									.and(qCpMarcador.hisIdIni.in(JPAExpressions
+											.select(qCpMarcador.hisIdIni)
+											.from(qCpMarcador)
+											.where(qCpMarcador.idMarcador.eq(filtro.getUltMovIdEstadoDoc()))
+									))
+					)
+					.exists();
+			predicates.and(existeMarcadorComIdInicialUltimaMovimentacaoIdEstadoDoc);
+
+			predicates.and(qExMarca.dtIniMarca.isNull()
+					.or(qExMarca.dtIniMarca.lt(currentTimestamp())));
+			predicates.and(qExMarca.dtFimMarca.isNull()
+					.or(qExMarca.dtFimMarca.gt(currentTimestamp())));
+		} else {
+			// FIXME generalizar estas constantes
+			final Long MARCADOR_A_RECEBER = 3L;
+			final Long MARCADOR_CAIXA_DE_ENTRADA = 14L;
+			final Long MARCADOR_COMO_SUBSCRITOR = 25L;
+
+			predicates.and(qExMarca.cpMarcador.idMarcador.in(
+					MARCADOR_A_RECEBER,
+					MARCADOR_CAIXA_DE_ENTRADA,
+					MARCADOR_COMO_SUBSCRITOR
+			));
+		}
+
+		if (filtro.getUltMovRespSelId() != null && filtro.getUltMovRespSelId() > 0) {
+			predicates.and(qExMarca.dpPessoaIni.idPessoa.eq(filtro.getUltMovRespSelId()));
+		}
+
+		if (filtro.getUltMovLotaRespSelId() != null && filtro.getUltMovLotaRespSelId() > 0) {
+			predicates.and(qExMarca.dpLotacaoIni.idLotacao.eq(filtro.getUltMovLotaRespSelId()));
+		}
+
+		if (filtro.getIdTipoMobil() != null && filtro.getIdTipoMobil() > 0) {
+			predicates.and(qExMobil.exTipoMobil.idTipoMobil.eq(filtro.getIdTipoMobil()));
+		}
+
+		if (filtro.getNumSequencia() != null && filtro.getNumSequencia() > 0) {
+			predicates.and(qExMobil.numSequencia.eq(filtro.getNumSequencia()));
+		}
+
+		if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu() > 0) {
+			predicates.and(qExDocumento.orgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+		}
+
+		if (filtro.getAnoEmissao() != null && filtro.getAnoEmissao() > 0) {
+			predicates.and(qExDocumento.anoEmissao.eq(filtro.getAnoEmissao()));
+		}
+
+		if (filtro.getNumExpediente() != null && filtro.getNumExpediente() > 0) {
+			predicates.and(qExDocumento.numExpediente.eq(filtro.getNumExpediente()));
+		}
+
+		if (filtro.getIdTpDoc() != null && filtro.getIdTpDoc() > 0) {
+			predicates.and(qExDocumento.exTipoDocumento.idTpDoc.eq(filtro.getIdTpDoc()));
+		}
+
+		if (filtro.getIdTipoFormaDoc() != null && filtro.getIdTipoFormaDoc() > 0) {
+			final BooleanBuilder innerPredicate = new BooleanBuilder(
+					qExDocumento.exFormaDocumento.idFormaDoc.eq(qExFormaDoc.idFormaDoc)
+							.and(qExFormaDoc.exTipoFormaDoc.idTipoFormaDoc.eq(filtro.getIdTipoFormaDoc()))
+			);
+			if (filtro.getIdFormaDoc() != null && filtro.getIdFormaDoc() > 0) {
+				innerPredicate.and(qExFormaDoc.idFormaDoc.eq(filtro.getIdFormaDoc()));
+			}
+
+			final JPQLQuery<Integer> queryTipoFormaDocumentoParaFormaDoDocumento = JPAExpressions
+					.selectOne()
+					.from(qExFormaDoc)
+					.where(innerPredicate);
+
+			predicates.and(queryTipoFormaDocumentoParaFormaDoDocumento.exists());
+		} else {
+			if (filtro.getIdFormaDoc() != null && filtro.getIdFormaDoc() > 0) {
+				predicates.and(qExDocumento.exFormaDocumento.idFormaDoc.eq(filtro.getIdFormaDoc()));
+			}
+		}
+
+		if (filtro.getClassificacaoSelId() != null && filtro.getClassificacaoSelId() > 0) {
+			predicates.and(qExDocumento.exClassificacao.hisIdIni.eq(filtro.getClassificacaoSelId()));
+		}
+
+		// ExDocumento#descrDocumentoAI é gravado UPPERCASE no banco de dados
+		likeUppercaseParam(filtro.getDescrDocumento())
+				.map(StringUtils::stripAccents)
+				.ifPresent(p -> predicates.and(qExDocumento.descrDocumentoAI.like(p)));
+
+		if (filtro.getDtDoc() != null) {
+			if (Objects.equals(CpMarcadorEnum.EM_ELABORACAO.getId(), filtro.getUltMovIdEstadoDoc())) {
+				predicates.and(qExDocumento.dtRegDoc.goe(filtro.getDtDoc()));
+			} else {
+				predicates.and(qExDocumento.dtDoc.goe(filtro.getDtDoc()));
+			}
+		} else {
+			log.debug("Data inicial para busca de MOBIL não fornecida!");
+		}
+
+		if (filtro.getDtDocFinal() != null) {
+			if (Objects.equals(CpMarcadorEnum.EM_ELABORACAO.getId(), filtro.getUltMovIdEstadoDoc())) {
+				predicates.and(qExDocumento.dtRegDoc.loe(filtro.getDtDocFinal()));
+			} else {
+				predicates.and(qExDocumento.dtDoc.loe(filtro.getDtDocFinal()));
+			}
+		} else {
+			log.debug("Data final para busca de MOBIL não fornecida!");
+		}
+
+		final String paramNumAntigoDoc = likeUppercaseParamOrNull(filtro.getNumAntigoDoc());
+		if (paramNumAntigoDoc != null) {
+			predicates.and(qExDocumento.numAntigoDoc.toUpperCase().like(paramNumAntigoDoc));
+		}
+
+		if (filtro.getDestinatarioSelId() != null && filtro.getDestinatarioSelId() > 0) {
+			predicates.and(qExDocumento.destinatario.idPessoaIni.eq(filtro.getDestinatarioSelId()));
+		}
+
+		if (filtro.getLotacaoDestinatarioSelId() != null && filtro.getLotacaoDestinatarioSelId() > 0) {
+			predicates.and(qExDocumento.lotaDestinatario.idLotacaoIni.eq(filtro.getLotacaoDestinatarioSelId()));
+		}
+
+		final String paramNmDestinatario = likeUppercaseParamOrNull(filtro.getNmDestinatario());
+		if (paramNmDestinatario != null) {
+			predicates.and(qExDocumento.nmDestinatario.toUpperCase().like(paramNmDestinatario));
+		}
+
+		if (filtro.getOrgaoExternoDestinatarioSelId() != null && filtro.getOrgaoExternoDestinatarioSelId() > 0) {
+			predicates.and(qExDocumento.orgaoExternoDestinatario.idOrgao.eq(filtro.getOrgaoExternoDestinatarioSelId()));
+		}
+
+		if (filtro.getCadastranteSelId() != null && filtro.getCadastranteSelId() > 0) {
+			predicates.and(qExDocumento.cadastrante.idPessoaIni.eq(filtro.getCadastranteSelId()));
+		}
+
+		if (filtro.getLotaCadastranteSelId() != null && filtro.getLotaCadastranteSelId() > 0) {
+			predicates.and(qExDocumento.lotaCadastrante.idLotacaoIni.eq(filtro.getLotaCadastranteSelId()));
+ 		}
+
+		if (filtro.getSubscritorSelId() != null && filtro.getSubscritorSelId() > 0) {
+			predicates.and(qExDocumento.subscritor.idPessoaIni.eq(filtro.getSubscritorSelId()));
+		}
+
+		final String paramNmSubscritorExt = likeUppercaseParamOrNull(filtro.getNmSubscritorExt());
+		if (paramNmSubscritorExt != null) {
+			predicates.and(qExDocumento.nmSubscritorExt.toUpperCase().like(paramNmSubscritorExt));
+		}
+
+		if (filtro.getOrgaoExternoSelId() != null && filtro.getOrgaoExternoSelId() > 0) {
+			predicates.and(qExDocumento.orgaoExterno.idOrgao.eq(filtro.getOrgaoExternoSelId()));
+		}
+
+		final String paramNumExtDoc = likeUppercaseParamOrNull(filtro.getNumExtDoc());
+		if (paramNumExtDoc != null) {
+			predicates.and(qExDocumento.numExtDoc.toUpperCase().like(paramNumExtDoc));
+		}
+
+		if (filtro.getIdMod() != null && filtro.getIdMod() > 0) {
+			final ExModelo modelo = ExDao.getInstance().consultar(filtro.getIdMod(), ExModelo.class, false);
+			predicates.and(qExDocumento.exModelo.hisIdIni.eq(modelo.getHisIdIni()));
+		}
+
+		return query.where(predicates);
 	}
 
 	private IMontadorQuery carregarPlugin() {
 		CarregadorPlugin carregador = new CarregadorPlugin();
 		IMontadorQuery montadorQuery = carregador.getMontadorQueryImpl();
-		montadorQuery
-				.setMontadorPrincipal(carregador.getMontadorQueryDefault());
+		montadorQuery.setMontadorPrincipal(carregador.getMontadorQueryDefault());
 		return montadorQuery;
 	}
 
@@ -2231,6 +2490,5 @@ public class ExDao extends CpDao {
 		// 			/ 1000000 + " ms -> " + query + ", resultado: " + l);
 		return l;
 	}
-	
 
 }

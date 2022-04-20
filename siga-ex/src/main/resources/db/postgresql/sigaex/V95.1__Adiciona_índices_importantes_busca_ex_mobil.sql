@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS ex_mobil_id_doc ON siga.ex_mobil (id_doc);

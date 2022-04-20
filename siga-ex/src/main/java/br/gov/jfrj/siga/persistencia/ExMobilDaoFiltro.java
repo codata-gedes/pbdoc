@@ -91,7 +91,7 @@ public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements
 
 	private Long idFormaDoc;
 
-	private Integer idTpDoc;
+	private Long idTpDoc;
 
 	private Long lotacaoDestinatarioSelId;
 
@@ -157,7 +157,7 @@ public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements
 		return idFormaDoc;
 	}
 
-	public Integer getIdTpDoc() {
+	public Long getIdTpDoc() {
 		return idTpDoc;
 	}
 
@@ -229,7 +229,7 @@ public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements
 		this.idFormaDoc = idFormaDoc;
 	}
 
-	public void setIdTpDoc(final Integer idTpDoc) {
+	public void setIdTpDoc(final Long idTpDoc) {
 		this.idTpDoc = idTpDoc;
 	}
 

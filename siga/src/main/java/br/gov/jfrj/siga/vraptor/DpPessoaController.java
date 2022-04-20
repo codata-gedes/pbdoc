@@ -288,7 +288,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			dpPessoa.setId(Long.valueOf(0));
 			setItens(CpDao.getInstance().consultarPorFiltro(dpPessoa, paramoffset, 15));
 			result.include("itens", getItens());
-			Integer tamanho = dao().consultarQuantidade(dpPessoa);
+			long tamanho = dao().consultarQuantidade(dpPessoa);
 			result.include("tamanho", tamanho);
 
 			result.include("idOrgaoUsu", idOrgaoUsu);
@@ -353,7 +353,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				dpPessoa.setId(id);
 
 				dpPessoa.setBuscarFechadas(Boolean.FALSE);
-				Integer tamanho = dao().consultarQuantidade(dpPessoa);
+				long tamanho = dao().consultarQuantidade(dpPessoa);
 
 				if (tamanho > 0) {
 					throw new AplicacaoException(

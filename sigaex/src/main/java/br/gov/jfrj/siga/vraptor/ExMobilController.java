@@ -46,6 +46,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+import com.querydsl.core.Tuple;
+
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -130,28 +132,65 @@ public class ExMobilController extends
 	}
 
 	@Get("app/expediente/buscar")
-	public void aBuscar(final String sigla, final String popup, final String primeiraVez, final String propriedade, final Integer postback,
-			final int apenasRefresh, final Long ultMovIdEstadoDoc, final int ordem, final int visualizacao, final Integer ultMovTipoResp,
-			final DpPessoaSelecao ultMovRespSel, final DpLotacaoSelecao ultMovLotaRespSel, final Long orgaoUsu, final Long idTpDoc, final String dtDocString,
-			final String dtDocFinalString, final Long idTipoFormaDoc, final Integer forma, final Long idMod, final String anoEmissaoString,
-			final String numExpediente, final String numExtDoc, final CpOrgaoSelecao cpOrgaoSel, final String numAntigoDoc,
-			final DpPessoaSelecao subscritorSel, String nmSubscritorExt, final Integer tipoCadastrante, final DpPessoaSelecao cadastranteSel,
-			final DpLotacaoSelecao lotaCadastranteSel, final Integer tipoDestinatario, final DpPessoaSelecao destinatarioSel,
-			final DpLotacaoSelecao lotacaoDestinatarioSel, final CpOrgaoSelecao orgaoExternoDestinatarioSel, final String nmDestinatario,
-			final ExClassificacaoSelecao classificacaoSel, final String descrDocument, final String fullText, final Long ultMovEstadoDoc,
+	public void aBuscar(
+			final String sigla,
+			final String popup,
+			final String primeiraVez,
+			final String propriedade,
+			final Integer postback,
+			final int apenasRefresh,
+			final Long ultMovIdEstadoDoc,
+			final int ordem,
+			final int visualizacao,
+			final Integer ultMovTipoResp,
+			final DpPessoaSelecao ultMovRespSel,
+			final DpLotacaoSelecao ultMovLotaRespSel,
+			final Long orgaoUsu,
+			final Long idTpDoc,
+			final String dtDocString,
+			final String dtDocFinalString,
+			final Long idTipoFormaDoc,
+			final Integer forma,
+			final Long idMod,
+			final String anoEmissaoString,
+			final String numExpediente,
+			final String numExtDoc,
+			final CpOrgaoSelecao cpOrgaoSel,
+			final String numAntigoDoc,
+			final DpPessoaSelecao subscritorSel,
+			final String nmSubscritorExt,
+			final Integer tipoCadastrante,
+			final DpPessoaSelecao cadastranteSel,
+			final DpLotacaoSelecao lotaCadastranteSel,
+			final Integer tipoDestinatario,
+			final DpPessoaSelecao destinatarioSel,
+			final DpLotacaoSelecao lotacaoDestinatarioSel,
+			final CpOrgaoSelecao orgaoExternoDestinatarioSel,
+			final String nmDestinatario,
+			final ExClassificacaoSelecao classificacaoSel,
+			final String descrDocument,
+			final String fullText,
+			final Long ultMovEstadoDoc,
 			final Integer offset) {
 		assertAcesso("");
-		
+
 		getP().setOffset(offset);
 		this.setSigla(sigla);
 		this.setPostback(postback);
 
-		final ExMobilBuilder builder = ExMobilBuilder.novaInstancia();
+		Long idOrgaoUsu = orgaoUsu;
+		if (postback == null && getLotaTitular() != null) {
+			idOrgaoUsu = getLotaTitular().getIdOrgaoUsuario();
+		}
 
-		builder.setPostback(postback).setUltMovTipoResp(ultMovTipoResp)
+		final ExMobilBuilder builder = ExMobilBuilder.novaInstancia()
+				.setPostback(postback)
+				.setUltMovTipoResp(ultMovTipoResp)
 				.setUltMovRespSel(ultMovRespSel)
-				.setUltMovLotaRespSel(ultMovLotaRespSel).setOrgaoUsu(orgaoUsu)
-				.setIdTpDoc(idTpDoc).setCpOrgaoSel(cpOrgaoSel)
+				.setUltMovLotaRespSel(ultMovLotaRespSel)
+				.setOrgaoUsu(idOrgaoUsu)
+				.setIdTpDoc(idTpDoc)
+				.setCpOrgaoSel(cpOrgaoSel)
 				.setSubscritorSel(subscritorSel)
 				.setTipoCadastrante(tipoCadastrante)
 				.setCadastranteSel(cadastranteSel)
@@ -160,7 +199,8 @@ public class ExMobilController extends
 				.setDestinatarioSel(destinatarioSel)
 				.setLotacaoDestinatarioSel(lotacaoDestinatarioSel)
 				.setOrgaoExternoDestinatarioSel(orgaoExternoDestinatarioSel)
-				.setClassificacaoSel(classificacaoSel).setOffset(offset);
+				.setClassificacaoSel(classificacaoSel)
+				.setOffset(offset);
 
 		builder.processar(getLotaTitular());
 
@@ -190,7 +230,7 @@ public class ExMobilController extends
 		result.include("ultMovTipoResp", builder.getUltMovTipoResp());
 		result.include("ultMovRespSel", builder.getUltMovRespSel());
 		result.include("orgaoUsu", builder.getOrgaoUsu());
-		result.include("orgaosUsu", this.getOrgaosUsu());
+		result.include("orgaosUsu", this.getOrgaosPermitidosUsuarioCadastrante());
 		result.include("tiposDocumento", this.getTiposDocumentoParaConsulta());
 		result.include("idTpDoc", builder.getIdTpDoc());
 		result.include("dtDocString", dtDoc);
@@ -553,15 +593,17 @@ public class ExMobilController extends
 		}
 
 		try {
-			if(Cp.getInstance().getConf().podeUtilizarServicoPorConfiguracao(getTitular(), getLotaTitular(), SIGA_DOC_PESQ_DTLIMITADA ) && dt == null) 
+			if(Cp.getInstance().getConf().podeUtilizarServicoPorConfiguracao(getTitular(), getLotaTitular(), SIGA_DOC_PESQ_DTLIMITADA ) && dt == null) { 
 				validarLimiteDeDatas(dtDocString, dtDocFinalString);
-			setItens(dao().consultarPorFiltroOtimizado(flt, builder.getOffset(), getItemPagina() + (Prop.isGovSP() ? 1 : 0), getTitular(), getLotaTitular()));
-			if(Prop.isGovSP()) {
-				setTamanho(getItens().size());
-			} else {
-				setTamanho(dao().consultarQuantidadePorFiltroOtimizado(flt,
-						getTitular(), getLotaTitular()));
 			}
+
+			final List<Tuple> itens = dao().consultarPorFiltroQdsl(flt, builder.getOffset(), getItemPagina());
+			final List<Object[]> itensArray = new ArrayList<>(itens.size());
+			for (Tuple item : itens) {
+				itensArray.add(item.toArray());
+			}
+			this.setItens(itensArray);
+			this.setTamanho((int) dao().contarPorFiltroQdsl(flt));
 		} catch (RegraNegocioException e) {
 			result.include("msgCabecClass", "alert-danger");
 			result.include("mensagemCabec", e.getMessage());
@@ -678,7 +720,7 @@ public class ExMobilController extends
 		}
 		flt.setIdFormaDoc(paramLong("idFormaDoc"));
 		flt.setIdTipoFormaDoc(paramLong("idTipoFormaDoc"));
-		flt.setIdTpDoc(paramInteger("idTpDoc"));
+		flt.setIdTpDoc(paramLong("idTpDoc"));
 		flt.setLotacaoDestinatarioSelId(paramLong("lotacaoDestinatarioSel.id"));
 		if (flt.getLotacaoDestinatarioSelId() != null) {
 			flt.setLotacaoDestinatarioSelId((daoLot(flt

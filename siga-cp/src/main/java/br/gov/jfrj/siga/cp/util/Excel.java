@@ -38,7 +38,6 @@ import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 import br.gov.jfrj.siga.dp.dao.DpPessoaDaoFiltro;
-import br.gov.jfrj.siga.model.dao.DaoFiltro;
 
 public class Excel {
 	
@@ -659,7 +658,7 @@ public class Excel {
 			String nomeExibicao = null;
 			
 			DpPessoaDaoFiltro dpPessoaFiltro = new DpPessoaDaoFiltro();
-			Integer tamanho = 0;
+			long tamanho = 0;
 						
 			while (rowIterator.hasNext()) {
 				linha++;

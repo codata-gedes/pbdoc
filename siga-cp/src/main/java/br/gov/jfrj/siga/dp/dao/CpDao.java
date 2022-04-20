@@ -29,9 +29,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 import static org.apache.commons.lang3.StringUtils.replace;
-import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -43,6 +41,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -124,6 +123,7 @@ import br.gov.jfrj.siga.dp.QDpCargo;
 import br.gov.jfrj.siga.dp.QDpFuncaoConfianca;
 import br.gov.jfrj.siga.dp.QDpLotacao;
 import br.gov.jfrj.siga.dp.QDpPessoa;
+import br.gov.jfrj.siga.dp.QDpSubstituicao;
 import br.gov.jfrj.siga.model.CarimboDeTempo;
 import br.gov.jfrj.siga.model.ContextoPersistencia;
 import br.gov.jfrj.siga.model.Historico;
@@ -149,6 +149,7 @@ public class CpDao extends ModeloDao {
 			.append("-")
 			.append(qDpPessoa.matricula.stringValue());
 
+	private static final QDpSubstituicao qDpSubstituicao = QDpSubstituicao.dpSubstituicao;
 	private static final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
 	private static final QCpContrato qCpContrato = QCpContrato.cpContrato;
 	private static final QDpFuncaoConfianca qDpFuncaoConfianca = QDpFuncaoConfianca.dpFuncaoConfianca;
@@ -563,7 +564,7 @@ public class CpDao extends ModeloDao {
 
 	public List<DpFuncaoConfianca> consultarPorFiltro(final DpFuncaoConfiancaDaoFiltro filtro, final int offset, final int itensPorPagina) {
 
-		final JPAQuery<DpFuncaoConfianca> query = queryConsultaDpFuncaoConfiancaFiltro(filtro)
+		final JPAQuery<DpFuncaoConfianca> query = queryConsultarPorFiltro(filtro)
 				.select(qDpFuncaoConfianca);
 
 		if (offset > 0) {
@@ -625,11 +626,11 @@ public class CpDao extends ModeloDao {
 	}
 
 	public long consultarQuantidade(final DpFuncaoConfiancaDaoFiltro o) {
-		return queryConsultaDpFuncaoConfiancaFiltro(o)
+		return queryConsultarPorFiltro(o)
 				.fetchCount();
 	}
 
-	private JPAQuery<?> queryConsultaDpFuncaoConfiancaFiltro(final DpFuncaoConfiancaDaoFiltro filtro) {
+	private JPAQuery<?> queryConsultarPorFiltro(final DpFuncaoConfiancaDaoFiltro filtro) {
 		final JPAQuery<?> query = new JPAQuery<>(em())
 				.from(qDpFuncaoConfianca);
 
@@ -685,14 +686,12 @@ public class CpDao extends ModeloDao {
 				.fetchCount();
 	}
 
-	protected JPAQuery<?> queryConsultarPorFiltro(final DpLotacaoDaoFiltro filtro) {
+	private JPAQuery<?> queryConsultarPorFiltro(final DpLotacaoDaoFiltro filtro) {
 		final BooleanBuilder predicates = new BooleanBuilder();
-
-		String textoLike = filtro.getNome();
-		textoLike = stripToEmpty(textoLike);
-		textoLike = normalizeSpace(textoLike);
-		textoLike = replace(textoLike, SPACE, "%");
-		textoLike = replace(textoLike, "-", StringUtils.EMPTY);
+		final String nomeLike = likeUppercaseParam(filtro.getNome())
+				.map(p -> replace(p, "-", EMPTY))
+				.filter(StringUtils::isNotBlank)
+				.orElse(null);
 
 		boolean joinOrgao = false;
 		if (filtro.isBuscarFechadas()) {
@@ -700,11 +699,11 @@ public class CpDao extends ModeloDao {
 			final QCpOrgaoUsuario subqCpOrgaoUsuario = new QCpOrgaoUsuario("subqCpOrgaoUsuario");
 			final BooleanBuilder subqPredicates = new BooleanBuilder();
 			final StringExpression siglaOrgaoComLotacao = subqCpOrgaoUsuario.acronimoOrgaoUsu.append(subqDpLotacao.siglaLotacao);
-			if (isNotBlank(textoLike)) {
+			if (nomeLike != null) {
 				subqPredicates.and(
-						siglaOrgaoComLotacao.startsWithIgnoreCase(textoLike)
-								.or(qDpLotacao.siglaLotacao.likeIgnoreCase("%" + textoLike + "%"))
-								.or(subqDpLotacao.nomeLotacaoAI.likeIgnoreCase("%" + textoLike + "%"))
+						siglaOrgaoComLotacao.startsWithIgnoreCase(nomeLike)
+								.or(qDpLotacao.siglaLotacao.likeIgnoreCase("%" + nomeLike + "%"))
+								.or(subqDpLotacao.nomeLotacaoAI.likeIgnoreCase("%" + nomeLike + "%"))
 				);
 			}
 
@@ -724,12 +723,12 @@ public class CpDao extends ModeloDao {
 			joinOrgao = true;
 			predicates.and(qDpLotacao.dataFimLotacao.isNull());
 
-			final StringExpression siglaOrgaoComLotacao = qCpOrgaoUsuario.acronimoOrgaoUsu.append(qDpLotacao.siglaLotacao);
-			if (isNotBlank(textoLike)) {
+			if (nomeLike != null) {
+				final StringExpression siglaOrgaoComLotacao = qCpOrgaoUsuario.acronimoOrgaoUsu.append(qDpLotacao.siglaLotacao);
 				predicates.and(
-						siglaOrgaoComLotacao.startsWithIgnoreCase(textoLike)
-								.or(qDpLotacao.siglaLotacao.likeIgnoreCase("%" + textoLike + "%"))
-								.or(qDpLotacao.nomeLotacaoAI.likeIgnoreCase("%" + textoLike + "%"))
+						siglaOrgaoComLotacao.startsWithIgnoreCase(nomeLike)
+								.or(qDpLotacao.siglaLotacao.likeIgnoreCase("%" + nomeLike + "%"))
+								.or(qDpLotacao.nomeLotacaoAI.likeIgnoreCase("%" + nomeLike + "%"))
 				);
 			}
 
@@ -1409,70 +1408,119 @@ public class CpDao extends ModeloDao {
 		return em().createQuery(query.toString());
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<DpPessoa> consultarPorFiltro(final DpPessoaDaoFiltro flt, final int offset, final int itemPagina) {
-		try {
-			final Query query;
-			
-			if (flt.isBuscarFechadas()) {
-				query = em().createNamedQuery("consultarPorFiltroDpPessoaInclusiveFechadas");
-			} else if (flt.isBuscarSubstitutos()) {
-				query = em().createNamedQuery("consultarPorFiltroDpPessoaSubstitutos");
-				query.setParameter("id", Long.valueOf(flt.getId()));
-			} else {
-				query = em().createNamedQuery("consultarPorFiltroDpPessoa");
-				if(flt.getId() != null && !"".equals(flt.getId())) {
-					query.setParameter("id", Long.valueOf(flt.getId()));
-				} else {
-					query.setParameter("id", 0L);
-				}
+	private BooleanBuilder preencherPredicadosQueryConsultaPorFiltro(final DpPessoaDaoFiltro filtro, final BooleanBuilder predicates) {
+		// DpPessoa#nomePessoaAI é gravado UPPERCASE no banco de dados
+		likeUppercaseParam(filtro.getNome())
+				.map(StringUtils::stripAccents)
+				.ifPresent(p -> predicates.and(
+						qDpPessoa.nomePessoaAI.like(p)
+								.or(qDpPessoaSiglaSemHifen.eq(p))
+								.or(qDpPessoaSiglaComHifen.eq(p))
+				));
+
+		ofNullable(filtro.getCpf())
+				.filter(p -> p.longValue() > 0L)
+				.map(qDpPessoa.cpfPessoa::eq)
+				.ifPresent(predicates::and);
+
+		ofNullable(filtro.getIdOrgaoUsu())
+				.filter(p -> p.longValue() > 0L)
+				.map(qDpPessoa.orgaoUsuario.idOrgaoUsu::eq)
+				.ifPresent(predicates::and);
+
+		ofNullable(filtro.getLotacao())
+				.map(DpLotacao::getIdLotacao)
+				.filter(p -> p.longValue() > 0L)
+				.map(qDpPessoa.lotacao.idLotacao::eq)
+				.ifPresent(predicates::and);
+
+		ofNullable(filtro.getCargo())
+				.map(DpCargo::getIdCargo)
+				.filter(p -> p.longValue() > 0L)
+				.map(qDpPessoa.cargo.idCargo::eq)
+				.ifPresent(predicates::and);
+
+		ofNullable(filtro.getFuncaoConfianca())
+				.map(DpFuncaoConfianca::getIdFuncao)
+				.filter(p -> p.longValue() > 0L)
+				.map(qDpPessoa.funcaoConfianca.idFuncao::eq)
+				.ifPresent(predicates::and);
+
+		normalizeUppercaseParam(filtro.getEmail())
+				.map(qDpPessoa.emailPessoa.toUpperCase()::eq)
+				.ifPresent(predicates::and);
+
+		normalizeUppercaseParam(filtro.getIdentidade())
+				.map(qDpPessoa.identidade.toUpperCase()::eq)
+				.ifPresent(predicates::and);
+
+		return predicates;
+	}
+
+	private JPAQuery<?> queryConsultarPorFiltro(final QDpPessoa root, final DpPessoaDaoFiltro filtro) {
+		final BooleanBuilder predicates = new BooleanBuilder();
+
+		if (filtro.isBuscarSubstitutos()) {
+			ofNullable(filtro.getId())
+					.filter(p -> p.longValue() > 0L)
+					// Condicional: existe substituto para o titular informado
+					.map(p ->
+							JPAExpressions
+							.selectOne()
+							.from(qDpSubstituicao)
+							.where(qDpSubstituicao.titular.idPessoa.eq(filtro.getId())
+									.and(qDpSubstituicao.substituto.idPessoa.eq(qDpPessoa.idPessoa)))
+							.exists()
+					)
+					.ifPresent(predicates::and);
+		} else {
+			if (!filtro.isBuscarFechadas()) {
+				predicates.and(qDpPessoa.dataFimPessoa.isNull());
 			}
 
-			if (offset > 0) {
-				query.setFirstResult(offset);
-			}
-			if (itemPagina > 0) {
-				query.setMaxResults(itemPagina);
-			}
-			
-			query.setParameter("nome", stripToEmpty(flt.getNome()).toUpperCase().replace(' ', '%'));
-			query.setParameter("identidade", stripToEmpty(flt.getIdentidade()));
-			query.setParameter("email", stripToEmpty(flt.getEmail()));
+			ofNullable(filtro.getId())
+					.filter(p -> p.longValue() > 0L)
+					.map(qDpPessoa.idPessoa::eq)
+					.ifPresent(predicates::and);
 
-			if (!flt.isBuscarFechadas() && !flt.isBuscarSubstitutos()) {
-				String situacaoFuncionalPessoa = flt.getSituacaoFuncionalPessoa();
-				if (situacaoFuncionalPessoa != null && situacaoFuncionalPessoa.length() == 0)
-					situacaoFuncionalPessoa = null;
-				query.setParameter("situacaoFuncionalPessoa", situacaoFuncionalPessoa);
-			}
-
-			query.setParameter("cpf", flt.getCpf() != null ? flt.getCpf() : 0L);
-
-			if (flt.getIdOrgaoUsu() != null)
-				query.setParameter("idOrgaoUsu", flt.getIdOrgaoUsu());
-			else
-				query.setParameter("idOrgaoUsu", 0L);
-
-			if (flt.getLotacao() != null)
-				query.setParameter("lotacao", flt.getLotacao().getId());
-			else
-				query.setParameter("lotacao", 0L);
-
-			if (flt.getCargo() != null)
-				query.setParameter("cargo", flt.getCargo().getId());
-			else
-				query.setParameter("cargo", 0L);
-
-			if (flt.getFuncaoConfianca() != null)
-				query.setParameter("funcao", flt.getFuncaoConfianca().getId());
-			else
-				query.setParameter("funcao", 0L);
-
-			final List<DpPessoa> l = query.getResultList();
-			return l;
-		} catch (final NullPointerException e) {
-			return null;
+			ofNullable(filtro.getSituacaoFuncionalPessoa())
+					.map(StringUtils::stripToNull)
+					.map(qDpPessoa.situacaoFuncionalPessoa::eq)
+					.ifPresent(predicates::and);
 		}
+
+		this.preencherPredicadosQueryConsultaPorFiltro(filtro, predicates);
+
+		return new JPAQuery<>(em())
+				.from(root)
+				.where(root.idPessoa.in(
+						JPAExpressions
+						.select(qDpPessoa.idPessoa.max())
+						.from(qDpPessoa)
+						.where(predicates)
+						.groupBy(qDpPessoa.idPessoaIni)
+				));
+	}
+
+	public List<DpPessoa> consultarPorFiltro(final DpPessoaDaoFiltro filtro, final int offset, final int tamanhoPagina) {
+		final QDpPessoa qDpPessoaWrapper = new QDpPessoa("qDpPessoaWrapper");
+		final JPAQuery<DpPessoa> query = queryConsultarPorFiltro(qDpPessoaWrapper, filtro)
+				.select(qDpPessoaWrapper);
+
+		if (offset > 0) {
+			query.offset(offset);
+		}
+		if (tamanhoPagina > 0) {
+			query.limit(tamanhoPagina);
+		}
+
+		return query.orderBy(qDpPessoaWrapper.nomePessoaAI.asc())
+				.fetch();
+	}
+
+	public long consultarQuantidade(final DpPessoaDaoFiltro filtro) {
+		final QDpPessoa qDpPessoaWrapper = new QDpPessoa("qDpPessoaWrapper");
+		return queryConsultarPorFiltro(qDpPessoaWrapper, filtro).fetchCount();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1500,66 +1548,6 @@ public class CpDao extends ModeloDao {
 			return l;
 		} catch (final NullPointerException e) {
 			return null;
-		}
-	}
-
-	public int consultarQuantidade(final DpPessoaDaoFiltro flt) {
-		try {
-			final Query query;
-
-			if (flt.isBuscarFechadas()) {
-				query = em().createNamedQuery("consultarQuantidadeDpPessoaInclusiveFechadas");
-			} else if (flt.isBuscarSubstitutos()) {
-				query = em().createNamedQuery("consultarQuantidadeDpPessoaSubstitutos");
-				query.setParameter("id", Long.valueOf(flt.getId()));
-			} else {
-				query = em().createNamedQuery("consultarQuantidadeDpPessoa");
-				if (flt.getId() != null)
-					query.setParameter("id", flt.getId());
-				else
-					query.setParameter("id", 0L);
-			}
-			
-			query.setParameter("nome", stripToEmpty(flt.getNome()).toUpperCase().replace(' ', '%'));
-			query.setParameter("identidade", stripToEmpty(flt.getIdentidade()));
-			query.setParameter("email", stripToEmpty(flt.getEmail()));
-
-			if (!flt.isBuscarFechadas() && !flt.isBuscarSubstitutos()) {
-				String situacaoFuncionalPessoa = flt.getSituacaoFuncionalPessoa();
-				if (situacaoFuncionalPessoa != null && situacaoFuncionalPessoa.length() == 0)
-					situacaoFuncionalPessoa = null;
-				query.setParameter("situacaoFuncionalPessoa", situacaoFuncionalPessoa);
-			}
-
-			if (flt.getCpf() != null)
-				query.setParameter("cpf", flt.getCpf());
-			else
-				query.setParameter("cpf", 0L);
-
-			if (flt.getIdOrgaoUsu() != null)
-				query.setParameter("idOrgaoUsu", flt.getIdOrgaoUsu());
-			else
-				query.setParameter("idOrgaoUsu", 0L);
-			
-			if (flt.getLotacao() != null)
-				query.setParameter("lotacao", flt.getLotacao().getId());
-			else
-				query.setParameter("lotacao", 0L);
-
-			if (flt.getCargo() != null)
-				query.setParameter("cargo", flt.getCargo().getId());
-			else
-				query.setParameter("cargo", 0L);
-
-			if (flt.getFuncaoConfianca() != null)
-				query.setParameter("funcao", flt.getFuncaoConfianca().getId());
-			else
-				query.setParameter("funcao", 0L);
-
-			final int l = ((Long) query.getSingleResult()).intValue();
-			return l;
-		} catch (final Exception e) {
-			return 0;
 		}
 	}
 
@@ -2957,6 +2945,32 @@ public class CpDao extends ModeloDao {
 						)
 				)
 				.execute();
+	}
+
+	protected static Optional<String> normalizeUppercaseParam(final String param) {
+		return ofNullable(param)
+				.map(StringUtils::stripToNull)
+				.map(StringUtils::normalizeSpace)
+				.map(StringUtils::upperCase);
+	}
+
+	protected static Optional<String> likeUppercaseParam(final String param) {
+		return normalizeUppercaseParam(param)
+				.map(p -> "%" + replace(p, SPACE, "%") + "%");
+	}
+
+	protected static Optional<String> startsWithUppercaseParam(final String param) {
+		return normalizeUppercaseParam(param)
+				.map(p -> replace(p, SPACE, "%") + "%");
+	}
+
+	protected static Optional<String> endsWithUppercaseParam(final String param) {
+		return normalizeUppercaseParam(param)
+				.map(p -> "%" + replace(p, SPACE, "%"));
+	}
+
+	protected static String likeUppercaseParamOrNull(final String param) {
+		return likeUppercaseParam(param).orElse(null);
 	}
 
 }

@@ -2065,7 +2065,7 @@ public class ExMovimentacaoController extends ExController {
 			filtro.setBuscarFechadas(Boolean.FALSE);
 			filtro.setNome("");
 			filtro.setLotacao(lotaResponsavelSel.getObjeto());
-			Integer qtde = CpDao.getInstance().consultarQuantidade(filtro);
+			long qtde = CpDao.getInstance().consultarQuantidade(filtro);
 			
 			if(qtde == 0) {
 				DpSubstituicao subst = new DpSubstituicao();

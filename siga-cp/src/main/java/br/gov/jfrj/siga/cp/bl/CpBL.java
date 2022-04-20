@@ -1290,7 +1290,7 @@ public class CpBL {
 		dpPessoa.setId(id);
 
 		dpPessoa.setBuscarFechadas(Boolean.FALSE);
-		Integer tamanho = CpDao.getInstance().consultarQuantidade(dpPessoa);
+		long tamanho = CpDao.getInstance().consultarQuantidade(dpPessoa);
 
 		if (tamanho > 0) {
 			throw new AplicacaoException("Usuário já cadastrado com estes dados: Órgão, Cargo, Função, Unidade e CPF");
