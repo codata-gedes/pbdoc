@@ -2385,7 +2385,7 @@ Pede deferimento.</span><br/><br/><br/>
 <table align="right" width="100%" border="1" style="border-color: black; border-spacing: 0px; border-collapse: collapse" bgcolor="#000000">
 <tr>
 <td align="center" width="55%" style="border-collapse: collapse; border-color: black; font-family:Arial; font-size:8pt;" bgcolor="#FFFFFF">
-	<i>Classif. documental</i>
+	<i>Tipo Documental</i>
 </td>
 <td align="center" width="45%" style="border-collapse: collapse; border-color: black; font-family:Arial;font-size:8pt;" bgcolor="#FFFFFF">
 	<span>${(doc.exClassificacao.sigla)!}</span>

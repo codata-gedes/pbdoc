@@ -26,7 +26,7 @@
 						<table align="right" width="100%" border="1" cellspacing="1" bgcolor="#000000">
 							<tr>
 								<td align="center"  width="60%" style="font-family:Arial;font-size:8pt;text-decoration:italic;"
-									bgcolor="#FFFFFF">Classif. documental</td>
+									bgcolor="#FFFFFF">Tipo Documental</td>
 								<td align="center" width="40%"
 									style="font-family:Arial;font-size:8pt;" bgcolor="#FFFFFF">${doc.exClassificacao.sigla}</td>
 								</tr>

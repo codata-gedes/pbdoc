@@ -16,8 +16,7 @@
 			</colgroup>
 			<tr>
 				<td align="center"
-					style="border-width: 0px 1px 0px 0px; border-style: solid; border-color: #666666; font-family: Arial; font-size: 8pt; color: #666666;"><i>Classif.
-				documental</i></td>
+					style="border-width: 0px 1px 0px 0px; border-style: solid; border-color: #666666; font-family: Arial; font-size: 8pt; color: #666666;"><i>Tipo Documental</i></td>
 				<td align="center"
 					style="font-family: Arial; font-size: 8pt; color: #666666">${doc.exClassificacao.sigla}</td>
 			</tr>

@@ -23,7 +23,7 @@
 		</c:if>
 		</b></p>
 		
-		<table width="100%" border="0"><tr><td align="right"><table border="1"><tr><td>Classif. documental</td><td>${doc.exClassificacao.sigla}</td></tr></table></td></tr></table>
+		<table width="100%" border="0"><tr><td align="right"><table border="1"><tr><td>Tipo Documental</td><td>${doc.exClassificacao.sigla}</td></tr></table></td></tr></table>
 		</body>
 		</html>
 	</mod:documento>

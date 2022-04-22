@@ -16,8 +16,7 @@
 			<col width="40%"></col>
 			<tr>
 				<td align="center" valign="bottom" width="60%"
-					style="font-size: 8pt; font-style: italic; border-width: 0px 0px 0px 0px; border-style: solid; margin: 0">Classif.
-				documental</td>
+					style="font-size: 8pt; font-style: italic; border-width: 0px 0px 0px 0px; border-style: solid; margin: 0">Tipo Documental</td>
 				<td valign="bottom" align="center" width="40%"
 					style="font-size: 8pt; border-width: 0px 0px 0px 1px; border-style: solid; margin: 0;">${doc.exClassificacao.sigla}</td>
 			</tr>
