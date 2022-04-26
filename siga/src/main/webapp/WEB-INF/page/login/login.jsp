@@ -77,7 +77,7 @@
 										   aria-describedby="icon-user"
 									/>
 									<c:if test="${not empty loginMensagem}">
-										<div class="invalid-feedback">Digite <fmt:message key="usuario.matricula"/> válido.</div>
+										<div class="invalid-feedback">Digite <fmt:message key="usuario.digite.usuario"/> válido.</div>
 									</c:if>
 								</div>
 							</div>
@@ -96,7 +96,7 @@
 										   aria-describedby="icon-pass"
 									/>
 									<c:if test="${not empty loginMensagem}">
-										<div class="invalid-feedback">Digite uma senha válida para <fmt:message key="usuario.matricula"/>.</div>
+										<div class="invalid-feedback">Digite uma senha válida para <fmt:message key="usuario.digite.usuario"/>.</div>
 									</c:if>
 								</div>
 							</div>						
