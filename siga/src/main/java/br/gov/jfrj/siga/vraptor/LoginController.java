@@ -103,12 +103,6 @@ public class LoginController extends SigaController {
 			GiService giService = Service.getGiService();
 			String usuarioLogado = giService.login(username, password);
 
-			if (Pattern.matches("\\d+", username) && username.length() == 11) {
-				List<CpIdentidade> lista = new CpDao().consultaIdentidadesCadastrante(username, Boolean.TRUE);
-				/* if (lista.size() > 1) {
-					throw new RuntimeException("Pessoa com mais de um usuário, favor efetuar login com a matrícula!");
-				}*/
-			}
 			if (usuarioLogado == null || usuarioLogado.trim().length() == 0) {
 				StringBuffer mensagem = new StringBuffer();
 				mensagem.append(SigaMessages.getMessage("usuario.falhaautenticacao"));
