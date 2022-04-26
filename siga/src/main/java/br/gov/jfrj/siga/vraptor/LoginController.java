@@ -97,6 +97,9 @@ public class LoginController extends SigaController {
 	@Transacional
 	public void auth(String username, String password, String cont) throws IOException {
 		try {
+			// Remover pontuacao para o caso de uso de CPF (logins tambem nao usam caracteres '-' ou '.').
+			username = StringUtils.replaceChars(username, "-.", null);
+
 			GiService giService = Service.getGiService();
 			String usuarioLogado = giService.login(username, password);
 
