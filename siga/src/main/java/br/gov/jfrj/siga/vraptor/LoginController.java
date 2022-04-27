@@ -23,6 +23,8 @@ import org.jboss.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.common.base.CharMatcher;
+
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -97,8 +99,9 @@ public class LoginController extends SigaController {
 	@Transacional
 	public void auth(String username, String password, String cont) throws IOException {
 		try {
-			// Remover pontuacao para o caso de uso de CPF (logins tambem nao usam caracteres '-' ou '.').
-			username = StringUtils.replaceChars(username, "-.", null);
+			// Mantém apenas LETRAS ou DÍGITOS
+			username = CharMatcher.javaLetterOrDigit().retainFrom(username);
+			
 
 			GiService giService = Service.getGiService();
 			String usuarioLogado = giService.login(username, password);
