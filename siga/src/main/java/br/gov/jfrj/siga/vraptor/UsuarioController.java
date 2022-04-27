@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import br.com.caelum.vraptor.Controller;
@@ -24,6 +25,7 @@ import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Correio;
 import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.base.SigaMessages;
+import br.gov.jfrj.siga.base.util.CPFUtils;
 import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.util.MatriculaUtils;
@@ -308,7 +310,18 @@ public class UsuarioController extends SigaController {
 	@Post({ "/app/usuario/esqueci_senha_gravar", "/public/app/usuario/esqueci_senha_gravar" })
 	public void gravarEsqueciSenha(UsuarioAction usuario) throws Exception {
 		// caso LDAP, orientar troca pelo Windows / central
-		final CpIdentidade id = dao().consultaIdentidadeCadastrante(usuario.getMatricula(), true);
+		final CpIdentidade id;
+		if (usuario.getMatricula() == null) {
+			String cpf = CPFUtils.limpaCpf(usuario.getCpf());
+			id = dao().consultaIdentidadeCadastrante(cpf, true);
+			String sigla = id.getCpOrgaoUsuario().getSigla();
+			String codigo = id.getDpPessoa().getMatricula().toString();
+			usuario.setMatricula(sigla + codigo);
+		} else {
+			id = dao().consultaIdentidadeCadastrante(usuario.getMatricula(), true);
+		}
+		
+		
 		if (id == null)
 			throw new AplicacaoException("O usuário não está cadastrado.");
 		boolean autenticaPeloBanco = Cp.getInstance().getBL().buscarModoAutenticacao(id.getCpOrgaoUsuario().getSiglaOrgaoUsu())

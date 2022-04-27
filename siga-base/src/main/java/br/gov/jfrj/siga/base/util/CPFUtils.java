@@ -48,7 +48,7 @@ public class CPFUtils {
 		return true;
 	}
 
-	private static String limpaCpf(final String cpf) {
+	public static String limpaCpf(final String cpf) {
 		String cpfLimpo = cpf.trim();
 		cpfLimpo = cpfLimpo.replaceAll( "\\.", "" );
 		cpfLimpo = cpfLimpo.replaceAll( "\\-", "" );
