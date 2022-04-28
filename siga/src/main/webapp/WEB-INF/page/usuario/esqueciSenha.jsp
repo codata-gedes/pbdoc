@@ -246,6 +246,10 @@ function refreshWindow(){
 		<c:if test="${baseTeste}">
 				<p id="msgSenha" class="gt-error">ATENÇÃO: Esta é uma versão de testes. Para sua segurança, NÃO utilize a mesma senha da versão de PRODUÇÃO.</p>
 		</c:if>
+		<fmt:message key="usuario.novo" var="primeiroAcesso" />
+		<c:if test="${titulo == primeiroAcesso}">
+				<p id="help" class="gt-error" style="color: red"><fmt:message key="usuario.primeiroacesso.alerta"/></p>
+		</c:if>
 		<div class="card bg-light mb-3" >
 			<div class="card-header"><h5>${titulo}</h5></div>
 			<div class="card-body">
