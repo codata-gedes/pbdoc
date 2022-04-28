@@ -58,14 +58,13 @@
 <script type="text/javascript" language="Javascript1.1">
 
 function checkIntegradoAD(){
-	
-	if ('${proxima_acao}' == 'incluir_usuario_gravar'){
-		var matricula = document.getElementById('txtMatricula').value;
-		PassAjaxResponseToFunction('integracao_ldap?matricula=' + matricula, 'exibirDadosIntegracaoAD',  false,true, null);
+	var matricula = document.getElementById('txtMatricula').value.trim();
+	if ('${proxima_acao}' == 'incluir_usuario_gravar' && matricula !== ""){
+		PassAjaxResponseToFunction('integracao_ldap?matricula=' + matricula, 'exibirDadosIntegracaoAD', false, true, null);
 	}
 }
 
-function exibirDadosIntegracaoAD(response,param){
+function exibirDadosIntegracaoAD(response, param){
 	
 	if (response != "0"){
 		document.getElementById('dadosIntegracaoAD').style.display = 'block';
@@ -79,21 +78,21 @@ function exibirDadosIntegracaoAD(response,param){
 }
 
 function checkEmailValido(){
-	var matricula = document.getElementById('txtMatricula').value;
-	$.ajax({
-		method:'GET',
-		url: 'check_email_valido?matricula=' + matricula,
-		success: function(data){permitirInclusaoUsuario(data)},
-		error: function(data){permitirInclusaoUsuario(data)} 
-	});
+	var matricula = document.getElementById('txtMatricula').value.trim();
+	if (matricula !== ""){
+		$.ajax({
+			method:'GET',
+			url: 'check_email_valido?matricula=' + matricula,
+			success: function(data){permitirInclusaoUsuario(data)},
+			error: function(data){permitirInclusaoUsuario(data)} 
+		});
+	}
 }
 
 function permitirInclusaoUsuario(response,param){
 	if (response == '0'){
-		document.getElementById('painel-dados-usuario').style.display = 'block';
 		$("#msgErro").removeAttr("style").hide();
 	}else{
-		document.getElementById('painel-dados-usuario').style.display = 'none';
 		$("#msgErro").show();
 		$('#msgEmail').text(response);
 
