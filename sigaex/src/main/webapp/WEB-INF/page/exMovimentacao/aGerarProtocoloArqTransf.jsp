@@ -139,7 +139,7 @@
 				theme="simple">
 				<button type="button" class="btn btn-primary" onclick="javascript: document.body.offsetHeight; window.print();" >Imprimir</button>
 				<c:if test="${popup != true}">
-					<button type="button" class="btn btn-primary" onclick="javascript:history.back();" >Voltar</button>
+					<a href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${itens[0].mob.sigla}" class="btn btn-primary">Voltar</a>
 				</c:if>
 			</form>
 		</div>

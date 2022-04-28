@@ -2108,8 +2108,10 @@ public class ExMovimentacaoController extends ExController {
 				result.redirectTo("/app/expediente/mov/protocolo_unitario_sp?popup=false&sigla=" + sigla
 						+ "&id=" + ultimaMovimentacao.getIdMov());
 			} else {
-				result.redirectTo("/app/expediente/mov/protocolo_unitario?popup=false&sigla=" + sigla
-						+ "&id=" + ultimaMovimentacao.getIdMov());
+				final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+				String dt = df.format(ultimaMovimentacao.getDtMov());
+			
+				result.redirectTo("/app/expediente/mov/protocolo_arq_transf?popup=false&isTransf=true&sigla=" + getTitular() + "&dt=" + dt);
 			}
 			
 			
