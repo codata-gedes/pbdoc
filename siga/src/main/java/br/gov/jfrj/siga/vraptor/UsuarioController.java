@@ -314,8 +314,9 @@ public class UsuarioController extends SigaController {
 		if (usuario.getMatricula() == null) {
 			String cpf = CPFUtils.limpaCpf(usuario.getCpf());
 			id = dao().consultaIdentidadeCadastrante(cpf, true);
-			String sigla = id.getCpOrgaoUsuario().getSigla();
-			String codigo = id.getDpPessoa().getMatricula().toString();
+			DpPessoa pessoa = id.getDpPessoa();
+			String sigla = pessoa.getSesbPessoa();
+			String codigo = pessoa.getMatricula().toString();
 			usuario.setMatricula(sigla + codigo);
 		} else {
 			id = dao().consultaIdentidadeCadastrante(usuario.getMatricula(), true);
