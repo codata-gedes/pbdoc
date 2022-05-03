@@ -138,7 +138,7 @@
 			<form name="frm" action="principal" namespace="/" method="get"
 				theme="simple">
 				<button type="button" class="btn btn-primary" onclick="javascript: document.body.offsetHeight; window.print();" >Imprimir</button>
-				<c:if test="${popup != true}">
+				<c:if test="${popup != true && itens.size() > 0}" >
 					<a href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${itens[0].mob.sigla}" class="btn btn-primary">Voltar</a>
 				</c:if>
 			</form>
