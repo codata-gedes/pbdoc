@@ -119,6 +119,10 @@
 											<div class="d-flex justify-content-between">
 												<a href="/siga/public/app/usuario/esqueci_senha" class="btn btn-sm btn-link"><strong>Esqueci Minha Senha</strong></a>
 												<a href="//portal.pbdoc.pb.gov.br" target="_blank" class="btn btn-sm btn-link">Sobre o PBdoc</a>
+												
+											</div>
+											<div style="float: right">
+												<a href="//portal.pbdoc.pb.gov.br/manual" target="_blank" class="btn btn-sm btn-link">Manual do PBdoc</a>
 											</div>
 										</div>
 										
