@@ -1509,7 +1509,7 @@
 		});	
 	</script>
 </c:if>
-<!-- <c:if test="${mob.isJuntado()}">			
+<c:if test="${mob.isJuntado()}">			
 	<siga:siga-modal id="modalDeAvisoTornarDocumentoSemEfeito" exibirRodape="true" 
 		tituloADireita="<i class='fas fa-exclamation-circle' style='font-size: 1.5em; color: #ffc107;'></i> <label style='font-size: 1.1em;vertical-align: middle;'><b>Atenção</b></label>"
 		descricaoBotaoFechaModalDoRodape="Ok">
@@ -1533,7 +1533,7 @@
 			}							
 		});
 	</script>	
-</c:if> -->
+</c:if>
 	
 <script>
 	var containerArquivosAuxiliares = $('.container-files');
