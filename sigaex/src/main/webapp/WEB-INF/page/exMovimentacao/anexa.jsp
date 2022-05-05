@@ -184,7 +184,7 @@
 							<div class="col-sm">
 								<input type="submit" value="Ok" class="btn btn-primary"
 									onclick="javascript: return validaSelecaoAnexo( this.form );" />
-								<input type="button" value="Cancela"
+								<input type="button" value="Voltar"
 									onclick="javascript:window.location.href='/sigaex/app/expediente/doc/exibir?sigla=${mobilVO.sigla}'"
 									class="btn btn-cancel ml-2" /><input class="ml-2"
 									type="checkbox" name="check"

@@ -59,7 +59,7 @@
 						<tr class="button">
 							<td colspan="2">
 								<input type="submit" value="Ok" class="gt-btn-small gt-btn-left" /> 
-								<input type="button" value="Cancela" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" />
+								<input type="button" value="Voltar" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" />
 							</td>
 						</tr>
 					</table>

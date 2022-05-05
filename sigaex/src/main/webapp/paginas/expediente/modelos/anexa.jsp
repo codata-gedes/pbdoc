@@ -48,7 +48,7 @@ function sbmt() {
 				<tr class="button">
 					<td></td>
 					<td><input type="submit" value="Ok" /> <input type="submit"
-						value="Cancela" onclick="javascript:history.back();" />
+						value="Voltar" onclick="javascript:history.back();" />
 				</tr>
 			</table>
 		</html:form></td>

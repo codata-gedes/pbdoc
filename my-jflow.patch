@@ -31463,7 +31463,7 @@ index 95e61ba628..ce7992c451 100644
 -						<div class="col-sm">
 +						<div class="col-12">
  							<input type="submit" value="Ok" class="btn btn-primary" />
- 							<input type="button" value="Cancela" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+ 							<input type="button" value="Voltar" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
  						</div>
 diff --git a/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aCopiar.jsp b/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aCopiar.jsp
 index 5ea285d3cd..2ab531d029 100644
@@ -31722,7 +31722,7 @@ index 086e89d9a1..d7129a749b 100644
 -						<tr class="button">
 -							<td colspan="2">
 -								<input type="submit" value="Ok" class="gt-btn-small gt-btn-left" /> 
--								<input type="button" value="Cancela" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" />
+-								<input type="button" value="Voltar" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" />
 -							</td>
 -						</tr>
 -					</table>
@@ -31813,7 +31813,7 @@ index 086e89d9a1..d7129a749b 100644
 +
 +			<tr class="button">
 +				<td colspan="3"><input type="submit" value="Ok"
-+					class="btn btn-primary" /> <input type="button" value="Cancela"
++					class="btn btn-primary" /> <input type="button" value="Voltar"
 +					onclick="javascript:history.back();" class="btn btn-light ml-2" /></td>
 +			</tr>
 +			</table>

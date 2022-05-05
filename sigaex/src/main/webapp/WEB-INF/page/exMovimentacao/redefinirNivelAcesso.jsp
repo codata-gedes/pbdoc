@@ -80,7 +80,7 @@
 					<div class="row">
 						<div class="col-sm">
 							<input type="submit" value="Ok" class="btn btn-primary"/> 
-							<input type="button" value="Cancela" onclick="javascript:history.back();" class="btn btn-cancel ml-2"/> 
+							<input type="button" value="Voltar" onclick="javascript:history.back();" class="btn btn-cancel ml-2"/> 
 						</div>
 					</div>
 				</form>

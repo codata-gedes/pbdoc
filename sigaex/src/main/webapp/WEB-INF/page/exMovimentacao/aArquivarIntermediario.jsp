@@ -80,7 +80,7 @@ function sbmt() {
 				
 				<tr class="button">
 					<td colspan="2"><input type="submit" value="Ok" class="gt-btn-medium gt-btn-left"/> <input type="button"
-						value="Cancela" onclick="javascript:history.back();" class="gt-btn-medium gt-btn-left"/>
+						value="Voltar" onclick="javascript:history.back();" class="gt-btn-medium gt-btn-left"/>
 				</tr>
 			</table>
 		</form>
