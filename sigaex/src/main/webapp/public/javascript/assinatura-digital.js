@@ -628,7 +628,7 @@ var providerPassword = {
 					'<div class="modal fade" tabindex="-1" role="dialog" id="senhaDialog"><div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content">'
 					+ sigaModal.obterCabecalhoPadrao('Identificação')
 					+ '<div class="modal-body"><fieldset><label>Usuário</label> <br /> <input id="nomeUsuarioSubscritor" type="text" value="' + $('#siglaUsuarioCadastrante').val() + '" class="text ui-widget-content ui-corner-all" onblur="javascript:converteUsuario(this)" /> <label>(modifique caso necessário)</label><br /> <br /> <label>Senha</label><br /> <input type="password" id="senhaUsuarioSubscritor" class="text ui-widget-content ui-corner-all" autocomplete="off" autofocus /></fieldset></div>'
-					+ '<div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button><button type="button" id="senhaOk" class="btn btn-primary"><fmt:message key="botao.ok"/></button></div>'
+					+ '<div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button><button type="button" id="senhaOk" class="btn btn-primary">OK</button></div>'
 					+ '</div></div></div>')
 					.modal();										
 			
@@ -827,7 +827,7 @@ var process = {
 				'<div class="modal fade" tabindex="-1" role="dialog" id="progressDialog"><div class="modal-dialog" role="document"><div class="modal-content">'
 				+ sigaModal.obterCabecalhoPadrao()				
 				+ '<div class="modal-body"><h1 class="siga-modal__titulo  siga-modal__titulo--conteudo">Assinatura Digital (' + provider.nome + ')</h1><p id="vbslog">Iniciando...</p><div id="progressbar-ad"></div></div>'
-				+ '<div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button><button type="button" id="senhaOk" class="btn btn-primary"><fmt:message key="botao.ok"/></button></div>'
+				+ '<div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button><button type="button" id="senhaOk" class="btn btn-primary">OK</button></div>'
 				+ '</div></div></div>')
 				.modal();
 		
