@@ -441,15 +441,25 @@ function limpaCampos()
 		</div>
 		<div class="card bg-light mb-3">
 			<div class="card-header">
-				<h5>Pesquisa de Documentos</h5>
+				<h5 class="m-0">Pesquisa de Documentos</h5>
 			</div>
 			<div class="card-body">
-
-				<div class="card bg-light mb-3">
-					<div class="card-header">
-						<h5>Dados do Documento</h5>
+				<div class="card card__collapsible-body bg-light mb-3">
+					<div class="card-header card-header__flex">
+						<h5 class="m-0">Dados do Documento</h5>
+						<c:if test="${
+						  ((empty primeiraVez) or (primeiraVez != 'sim')) and
+						  ((empty apenasRefresh) or (apenasRefresh != 1))
+						}">
+						<button class="btn btn-sm btn-danger" type="button" data-toggle="collapse" data-target="#collapsibleBody" aria-expanded="false" aria-controls="collapsibleBody">
+							<i class="fas fa-filter"></i>
+							Filtros
+							<i class="fas fa-chevron-up"></i>
+							<i class="fas fa-chevron-down"></i>
+						</button>
+						</c:if>
 					</div>
-					<div class="card-body">
+					<div id="collapsibleBody" class="card-body ${param.primeiraVez == null ? 'collapse' : 'expanded'}">
 						<form id="buscar" name="buscar" onsubmit="limpaCampos()" action="buscar" method="get" class="form100">
 							<input type="hidden" name="popup" value="${popup}" />
 							<input type="hidden" name="propriedade" value="${propriedade}" />

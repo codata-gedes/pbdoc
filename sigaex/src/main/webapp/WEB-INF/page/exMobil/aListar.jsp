@@ -365,32 +365,24 @@
 	
 	<link rel="stylesheet" href="/siga/javascript/select2/select2.css" type="text/css" media="screen, projection" />
 	<link rel="stylesheet" href="/siga/javascript/select2/select2-bootstrap.css" type="text/css" media="screen, projection" />
-	
+
 	<div class="container-fluid content mb-3">
-		<c:if
-			test="${((empty primeiraVez) or (primeiraVez != 'sim')) and ((empty apenasRefresh) or (apenasRefresh != 1))}">
-			<c:if test="${not empty tamanho and tamanho > 0}">
-				<h2 class="mt-3"><fmt:message key="documento.encontrados"/></h2>
-				<c:choose>
-					<c:when test="${siga_cliente == 'GOVSP'}">
-						<jsp:include page="./listaSP.jsp"/>
-					</c:when>
-					<c:otherwise>
-						<jsp:include page="./lista.jsp"/>
-					</c:otherwise>
-				</c:choose>
-			</c:if>
-			<c:if test="${empty tamanho or tamanho == 0}">
-				<h2 class="mt-3"><fmt:message key="documento.encontrados"/></h2>
-				<p class="gt-notice-box">A pesquisa não retornou resultados.</p>
-			</c:if>
-		</c:if>		
-		
-		<div class="card bg-light mb-3">
-			<div class="card-header">
-				<h5>Pesquisar Documentos</h5>
+		<div class="card card__collapsible-body bg-light mb-3">
+			<div class="card-header card-header__flex">
+				<h5 class="m-0">Pesquisar Documentos</h5>
+				<c:if test="${
+				  ((empty primeiraVez) or (primeiraVez != 'sim')) and
+				  ((empty apenasRefresh) or (apenasRefresh != 1))
+				}">
+				<button class="btn btn-sm btn-danger" type="button" data-toggle="collapse" data-target="#collapsibleBody" aria-expanded="false" aria-controls="collapsibleBody">
+					<i class="fas fa-filter"></i>
+					Filtros
+					<i class="fas fa-chevron-up"></i>
+					<i class="fas fa-chevron-down"></i>
+				</button>
+				</c:if>
 			</div>
-			<div class="card-body">
+			<div id="collapsibleBody" class="card-body ${param.primeiraVez == null ? 'collapse' : 'expanded'}">
 				<form id="listar" name="listar"
 					onsubmit="javascript: return limpaCampos()" action="listar"
 					method="get" class="form100">
@@ -738,6 +730,24 @@
 				</form>
 			</div>
 		</div>
+
+		<c:if test="${((empty primeiraVez) or (primeiraVez != 'sim')) and ((empty apenasRefresh) or (apenasRefresh != 1))}">
+			<c:if test="${not empty tamanho and tamanho > 0}">
+				<h5 class="mt-3"><fmt:message key="documento.encontrados"/></h5>
+				<c:choose>
+					<c:when test="${siga_cliente == 'GOVSP'}">
+						<jsp:include page="./listaSP.jsp"/>
+					</c:when>
+					<c:otherwise>
+						<jsp:include page="./lista.jsp"/>
+					</c:otherwise>
+				</c:choose>
+			</c:if>
+			<c:if test="${empty tamanho or tamanho == 0}">
+				<h2 class="mt-3"><fmt:message key="documento.encontrados"/></h2>
+				<p class="gt-notice-box">A pesquisa não retornou resultados.</p>
+			</c:if>
+		</c:if>
 	</div>
 	<script type="text/javascript" src="/siga/javascript/select2/select2.min.js"></script>
 	<script type="text/javascript" src="/siga/javascript/select2/i18n/pt-BR.js"></script>
