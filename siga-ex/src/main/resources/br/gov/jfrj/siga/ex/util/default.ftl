@@ -2215,6 +2215,9 @@ Pede deferimento.</span><br/><br/><br/>
     <tr bgcolor="#FFFFFF">
         <td width="100%">
         <table width="100%" border="0" cellpadding="2">
+         	<tr>
+	            <td width="100%" align="center" valign="bottom"><img src="${_pathBrasao}" width="65" height="70" /></td>
+	        </tr>
             <tr>
                 <td width="100%" align="center">
                 <p style="font-family: AvantGarde Bk BT, Arial; font-size: 11pt;">${_tituloGeral}</p>
