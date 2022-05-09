@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Disponibilidade de itens de configuração">
 
@@ -118,12 +119,12 @@ td .orgao:first-child {
 				</div>
 
 				<div class="gt-form-row">
-					<input type="button" value="Gravar"
+					<input type="button" value="<fmt:message key="botao.gravar"/>"
 						class="gt-btn-medium gt-btn-left"
 						onclick="disponibilidadeService.gravar()" /> <a
 						class="gt-btn-medium gt-btn-left"
-						onclick="disponibilidadeService.cancelarGravacao()">Cancelar</a> <input
-						type="button" value="Aplicar" class="gt-btn-medium gt-btn-left"
+						onclick="disponibilidadeService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a> <input
+						type="button" value="<fmt:message key="botao.aplicar"/>" class="gt-btn-medium gt-btn-left"
 						onclick="disponibilidadeService.aplicar()" />
 				</div>
 			</form>

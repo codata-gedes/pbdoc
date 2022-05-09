@@ -187,8 +187,8 @@ $(function(){
 				<div class="row">
 					<div class="col col-12">
 						<div class="form-group">
-							<a accesskey="o" id="button_ok" onclick="javascript:submeter();" class="btn btn-primary"><u>O</u>k</a>																			
-							<a href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${sigla}" class="btn btn-light ml-2">Cancela</a>
+							<a accesskey="o" id="button_ok" onclick="javascript:submeter();" class="btn btn-primary">value="<fmt:message key="botao.ok"/>"</a>																			
+							<a href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${sigla}" class="btn btn-light ml-2"><fmt:message key="botao.voltar"/></a>
 						</div>
 					</div>
 				</div>				

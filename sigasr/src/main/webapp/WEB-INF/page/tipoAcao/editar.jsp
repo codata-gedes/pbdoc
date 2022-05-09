@@ -15,8 +15,8 @@
 			<input type="text" id="descrTipoAcao" name="tipoAcao.descrTipoAcao" maxlength="255" class="form-control"/>
 		</div>
 
-		<input type="button" value="Gravar" class="btn btn-primary" onclick="tipoAcaoService.gravar()"/>
-		<a class="btn btn-secondary" style="color: #fff" onclick="tipoAcaoService.cancelarGravacao()">Cancelar</a>
-		<input type="button" value="Aplicar" class="btn btn-primary" onclick="tipoAcaoService.aplicar()"/>
+		<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" onclick="tipoAcaoService.gravar()"/>
+		<a class="btn btn-secondary" style="color: #fff" onclick="tipoAcaoService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
+		<input type="button" value="<fmt:message key="botao.aplicar"/>" class="btn btn-primary" onclick="tipoAcaoService.aplicar()"/>
 	</form>
 </div>

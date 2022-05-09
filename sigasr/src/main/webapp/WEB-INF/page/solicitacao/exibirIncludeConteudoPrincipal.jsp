@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <form action="${linkTo[SolicitacaoController].darAndamento}" 
 		method="post" onsubmit="javascript: return block();"
@@ -48,7 +49,7 @@
 	</div>
 
 	<div class="mt-2 form-group">
-		<input type="submit" value="Gravar"
+		<input type="submit" value="<fmt:message key="botao.gravar"/>"
 			class="btn btn-primary" />
 	</div>
 </form>

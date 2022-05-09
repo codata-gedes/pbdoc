@@ -30,7 +30,7 @@
 						<jsp:include page="relGestaoInput.jsp" />
 						<div class="form-group col-md-4">
 							<input type="submit" value="Pesquisar" class="btn btn-primary mt-auto" />
-							<input type="button" value="Voltar" onclick="javascript:history.back();" class="btn btn-cancel ml-2 mt-auto" />
+							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2 mt-auto" />
 						</div>
 					</div>
 					<c:if test="${listModelos != null}">

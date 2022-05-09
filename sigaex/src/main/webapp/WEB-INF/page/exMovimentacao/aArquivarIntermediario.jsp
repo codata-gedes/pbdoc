@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Arquivamento Intermediário">
 
@@ -79,8 +80,8 @@ function sbmt() {
 				</tr>
 				
 				<tr class="button">
-					<td colspan="2"><input type="submit" value="Ok" class="gt-btn-medium gt-btn-left"/> <input type="button"
-						value="Voltar" onclick="javascript:history.back();" class="gt-btn-medium gt-btn-left"/>
+					<td colspan="2"><input type="submit" value="<fmt:message key="botao.ok"/>" class="gt-btn-medium gt-btn-left"/> <input type="button"
+						value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="gt-btn-medium gt-btn-left"/>
 				</tr>
 			</table>
 		</form>

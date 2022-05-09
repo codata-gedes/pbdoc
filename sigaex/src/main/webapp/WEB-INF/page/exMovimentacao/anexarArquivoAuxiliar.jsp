@@ -6,6 +6,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/functiontag" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Anexação de Arquivo Auxiliar">
 
@@ -40,9 +41,9 @@
 					</div>
 					<div class="row mt-4">
 						<div class="col-sm">
-							<input type="submit" value="Ok" class="btn btn-primary"
+							<input type="submit" value="<fmt:message key="botao.ok"/>" class="btn btn-primary"
 								onclick="javascript: return validaSelecaoAnexo( this.form );" name="sbmt"/>
-							<input type="button" value="Voltar"
+							<input type="button" value="<fmt:message key="botao.voltar"/>" 
 								onclick="javascript:window.location.href='/sigaex/app/expediente/doc/exibir?sigla=${sigla}'"
 								class="btn btn-cancel ml-2" />
 						</div>

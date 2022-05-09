@@ -29,7 +29,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="botao.cancela"/></button>
 				<button type="button" class="btn btn-primary"
 					onclick="javascript: document.getElementById('redirecionarForm').submit();">Redirecionar</button>
 			</div>

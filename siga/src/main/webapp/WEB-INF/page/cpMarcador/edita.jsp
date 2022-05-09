@@ -2,6 +2,7 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <link rel="stylesheet"
 	href="/siga/css/selectpicker/bootstrap-select.min.css" type="text/css"
 	media="screen, projection" />
@@ -111,8 +112,8 @@
 					</div>
 					<div class="form-group">
 						<input type="submit" type="button"
-							class="btn btn-primary  btn-salvar" value="OK"> <a
-							href="/siga/app/marcador/listar" class="btn btn-cancel btn-light">Cancela</a>
+							class="btn btn-primary  btn-salvar" value="<fmt:message key="botao.ok"/>"> <a
+							href="/siga/app/marcador/listar" class="btn btn-cancel btn-light"><fmt:message key="botao.cancela"/></a>
 					</div>
 				</form>
 			</div>

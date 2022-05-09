@@ -2,7 +2,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
 <%@ taglib uri="http://localhost/libstag" prefix="f"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <script src="/sigasr/javascripts/jquery.validate.min.js"></script>
 <script src="/sigasr/javascripts/language/messages_pt_BR.min.js"></script>
 <script src="/sigasr/javascripts/detalhe-tabela.js"></script>
@@ -162,11 +162,11 @@
 		</div>
 		--%>
 		<div class="gt-form-row">
-			<input type="button" value="Gravar" class="gt-btn-medium gt-btn-left"
+			<input type="button" value="<fmt:message key="botao.gravar"/>" class="gt-btn-medium gt-btn-left"
 				onclick="listaService.gravar()" /> <a
 				class="gt-btn-medium gt-btn-left"
-				onclick="listaService.cancelarGravacao()">Cancelar</a> <input
-				type="button" value="Aplicar" class="gt-btn-medium gt-btn-left"
+				onclick="listaService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a> <input
+				type="button" value="<fmt:message key="botao.aplicar"/>" class="gt-btn-medium gt-btn-left"
 				onclick="listaService.aplicar()" />
 		</div>
 		<div class="gt-form-row gt-width-100">
@@ -230,11 +230,11 @@
 			</div>
 			<div class="gt-form-row">
 				<a href="javascript: inserirAcesso()"
-					class="gt-btn-medium gt-btn-left">Gravar</a> <a
+					class="gt-btn-medium gt-btn-left"><fmt:message key="botao.gravar"/></a> <a
 					href="javascript: controleAcessoModalFechar()"
-					class="gt-btn-medium gt-btn-left">Cancelar</a>
+					class="gt-btn-medium gt-btn-left"><fmt:message key="botao.cancela"/></a>
 				<c:if test="${idConfiguracao}">
-					<input type="button" value="Desativar"
+					<input type="button" value="<fmt:message key="botao.desativar"/>"
 						class="gt-btn-medium gt-btn-left"
 						onclick="location.href='${linkTo[SolicitacaoController].desativarPermissaoUsoListaEdicao(idConfiguracao)}'" />
 				</c:if>
@@ -256,9 +256,9 @@
 									headerKey="0" listValue="idTipoPermissaoLista" theme="simple" />
 							</div>
 							<div class="gt-form-row">
-								<input type="button" id="modalOk" value="Ok"
+								<input type="button" value="<fmt:message key="botao.ok"/>" id="modalOk"
 									class="gt-btn-medium gt-btn-left" /> <input type="button"
-									value="Cancelar" id="modalCancel"
+									value="<fmt:message key="botao.cancela"/>" id="modalCancel"
 									class="gt-btn-medium gt-btn-left" />
 							</div>
 						</div>
@@ -339,9 +339,9 @@
 
 			<div class="gt-form-row">
 				<a href="javascript: configuracaoInclusaoAutomaticaService.gravar()"
-					class="gt-btn-medium gt-btn-left">Gravar</a> 
+					class="gt-btn-medium gt-btn-left"><fmt:message key="botao.gravar"/></a> 
 				<a href="javascript: configuracaoInclusaoAutomaticaService.cancelarGravacao()"
-					class="gt-btn-medium gt-btn-left">Cancelar</a>
+					class="gt-btn-medium gt-btn-left"><fmt:message key="botao.cancela"/></a>
 			</div>
 		</div>
 	</form>

@@ -124,9 +124,9 @@
                 </div>
             </c:if>            
             <button type="submit" class="btn  btn-primary  troca-senha-usuario-btn  js-troca-senha-usuario-btn" disabled>                       
-                Salvar                      
+                <fmt:message key="botao.gravar"/>                      
             </button>
-            <a href="#" class="btn  btn-default  js-senha-usuario-cancelar" data-dismiss="modal">Cancelar</a>                       
+            <a href="#" class="btn  btn-default  js-senha-usuario-cancelar" data-dismiss="modal"><fmt:message key="botao.cancela"/></a>                       
         </form>                                
     </div>   			
 </siga:siga-modal>

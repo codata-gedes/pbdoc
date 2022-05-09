@@ -1,7 +1,7 @@
 <%@ tag body-content="empty" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/functiontag" prefix="f"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ attribute name="assinar" required="false"%>
 <%@ attribute name="voltar" required="false"%>
 <%@ attribute name="linkVoltar" required="false"%>
@@ -27,7 +27,7 @@
 		<div class="col-auto my-auto">
 		
 			<c:if test="${not empty voltar and voltar}">
-				<input type="button" value="Voltar" onclick="${(empty linkVoltar) ? 'javascript:history.back();' : 'javascript:window.location.href=\''.concat(linkVoltar).concat('\';')}" class="btn btn-secondary mr-2" />
+				<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="${(empty linkVoltar) ? 'javascript:history.back();' : 'javascript:window.location.href=\''.concat(linkVoltar).concat('\';')}" class="btn btn-secondary mr-2" />
 			</c:if>
 			
 			<c:if test="${not empty assinar and assinar}">

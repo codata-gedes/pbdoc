@@ -183,8 +183,8 @@
 				<div class="row">
 					<div class="col-sm-2">
 						<div class="form-group">
-							<button type="button" id="btnOk" onclick="javascript: validar();" class="btn btn-primary" >Salvar</button>
-							<button type="button" onclick="javascript:history.back();" class="btn btn-secondary" >Cancelar</button>
+							<button type="button" id="btnOk" onclick="javascript: validar();" class="btn btn-primary" ><fmt:message key="botao.gravar"/></button>
+							<button type="button" onclick="javascript:history.back();" class="btn btn-secondary" ><fmt:message key="botao.cancela"/></button>
 						</div>
 					</div>
 				</div>

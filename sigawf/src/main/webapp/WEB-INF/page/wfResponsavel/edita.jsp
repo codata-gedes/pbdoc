@@ -55,11 +55,11 @@
 				<div class="col-sm-12">
 					<div class="form-group mb-0">
 						<button class="btn btn-primary"
-							onclick="javascript:gravarResponsabilidade()">Ok</button>
-						<button value="Desativar" class="btn btn-primary"
-							ng-click="desativar()">Desativar</button>
+							onclick="javascript:gravarResponsabilidade()"><fmt:message key="botao.ok"/></button>
+						<button value="<fmt:message key="botao.desativar"/>" class="btn btn-primary"
+							ng-click="desativar()"><fmt:message key="botao.desativar"/></button>
 						<button onclick="javascript:history.back();"
-							class="btn btn-primary">Cancelar</button>
+							class="btn btn-primary"><fmt:message key="botao.cancela"/></button>
 					</div>
 				</div>
 			</div>

@@ -2,7 +2,7 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Lista Feriados">
 	<!-- main content -->
@@ -36,11 +36,11 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group">
-									<input type="button" value="Salvar" onclick="javascript: validar();"
+									<input type="button" value="<fmt:message key="botao.gravar"/>" onclick="javascript: validar();"
 										class="btn btn-primary" />	
-									<input  type="button" value="Excluir" onclick="javascript:if (confirm('Deseja excluir o feriado?')) location.href='/siga/app/feriado/excluir?id=${id}';"
+									<input  type="button" value="<fmt:message key="botao.excluir"/>" onclick="javascript:if (confirm('Deseja excluir o feriado?')) location.href='/siga/app/feriado/excluir?id=${id}';"
 									       class="btn btn-primary" />											
-									<input  type="button" value="Voltar" onclick="javascript:location.href='/siga';"
+									<input  type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:location.href='/siga';"
 									       class="btn btn-primary" />
 								</div>	
 							</div>

@@ -116,9 +116,9 @@
 			</div>
 
 			<tr class="button">
-				<td colspan="3"><input id="btnSubmit" type="button" value="Ok"
+				<td colspan="3"><input id="btnSubmit" type="button" value="<fmt:message key="botao.ok"/>"
 					class="btn btn-primary" onclick="sbmt();" /> <input type="button"
-					value="Voltar" onclick="javascript:history.back();"
+					value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();"
 					class="btn btn-light ml-2" /></td>
 			</tr>
 			</table>

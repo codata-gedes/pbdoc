@@ -195,8 +195,8 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group mb-0">
-								<input type="submit" value="Ok" class="btn btn-primary" /> <input
-									type="button" value="Cancelar"
+								<input type="submit" value="<fmt:message key="botao.ok"/>" class="btn btn-primary" /> <input
+									type="button" value="<fmt:message key="botao.cancela"/>"
 									onclick="javascript:history.back();" class="btn btn-primary" />
 							</div>
 						</div>

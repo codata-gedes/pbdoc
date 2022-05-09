@@ -1249,7 +1249,7 @@
 															<c:when test="${acao.nomeNbsp eq 'Cancelar' and siga_cliente eq 'GOVSP'}">
 																<button type="button" class="btn btn-sm btn-outline-danger btn-cancel"																	
 																	onclick="confirmarExclusaoArquivoAuxiliar(${mov.idMov}, '${sigla}', this)">																
-																	Cancelar
+																	<fmt:message key="botao.cancela"/>
 																</button>																													
 															</c:when>															
 														</c:choose>																							

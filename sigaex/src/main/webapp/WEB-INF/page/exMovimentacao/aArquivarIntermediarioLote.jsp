@@ -93,8 +93,8 @@
 				<div class="row">
 					<div class="col-sm-2">
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary">Ok</button> 
-							<button type="button" onclick="javascript:history.back();" class="btn btn-primary">Cancela</button>
+							<button type="submit" class="btn btn-primary"><fmt:message key="botao.ok"/></button> 
+							<button type="button" onclick="javascript:history.back();" class="btn btn-primary"><fmt:message key="botao.voltar"/></button>
 						</div>
 					</div>
 				</div>

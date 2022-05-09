@@ -101,7 +101,7 @@
 					</c:if>
 					<div class="row">
 						<div class="col-12 col-lg-6">
-							<input type="submit" value="Ok" class="btn btn-primary" />
+							<input type="submit" value="<fmt:message key="botao.ok"/>" class="btn btn-primary" />
 							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 						</div>
 					</div>

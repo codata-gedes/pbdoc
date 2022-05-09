@@ -43,9 +43,9 @@
 			<div class="row">
 				<div class="col col-12">
 					<div class="form-group mb-0">
-						<button class="btn btn-primary" type="submit">Ok</button>
+						<button class="btn btn-primary" type="submit"><fmt:message key="botao.ok"/></button>
 						<button onclick="javascript:history.back();"
-							class="btn btn-light ml-3">Cancelar</button>
+							class="btn btn-light ml-3"><fmt:message key="botao.cancela"/></button>
 					</div>
 				</div>
 			</div>

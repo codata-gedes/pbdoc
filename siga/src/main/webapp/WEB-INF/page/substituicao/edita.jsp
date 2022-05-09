@@ -169,8 +169,8 @@
 					</c:if>
 					<div class="row">
 						<div class="col-sm-2">
-							<button type="submit" class="btn btn-primary">OK</button>
-							<button type="button"  class="btn btn-primary" onclick="javascript:history.back();">Cancela</button>
+							<button type="submit" class="btn btn-primary"><fmt:message key="botao.ok"/></button>
+							<button type="button"  class="btn btn-primary" onclick="javascript:history.back();"><fmt:message key="botao.voltar"/></button>
 						</div>						
 					</div>
 				</form>

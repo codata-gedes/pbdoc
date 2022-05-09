@@ -2,6 +2,7 @@
 <%@ page isErrorPage="true" import="java.io.*" contentType="text/html"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:catch var="selectException">
 	<c:if test="${empty exceptionGeral or empty exceptionStackGeral}">
@@ -66,7 +67,7 @@ This is a useless buffer to fill the page to 513 bytes to avoid display of Frien
 						<div class="col">
 							<div class="form-group">
 							<c:if test="${newWindow != 1}">
-								<input type="button" value="Voltar"
+								<input type="button" value="<fmt:message key="botao.voltar"/>"
 									onclick="javascript:history.back();" class="btn btn-secondary btn-sm" />
 							</c:if>
 							<c:if test="${newWindow eq 1}">

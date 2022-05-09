@@ -162,9 +162,9 @@
 						<div class="col-sm-2">
 							<div class="form-group">
 								<button type="button" onclick="javascript: validar();"
-									class="btn btn-primary">Ok</button>
+									class="btn btn-primary"><fmt:message key="botao.ok"/></button>
 								<button type="button" onclick="javascript:history.back();"
-									class="btn btn-primary">Cancela</button>
+									class="btn btn-primary"><fmt:message key="botao.voltar"/></button>
 							</div>
 						</div>
 					</div>

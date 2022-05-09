@@ -26,7 +26,7 @@ function tamanho() {
 
 function tamanho2() {
 	nota= new String();
-	nota = this.frm.descrMov.value;
+	nota = this.frm.descrMov.value;	
 	var i = 255 - nota.length;
 	return i;
 }
@@ -150,7 +150,7 @@ function alteraResponsavel()
 					</div>
 					<div class="row">
 						<div class="col-sm">
-							<input type="submit" value="Ok" class="btn btn-primary"/>
+							<input type="submit" value="<fmt:message key="botao.ok"/>" class="btn btn-primary"/>
 							<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2"/>
 						</div>
 					</div>

@@ -75,7 +75,7 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>Aplicar a</label>
+								<label><fmt:message key="botao.aplicar"/> a</label>
 								<select name="tipoPublicador" onchange="javascript:hideShowSel(this);" class="form-control">
 									<c:forEach var="tipoEntry" items="${listaTipoPublicador}">
 										<option value="${tipoEntry.key}">${tipoEntry.value}</option>

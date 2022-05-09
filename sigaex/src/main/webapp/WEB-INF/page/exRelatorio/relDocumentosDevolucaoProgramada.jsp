@@ -38,7 +38,7 @@
 						<jsp:include page="relGestaoInput.jsp" />
 						<div class="form-group col-md-4">
 							<input type="submit" value="Pesquisar" class="btn btn-primary" />
-							<input type="button" value="Voltar"
+							<input type="button" value="<fmt:message key="botao.voltar"/>" 
 								onclick="javascript:history.back();" class="btn btn-primary" />
 						</div>
 					</div>

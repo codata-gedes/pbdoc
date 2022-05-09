@@ -310,7 +310,7 @@ function refreshWindow(){
 								</div>
 								<div class="row">
 									<div class="col-sm-1">
-										<button type="submit" class="btn btn-primary">OK</button>
+										<button type="submit" class="btn btn-primary"><fmt:message key="botao.ok"/></button>
 									</div>
 								</div>					
 							</div>					
@@ -437,7 +437,7 @@ function refreshWindow(){
 								</div>
 								<div class="row">
 									<div class="col-sm-1">
-										<button type="submit" class="btn btn-primary">OK</button>
+										<button type="submit" class="btn btn-primary"><fmt:message key="botao.ok"/></button>
 									</div>
 								</div>					
 							</form>

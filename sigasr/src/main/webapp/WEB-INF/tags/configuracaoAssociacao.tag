@@ -112,8 +112,8 @@
 				</div>
 			</c:if>
 			
-			<a href="javascript: associacaoService.gravar()" class="btn btn-primary" style="color: #fff">Gravar</a>
-			<a href="javascript: associacaoService.cancelarGravacao()" class="btn btn-secondary" style="color: #fff">Cancelar</a>
+			<a href="javascript: associacaoService.gravar()" class="btn btn-primary" style="color: #fff"><fmt:message key="botao.gravar"/></a>
+			<a href="javascript: associacaoService.cancelarGravacao()" class="btn btn-secondary" style="color: #fff"><fmt:message key="botao.cancela"/></a>
 		</form>
 	</div>
 	<div class="gt-content-box" id="modal-associacao-error" style="display: none;">

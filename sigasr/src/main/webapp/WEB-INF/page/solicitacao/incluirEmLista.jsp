@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <div>
 	<form id="formSelecionarLista" action="${linkTo[SolicitacaoController].incluirEmListaGravar}?sigla=${solicitacao.siglaCompacta}
 		${lista != null ? '&idLista='+lista.idLista : ''}" onsubmit="javascript: return block();" enctype="multipart/form-data">
@@ -57,7 +58,7 @@
 				
 				<div class="gt-width-100 gt-form-row ">
 					<input type="button" value="Adicionar" class="btn btn-primary" onclick="listaService.gravarInclusaoComPrioridade()"/>
-					<input type="button" class="btn btn-primary" value="Cancelar" onclick="listaService.fecharModalPrioridade()" style="color: #fff"/>
+					<input type="button" class="btn btn-primary" value="<fmt:message key="botao.cancela"/>" onclick="listaService.fecharModalPrioridade()" style="color: #fff"/>
 				</div>
 			</div>
 		</sigasr:modal>

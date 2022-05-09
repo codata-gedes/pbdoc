@@ -5,6 +5,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
 <%@ taglib uri="http://localhost/functiontag" prefix="f"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Temporalidade Documental">
 
@@ -92,13 +93,13 @@
 				<div class="botoesTemporalidade">
 					<!-- form row -->
 					<div class="gt-form-row">
-						<input type="button" value="Gravar" onclick="javascript:gravarTemporalidade()" class="btn btn-primary" />
+						<input type="button" value="<fmt:message key="botao.gravar"/>" onclick="javascript:gravarTemporalidade()" class="btn btn-primary" />
 						<c:choose>
 							<c:when test="${acao == 'editar_temporalidade'}">
-								<input type="button" value="Excluir" onclick="javascript:location.href='${pageContext.request.contextPath}/app/expediente/temporalidade/excluir?idTemporalidade=${exTemporal.idTemporalidade}';" class="btn btn-primary" />
+								<input type="button" value="<fmt:message key="botao.excluir"/>" onclick="javascript:location.href='${pageContext.request.contextPath}/app/expediente/temporalidade/excluir?idTemporalidade=${exTemporal.idTemporalidade}';" class="btn btn-primary" />
 							</c:when>
 							<c:otherwise>
-								<input type="button" value="Cancelar" onclick="javascript:location.href='${pageContext.request.contextPath}/app/expediente/temporalidade/listar';" class="btn btn-primary" />
+								<input type="button" value="<fmt:message key="botao.cancela"/>" onclick="javascript:location.href='${pageContext.request.contextPath}/app/expediente/temporalidade/listar';" class="btn btn-primary" />
 							</c:otherwise>
 						</c:choose>
 						

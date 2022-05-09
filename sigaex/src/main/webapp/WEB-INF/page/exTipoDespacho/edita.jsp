@@ -46,11 +46,11 @@
 								<div class="form-group">
 									<c:choose>
 										<c:when test="${empty exTipoDespacho.idTpDespacho}">
-											<input type="submit" value="OK" class="btn btn-primary" />
-											<a href="${linkTo[ExTipoDespachoController].lista()}" class="btn btn-cancel ml-2">Cancela</a>
+											<input type="submit" value="<fmt:message key="botao.ok"/>" class="btn btn-primary" />
+											<a href="${linkTo[ExTipoDespachoController].lista()}" class="btn btn-cancel ml-2"><fmt:message key="botao.voltar"/></a>
 										</c:when>
 										<c:otherwise>
-											<a href="${linkTo[ExTipoDespachoController].lista()}" class="btn btn-secondary">Voltar</a>
+											<a href="${linkTo[ExTipoDespachoController].lista()}" class="btn btn-secondary"><fmt:message key="botao.voltar"/></a>
 										</c:otherwise>
 									</c:choose>																	
 								</div>

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <style>
 	#sortable ul {
 			height: 1.5em;
@@ -62,9 +62,9 @@
 								 urlGravar="${linkTo[AssociacaoController].gravarAssociacaoPesquisa}"></sigasr:configuracaoAssociacao>
 
 	<div class="gt-form-row">
-		<input type="button" value="Gravar" onclick="pesquisaService.gravar()" class="gt-btn-medium gt-btn-left" />
-		<a class="gt-btn-medium gt-btn-left" onclick="pesquisaService.cancelarGravacao()">Cancelar</a>
-		<input type="button" value="Aplicar" class="gt-btn-medium gt-btn-left" onclick="pesquisaService.aplicar()"/>
+		<input type="button" value="<fmt:message key="botao.gravar"/>" onclick="pesquisaService.gravar()" class="gt-btn-medium gt-btn-left" />
+		<a class="gt-btn-medium gt-btn-left" onclick="pesquisaService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
+		<input type="button" value="<fmt:message key="botao.aplicar"/>" class="gt-btn-medium gt-btn-left" onclick="pesquisaService.aplicar()"/>
 	</div>
 </div>
 
@@ -87,8 +87,8 @@
 							value="${idTipoPergunta}" />
 					</div>
 					<div class="gt-form-row">
-						<input type="button" id="modalOk" value="Ok" class="gt-btn-medium gt-btn-left" />
-						<input type="button" value="Cancelar" id="modalCancel" class="gt-btn-medium gt-btn-left" />
+						<input type="button" value="<fmt:message key="botao.ok"/>" id="modalOk" class="gt-btn-medium gt-btn-left" />
+						<input type="button" value="<fmt:message key="botao.cancela"/>" id="modalCancel" class="gt-btn-medium gt-btn-left" />
 					</div>
 				</form>
 			</div>

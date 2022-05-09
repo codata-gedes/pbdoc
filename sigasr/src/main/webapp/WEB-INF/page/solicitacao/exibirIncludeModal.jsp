@@ -1,5 +1,6 @@
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <sigasr:modal nome="anexarArquivo" titulo="Anexar Arquivo" largura="80%">
 	<div class="gt-content-box gt-form">
@@ -31,7 +32,7 @@
 	                id="descrAnexoArquivo" cols="70" rows="4"></textarea>
 	        </div>
 	        <div class="mt-2">
-	            <input type="submit" value="Gravar"
+	            <input type="submit" value="<fmt:message key="botao.gravar"/>"
 	                class="btn btn-primary" />
 	        </div>
 	    </form>
@@ -68,7 +69,7 @@
             <span id="erroJustificativaJuncao" style="color: red; display: none;"><br />Justificativa n&atilde;o informada.</span>
         </div>
         <div style="display: inline" class="gt-form-row ">
-            <input type="button" onclick="gravarAssociacao('Juncao');" value="Gravar" class="btn btn-primary" />
+            <input type="button" onclick="gravarAssociacao('Juncao');" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" />
         </div>
     </form>
 </sigasr:modal>
@@ -92,7 +93,7 @@
             			onkeyup="validarAssociacao('Vinculo')"></textarea>
             <span id="erroJustificativaVinculo" style="color: red; display: none;"><br />Justificativa n&atilde;o informada.</span>
         </div>
-        <input type="button" onclick="gravarAssociacao('Vinculo');" value="Gravar" class="btn btn-primary" />
+        <input type="button" onclick="gravarAssociacao('Vinculo');" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" />
     </form>
 </sigasr:modal>
 
@@ -123,7 +124,7 @@
                     <textarea name="detalheMotivo" rows="4" class="form-control"> </textarea>
                 </div>
                	<input type="hidden" name="sigla" value="${solicitacao.siglaCompacta}" /> 
-               	<input type="submit" value="Gravar" class="btn btn-primary" />
+               	<input type="submit" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" />
             </form>
         </div>
 </sigasr:modal> 
@@ -141,7 +142,7 @@
 	</div>
             <div class="gt-form-row">
             	<input type="hidden" name="sigla" value="${solicitacao.siglaCompacta}" /> 
-            	<input type="submit" value="Gravar" class="btn btn-primary" />
+            	<input type="submit" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -155,7 +156,7 @@
         </div>
         <input type="hidden" name="completo" value="${completo}" /> <input
             type="hidden" name="sigla" value="${solicitacao.siglaCompacta}" /> <input
-            type="submit" value="Gravar" class="gt-btn-medium gt-btn-left" />
+            type="submit" value="<fmt:message key="botao.gravar"/>" class="gt-btn-medium gt-btn-left" />
     </form>
 </sigasr:modal>   
 
@@ -174,6 +175,6 @@
             type="hidden" name="idMovimentacao" id="movimentacaoId" value="" /><input
             type="hidden" name="motivo" id="motivoId" value="" /><input
             type="hidden" name="sigla" value="${solicitacao.siglaCompacta}" /> <input
-            type="submit" value="Gravar" class="btn btn-primary" />
+            type="submit" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" />
     </form>
     </sigasr:modal>  

@@ -28,7 +28,7 @@ import br.gov.jfrj.siga.model.GenericoSelecao;
 @Controller
 public class TestesController extends SigaController {
 
-	private static final String OK = "<span style=\"color: green;\">OK</span>";
+	private static final String OK = "<span style=\"color: green;\"><fmt:message key=\"botao.voltar\"/></span>";
 	private static final String ERRO = "<span style=\"color: red;\">ERRO</span>";
 	private static final String SIGA_TESTES_ACTION = "/siga/public/app/testes/testes";
 

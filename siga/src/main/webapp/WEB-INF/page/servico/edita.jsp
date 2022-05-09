@@ -71,7 +71,7 @@
 						<tr class="">
 							<td>	
 								${pessoa.sesbPessoa}${pessoa.matricula}
-								<input type="button" value="Excluir"
+								<input type="button" value="<fmt:message key="botao.excluir"/>"
 													class="btn btn-primary" onclick="javascript:location.href='excluir-pessoa-extra/${pessoa.id}'"/>
 							</td>												
 							<td>${pessoa.nomePessoa}</td>

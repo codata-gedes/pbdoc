@@ -110,8 +110,8 @@
 										
 					<div class="row mt-5">						
 					  	<div class="col-sm-12 text-right">					  	  
-							<button type="button" class="btn  btn-secondary btn-lg  btn-anterior  js-btn-cancelar">Cancelar</button>	
-						  	<button type="button" class="btn  btn-primary btn-lg  btn-proximo  js-btn-proximo">Próximo <i class="fas fa-arrow-right"></i></button>					    					  
+							<button type="button" class="btn  btn-secondary btn-lg  btn-anterior  js-btn-cancelar"><fmt:message key="botao.cancela"/></button>	
+						  	<button type="button" class="btn  btn-primary btn-lg  btn-proximo  js-btn-proximo"><fmt:message key="botao.proximo"/> <i class="fas fa-arrow-right"></i></button>					    					  
 					  	</div>
 					</div>									
 														

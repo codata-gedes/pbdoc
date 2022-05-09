@@ -5,6 +5,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
 <%@ taglib uri="http://localhost/libstag" prefix="f"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Cadastro de Solicitação">
 	<link rel="stylesheet" href="/siga/javascript/hierarchy-select/hierarchy-select.css" type="text/css" media="screen, projection" />
@@ -416,7 +417,7 @@
 									</c:when>
 								</c:choose>
 								<div class="gt-form-row mt-2">
-									<input type="button" value="Gravar" class="btn btn-primary" id="gravar" /> 
+									<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" id="gravar" /> 
 									<c:if test="${not empty solicitacao.id}">
 									<a href="${linkTo[SolicitacaoController].excluir}?sigla=${solicitacao.siglaCompacta}" class="gt-btn-alternate-medium gt-btn-left">Descartar</a>
 									</c:if>

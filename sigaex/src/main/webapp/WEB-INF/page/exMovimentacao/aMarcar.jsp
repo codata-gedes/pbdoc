@@ -110,7 +110,7 @@
 							</tr>
 							<tr class="button">
 								<td colspan="2">
-									<input type="submit" value="OK" class="btn btn-primary" />
+									<input type="submit" value="<fmt:message key="botao.ok"/>" class="btn btn-primary" />
 									<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2"/>
 								</td>
 							</tr>

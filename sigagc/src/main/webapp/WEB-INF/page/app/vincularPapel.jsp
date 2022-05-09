@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/page/include.jsp"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <siga:pagina titulo="Definir Perfil Sobre T&oacute;pico de Informa&ccedil;&atilde;o">
 
 	<div class="gt-bd clearfix">
@@ -30,7 +30,7 @@
 					</div>
 					<br />
 					<div class="gt-form-row gt-width-100">
-						<input type="submit" value="Gravar"
+						<input type="submit" value="<fmt:message key="botao.gravar"/>"
 							class="gt-btn-medium gt-btn-left" style="cursor: pointer;" />
 						<p class="gt-cancel">
 							ou <a

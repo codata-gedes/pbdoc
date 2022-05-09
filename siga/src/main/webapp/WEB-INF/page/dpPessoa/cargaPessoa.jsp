@@ -96,8 +96,8 @@
 				<div class="row">
 					<div class="col-sm">
 						<div class="form-group">
-							<button type="submit" onclick="javascript: return validaSelecaoAnexo( this.form );" name="sbmt" class="btn btn-primary" >Ok</button>
-							<button type="button" onclick="javascript:location.href='/siga/app/pessoa/editar';" class="btn btn-primary" >Cancelar</button>
+							<button type="submit" onclick="javascript: return validaSelecaoAnexo( this.form );" name="sbmt" class="btn btn-primary" ><fmt:message key="botao.ok"/></button>
+							<button type="button" onclick="javascript:location.href='/siga/app/pessoa/editar';" class="btn btn-primary" ><fmt:message key="botao.cancela"/></button>
 						</div>
 					</div>
 				</div>								

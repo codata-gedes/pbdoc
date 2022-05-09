@@ -734,7 +734,7 @@
 							onclique="sbmtAction('listar', '/sigaex/app/ferramentas/doc/listar');"
 							value="Administrar Documentos" cssClass="btn btn-primary" />
 					</c:if>
-					<input type="button" value="Voltar" onclick="javascript:history.back();" class="btn btn-primary" />				
+					<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-primary" />				
 				</form>
 			</div>
 		</div>

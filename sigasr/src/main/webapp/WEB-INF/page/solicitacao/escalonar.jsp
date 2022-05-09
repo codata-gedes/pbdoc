@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:if test="${not empty solicitante}">
 	<script>
@@ -81,7 +82,7 @@
 			<div class="gt-form-row">
 				<input type="hidden" name="solicitacao.codigo" id="sigla" value="${siglaCompacta}" />
 				<input type="hidden" name="solicitante" value="${solicitante}">
-				<input type="button" value="Gravar" class="btn btn-primary" onclick="gravar()"/>				
+				<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" onclick="gravar()"/>				
 				<a class="btn btn-primary" role="button" href="${linkTo[SolicitacaoController].exibir(siglaCompacta)}" style="color: #fff">Voltar</a>
 			</div>
 		</form>
@@ -98,8 +99,8 @@
 			<span style="display: none; color: red" id="atendente">Atendente n&atilde;o informado.</span>
 		</div>
 		<div class="gt-form-row">
-			<a href="javascript: alterarAtendente()" class="btn btn-primary" style="color: #fff">Ok</a>
-			<a href="javascript: modalFechar('lotacaoAtendente')" class="btn btn-primary" style="color: #fff">Cancelar</a>
+			<a href="javascript: alterarAtendente()" class="btn btn-primary" style="color: #fff"><fmt:message key="botao.ok"/></a>
+			<a href="javascript: modalFechar('lotacaoAtendente')" class="btn btn-primary" style="color: #fff"><fmt:message key="botao.cancela"/></a>
 		</div>
 	</sigasr:modal>
 
