@@ -173,7 +173,7 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="form-group">
-										<siga:monobotao inputType="submit" value="<fmt:message key="botao.gravar"/>" cssClass="btn btn-primary" />
+										<siga:monobotao inputType="submit" value="Gravar" cssClass="btn btn-primary" />
 										<input type="button" onclick="javascript: sbmt('editar_${ident.id}','/siga/app/gi/identidade/cancelar');"
 											value="Voltar" class="btn btn-primary" /> 											
 										<c:if test="${not pessoaSel.objeto.bloqueada}">
