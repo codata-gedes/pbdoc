@@ -6,7 +6,6 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
 <%@ taglib uri="http://localhost/functiontag" prefix="f"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Protocolo de Transferência" popup="true">
 
@@ -102,7 +101,7 @@
 					class="gt-btn-medium gt-btn-left"
 					onclick="javascript: document.body.offsetHeight; window.print();" />
 				<c:if test="${popup != true}">
-					<input type="button" value="<fmt:message key="botao.voltar"/>" 
+					<input type="button" value="Voltar"
 						class="gt-btn-medium gt-btn-left"
 						onclick="javascript:history.back();history.back();history.back();" />
 				</c:if>

@@ -20,5 +20,10 @@
 
 
 <script type="text/javascript">
-	$(document.getElementById('idFormaDoc')).select2({theme: "bootstrap"});	
+$(document.getElementById('idFormaDoc'))
+	.select2({
+		theme: 'bootstrap',
+		language: 'pt-BR',
+		width: '100%',
+	});
 </script>

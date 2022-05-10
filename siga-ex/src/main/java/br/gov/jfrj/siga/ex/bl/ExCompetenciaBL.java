@@ -24,11 +24,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.cp.CpComplexo;
+import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.cp.CpSituacaoConfiguracao;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
 import br.gov.jfrj.siga.cp.bl.Cp;
@@ -1478,7 +1480,30 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 				null, exTpMov, null, null, null, lotaTitular, titular, null,null,
 				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
 	}
-	
+
+	public boolean podeAssinarMovimentacaoComSenhaVerificarDuplicidade(final DpPessoa titular, final DpLotacao lotaTitular, final ExMovimentacao mov) {
+
+		final boolean podeAssinarPorConfiguracao = this.podeAssinarMovimentacaoComSenha(titular, lotaTitular, mov);
+
+		boolean titularJaAssinou = false;
+		for (ExMovimentacao assinatura : mov.getAssinaturasDigitais()) {
+			final CpIdentidade identidadeAssinante = assinatura.getAuditIdentidade();
+			if (identidadeAssinante == null) {
+				continue;
+			}
+			final DpPessoa pessoaAssinante = identidadeAssinante.getDpPessoa();
+			if (pessoaAssinante == null) {
+				continue;
+			}
+			if (Objects.equals(pessoaAssinante.getId(), titular.getId())) {
+				titularJaAssinou = true;
+				break;
+			}
+		}
+
+		return podeAssinarPorConfiguracao && !titularJaAssinou;
+	}
+
 	/*
 	 * Retorna se é possível assinar movimentações do mobil com senha:
 	 * 

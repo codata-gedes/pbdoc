@@ -19,6 +19,7 @@
 package br.gov.jfrj.siga.ex.bl;
 
 import static br.gov.jfrj.siga.ex.ExMobil.isMovimentacaoComOrigemPeloBotaoDeRestricaoDeAcesso;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -1687,7 +1688,7 @@ public class ExBL extends CpBL {
 		boolean fValido = false;
 		boolean fSubstituindoSubscritor = false;
 		boolean fSubstituindoCosignatario = false;
-		final String formaAssinaturaSenha = senhaIsPIN ? "PIN" : "Senha";
+		final String formaAssinaturaSenha = senhaIsPIN ? "PIN" : "SENHA";
 		final String concordanciaAssinaturaSenha = senhaIsPIN ? "o" : "a";
 
 		if (matriculaSubscritor == null || matriculaSubscritor.isEmpty())
@@ -1836,8 +1837,13 @@ public class ExBL extends CpBL {
 					autenticando ? ExTipoMovimentacao.TIPO_MOVIMENTACAO_CONFERENCIA_COPIA_COM_SENHA
 							: ExTipoMovimentacao.TIPO_MOVIMENTACAO_ASSINATURA_COM_SENHA,
 					cadastrante, lotaCadastrante, doc.getMobilGeral(), dtMov, assinante, null, null, null, null);
-			mov.setDescrMov(assinante.getNomePessoa() + ":" + assinante.getSigla() + " ["+formaAssinaturaSenha+"]");
-			String cpf = Long.toString(assinante.getCpfPessoa());
+
+			final String descricaoMov = EMPTY
+					+ "[" + assinante.getSigla() + "] "
+					+ "[" + formaAssinaturaSenha + "] "
+					+ assinante.getNomePessoa();
+			mov.setDescrMov(descricaoMov);
+			String cpf = assinante.getCpfPessoa().toString();
 			acrescentarHashDeAuditoria(mov, sha256, autenticando, assinante.getNomePessoa(), cpf, null);
 
 			gravarMovimentacao(mov);
@@ -1937,7 +1943,7 @@ public class ExBL extends CpBL {
 
 		DpPessoa subscritor = null;
 		boolean fValido = false;
-		final String formaAssinaturaSenha = senhaIsPIN ? "PIN" : "Senha";
+		final String formaAssinaturaSenha = senhaIsPIN ? "PIN" : "SENHA";
 		final String concordanciaAssinaturaSenha = senhaIsPIN ? "o" : "a";
 
 		if (matriculaSubscritor == null || matriculaSubscritor.isEmpty())
@@ -2029,15 +2035,18 @@ public class ExBL extends CpBL {
 			final ExMovimentacao mov = criarNovaMovimentacao(tpMovAssinatura, cadastrante, lotaCadastrante,
 					movAlvo.getExMobil(), null, null, null, null, null, null);
 
-			mov.setDescrMov(subscritor.getNomePessoa() + ":" + subscritor.getSigla() + " ["+formaAssinaturaSenha+"]");
-
+			final String descricaoMov = EMPTY
+					+ "[" + subscritor.getSigla() + "] "
+					+ "[" + formaAssinaturaSenha + "] "
+					+ subscritor.getNomePessoa();
+			mov.setDescrMov(descricaoMov);
 			mov.setExMovimentacaoRef(movAlvo);
 
 			// Hash de auditoria
 			//
 			final byte[] pdf = movAlvo.getConteudoBlobPdf();
 			byte[] sha256 = BlucService.calcSha256(pdf);
-			String cpf = Long.toString(subscritor.getCpfPessoa());
+			String cpf = subscritor.getCpfPessoa().toString();
 			acrescentarHashDeAuditoria(mov, sha256,
 					tpMovAssinatura == ExTipoMovimentacao.TIPO_MOVIMENTACAO_CONFERENCIA_COPIA_COM_SENHA,
 					subscritor.getNomePessoa(), cpf, null);

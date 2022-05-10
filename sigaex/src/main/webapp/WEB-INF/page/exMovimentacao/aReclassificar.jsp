@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<%@ page language="java" contentType="text/html; charset=UTF-8"	buffer="64kb"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
@@ -83,8 +83,8 @@ function sbmt() {
 				<div class="row">
 					<div class="col-12">
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary" ><fmt:message key="botao.ok"/></button>
-							<button type="button" onclick="javascript:history.back();" class="btn btn-primary" ><fmt:message key="botao.voltar"/></button>
+							<button type="submit" class="btn btn-primary" >Ok</button>
+							<button type="button" onclick="javascript:history.back();" class="btn btn-primary" >Cancela</button>
 						</div>
 					</div>
 				</div>

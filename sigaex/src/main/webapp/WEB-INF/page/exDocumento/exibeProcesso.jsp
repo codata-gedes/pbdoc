@@ -301,7 +301,7 @@
 										<i class="fas fa-check"></i> Salvar
 									</button>
 									<button type="button" class="mt-3 ml-2 btn btn-danger btn-sm align-center" id="btnCancelarOrdenacao">
-											<i class="fas fa-times"></i> <fmt:message key="botao.cancela"/>
+											<i class="fas fa-times"></i> Cancelar
 									</button>																					
 								</form>
 							</div>	

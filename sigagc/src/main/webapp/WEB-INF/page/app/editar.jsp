@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ include file="/WEB-INF/page/include.jsp"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <siga:pagina titulo="Edi&ccedil;&atilde;o de T&oacute;pico de Informa&ccedil;&atilde;o">
 
 	<script>
@@ -95,7 +94,7 @@
 
 					<div class="gt-form-row gt-width-100">
 
-						<input id="btn-save" type="submit" value="<fmt:message key="botao.gravar"/>"
+						<input id="btn-save" type="submit" value="Gravar"
 							class="gt-btn-medium gt-btn-left" style="cursor: pointer;" />
 
 						<p class="gt-cancel">

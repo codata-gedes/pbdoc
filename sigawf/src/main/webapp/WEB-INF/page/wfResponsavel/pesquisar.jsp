@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/page/include.jsp"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <script type="text/javascript">
 	function solicitarInformacao(tarefa) {
 
@@ -209,7 +209,7 @@
 					</c:forEach>
 					<tr>
 						<td align="right" width="90%"><input type="button"
-							value="<fmt:message key="botao.gravar"/>" onclick="javascript:gravarResponsabilidade()"
+							value="Gravar" onclick="javascript:gravarResponsabilidade()"
 							class="gt-btn-medium gt-btn-left" /></td>
 					</tr>
 				</table>

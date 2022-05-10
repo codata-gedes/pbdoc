@@ -20,10 +20,10 @@
 										class="gt-form-textarea">${task.conhecimento}</textarea>
 								</div>
 								<div class="gt-form-row gt-width-100">
-									<input name="salvar_conhecimento" type="submit" value="<fmt:message key="botao.gravar"/>"
+									<input name="salvar_conhecimento" type="submit" value="Salvar"
 										class="gt-btn-medium gt-btn-left" /> <a
 										href="javascript: window.location.reload()"
-										class="gt-btn-medium gt-btn-left"><fmt:message key="botao.cancela"/></a>
+										class="gt-btn-medium gt-btn-left">Cancelar</a>
 								</div>
 							</form>
 						</div>

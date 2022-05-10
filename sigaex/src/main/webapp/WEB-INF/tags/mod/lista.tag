@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib tagdir="/WEB-INF/tags/mod" prefix="mod"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ attribute name="var"%>
 <%@ attribute name="quantidade"%>
 <%@ attribute name="reler"%>
@@ -23,7 +22,7 @@
 
 <c:forEach var="i" begin="1" end="${requestScope[quantidade]}">
 	${i}) <jsp:doBody />
-	<input type="button" name="Excluir" value="<fmt:message key="botao.excluir"/>"
+	<input type="button" name="Excluir" value="Excluir"
 		onclick="javascript:var f=document.getElementById('${quantidade}'); f.value=parseInt(f.value)+1;sbmt(${idAjaxPlic});" />
 	<br />
 </c:forEach>

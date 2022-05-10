@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <div>
 	<form id="acordoForm" enctype="multipart/form-data">
 		
@@ -110,8 +110,8 @@
 		</div>
 
 
-		<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" onclick="preparaObjeto();acordoService.gravar()" />
-		<a class="btn btn-secondary" style="color: #fff" onclick="acordoService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
+		<input type="button" value="Gravar" class="btn btn-primary" onclick="preparaObjeto();acordoService.gravar()" />
+		<a class="btn btn-secondary" style="color: #fff" onclick="acordoService.cancelarGravacao()">Cancelar</a>
 		<input type="button" value="Aplicar" class="btn btn-primary" onclick="preparaObjeto();acordoService.aplicar()" />
 	</form>
 </div>
@@ -153,8 +153,8 @@
 			</div>
 			
 		</div>
-		<input type="button" id="modalOk" value="<fmt:message key="botao.ok"/>" class="btn btn-primary" />
-		<input type="button" value="<fmt:message key="botao.cancela"/>" id="modalCancel" class="btn btn-secondary" />
+		<input type="button" id="modalOk" value="Ok" class="btn btn-primary" />
+		<input type="button" value="Cancelar" id="modalCancel" class="btn btn-secondary" />
 	</form>
 </div>
 
@@ -221,7 +221,7 @@
 		<sigasr:configuracaoItemAcao itemConfiguracaoSet="${itemConfiguracaoSet}" acoesSet="${acoesSet}"></sigasr:configuracaoItemAcao>
 								 
 		<a href="javascript: gravarAssociacao()" class="btn btn-primary" style="color: #fff">Gravar</a>
-		<a href="javascript: associacaoModalFechar()" class="btn btn-secondary" style="color: #fff"><fmt:message key="botao.cancela"/></a>
+		<a href="javascript: associacaoModalFechar()" class="btn btn-secondary" style="color: #fff">Cancelar</a>
 	</div>
 	<div class="gt-content-box" id="modal-associacao-error"
 		style="display: none;">

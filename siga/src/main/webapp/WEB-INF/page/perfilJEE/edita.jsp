@@ -536,11 +536,11 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<input type="button" id="btnGravar" value="<fmt:message key="botao.gravar"/>" onclick="javascript:gravarGrupo()" class="btn btn-primary"/>
+								<input type="button" id="btnGravar" value="Gravar" onclick="javascript:gravarGrupo()" class="btn btn-primary"/>
 								<c:if test="${cpTipoGrupo.idTpGrupo != 2 or (cpTipoGrupo.idTpGrupo == 2 and f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA;GI;GDISTR;EXC:Excluir'))}">
-									<input type="button" id="btnExcluir" value="<fmt:message key="botao.excluir"/>" onclick="javascript:excluirGrupo()" class="btn btn-primary"/>
+									<input type="button" id="btnExcluir" value="Excluir" onclick="javascript:excluirGrupo()" class="btn btn-primary"/>
 								</c:if>
-								<input type="button" id="btnSair" value="<fmt:message key="botao.sair"/>" onclick="javascript:sair()" class="btn btn-primary"/>
+								<input type="button" id="btnSair" value="Sair" onclick="javascript:sair()" class="btn btn-primary"/>
 							</div>
 						</div>
 					</div>

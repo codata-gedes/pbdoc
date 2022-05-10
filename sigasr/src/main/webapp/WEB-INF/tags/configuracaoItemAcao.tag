@@ -3,7 +3,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
 <%@ taglib uri="http://localhost/libstag" prefix="f"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <%@ attribute name="itemConfiguracaoSet" type="java.util.List" required="false"%>
 <%@ attribute name="acoesSet" type="java.util.List" required="false"%>
 
@@ -95,8 +95,8 @@
 			<sigasr:selecao3 propriedade="itemConfiguracao" tipo="itemConfiguracao" tema="simple" modulo="sigasr" onchange="bloqueiaItemOkSeVazio()"/>
 			<span style="display:none;color: red" id="designacao.itemConfiguracao">Item de Configuração não informado.</span>
 		</div>
-		<button id="modalItemOk" onclick="javascript: configuracaoItemAcaoService.inserirItemConfiguracao()" class="btn btn-primary" disabled><fmt:message key="botao.ok"/></button>
-		<a href="javascript: configuracaoItemAcaoService.modalFechar('itemConfiguracao')" class="btn btn-secondary" style="color: #fff"><fmt:message key="botao.cancela"/></a>
+		<button id="modalItemOk" onclick="javascript: configuracaoItemAcaoService.inserirItemConfiguracao()" class="btn btn-primary" disabled>Ok</button>
+		<a href="javascript: configuracaoItemAcaoService.modalFechar('itemConfiguracao')" class="btn btn-secondary" style="color: #fff">Cancelar</a>
 	</div>
 </sigasr:modal>
 
@@ -116,8 +116,8 @@
 			<sigasr:selecao3 propriedade="acao" tipo="acao" tema="simple" modulo="sigasr" onchange="bloqueiaAcaoOkSeVazio()"/>
 			<span style="display:none;color: red" id="designacao.acao">Ação não informada.</span>
 		</div>
-		<button id="modalAcaoOk" onclick="javascript: configuracaoItemAcaoService.inserirAcao()" class="btn btn-primary" disabled><fmt:message key="botao.ok"/></button>
-		<a href="javascript: configuracaoItemAcaoService.modalFechar('acao')" class="btn btn-primary" style="color: #fff"><fmt:message key="botao.cancela"/></a>
+		<button id="modalAcaoOk" onclick="javascript: configuracaoItemAcaoService.inserirAcao()" class="btn btn-primary" disabled>Ok</button>
+		<a href="javascript: configuracaoItemAcaoService.modalFechar('acao')" class="btn btn-primary" style="color: #fff">Cancelar</a>
 	</div>
 </sigasr:modal>
 

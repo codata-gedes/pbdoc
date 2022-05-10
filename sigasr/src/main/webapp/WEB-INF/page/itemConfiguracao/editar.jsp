@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 
 <style>
 .inline {
@@ -159,9 +159,9 @@
 		
 		<p class="gt-error" style="display:none;" id="erroCamposObrigatorios">Não foi possível gravar o registro.</p>
 		
-		<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" onclick="itemConfiguracaoService.gravar()"/>
-		<a class="btn btn-secondary" style="color: #fff" onclick="itemConfiguracaoService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
-		<input type="button" value="<fmt:message key="botao.aplicar"/>" class="btn btn-primary" onclick="itemConfiguracaoService.aplicar()"/>
+		<input type="button" value="Gravar" class="btn btn-primary" onclick="itemConfiguracaoService.gravar()"/>
+		<a class="btn btn-secondary" style="color: #fff" onclick="itemConfiguracaoService.cancelarGravacao()">Cancelar</a>
+		<input type="button" value="Aplicar" class="btn btn-primary" onclick="itemConfiguracaoService.aplicar()"/>
 		
 	</form>
 </div>	
@@ -190,8 +190,8 @@
 						labelPessoaLotacao="Gestor *"
 						/>
 			</div>
-			<input type="button" value="<fmt:message key="botao.ok"/>" id="modalOk" class="btn btn-primary" /> 
-			<input type="button" value="<fmt:message key="botao.cancela"/>" id="modalCancel" class="btn btn-secondary" />
+			<input type="button" id="modalOk" value="Ok" class="btn btn-primary" /> 
+			<input type="button" value="Cancelar" id="modalCancel" class="btn btn-secondary" />
 		</div>
 	</form>
 </div>
@@ -288,7 +288,7 @@
 		<input type="button" id="modalOkFator" value="Ok"
 				class="btn btn-primary" /> 
 		<input type="button"
-				value="<fmt:message key="botao.cancela"/>" id="modalCancelFator" 
+				value="Cancelar" id="modalCancelFator" 
 				class="btn btn-secondary" />
 	</form>
 </div>

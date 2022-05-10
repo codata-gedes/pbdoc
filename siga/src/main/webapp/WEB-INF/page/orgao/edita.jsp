@@ -2,7 +2,7 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 
 <siga:pagina titulo="Cadastro de Orgãos Externos">
 <link rel="stylesheet" href="/siga/javascript/select2/select2.css" type="text/css" media="screen, projection" />
@@ -75,8 +75,8 @@
 					<div class="row">
 						<div class="col-sm">
 							<div class="form-group">
-								<input type="button" value="<fmt:message key="botao.ok"/>" onclick="javascript: validar();" class="btn btn-primary" /> 
-								<input type="button" value="<fmt:message key="botao.cancela"/>" onclick="javascript:history.back();" class="btn btn-primary" />
+								<input type="button" value="Ok" onclick="javascript: validar();" class="btn btn-primary" /> 
+								<input type="button" value="Cancela" onclick="javascript:history.back();" class="btn btn-primary" />
 							</div>
 						</div>
 					</div>

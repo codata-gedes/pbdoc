@@ -1,17 +1,15 @@
 var Componente = Componente || {};
 
 Componente.Select2 = (function() {
-	
+
 	function Select2() {}	
-	
 	Select2.prototype.aplicar = function() {
-		$.each($('.siga-select2'), function() {					
+		$.each($('.siga-select2'), function() {
 			transformarEmSelect2(this, null, null, $(this).data('sigaSelect2Placeholder'));					
-		});				
+		});
 	}	
-	
+
 	return Select2;
-	
 }());
 
 $(function() {
@@ -19,16 +17,15 @@ $(function() {
 	select2.aplicar();
 });
 
-
 function transformarEmSelect2(select, idSelect, idDivContainer, descricao) {		
 	if(select || (idSelect && idDivContainer)) {
 		var select = idSelect ? $(idSelect) : new jQuery(select);
-		var container = idSelect ? $(idDivContainer) : select.parent();	    
+		var container = idSelect ? $(idDivContainer) : select.parent();
 		var theme = "bootstrap";
-		var width = "resolve";
-		var language = "pt-BR";	
-		var placeholder = ''; 
-			
+		var width = "100%"
+		var language = "pt-BR";
+		var placeholder = '';
+
 		if (typeof descricao !== 'undefined' && descricao != null) {
 			if (descricao.length > 0) {
 				placeholder = descricao;

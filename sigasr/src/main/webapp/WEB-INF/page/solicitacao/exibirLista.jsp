@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="${lista.nomeLista}">
 	<jsp:include page="../main.jsp"></jsp:include>
@@ -34,9 +33,9 @@
 		<div class="gt-table-buttons">
 			<input type="hidden" name="idLista" value="${lista.idLista}">
 			<c:if test="${podePriorizar}">
-				<input type="button" id="btn" value="<fmt:message key="botao.gravar"/>" class="gt-btn-medium gt-btn-left" />
+				<input type="button" id="btn" value="Gravar" class="gt-btn-medium gt-btn-left" />
 			</c:if>
-			<a href="${linkTo[SolicitacaoController].listarLista(false)}" class="gt-btn-medium gt-btn-left"><fmt:message key="botao.cancela"/></a>
+			<a href="${linkTo[SolicitacaoController].listarLista(false)}" class="gt-btn-medium gt-btn-left">Cancelar</a>
 		</div>
 	</div>
 	
@@ -56,9 +55,9 @@
 				</div>
 				
 				<div class="gt-form-row">
-					<input type="button" value="<fmt:message key="botao.ok"/>" class="gt-btn-medium gt-btn-left" 
+					<input type="button" value="Ok" class="gt-btn-medium gt-btn-left" 
 						onclick="reposicionar()" />
-					<a class="gt-btn-medium gt-btn-left" onclick="modalPosicaoFechar()"><fmt:message key="botao.cancela"/></a>
+					<a class="gt-btn-medium gt-btn-left" onclick="modalPosicaoFechar()">Cancelar</a>
 				</div>
 			</form>
 		</div>	
@@ -89,9 +88,9 @@
 				</div>				
 				
 				<div class="gt-form-row">
-					<input type="button" value="<fmt:message key="botao.ok"/>" class="gt-btn-medium gt-btn-left" 
+					<input type="button" value="Ok" class="gt-btn-medium gt-btn-left" 
 						onclick="gravarPrioridade()" />
-					<a class="gt-btn-medium gt-btn-left" onclick="modalPrioridadeFechar()"><fmt:message key="botao.cancela"/></a>					
+					<a class="gt-btn-medium gt-btn-left" onclick="modalPrioridadeFechar()">Cancelar</a>					
 				</div>
 			</form>
 		</div>

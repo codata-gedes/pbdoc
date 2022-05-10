@@ -79,9 +79,9 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message key="botao.cancela"/></button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 				<button type="button" class="btn btn-primary"
-					onclick="javascript: document.getElementById('anotarForm').submit();"><fmt:message key="botao.gravar"/></button>
+					onclick="javascript: document.getElementById('anotarForm').submit();">Gravar</button>
 			</div>
 		</div>
 	</div>

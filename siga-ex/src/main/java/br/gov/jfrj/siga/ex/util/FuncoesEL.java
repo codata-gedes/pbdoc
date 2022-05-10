@@ -1034,6 +1034,12 @@ public class FuncoesEL {
 				.podeAssinarMovimentacaoComSenha(titular, lotaTitular, mov);
 	}
 	
+	public static Boolean podeAssinarMovimentacaoComSenhaVerificarDuplicidade(DpPessoa titular,
+			DpLotacao lotaTitular, ExMovimentacao mov) throws Exception {
+		return Ex.getInstance().getComp()
+				.podeAssinarMovimentacaoComSenhaVerificarDuplicidade(titular, lotaTitular, mov);
+	}
+	
 	public static Boolean deveAssinarMovimentacaoComSenha(DpPessoa titular,
 			DpLotacao lotaTitular, ExMovimentacao mov) throws Exception {
 		return Ex.getInstance().getComp()

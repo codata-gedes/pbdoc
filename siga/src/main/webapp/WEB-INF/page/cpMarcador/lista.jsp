@@ -2,7 +2,7 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <siga:pagina titulo="Lista Marcadores">
 	<form name="frm" action="listar" class="form" method="GET">
 		<input type="hidden" name="paramoffset" value="0" /> <input
@@ -65,7 +65,7 @@
 					<div class="gt-table-buttons">
 						<a id="btn-editar" class="btn btn-primary"
 							href="/siga/app/marcador/editar">Incluir</a> <input type="button"
-							value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();"
+							value="Voltar" onclick="javascript:history.back();"
 							class="btn btn-cancel ml-2" />
 					</div>
 				</div>

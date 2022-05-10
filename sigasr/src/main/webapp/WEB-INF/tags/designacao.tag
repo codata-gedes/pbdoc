@@ -4,7 +4,7 @@
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
 <%@ taglib uri="http://localhost/libstag" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <%@ attribute name="orgaos" required="false"%>
 <%@ attribute name="locais" required="false"%>
 <%@ attribute name="unidadesMedida" required="false"%>
@@ -170,8 +170,8 @@
 				<sigasr:configuracaoItemAcao itemConfiguracaoSet="${itemConfiguracaoSet}" acoesSet="${acoesSet}"/>
 			
 	
-				<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" onclick="preparaObjeto();designacaoService.gravar()"/>
-				<a class="btn btn-secondary" style="color: #fff" onclick="designacaoService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
+				<input type="button" value="Gravar" class="btn btn-primary" onclick="preparaObjeto();designacaoService.gravar()"/>
+				<a class="btn btn-secondary" style="color: #fff" onclick="designacaoService.cancelarGravacao()">Cancelar</a>
 				<input type="button" value="Aplicar" class="btn btn-primary" onclick="preparaObjeto();designacaoService.aplicar()"/>
 	
 				<p class="gt-error" style="display:none;" id="erroCamposObrigatorios">Alguns campos obrigat&oacute;rios n&atilde;o foram
@@ -191,7 +191,7 @@
 	</div>
 	<div class="gt-form-row" style="margin-left: 297px;">
 		<a href="javascript: fecharModalErroAoSalvar()"
-			class="gt-btn-medium gt-btn-left"><fmt:message key="botao.ok"/></a>
+			class="gt-btn-medium gt-btn-left">OK</a>
 	</div>
 </sigasr:modal>
 

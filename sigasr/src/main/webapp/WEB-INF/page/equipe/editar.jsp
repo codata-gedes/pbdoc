@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <style>
 	.inline {
@@ -128,9 +127,9 @@
 					pesquisaSatisfacao="${pesquisaSatisfacao}" listasPrioridade="${listasPrioridade}" /> 
 			</div>
 			<div class="gt-form-row">
-				<input type="button" value="<fmt:message key="botao.gravar"/>" class="gt-btn-medium gt-btn-left" onclick="equipeService.gravar()"/>
-				<a class="gt-btn-medium gt-btn-left" onclick="equipeService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
-				<input type="button" value="<fmt:message key="botao.aplicar"/>" class="gt-btn-medium gt-btn-left" onclick="equipeService.aplicar()"/>
+				<input type="button" value="Gravar" class="gt-btn-medium gt-btn-left" onclick="equipeService.gravar()"/>
+				<a class="gt-btn-medium gt-btn-left" onclick="equipeService.cancelarGravacao()">Cancelar</a>
+				<input type="button" value="Aplicar" class="gt-btn-medium gt-btn-left" onclick="equipeService.aplicar()"/>
 			</div>
 		</div>
 		
@@ -177,8 +176,8 @@
 					</div>
 					
 					<div class="gt-form-row">
-						<a href="javascript: inserirExcecaoHorario()" class="gt-btn-medium gt-btn-left"><fmt:message key="botao.ok"/></a>
-						<a href="javascript: modalExcecaoFechar()" class="gt-btn-medium gt-btn-left"><fmt:message key="botao.cancela"/></a>
+						<a href="javascript: inserirExcecaoHorario()" class="gt-btn-medium gt-btn-left">Ok</a>
+						<a href="javascript: modalExcecaoFechar()" class="gt-btn-medium gt-btn-left">Cancelar</a>
 					</div>
 				</div>
 			</form>

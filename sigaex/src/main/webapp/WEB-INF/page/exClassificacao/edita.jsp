@@ -151,20 +151,20 @@
 						<div class="col-sm">
 							<button type="button" class="btn btn-primary"
 								id="btGravarClassificacao"
-								onclick="javascript:gravarClassificacao()"><fmt:message key="botao.gravar"/></button>
+								onclick="javascript:gravarClassificacao()">Gravar</button>
 							<c:choose>
 								<c:when test="${acao == 'editar_classificacao'}">
 									<button type="button" class="btn btn-primary"
 										id="btGravarClassificacao"
-										onclick="javascript:location.href='excluir?codificacao=${exClassificacao.codificacao}'"><fmt:message key="botao.excluir"/></button>
+										onclick="javascript:location.href='excluir?codificacao=${exClassificacao.codificacao}'">Excluir</button>
 									<button type="button" class="btn btn-primary"
 										id="btGravarClassificacao"
-										onclick="javascript:location.href='listar'"><fmt:message key="botao.voltar"/></button>
+										onclick="javascript:location.href='listar'">Voltar</button>
 								</c:when>
 								<c:otherwise>
 									<button type="button" class="btn btn-primary"
 										id="btGravarClassificacao"
-										onclick="javascript:location.href='listar'"><fmt:message key="botao.cancela"/></button>
+										onclick="javascript:location.href='listar'">Cancelar</button>
 								</c:otherwise>
 							</c:choose>
 							<c:if test="${acao == 'editar_classificacao'}">
@@ -362,11 +362,11 @@
 														<div class="col-sm">
 															<button type="button" class="btn btn-primary"
 																id="btGravarClassificacao"
-																onclick="javascript:gravarExVia(${via.idVia});"><fmt:message key="botao.gravar"/>
+																onclick="javascript:gravarExVia(${via.idVia});">Gravar
 																Via</button>
 															<button type="button" class="btn btn-primary"
 																id="btGravarClassificacao"
-																onclick="javascript:cancelarEdicaoVia(${via.idVia});"><fmt:message key="botao.cancela"/></button>
+																onclick="javascript:cancelarEdicaoVia(${via.idVia});">Cancelar</button>
 														</div>
 													</div>
 												</div>
@@ -477,10 +477,10 @@
 							<div class="row">
 								<div class="col-sm">
 									<button type="button" class="btn btn-primary"
-										id="btGravarClassificacao" onclick="javascript:gravarExVia(0)"><fmt:message key="botao.gravar"/></button>
+										id="btGravarClassificacao" onclick="javascript:gravarExVia(0)">Gravar</button>
 									<button type="button" class="btn btn-primary"
 										id="btGravarClassificacao"
-										onclick="javascript:cancelarNovaVia();"><fmt:message key="botao.cancela"/></button>
+										onclick="javascript:cancelarNovaVia();">Cancelar</button>
 								</div>
 
 							</div>

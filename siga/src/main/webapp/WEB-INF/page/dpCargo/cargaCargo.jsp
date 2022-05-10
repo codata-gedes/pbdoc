@@ -3,7 +3,6 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Cadastro de Lota&ccedil;&atilde;o">
 
@@ -75,8 +74,8 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<input type="submit" value="<fmt:message key="botao.ok"/>"	class="btn btn-primary" onclick="javascript: return validaSelecaoAnexo( this.form );" name="sbmt"/>
-								<input type="button" value="<fmt:message key="botao.cancela"/>"  onclick="javascript:location.href='/siga/app/cargo/editar';" class="btn btn-primary" />
+								<input type="submit" value="Ok"	class="btn btn-primary" onclick="javascript: return validaSelecaoAnexo( this.form );" name="sbmt"/>
+								<input type="button" value="Cancelar" onclick="javascript:location.href='/siga/app/cargo/editar';" class="btn btn-primary" />
 							</div>
 						</div>
 					</div>

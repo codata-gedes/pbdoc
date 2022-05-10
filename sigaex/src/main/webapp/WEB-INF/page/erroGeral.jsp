@@ -100,7 +100,7 @@
 				  </ul>
 				  <div class="card-footer text-center pt-2">
 				   	<c:if test="${newWindow != 1}">
-						<input type="button" value="<fmt:message key="botao.voltar"/>"	onclick="javascript:history.back();" class="btn btn-primary" />
+						<input type="button" value="Voltar"	onclick="javascript:history.back();" class="btn btn-primary" />
 					</c:if>
 					<c:if test="${newWindow eq 1}">
 						<input type="button" value="Fechar"	onclick="javascript:window.close();" class="btn btn-primary" />

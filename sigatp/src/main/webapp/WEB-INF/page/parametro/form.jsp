@@ -69,6 +69,6 @@ $(function() {
 	<span class="alerta menor"><fmt:message key="views.erro.preenchimentoObrigatorio"/></span>
 	<div class="gt-table-buttons">
 		<input type="submit" id="salvar" value="Salvar" class="gt-btn-medium gt-btn-left" />
-		<input type="button" value="<fmt:message key="botao.cancela"/>" class="gt-btn-medium gt-btn-left" onclick="javascript:window.location = '${linkTo[ParametroController].listar}';" />
+		<input type="button" value="Cancelar" class="gt-btn-medium gt-btn-left" onclick="javascript:window.location = '${linkTo[ParametroController].listar}';" />
 	</div>
 </form>

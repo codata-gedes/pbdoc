@@ -31129,10 +31129,10 @@ index 7222c49cdf..8385dfaabc 100644
 -						<div class="col-sm-3">
 +						<div class="col-12">
  							<div class="form-group">
- 								<button type="submit" class="btn btn-primary"><fmt:message key="botao.ok"/></button>
--								<button type="submit" name="submit" class="btn btn-primary"><fmt:message key="botao.aplicar"/></button>
+ 								<button type="submit" class="btn btn-primary">Ok</button>
+-								<button type="submit" name="submit" class="btn btn-primary">Aplicar</button>
  								<button type="button" onclick="javascript:history.back();"
- 									class="btn btn-primary"><fmt:message key="botao.voltar"/></button>
+ 									class="btn btn-primary">Cancela</button>
  							</div>
 diff --git a/sigaex/src/main/webapp/WEB-INF/page/exFormaDocumento/listarFormas.jsp b/sigaex/src/main/webapp/WEB-INF/page/exFormaDocumento/listarFormas.jsp
 index 6bea56f273..7c27e8261f 100644
@@ -31463,7 +31463,7 @@ index 95e61ba628..ce7992c451 100644
 -						<div class="col-sm">
 +						<div class="col-12">
  							<input type="submit" value="Ok" class="btn btn-primary" />
- 							<input type="button" value="Voltar" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+ 							<input type="button" value="Cancela" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
  						</div>
 diff --git a/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aCopiar.jsp b/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aCopiar.jsp
 index 5ea285d3cd..2ab531d029 100644
@@ -31567,8 +31567,8 @@ index 133ee91f0a..fcadfe85df 100644
 -					<div class="col-sm-2">
 +					<div class="col-12">
  						<div class="form-group">
- 							<button type="submit" class="btn btn-primary" ><fmt:message key="botao.ok"/></button>
- 							<button type="button" onclick="javascript:history.back();" class="btn btn-primary" ><fmt:message key="botao.voltar"/></button>
+ 							<button type="submit" class="btn btn-primary" >Ok</button>
+ 							<button type="button" onclick="javascript:history.back();" class="btn btn-primary" >Cancela</button>
 diff --git a/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aTransferir.jsp b/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aTransferir.jsp
 index c0921b35e0..d5dc842c5b 100644
 --- a/sigaex/src/main/webapp/WEB-INF/page/exMovimentacao/aTransferir.jsp
@@ -31637,9 +31637,9 @@ index c0921b35e0..d5dc842c5b 100644
 -					<div class="col-sm-2">
 +					<div class="col col-12">
  						<div class="form-group">
- 							<a accesskey="o" id="button_ok" onclick="javascript:submeter();" class="btn btn-primary"><fmt:message key="botao.ok"/></a>
--							<button type="button"  onclick="javascript:history.back();" class="btn btn-primary"><fmt:message key="botao.voltar"/></button>
-+							<button type="button"  onclick="javascript:history.back();" class="btn btn-light ml-2"><fmt:message key="botao.voltar"/></button>
+ 							<a accesskey="o" id="button_ok" onclick="javascript:submeter();" class="btn btn-primary"><u>O</u>k</a>
+-							<button type="button"  onclick="javascript:history.back();" class="btn btn-primary">Cancela</button>
++							<button type="button"  onclick="javascript:history.back();" class="btn btn-light ml-2">Cancela</button>
  						</div>
  					</div>
  				</div>				
@@ -31722,7 +31722,7 @@ index 086e89d9a1..d7129a749b 100644
 -						<tr class="button">
 -							<td colspan="2">
 -								<input type="submit" value="Ok" class="gt-btn-small gt-btn-left" /> 
--								<input type="button" value="Voltar" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" />
+-								<input type="button" value="Cancela" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" />
 -							</td>
 -						</tr>
 -					</table>
@@ -31813,7 +31813,7 @@ index 086e89d9a1..d7129a749b 100644
 +
 +			<tr class="button">
 +				<td colspan="3"><input type="submit" value="Ok"
-+					class="btn btn-primary" /> <input type="button" value="Voltar"
++					class="btn btn-primary" /> <input type="button" value="Cancela"
 +					onclick="javascript:history.back();" class="btn btn-light ml-2" /></td>
 +			</tr>
 +			</table>
@@ -31881,8 +31881,8 @@ index 6c525e425d..c04d49251f 100644
 -					<div class="col-sm-2">
 +					<div class="col-12">
  						<div class="form-group">
- 							<button type="submit" class="btn btn-primary" ><fmt:message key="botao.ok"/></button>
- 							<button type="button" onclick="javascript:history.back();" class="btn btn-primary" ><fmt:message key="botao.voltar"/></button>
+ 							<button type="submit" class="btn btn-primary" >Ok</button>
+ 							<button type="button" onclick="javascript:history.back();" class="btn btn-primary" >Cancela</button>
 diff --git a/sigaex/src/main/webapp/WEB-INF/page/exRelatorio/aRelRelatorios.jsp b/sigaex/src/main/webapp/WEB-INF/page/exRelatorio/aRelRelatorios.jsp
 index 8392d6e8a6..4791602c52 100644
 --- a/sigaex/src/main/webapp/WEB-INF/page/exRelatorio/aRelRelatorios.jsp
@@ -42352,7 +42352,7 @@ index 0000000000..29800b9636
 +			<div class="row">
 +				<div class="col-sm-12">
 +					<div class="form-group mb-0">
-+						<button class="btn btn-primary" type="submit"><fmt:message key="botao.ok"/></button>
++						<button class="btn btn-primary" type="submit">Ok</button>
 +						<button onclick="javascript:history.back();" class="btn btn-light ml-3">Cancelar</button>
 +					</div>
 +				</div>
@@ -43232,7 +43232,7 @@ index 0000000000..b71dc6d918
 +		<div class="row">
 +			<div class="col-sm-12">
 +				<div class="form-group mb-0">
-+					<button class="btn btn-primary" ng-click="gravar()"><fmt:message key="botao.ok"/></button>
++					<button class="btn btn-primary" ng-click="gravar()">Ok</button>
 +					<button value="Desativar" class="btn btn-primary"
 +						ng-click="desativar()">Desativar</button>
 +					<button onclick="javascript:history.back();"
@@ -43505,7 +43505,7 @@ index 0000000000..6f1e17f2cf
 +				<div class="col-sm-12">
 +					<div class="form-group mb-0">
 +						<button class="btn btn-primary"
-+							onclick="javascript:gravarResponsabilidade()"><fmt:message key="botao.ok"/></button>
++							onclick="javascript:gravarResponsabilidade()">Ok</button>
 +						<button value="Desativar" class="btn btn-primary"
 +							ng-click="desativar()">Desativar</button>
 +						<button onclick="javascript:history.back();"

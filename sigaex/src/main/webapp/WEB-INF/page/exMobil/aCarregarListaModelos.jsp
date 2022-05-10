@@ -15,5 +15,10 @@
 </div>
 
 <script type="text/javascript">
-	$(document.getElementById('idMod')).select2({theme: "bootstrap"});	
+$(document.getElementById('idMod'))
+	.select2({
+		theme: 'bootstrap',
+		language: 'pt-BR',
+		width: '100%',
+	});	
 </script>

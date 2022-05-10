@@ -2,7 +2,6 @@
 <%@ page isErrorPage="true" import="java.io.*" contentType="text/html"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:catch var="selectException">
 	<c:if test="${empty exceptionGeral or empty exceptionStackGeral}">
@@ -92,7 +91,7 @@
 				<div style="padding-top:10px;float: right;">
 					<table>
 						<tr>
-							<td><input type="button" value="<fmt:message key="botao.voltar"/>" class="gt-btn-medium gt-btn-left"  onclick="javascript:history.back();" /></td>
+							<td><input type="button" value="Voltar" class="gt-btn-medium gt-btn-left"  onclick="javascript:history.back();" /></td>
 							<td><input type="button" id="show_stack" value="Mais detalhes" class="gt-btn-large gt-btn-right" onclick="javascript: document.getElementById('caption').setAttribute('class',''); document.getElementById('stack').style.display=''; document.getElementById('show_stack').style.display='none';" /></td>
 						</tr>
 					</table>

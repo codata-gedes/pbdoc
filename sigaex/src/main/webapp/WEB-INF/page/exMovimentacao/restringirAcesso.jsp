@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 <siga:pagina titulo="Restringir Acesso">
@@ -110,8 +110,8 @@
 					
 					<div class="row">
 						<div class="col-sm mt-3">
-							<input type="button" value="<fmt:message key="botao.ok"/>" id="ok" class="btn btn-primary"/> 
-							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2"/> 
+							<input type="button" value="Ok" id="ok" class="btn btn-primary"/> 
+							<input type="button" value="Voltar" onclick="javascript:history.back();" class="btn btn-cancel ml-2"/> 
 						</div>
 					</div>
 				</form>

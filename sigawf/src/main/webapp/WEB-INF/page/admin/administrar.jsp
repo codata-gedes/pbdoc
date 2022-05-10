@@ -26,7 +26,7 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-1">
-					<button type="submit" class="btn btn-primary"><fmt:message key="botao.ok"/></button>
+					<button type="submit" class="btn btn-primary">OK</button>
 				</div>
 			</div>
 		</form>		

@@ -3,7 +3,7 @@
 	buffer="64kb"
 	import="br.gov.jfrj.siga.wf.model.enm.WfTipoDeVariavel, br.gov.jfrj.siga.wf.model.enm.WfTipoDeAcessoDeVariavel"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 <%
@@ -527,11 +527,11 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="form-group mb-0">
-					<button class="btn btn-primary" ng-click="gravar()"><fmt:message key="botao.ok"/></button>
-					<button value="<fmt:message key="botao.desativar"/>" class="btn btn-primary"
-						ng-click="desativar()"><fmt:message key="botao.desativar"/></button>
+					<button class="btn btn-primary" ng-click="gravar()">Ok</button>
+					<button value="Desativar" class="btn btn-primary"
+						ng-click="desativar()">Desativar</button>
 					<button onclick="javascript:history.back();"
-						class="btn btn-primary"><fmt:message key="botao.cancela"/></button>
+						class="btn btn-primary">Cancelar</button>
 				</div>
 			</div>
 		</div>

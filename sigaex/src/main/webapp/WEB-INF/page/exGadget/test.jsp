@@ -4,7 +4,6 @@
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="/WEB-INF/tld/func.tld" prefix="f"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <script type="text/javascript">
 submitOk = function() {
@@ -268,7 +267,7 @@ submitOk = function() {
 						<!-- , '04':'Transferir Lote', ${itemRemeter} '05':'Receber Lote', '06':'2? Via Protocolo'} -->
 						<siga:selecao tema="simple" buscar="nao" ocultardescricao="sim" propriedade="documentoVia" modulo="sigaex"/>
 						
-						<input type="button" name="ok" value="<fmt:message key="botao.ok"/>" onclick="javascript:submitOk();" class="btn btn-primary"/> 
+						<input type="button" name="ok" value="Ok" onclick="javascript:submitOk();" class="btn btn-primary"/> 
 						<c:url var="url" value="/app/expediente/doc/editar"/>
 					</td>
 					<td>

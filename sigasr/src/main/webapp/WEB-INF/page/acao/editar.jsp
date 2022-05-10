@@ -1,7 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://localhost/sigasrtags" prefix="sigasr"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div class="">
 	<form id="acaoForm" enctype="multipart/form-data">
@@ -29,9 +28,9 @@
 			<sigasr:selecao3 tamanho="grande" propriedade="tipoAcaoSel" tipo="tipoAcao" tema="simple" modulo="sigasr"/>
 		</div>
 
-		<input type="button" value="<fmt:message key="botao.gravar"/>" class="btn btn-primary" onclick="prepararObjeto()"/>
-		<a class="btn btn-secondary" style="color: #fff" onclick="acaoService.cancelarGravacao()"><fmt:message key="botao.cancela"/></a>
-		<input type="button" value="<fmt:message key="botao.aplicar"/>" class="btn btn-primary" onclick="acaoService.aplicar()"/>
+		<input type="button" value="Gravar" class="btn btn-primary" onclick="prepararObjeto()"/>
+		<a class="btn btn-secondary" style="color: #fff" onclick="acaoService.cancelarGravacao()">Cancelar</a>
+		<input type="button" value="Aplicar" class="btn btn-primary" onclick="acaoService.aplicar()"/>
 
 	</form>
 </div>

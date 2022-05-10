@@ -2,7 +2,7 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 
 <siga:pagina titulo="Cadastro de Fun&ccedil;&atilde;o de Confian&ccedil;a">
 <c:if test="${empty id || podeAlterarOrgao}">
@@ -78,7 +78,7 @@
 					<div class="col-sm-6">
 						<div class="form-group">
 							<input type="button" value="Salvar" onclick="javascript: validar();" class="btn btn-primary" />
-							<input type="button" value="<fmt:message key="botao.cancela"/>" onclick="javascript:history.back();" class="btn btn-secondary" />
+							<input type="button" value="Cancelar" onclick="javascript:history.back();" class="btn btn-secondary" />
 						</div>
 					</div>
 				</div>
