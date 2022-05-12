@@ -466,6 +466,8 @@ function limpaCampos()
 							<input type="hidden" name="postback" value="1" />
 							<input type="hidden" name="apenasRefresh" value="0" />
 							<input type="hidden" name="offset" value="0" />
+							<input type="hidden" name="apenasDocumentosAssinados" value="true" />
+
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="form-group">

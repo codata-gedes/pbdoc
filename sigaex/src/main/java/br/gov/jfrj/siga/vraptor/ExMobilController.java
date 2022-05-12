@@ -171,7 +171,9 @@ public class ExMobilController extends
 			final String descrDocument,
 			final String fullText,
 			final Long ultMovEstadoDoc,
-			final Integer offset) {
+			final Integer offset,
+			final boolean apenasDocumentosAssinados
+	) {
 		assertAcesso("");
 
 		getP().setOffset(offset);
@@ -778,6 +780,7 @@ public class ExMobilController extends
 		}
 		flt.setIdMod(paramLong("idMod"));
 		flt.setOrdem(paramInteger("ordem"));
+		flt.setApenasDocumentosAssinados(paramNativeBoolean("apenasDocumentosAssinados"));
 
 		return flt;
 	}

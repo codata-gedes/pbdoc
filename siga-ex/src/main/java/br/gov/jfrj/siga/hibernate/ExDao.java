@@ -102,6 +102,7 @@ import br.gov.jfrj.siga.ex.QExDocumento;
 import br.gov.jfrj.siga.ex.QExFormaDocumento;
 import br.gov.jfrj.siga.ex.QExMarca;
 import br.gov.jfrj.siga.ex.QExMobil;
+import br.gov.jfrj.siga.ex.QExMovimentacao;
 import br.gov.jfrj.siga.ex.BIE.ExBoletimDoc;
 import br.gov.jfrj.siga.ex.bl.Mesa2.GrupoItem;
 import br.gov.jfrj.siga.ex.util.MascaraUtil;
@@ -129,6 +130,7 @@ public class ExDao extends CpDao {
 	private static final QExDocumento qExDocumento = QExDocumento.exDocumento;
 	private static final QCpMarcador qCpMarcador = QCpMarcador.cpMarcador;
 	private static final QExFormaDocumento qExFormaDoc = QExFormaDocumento.exFormaDocumento;
+	private static final QExMovimentacao qExMovimentacao = QExMovimentacao.exMovimentacao;
 
 	public static final String CACHE_EX = "ex";
 
@@ -834,10 +836,16 @@ public class ExDao extends CpDao {
 
 		if (filtro.getAnoEmissao() != null && filtro.getAnoEmissao() > 0) {
 			predicates.and(qExDocumento.anoEmissao.eq(filtro.getAnoEmissao()));
+		} else {
+			// Documentos finalizados: documentos temporários não possuem "anoEmissao"
+			predicates.and(qExDocumento.anoEmissao.isNotNull());
 		}
 
 		if (filtro.getNumExpediente() != null && filtro.getNumExpediente() > 0) {
 			predicates.and(qExDocumento.numExpediente.eq(filtro.getNumExpediente()));
+		} else {
+			// Documentos finalizados: documentos temporários não possuem "numExpediente"
+			predicates.and(qExDocumento.numExpediente.isNotNull());
 		}
 
 		if (filtro.getIdTpDoc() != null && filtro.getIdTpDoc() > 0) {
@@ -945,6 +953,22 @@ public class ExDao extends CpDao {
 		if (filtro.getIdMod() != null && filtro.getIdMod() > 0) {
 			final ExModelo modelo = ExDao.getInstance().consultar(filtro.getIdMod(), ExModelo.class, false);
 			predicates.and(qExDocumento.exModelo.hisIdIni.eq(modelo.getHisIdIni()));
+		}
+
+		if (filtro.isApenasDocumentosAssinados()) {
+			final BooleanExpression existeMovimentacaoDeAssinaturaParaMobilDoDocumento = JPAExpressions
+					.selectOne()
+					.from(qExMovimentacao)
+					.where(
+							qExMovimentacao.exMobil.idMobil.eq(qExMobil.idMobil),
+							qExMovimentacao.exTipoMovimentacao.idTpMov.in(
+									ExTipoMovimentacao.TIPO_MOVIMENTACAO_ASSINATURA_COM_SENHA,
+									ExTipoMovimentacao.TIPO_MOVIMENTACAO_ASSINATURA_DIGITAL_DOCUMENTO
+							)
+					)
+					.exists();
+
+			predicates.and(existeMovimentacaoDeAssinaturaParaMobilDoDocumento);
 		}
 
 		return query.where(predicates);

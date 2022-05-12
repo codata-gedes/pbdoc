@@ -27,8 +27,8 @@ import br.gov.jfrj.siga.hibernate.ExDao;
 import br.gov.jfrj.siga.hibernate.ext.IExMobilDaoFiltro;
 import br.gov.jfrj.siga.model.dao.DaoFiltroSelecionavel;
 
-public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements
-		IExMobilDaoFiltro {
+public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements IExMobilDaoFiltro {
+
 	@Override
 	public void setSigla(String nome) {
 		// Se receber valor nulo, zerar todos os campos
@@ -128,6 +128,8 @@ public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements
 	private Long ultMovRespSelId;
 
 	private Integer ordem;
+
+	private boolean apenasDocumentosAssinados;
 
 	public Integer getOrdem() {
 		return ordem;
@@ -416,4 +418,14 @@ public class ExMobilDaoFiltro extends DaoFiltroSelecionavel implements
 				|| (getAnoEmissao() != null && getAnoEmissao() != 0)
 				|| (getNumExpediente() != null && getNumExpediente() != 0);
 	}
+
+	@Override
+	public boolean isApenasDocumentosAssinados() {
+		return this.apenasDocumentosAssinados;
+	}
+
+	public void setApenasDocumentosAssinados(boolean apenasDocumentosAssinados) {
+		this.apenasDocumentosAssinados = apenasDocumentosAssinados;
+	}
+
 }

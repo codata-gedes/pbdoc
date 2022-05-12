@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.axis.encoding.Base64;
+import org.apache.commons.lang3.BooleanUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -345,6 +346,15 @@ public class SigaController {
 			return null;
 		}
 		return dt;
+	}
+
+	protected Boolean paramBoolean(final String parameterName) {
+		final String value = param(parameterName);
+		return BooleanUtils.toBooleanObject(value);
+	}
+
+	protected boolean paramNativeBoolean(final String parameterName) {
+		return BooleanUtils.toBoolean(paramBoolean(parameterName));
 	}
 
 	protected DpPessoa daoPes(long id) {
