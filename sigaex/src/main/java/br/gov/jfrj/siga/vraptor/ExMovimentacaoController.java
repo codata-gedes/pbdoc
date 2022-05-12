@@ -114,8 +114,7 @@ public class ExMovimentacaoController extends ExController {
 	private static final String OPCAO_MOSTRAR = "mostrar";
 	private static final int DEFAULT_TIPO_RESPONSAVEL = 1;
 	private static final int DEFAULT_POSTBACK = 1;
-	private static final Logger LOGGER = Logger
-			.getLogger(ExMovimentacaoController.class);
+	private static final Logger log = Logger.getLogger(ExMovimentacaoController.class);
 	
 	private static final int MAX_ITENS_PAGINA_TRAMITACAO_LOTE = 50;
 	
@@ -1037,7 +1036,7 @@ public class ExMovimentacaoController extends ExController {
 		final DpPessoa oExemplo = new DpPessoa();
 
 		if (isEmpty(sigla)) {
-			LOGGER.warn("[aGerarProtocoloArq] - A sigla informada é nula ou inválida");
+			log.warn("[aGerarProtocoloArq] - A sigla informada é nula ou inválida");
 			throw new AplicacaoException(
 					"A sigla informada é nula ou inválida.");
 		}
@@ -1046,7 +1045,7 @@ public class ExMovimentacaoController extends ExController {
 		pes = CpDao.getInstance().consultarPorSigla(oExemplo);
 
 		if (pes == null) {
-			LOGGER.warn("[aGerarProtocoloArq] - Não foi possível localizar DpPessoa com a sigla "
+			log.warn("[aGerarProtocoloArq] - Não foi possível localizar DpPessoa com a sigla "
 					+ oExemplo.getSigla());
 			throw new AplicacaoException(
 					"Não foi localizada pessoa com a sigla informada.");
@@ -2580,7 +2579,7 @@ public class ExMovimentacaoController extends ExController {
 	public void aTransferirLote(Integer paramoffset) {
 		Long tamanho = dao().consultarQuantidadeParaTransferirEmLote(getLotaTitular());
 
-		LOGGER.debug("TAMANHO : " + tamanho);
+		log.debug("TAMANHO : " + tamanho);
 
 		int offset = Objects.nonNull(paramoffset)
 				? ((paramoffset >= tamanho) ? ((paramoffset / MAX_ITENS_PAGINA_TRAMITACAO_LOTE - 1) * MAX_ITENS_PAGINA_TRAMITACAO_LOTE)
