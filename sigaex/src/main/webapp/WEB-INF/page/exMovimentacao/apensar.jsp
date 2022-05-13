@@ -118,8 +118,8 @@
 			<tr class="button">
 				<td colspan="3"><input id="btnSubmit" type="button" value="Ok"
 					class="btn btn-primary" onclick="sbmt();" /> <input type="button"
-					value="Cancela" onclick="javascript:history.back();"
-					class="btn btn-light ml-2" /></td>
+					value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();"
+					class="btn btn-cancel ml-2" /></td>
 			</tr>
 			</table>
 			</form>

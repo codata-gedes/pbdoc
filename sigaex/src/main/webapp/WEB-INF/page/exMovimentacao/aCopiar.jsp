@@ -5,6 +5,7 @@
 
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Inclusão de Cópia">
 
@@ -111,7 +112,7 @@
 					<div class="row">
 						<div class="col-12">
 							<input type="submit" value="Ok" class="btn btn-primary" /> <input
-								type="button" value="Cancela"
+								type="button" value=<fmt:message key="botao.voltar"/>
 								onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 						</div>
 					</div>

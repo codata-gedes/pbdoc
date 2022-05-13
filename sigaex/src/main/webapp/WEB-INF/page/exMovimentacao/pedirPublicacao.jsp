@@ -3,7 +3,7 @@
 	buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%--<%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
@@ -154,7 +154,7 @@
 									
 					<tr class="button">
 						<td colspan="2"><input type="button" onclick="javascript: validar();" value="Ok" class="gt-btn-medium gt-btn-left"  ${disabled}/> <input type="button"
-							value="Cancela" onclick="javascript:history.back();" class="gt-btn-medium gt-btn-left" />
+							value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="gt-btn-medium gt-btn-left" />
 							<a href="/sigaex/app/arquivo/download?arquivo=${mob.referenciaRTF}" class="gt-btn-large gt-btn-left">Visualizar Publicação</a></td>					
 					</tr>
 				</table>

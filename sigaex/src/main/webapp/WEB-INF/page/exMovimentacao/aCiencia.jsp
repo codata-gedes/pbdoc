@@ -79,7 +79,7 @@
 					<div class="row">
 						<div class="col-sm">
 							<input id="btnSubmit" type="button" value="Ok" class="btn btn-primary" onclick="sbmt();" />							
-							<a href="${linkTo[ExDocumentoController].exibe()}?sigla=${sigla}" class="btn btn-cancel ml-2">Cancela</a>														 												
+							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />														 												
 						</div>
 					</div>
 				</form>

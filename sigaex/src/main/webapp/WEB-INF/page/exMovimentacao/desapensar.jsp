@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <script type="text/javascript" language="Javascript1.1">
 function sbmt() {
@@ -59,7 +60,7 @@ function sbmt() {
 						</tr>
 						<tr class="button">
 							<td colspan="2"><input type="submit" value="Ok" class="gt-btn-small gt-btn-left" /> <input type="button"
-								value="Cancela" onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" /></td>
+								value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="gt-btn-small gt-btn-left" /></td>
 						</tr>
 					</table>
 				</form>

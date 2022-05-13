@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/customtag" prefix="tags"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Movimentação">
 	<div class="container-fluid content" id="page">
@@ -101,7 +102,7 @@
 					<div class="row">
 						<div class="col-sm">
 							<input type="submit" value="Ok" class="btn btn-primary" />
-							<input type="button" value="Cancela" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+							<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 						</div>
 					</div>
 				</form>

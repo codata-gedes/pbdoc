@@ -62,7 +62,7 @@
 						<div class="row text-center">
 							<div class="col-sm">
 								<button id="btnSubmit" type="button" class="btn btn-primary" onclick="sbmt();"><i class="fa fa-share-alt"></i>  Enviar para Publicação</button>
-								<input type="button" value="Cancelar" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+								<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 	
 							</div>
 						</div>
