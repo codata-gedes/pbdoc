@@ -172,7 +172,7 @@
 					<div class="row">
 						<div class="col-sm">
 							<input type="button" value="Ok" onclick="javascript: validar();" class="btn btn-primary" ${disabled}/>
-							<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 							<a href="${request.contextPath}/app/arquivo/download?arquivo=${mob.referenciaRTF}" class="btn btn-primary ml-2">Visualizar Publicação</a>
 						</div>
 					</div>

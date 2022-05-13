@@ -188,7 +188,7 @@ $(function(){
 					<div class="col col-12">
 						<div class="form-group">
 							<a accesskey="o" id="button_ok" onclick="javascript:submeter();" class="btn btn-primary"><u>O</u>k</a>																			
-							<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 						</div>
 					</div>
 				</div>				

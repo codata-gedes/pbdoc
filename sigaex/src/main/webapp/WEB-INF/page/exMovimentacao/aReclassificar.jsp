@@ -85,7 +85,7 @@ function sbmt() {
 					<div class="col-12">
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary" >Ok</button>
-							<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+							<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 						</div>
 					</div>
 				</div>

@@ -77,7 +77,7 @@
 				<div class="row">
 					<div class="form-group col-md-4">
 						<button type="submit" class="btn btn-primary mt-auto" >Ok</button>
-						<input type="button" value=<fmt:message key="botao.voltar"/> onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
+						<input type="button" value="<fmt:message key="botao.voltar"/>" onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 					</div>
 				</div>
 			</form>

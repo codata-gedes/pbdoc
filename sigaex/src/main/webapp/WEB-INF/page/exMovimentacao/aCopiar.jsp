@@ -112,7 +112,7 @@
 					<div class="row">
 						<div class="col-12">
 							<input type="submit" value="Ok" class="btn btn-primary" /> <input
-								type="button" value=<fmt:message key="botao.voltar"/>
+								type="button" value="<fmt:message key="botao.voltar"/>"
 								onclick="javascript:history.back();" class="btn btn-cancel ml-2" />
 						</div>
 					</div>
