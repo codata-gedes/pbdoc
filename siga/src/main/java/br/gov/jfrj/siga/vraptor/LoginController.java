@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -101,7 +100,6 @@ public class LoginController extends SigaController {
 		try {
 			// Mantém apenas LETRAS ou DÍGITOS
 			username = CharMatcher.javaLetterOrDigit().retainFrom(username);
-			
 
 			GiService giService = Service.getGiService();
 			String usuarioLogado = giService.login(username, password);
