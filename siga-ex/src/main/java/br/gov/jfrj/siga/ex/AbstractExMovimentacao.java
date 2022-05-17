@@ -454,7 +454,7 @@ public abstract class AbstractExMovimentacao extends ExArquivo implements Serial
 	@Column(name = "ip_audit", length = 20)
 	private String auditIP;
 
-	@Column(name = "hash_audit", length = 1024)
+	@Column(name = "hash_audit", columnDefinition = "text")
 	private String auditHash;
 	
 	@Temporal(TemporalType.TIMESTAMP)
