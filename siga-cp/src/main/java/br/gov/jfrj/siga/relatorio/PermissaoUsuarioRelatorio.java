@@ -47,9 +47,9 @@ public class PermissaoUsuarioRelatorio extends RelatorioTemplate{
 		} catch (Exception e) {
 			throw new DJBuilderException("Parâmetro idPessoa inválido!");
 		}
-		parametros.put("titulo","SIGA");
+		parametros.put("titulo","PBDOC");
 		parametros.put("subtitulo","Sistema de Gestão Administrativa");
-		parametros.put("secaoUsuario", "");
+		parametros.put("secaoUsuario", "Governo do Estado da Paraíba");
 
 		final String pathBrasao = Prop.get("/siga.relat.brasao");
 		if (isEmpty(pathBrasao)) {
