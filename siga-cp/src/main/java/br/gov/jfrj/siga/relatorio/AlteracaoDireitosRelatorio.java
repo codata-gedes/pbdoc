@@ -96,7 +96,15 @@ public class AlteracaoDireitosRelatorio extends RelatorioTemplate {
 		}
 		setDtInicio(t_dtaDataHoraIni);
 		setDtFim(t_dtaDataHoraFim);
-		parametros.put("titulo","SIGA");
+		
+		
+		final String cabecalhoPath = Prop.get("/siga.cabecalho.titulo");
+		if (isEmpty(cabecalhoPath)) {
+			parametros.put("titulo", "PBdoc");
+		} else {
+			parametros.put("titulo", cabecalhoPath);
+		}
+		
 		parametros.put("subtitulo","Sistema de Gestão Administrativa");
 		parametros.put("secaoUsuario", "");
 

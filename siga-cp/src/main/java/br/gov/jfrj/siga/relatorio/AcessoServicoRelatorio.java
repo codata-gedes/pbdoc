@@ -109,7 +109,14 @@ public class AcessoServicoRelatorio extends RelatorioTemplate {
 			throw new DJBuilderException("Orgao Usuario inválido ! erro:"
 					+ e.getMessage());
 		}
-		parametros.put("titulo","SIGA");
+		
+		final String cabecalhoPath = Prop.get("/siga.cabecalho.titulo");
+		if (isEmpty(cabecalhoPath)) {
+			parametros.put("titulo", "PBdoc");
+		} else {
+			parametros.put("titulo", cabecalhoPath);
+		}
+
 		parametros.put("subtitulo","Sistema de Gestão Administrativa");
 		parametros.put("secaoUsuario", "");
 

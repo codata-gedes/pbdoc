@@ -47,7 +47,15 @@ public class PermissaoUsuarioRelatorio extends RelatorioTemplate{
 		} catch (Exception e) {
 			throw new DJBuilderException("Parâmetro idPessoa inválido!");
 		}
-		parametros.put("titulo", "PBdoc");
+		
+		
+		final String cabecalhoPath = Prop.get("/siga.cabecalho.titulo");
+		if (isEmpty(cabecalhoPath)) {
+			parametros.put("titulo", "PBdoc");
+		} else {
+			parametros.put("titulo", cabecalhoPath);
+		}
+		
 		parametros.put("subtitulo", "Sistema de Gestão Administrativa");
 		parametros.put("secaoUsuario", "Governo do Estado da Paraíba");
 

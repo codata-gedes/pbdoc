@@ -118,7 +118,14 @@ public class HistoricoUsuarioRelatorio extends RelatorioTemplate {
 		setPessoasDoUsuario(dao().obterPessoasDoUsuario(getDpPessoa()));
 		@SuppressWarnings("unused")
 		int conta = 0;
-		parametros.put("titulo","SIGA");
+		
+		final String cabecalhoPath = Prop.get("/siga.cabecalho.titulo");
+		if (isEmpty(cabecalhoPath)) {
+			parametros.put("titulo", "PBdoc");
+		} else {
+			parametros.put("titulo", cabecalhoPath);
+		}
+		
 		parametros.put("subtitulo","Sistema de Gestão Administrativa");
 		parametros.put("secaoUsuario", "");
 
