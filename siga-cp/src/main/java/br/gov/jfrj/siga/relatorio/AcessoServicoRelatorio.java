@@ -18,7 +18,7 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.relatorio;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +33,6 @@ import ar.com.fdvs.dj.domain.builders.DJBuilderException;
 import br.gov.jfrj.relatorio.dinamico.AbstractRelatorioBaseBuilder;
 import br.gov.jfrj.relatorio.dinamico.RelatorioRapido;
 import br.gov.jfrj.relatorio.dinamico.RelatorioTemplate;
-import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.cp.CpConfiguracao;
 import br.gov.jfrj.siga.cp.CpPerfil;
 import br.gov.jfrj.siga.cp.CpServico;
@@ -109,23 +108,9 @@ public class AcessoServicoRelatorio extends RelatorioTemplate {
 			throw new DJBuilderException("Orgao Usuario inválido ! erro:"
 					+ e.getMessage());
 		}
-		
-		final String cabecalhoPath = Prop.get("/siga.cabecalho.titulo");
-		if (isEmpty(cabecalhoPath)) {
-			parametros.put("titulo", "PBdoc");
-		} else {
-			parametros.put("titulo", cabecalhoPath);
-		}
 
-		parametros.put("subtitulo","Sistema de Gestão Administrativa");
-		parametros.put("secaoUsuario", "");
-
-		final String pathBrasao = Prop.get("/siga.relat.brasao");
-		if (isEmpty(pathBrasao)) {
-			parametros.put("brasao", "brasao.png");
-		} else {
-			parametros.put("brasao", pathBrasao);
-		}
+		this.configurarParametrosPadraoSistema(parametros);
+		parametros.put("secaoUsuario", EMPTY);
 	}
 
 	@Override

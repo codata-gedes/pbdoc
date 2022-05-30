@@ -18,15 +18,20 @@
  ******************************************************************************/
 package br.gov.jfrj.relatorio.dinamico;
 
+import static java.util.Optional.ofNullable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
 import ar.com.fdvs.dj.domain.builders.DJBuilderException;
 import ar.com.fdvs.dj.domain.constants.VerticalAlign;
 import br.gov.jfrj.siga.base.AplicacaoException;
+import br.gov.jfrj.siga.base.Prop;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -309,6 +314,23 @@ public abstract class RelatorioTemplate extends RelatorioRapido {
 			byte[] arquivo = xlsReport.toByteArray();
 			return arquivo;
 		}
+	}
+
+	protected void configurarParametrosPadraoSistema(Map<String, String> parametros) {
+		final String pathBrasao = ofNullable(Prop.get("/siga.relat.brasao"))
+				.map(StringUtils::stripToNull)
+				.orElse("brasao.png");
+		parametros.put("brasao", pathBrasao);
+
+		final String titulo = ofNullable(Prop.get("/siga.relat.titulo"))
+				.map(StringUtils::stripToNull)
+				.orElse("PBdoc");
+		parametros.put("titulo", titulo);
+
+		final String subtitulo = ofNullable(Prop.get("/siga.relat.subtitulo"))
+				.map(StringUtils::stripToNull)
+				.orElse("Sistema de Gestão Documental");
+		parametros.put("subtitulo", subtitulo);
 	}
 
 }

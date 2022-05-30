@@ -92,8 +92,9 @@ public class Prop {
 		provider.addPublicProperty("/siga.gsa.url", null);
 
 		provider.addPublicProperty("/siga.relat.brasao", "brasao.png");
-		provider.addPublicProperty("/siga.relat.titulo", "PODER JUDICIÁRIO");
-		provider.addPublicProperty("/siga.relat.subtitulo", "JUSTIÇA FEDERAL");
+		provider.addPublicProperty("/siga.relat.titulo", "PBdoc");
+		provider.addPublicProperty("/siga.relat.subtitulo", "Sistema de Gestão Documental");
+		provider.addPublicProperty("/siga.relat.secao.usuario", "Governo do Estado da Paraíba");
 
 		/* proxy properties */
 		provider.addRestrictedProperty("/http.proxyHost", null);
@@ -123,7 +124,7 @@ public class Prop {
 		provider.addPublicProperty("/siga.omitir.metodo2", "true");
 
 		provider.addPublicProperty("/siga.cabecalho.logo", "/siga/imagens/logo-trf2-38px.png"); 
-		provider.addPublicProperty("/siga.cabecalho.titulo", "Justiça Federal");
+		provider.addPublicProperty("/siga.cabecalho.titulo", "PBdoc");
 		
 		provider.addPublicProperty("/siga.email.logo", "/siga/imagens/logo-siga-novo-38px.png"); 
 		provider.addPublicProperty("/siga.email.titulo", provider.getProp("/siga.cabecalho.titulo"));
