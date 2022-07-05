@@ -122,7 +122,7 @@
 												
 											</div>
 											<div style="float: right">
-												<a href="//portal.pbdoc.pb.gov.br/manual" target="_blank" class="btn btn-sm btn-link">Manual do PBdoc</a>
+												<a href="//portal.pbdoc.pb.gov.br/manuais" target="_blank" class="btn btn-sm btn-link">Manual do PBdoc</a>
 											</div>
 										</div>
 										

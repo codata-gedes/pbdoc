@@ -456,7 +456,7 @@
 				</c:when>
 				<c:otherwise>
 					<a class="dropdown-item" id="apostilaSiga"
-						href="https://portal.pbdoc.pb.gov.br/manual" target="_blank">Manual PBdoc</a>
+						href="https://portal.pbdoc.pb.gov.br/manuais" target="_blank">Manual PBdoc</a>
 
 				</c:otherwise>
 			</c:choose></li>
