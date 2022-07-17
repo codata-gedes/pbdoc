@@ -456,11 +456,11 @@
 				</c:when>
 				<c:otherwise>
 					<a class="dropdown-item" id="apostilaSiga"
-						href="https://portal.pbdoc.pb.gov.br/manuais" target="_blank">Manual PBdoc</a>
+						href="//portal.pbdoc.pb.gov.br/manuais" target="_blank">Manual PBdoc</a>
 
 				</c:otherwise>
 			</c:choose></li>
-		<li><a class="dropdown-item" href="https://portal.pbdoc.pb.gov.br/mural-de-avisos" target="_blank">Versões e Atualizações</a></li>
+		<li><a class="dropdown-item" href="//portal.pbdoc.pb.gov.br/mural-de-avisos" target="_blank">Versões e Atualizações</a></li>
 		<li><a class="dropdown-item" href="/siga/public/app/logout">Logoff</a></li>
 	</ul></li>
 
