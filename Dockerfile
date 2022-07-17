@@ -37,6 +37,8 @@ RUN wget https://github.com/projeto-siga/siga-docker/releases/download/v1.1/cked
 RUN wget https://github.com/assijus/blucservice/releases/download/v2.3.6/blucservice.war -O ${DEPLOYMENTS_HOME}/blucservice.war
 # https://api.github.com/repos/projeto-siga/vizservice/releases/latest
 RUN wget https://github.com/projeto-siga/vizservice/releases/download/v1.0.0.0/vizservice.war -O ${DEPLOYMENTS_HOME}/vizservice.war
+# https://api.github.com/repos/assijus/assijus/releases/latest
+RUN wget https://github.com/assijus/assijus/releases/download/v4.1.4/assijus.war -O ${DEPLOYMENTS_HOME}/assijus.war
 
 # Driver JDBC do PostgreSQL
 ENV JDBC_DRIVER_FILENAME 'postgresql-42.2.23.jar'
