@@ -85,6 +85,7 @@ public class ExVO extends VO {
 			String classe,
 			String modal) {
 
+		Long movIdDoc = null;
 		final Map<String, Object> params = new LinkedHashMap<>();
 		if (this instanceof ExMovimentacaoVO) {
 			final ExMovimentacaoVO vo = (ExMovimentacaoVO) this;
@@ -96,11 +97,11 @@ public class ExVO extends VO {
 					.map(ExMovimentacaoVO::getMobilVO)
 					.map(ExMobilVO::getSigla)
 					.ifPresent(value -> params.put(SIGLA, value));
-			ofNullable(vo)
+			movIdDoc = ofNullable(vo)
 					.map(ExMovimentacaoVO::getMov)
 					.map(ExMovimentacao::getExDocumento)
 					.map(ExDocumento::getId)
-					.ifPresent(value -> params.put(MOV_ID_DOC, value));
+					.orElse(null);
 		}
 
 		if (this instanceof ExMobilVO) {
@@ -122,10 +123,17 @@ public class ExVO extends VO {
 			if (parametros.startsWith("&")) {
 				parametros = parametros.substring(1);
 			}
+			else {
+				params.clear();
+			}
 			Utils.mapFromUrlEncodedForm(params, parametros.getBytes(StandardCharsets.ISO_8859_1));
 		}
 
 		if (pode) {
+			if (movIdDoc != null) {
+				params.put(MOV_ID_DOC, movIdDoc);
+			}
+
 			String hintEscapado = StringUtils.replace(nome, "_", "");
 			AcaoVO acao = new AcaoVO(icone, nome, nameSpace, action, pode, msgConfirmacao, params, pre, pos, classe, modal, hintEscapado);
 			getAcoes().add(acao);

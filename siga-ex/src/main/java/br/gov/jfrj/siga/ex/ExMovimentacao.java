@@ -65,7 +65,6 @@ import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.ex.bl.Ex;
 import br.gov.jfrj.siga.ex.logic.ExPodeCancelarMarcacao;
-import br.gov.jfrj.siga.ex.util.CronologiaComparator;
 import br.gov.jfrj.siga.ex.util.DatasPublicacaoDJE;
 import br.gov.jfrj.siga.ex.util.ProcessadorHtml;
 import br.gov.jfrj.siga.ex.util.ProcessadorReferencias;
@@ -388,6 +387,28 @@ public class ExMovimentacao extends AbstractExMovimentacao implements
 		return String.valueOf(getNumVia2());
 	}
 
+	private static Integer tpMovDesempatePosicao(Long idTpMov) {
+		final List<Long> tpMovDesempate = Arrays.asList(
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_CRIACAO,
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_ASSINATURA_DIGITAL_DOCUMENTO,
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_ASSINATURA_COM_SENHA,
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_CONFERENCIA_COPIA_COM_SENHA,
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_CONFERENCIA_COPIA_DOCUMENTO,
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_JUNTADA,
+				ExTipoMovimentacao.TIPO_MOVIMENTACAO_TRANSFERENCIA
+		);
+
+		if (idTpMov == null) {
+			return Integer.MAX_VALUE;
+		}
+
+		int i = tpMovDesempate.indexOf(idTpMov);
+		if (i == -1) {
+			return Integer.MAX_VALUE;
+		}
+		return i;
+	}
+
 	public static Integer tpMovDesempatePosicao(Long idTpMov, Long idTpMov2) {
 		final List<Long> tpMovDesempate = Arrays.asList(
 				ExTipoMovimentacao.TIPO_MOVIMENTACAO_CRIACAO,
@@ -419,7 +440,21 @@ public class ExMovimentacao extends AbstractExMovimentacao implements
 	}
 
 	public int compareTo(final ExMovimentacao mov) {
-		return CronologiaComparator.INSTANCE.compare(mov, this);
+		int i = 0;
+		if (getDtIniMov() != null)
+			i = getDtIniMov().compareTo(mov.getDtIniMov());
+		if (i != 0)
+			return i;
+
+		if (getExTipoMovimentacao() != null && mov.getExTipoMovimentacao() != null) {
+			i = tpMovDesempatePosicao(getExTipoMovimentacao().getId()).compareTo(
+					tpMovDesempatePosicao(mov.getExTipoMovimentacao().getId()));
+			if (i != 0)
+				return i;
+		}
+		
+		i = getIdMov().compareTo(mov.getIdMov());
+		return i;
 	}
 
 	/**
