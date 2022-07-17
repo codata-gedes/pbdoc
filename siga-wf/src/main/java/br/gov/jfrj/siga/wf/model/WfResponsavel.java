@@ -14,6 +14,9 @@ import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+
+import com.crivano.jflow.model.ProcessDefinition;
 import com.crivano.jflow.model.Responsible;
 
 import br.gov.jfrj.siga.cp.model.HistoricoAuditavelSuporte;
@@ -21,11 +24,13 @@ import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.model.Assemelhavel;
+import br.gov.jfrj.siga.model.Selecionavel;
 import br.gov.jfrj.siga.sinc.lib.Desconsiderar;
 import br.gov.jfrj.siga.sinc.lib.Sincronizavel;
 import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_responsavel")
 public class WfResponsavel extends HistoricoAuditavelSuporte
 		implements Responsible, Serializable, Sincronizavel, Comparable<Sincronizavel> {

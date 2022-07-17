@@ -27,6 +27,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.hibernate.ExDao;
 import br.gov.jfrj.siga.model.Selecionavel;
@@ -37,6 +39,7 @@ import br.gov.jfrj.siga.sinc.lib.Sincronizavel;
  * customized as it is never re-generated after being created.
  */
 @Entity
+@BatchSize(size = 500)
 @Table(name = "siga.ex_modelo")
 public class ExModelo extends AbstractExModelo implements Sincronizavel, Selecionavel {
 

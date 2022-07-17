@@ -16,6 +16,8 @@ import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.crivano.jflow.PausableTask;
 import com.crivano.jflow.model.TaskDefinitionDetour;
 
@@ -29,6 +31,7 @@ import br.gov.jfrj.siga.wf.util.NaoSerializar;
 import br.gov.jfrj.siga.wf.util.WfResp;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_def_desvio")
 public class WfDefinicaoDeDesvio extends HistoricoAuditavelSuporte
 		implements TaskDefinitionDetour, Sincronizavel, Comparable<Sincronizavel> {

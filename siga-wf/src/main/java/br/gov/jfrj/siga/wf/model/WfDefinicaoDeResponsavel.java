@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import br.gov.jfrj.siga.cp.model.HistoricoAuditavelSuporte;
 import br.gov.jfrj.siga.model.Assemelhavel;
 import br.gov.jfrj.siga.sinc.lib.Desconsiderar;
@@ -15,6 +17,7 @@ import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 import br.gov.jfrj.siga.wf.model.enm.WfTipoDeResponsavel;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_def_responsavel")
 public class WfDefinicaoDeResponsavel extends HistoricoAuditavelSuporte {
 	@Id

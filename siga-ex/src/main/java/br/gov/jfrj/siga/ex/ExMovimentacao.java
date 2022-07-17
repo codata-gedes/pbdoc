@@ -45,6 +45,8 @@ import java.util.TreeSet;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.auth0.jwt.JWTVerifier;
 import com.crivano.jlogic.Expression;
 import com.crivano.swaggerservlet.SwaggerUtils;
@@ -74,6 +76,7 @@ import br.gov.jfrj.siga.ex.util.PublicacaoDJEBL;
  */
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "siga.ex_movimentacao")
 public class ExMovimentacao extends AbstractExMovimentacao implements
 		Serializable, Comparable<ExMovimentacao> {

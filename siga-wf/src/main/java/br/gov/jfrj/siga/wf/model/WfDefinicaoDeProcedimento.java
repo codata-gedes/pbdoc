@@ -22,6 +22,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.crivano.jflow.model.ProcessDefinition;
 import com.crivano.jflow.model.TaskDefinition;
 
@@ -49,6 +51,7 @@ import br.gov.jfrj.siga.wf.util.SiglaUtils;
 import br.gov.jfrj.siga.wf.util.SiglaUtils.SiglaDecodificada;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_def_procedimento")
 public class WfDefinicaoDeProcedimento extends HistoricoAuditavelSuporte implements Serializable,
 		ProcessDefinition<WfDefinicaoDeTarefa>, Selecionavel, Sincronizavel, Comparable<Sincronizavel> {

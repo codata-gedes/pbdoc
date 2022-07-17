@@ -23,7 +23,10 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 @Entity
+@BatchSize(size = 500)
 @Table(name = "siga.ex_boletim_doc")
 public class ExBoletimDoc extends AbstractExBoletimDoc implements Serializable {
 

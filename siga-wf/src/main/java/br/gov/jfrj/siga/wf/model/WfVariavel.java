@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.crivano.jflow.support.ProcessInstanceVariable;
 
 import br.gov.jfrj.siga.base.Data;
@@ -19,6 +21,7 @@ import br.gov.jfrj.siga.sinc.lib.Sincronizavel;
 import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_variavel")
 public class WfVariavel implements ProcessInstanceVariable, Sincronizavel, Comparable<Sincronizavel> {
 	@Id

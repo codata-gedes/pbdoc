@@ -29,6 +29,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.crivano.jflow.model.ProcessInstance;
 import com.crivano.jflow.model.enm.ProcessInstanceStatus;
 
@@ -60,6 +62,7 @@ import br.gov.jfrj.siga.wf.util.SiglaUtils.SiglaDecodificada;
 import br.gov.jfrj.siga.wf.util.WfResp;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_procedimento")
 public class WfProcedimento extends Objeto
 		implements ProcessInstance<WfDefinicaoDeProcedimento, WfDefinicaoDeTarefa, WfResp>, Selecionavel {
@@ -87,9 +90,11 @@ public class WfProcedimento extends Objeto
 	@Transient
 	private Map<String, Object> variavelMap = new TreeMap<>();
 
+	@BatchSize(size = 1)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "procedimento")
 	private List<WfVariavel> variaveis = new ArrayList<>();
 
+	@BatchSize(size = 1)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "procedimento")
 	@OrderBy("HIS_DT_INI, MOVI_ID")
 	private SortedSet<WfMov> movimentacoes = new TreeSet<>();

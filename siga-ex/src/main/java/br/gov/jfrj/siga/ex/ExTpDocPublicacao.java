@@ -29,6 +29,7 @@ import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
@@ -36,6 +37,7 @@ import org.hibernate.annotations.Immutable;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 
 @Entity
+@BatchSize(size = 500)
 @Immutable
 @Cacheable
 @Cache(region = CpDao.CACHE_HOURS, usage = CacheConcurrencyStrategy.READ_ONLY)

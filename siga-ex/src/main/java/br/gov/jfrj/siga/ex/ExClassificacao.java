@@ -22,15 +22,20 @@
 package br.gov.jfrj.siga.ex;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
+import br.gov.jfrj.siga.dp.DpPessoa;
+import br.gov.jfrj.siga.dp.dao.CpDao;
 import br.gov.jfrj.siga.ex.util.MascaraUtil;
 import br.gov.jfrj.siga.hibernate.ExDao;
 import br.gov.jfrj.siga.model.Assemelhavel;
@@ -41,6 +46,7 @@ import br.gov.jfrj.siga.model.Selecionavel;
  * be customized as it is never re-generated after being created.
  */
 @Entity
+@BatchSize(size = 500)
 //@AttributeOverride(name = "hisAtivo", column = @Column(name = "HIS_ATIVO"))
 @Table(name = "siga.ex_classificacao")
 @Cache(region = ExDao.CACHE_EX, usage = CacheConcurrencyStrategy.TRANSACTIONAL)

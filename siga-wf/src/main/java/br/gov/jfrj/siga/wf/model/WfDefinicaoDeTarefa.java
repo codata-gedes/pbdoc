@@ -19,6 +19,8 @@ import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.crivano.jflow.model.TaskDefinition;
 
 import br.gov.jfrj.siga.cp.model.HistoricoAuditavelSuporte;
@@ -26,6 +28,7 @@ import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.model.Assemelhavel;
 import br.gov.jfrj.siga.sinc.lib.Desconsiderar;
+import br.gov.jfrj.siga.sinc.lib.NaoRecursivo;
 import br.gov.jfrj.siga.sinc.lib.Sincronizavel;
 import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 import br.gov.jfrj.siga.wf.model.enm.WfTipoDeResponsavel;
@@ -33,6 +36,7 @@ import br.gov.jfrj.siga.wf.model.enm.WfTipoDeTarefa;
 import br.gov.jfrj.siga.wf.util.NaoSerializar;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_def_tarefa")
 public class WfDefinicaoDeTarefa extends HistoricoAuditavelSuporte
 		implements TaskDefinition<WfTipoDeTarefa, WfTipoDeResponsavel, WfDefinicaoDeVariavel, WfDefinicaoDeDesvio>,

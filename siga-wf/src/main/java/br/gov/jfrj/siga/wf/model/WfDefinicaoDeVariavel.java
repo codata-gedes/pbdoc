@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.crivano.jflow.model.TaskDefinitionVariable;
 import com.crivano.jflow.model.enm.VariableEditingKind;
 import com.crivano.jflow.model.enm.VariableKind;
@@ -28,6 +30,7 @@ import br.gov.jfrj.siga.wf.model.enm.WfTipoDeVariavel;
 import br.gov.jfrj.siga.wf.util.NaoSerializar;
 
 @Entity
+@BatchSize(size = 500)
 @Table(name = "sigawf.wf_def_variavel")
 public class WfDefinicaoDeVariavel extends HistoricoAuditavelSuporte
 		implements TaskDefinitionVariable, Sincronizavel, Comparable<Sincronizavel> {
