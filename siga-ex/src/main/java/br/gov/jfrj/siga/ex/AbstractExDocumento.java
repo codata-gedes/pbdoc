@@ -40,7 +40,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SortNatural;
 
 import br.gov.jfrj.siga.base.util.Texto;
@@ -394,12 +393,10 @@ public abstract class AbstractExDocumento extends ExArquivo implements Serializa
 	@JoinColumn(name = "ID_ORGAO_DESTINATARIO")
 	private CpOrgao orgaoExternoDestinatario;
 
-	@BatchSize(size=1)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exDocumento")
 	@SortNatural
 	private SortedSet<ExMobil> exMobilSet = new TreeSet<ExMobil>();
 
-	@BatchSize(size=1)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exDocumento")
 	private Set<ExBoletimDoc> exBoletimDocSet;
 

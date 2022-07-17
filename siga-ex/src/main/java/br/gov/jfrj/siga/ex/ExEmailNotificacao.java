@@ -21,10 +21,7 @@ package br.gov.jfrj.siga.ex;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.BatchSize;
-
 @Entity
-@BatchSize(size = 500)
 @Table(name = "siga.ex_email_notificacao")
 public class ExEmailNotificacao extends AbstractExEmailNotificacao {
 

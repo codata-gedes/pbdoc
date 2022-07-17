@@ -49,7 +49,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.codec.binary.Base64;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.DynamicUpdate;
 import org.jboss.logging.Logger;
 
@@ -80,7 +79,6 @@ import br.gov.jfrj.siga.model.CarimboDeTempo;
  * customized as it is never re-generated after being created.
  */
 @Entity
-@BatchSize(size = 500)
 @Table(name = "siga.ex_documento")
 @DynamicUpdate
 public class ExDocumento extends AbstractExDocumento implements Serializable, CarimboDeTempo {

@@ -26,8 +26,6 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.BatchSize;
-
 import br.gov.jfrj.siga.dp.DpLotacao;
 
 /**
@@ -35,7 +33,6 @@ import br.gov.jfrj.siga.dp.DpLotacao;
  * be customized as it is never re-generated after being created.
  */
 @Entity
-@BatchSize(size = 500)
 @Table(name = "siga.ex_preenchimento")
 public class ExPreenchimento extends AbstractExPreenchimento implements
 		Serializable {

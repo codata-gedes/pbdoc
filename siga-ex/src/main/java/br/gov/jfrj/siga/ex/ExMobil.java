@@ -42,7 +42,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.BatchSize;
 import org.jboss.logging.Logger;
 
 import br.gov.jfrj.siga.base.Prop;
@@ -60,7 +59,6 @@ import br.gov.jfrj.siga.parser.PessoaLotacaoParser;
 import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
 
 @Entity
-@BatchSize(size = 500)
 @Table(name = "siga.ex_mobil")
 public class ExMobil extends AbstractExMobil implements Serializable, Selecionavel, Comparable<ExMobil> {
 

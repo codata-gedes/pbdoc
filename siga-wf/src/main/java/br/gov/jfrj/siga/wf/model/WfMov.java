@@ -79,7 +79,6 @@ public abstract class WfMov extends HistoricoAuditavelSuporte implements Seriali
 //	@JoinColumn(name = "MOVI_ID_CANCELADORA")
 //	private WfMov movimentacaoCanceladora;
 
-//	@BatchSize(size = 1)
 //	@OneToMany(fetch = FetchType.LAZY, mappedBy = "movimentacaoRef")
 //	private java.util.Set<WfMov> movimentacaoReferenciadoraSet;
 

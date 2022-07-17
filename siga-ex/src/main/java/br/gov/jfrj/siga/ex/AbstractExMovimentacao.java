@@ -40,8 +40,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.BatchSize;
-
 import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.dp.CpMarcador;
 import br.gov.jfrj.siga.dp.CpOrgao;
@@ -303,7 +301,6 @@ public abstract class AbstractExMovimentacao extends ExArquivo implements Serial
 	@Column(name = "conteudo_tp_mov", length = 128)
 	private String conteudoTpMov;
 
-	@BatchSize(size=1)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exMovimentacaoRef")
 	private java.util.Set<ExMovimentacao> exMovimentacaoReferenciadoraSet;
 
