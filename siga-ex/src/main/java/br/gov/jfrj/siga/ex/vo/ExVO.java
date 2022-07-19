@@ -55,6 +55,7 @@ public class ExVO extends VO {
 	private static final String ID = "id";
 	private static final String MOV_ID_DOC = "movDocId";
 	private static final String SIGLA = "sigla";
+	protected static final String CLASSE_DEFAULT = "btn btn-sm btn-light";
 
 	public void addAcao(
 			String icone,

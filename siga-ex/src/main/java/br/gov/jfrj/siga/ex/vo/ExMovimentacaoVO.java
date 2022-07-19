@@ -251,7 +251,7 @@ public class ExMovimentacaoVO extends ExVO {
 			// <c:url var='anexo' value='/anexo/${mov.idMov}/${mov.nmArqMov}' />
 			// tipo="${mov.conteudoTpMov}" />
 			addAcao(null, mov.getNmArqMov(), "/app/arquivo", "exibir", mov.getNmArqMov() != null, null,
-					"&popup=true&arquivo=" + mov.getReferenciaPDF(), null, null, null);
+					"&popup=true&arquivo=" + mov.getReferenciaPDF(), null, null, CLASSE_DEFAULT);
 
 			if (idTpMov == TIPO_MOVIMENTACAO_INCLUSAO_DE_COSIGNATARIO) {
 				addAcao(null, "Excluir", "/app/expediente/mov", "excluir",
@@ -357,7 +357,7 @@ public class ExMovimentacaoVO extends ExVO {
 						mensagemPos = " Descrição: " + mov.getExMobilRef().getExDocumento().getDescrDocumento();
 
 					addAcao(null, mov.getExMobilRef().getSigla(), "/app/expediente/doc", "exibir", true, null,
-							"sigla=" + mov.getExMobilRef().getSigla(), "Juntado ao documento: ", mensagemPos, null);
+							"sigla=" + mov.getExMobilRef().getSigla(), "Juntado ao documento: ", mensagemPos, CLASSE_DEFAULT);
 				} else {
 					descricao = "Juntado ao documento: " + mov.getDescrMov();
 				}
@@ -370,7 +370,7 @@ public class ExMovimentacaoVO extends ExVO {
 					mensagemPos = " Descrição: " + mov.getExDocumento().getDescrDocumento();
 
 				addAcao(null, mov.getExMobil().getSigla(), "/app/expediente/doc", "exibir", true, null,
-						"sigla=" + mov.getExMobil().getSigla(), "Documento juntado: ", mensagemPos, null);
+						"sigla=" + mov.getExMobil().getSigla(), "Documento juntado: ", mensagemPos, CLASSE_DEFAULT);
 
 				if (mov.getExMobil().podeExibirNoAcompanhamento(titular, lotaTitular)) {
 						Set<ExMovimentacao> movs = mov.getExMobil().getMovsNaoCanceladas(ExTipoMovimentacao
