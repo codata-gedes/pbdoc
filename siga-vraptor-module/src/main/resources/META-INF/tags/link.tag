@@ -59,7 +59,7 @@
 <c:if test="${empty test or test}">
 	<c:if test="${!linkBotoes}">
 		<c:if test="${not empty linkSeparator}">
-			<span class="gt-separator"></span>
+			<span class="gt-separator">|</span>
 		</c:if>
 		<c:if test="${empty linkSeparator}">
 			<c:if test="${empty linkInline}">
@@ -72,7 +72,6 @@
 	<c:if test="${empty url}">${img}${title}</c:if>
 	${pre}
 	<c:if test="${not empty url}">
-		<li class="ml-3">
 		<c:choose>
 			<c:when test="${not empty modal}">
 				<a id="${linkId}"
@@ -116,7 +115,6 @@
 		<c:if test="${not empty sufixoItemDesbotado}">
 			<small class="text-muted" title="${sufixoItemDesbotadoHint}">${sufixoItemDesbotado}</small>
 		</c:if>
-		</li>
 	</c:if>
 	${pos}
 </c:if>
