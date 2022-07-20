@@ -289,7 +289,7 @@
 														<span v-for="m in f.list">
 															<a class="popover-dismiss" role="button" 
 																data-toggle="popover" data-trigger="hover focus" :title="m.titulo" data-html="true" :data-pessoa="m.pessoa" :data-lotacao="m.lotacao">
-																<span class="text-size-8 badge badge-pill badge-secondary tagmesa m-1 btn-xs" v-bind:style="{color: '#' + m.cor + ' !important'}">												
+																<span class="text-size-9 badge badge-pill badge-secondary tagmesa m-1 btn-xs" v-bind:style="{color: '#' + m.cor + ' !important'}">												
 																	<i :class="m.icone" :style="{color: m.cor}"></i> {{m.nome}}<span v-if="m.ref1">, planejada: {{m.ref1}}</span><span v-if="m.ref2">, limite: {{m.ref2}}</span>
 																</span>
 															</a>

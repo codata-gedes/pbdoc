@@ -221,7 +221,7 @@
 						<small class="text-muted" title="Identificador Incremental Interno Único (ID)">#${docVO.doc.id}</small>
 					</c:if>
 				</c:if>
-				<button type="button" name="voltar" onclick="${(empty param.linkVolta) ? 'javascript:window.location.href=\'/siga\';' : 'javascript:'.concat(param.linkVolta) }" class="btn btn-secondary float-right ${hide_only_TRF2}" accesskey="r">Volta<u>r</u></button>				
+				<button type="button" name="voltar" onclick="${(empty param.linkVolta) ? 'javascript:window.location.href=\'/siga\';' : 'javascript:'.concat(param.linkVolta) }" class="btn btn-secondary float-right" accesskey="r">Volta<u>r</u></button>				
 			</h2>
 		</div>
 	</div>

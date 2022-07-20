@@ -32,6 +32,7 @@ import br.gov.jfrj.siga.hibernate.ExDao;
 
 public class Mesa2 {
 	private static List<GrupoItem> gruposBase;
+	private static final String EM_TRAMITE = "Em Trâmite";
 	
 	public static class SelGrupo implements ISwaggerModel {
 		public String grupoOrdem;
@@ -272,6 +273,11 @@ public class Mesa2 {
 							.findFirst().orElse("[indeterminado]");
 				}
 
+				if(EM_TRAMITE.equalsIgnoreCase(t.nome)) {
+					ExMarca parcial = mobil.getExMarcaSet().first();
+					t.nome = t.nome + " - " + parcial;
+				}
+				
 				r.list.add(t);
 				if (pessoa != null && tag.marca.getDpPessoaIni() != null) {
 					if (pessoa.getIdInicial().equals(
