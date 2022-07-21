@@ -273,6 +273,7 @@ public class Mesa2 {
 							.findFirst().orElse("[indeterminado]");
 				}
 
+				// FIXME Reavaliar esta solução: enviar um DTO com os dados em separado
 				if(EM_TRAMITE.equalsIgnoreCase(t.nome)) {
 					ExMarca parcial = mobil.getExMarcaSet().first();
 					t.nome = t.nome + " - " + parcial;
