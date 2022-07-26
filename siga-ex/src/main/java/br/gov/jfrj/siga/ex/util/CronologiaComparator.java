@@ -13,9 +13,9 @@ public class CronologiaComparator implements Comparator<ExMovimentacao> {
 			int i = 0;
 
 			// Pela data
-			if (o2.getDtTimestamp() != null) {
+			if (o2.getDtTimestamp() != null && o1.getDtTimestamp() != null) {
 				i = o2.getDtTimestamp().compareTo(o1.getDtTimestamp());
-			} else if (o2.getDtIniMov() != null) {
+			} else if (o2.getDtIniMov() != null && o1.getDtIniMov() != null) {
 				i = o2.getDtIniMov().compareTo(o1.getDtIniMov());
 			}
 
