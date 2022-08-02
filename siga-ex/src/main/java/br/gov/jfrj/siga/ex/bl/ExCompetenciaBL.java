@@ -3139,7 +3139,7 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 		final Set<ExMovimentacao> movsComSenha = mov.getApenasAssinaturasComSenha();
 		for (ExMovimentacao exMovimentacao : movsComSenha) {
 			final DpPessoa cadastranteMov = exMovimentacao.getCadastrante();
-			if (cadastranteMov != null && cadastranteMov.getId() == titular.getId()) {
+			if (cadastranteMov != null && titular != null && cadastranteMov.getId() == titular.getId()) {
 				return false;
 			}
 		}

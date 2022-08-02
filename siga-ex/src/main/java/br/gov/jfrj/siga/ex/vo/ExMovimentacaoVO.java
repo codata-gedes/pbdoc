@@ -264,7 +264,7 @@ public class ExMovimentacaoVO extends ExVO {
 					addAcao(null, "Cancelar", "/app/expediente/mov", "cancelar", Ex.getInstance().getComp().podeCancelarAnexo(titular, lotaTitular, mov.mob(), mov));
 					addAcao("script_key", "Autenticar", "/app/expediente/mov", "autenticar_mov", Ex.getInstance().getComp().podeAutenticarMovimentacao(titular, lotaTitular, mov), null, "&popup=true&autenticando=true", null, null, null);
 
-					final boolean podeAssinar = Ex.getInstance().getComp().podeAssinarAnexo(cadastrante, mov.mob(), mov);
+					final boolean podeAssinar = Ex.getInstance().getComp().podeAssinarAnexo(titular, mov.mob(), mov);
 					addAcao(null, "Assinar", "/app/expediente/mov", "exibir", podeAssinar, null, "&popup=true", null, null, null);
 				}
 			}
