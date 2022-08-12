@@ -2032,6 +2032,7 @@ public class CpBL {
 		pesNova.setMatricula(pesAnt.getMatricula());
 		pesNova.setIdPessoaIni(pesAnt.getIdPessoaIni());
 		pesNova.setIdePessoa(pesAnt.getIdePessoa());
+		pesNova.setTramitarOutrosOrgaos(pesAnt.isTramitarOutrosOrgaos());
 	}
 	
 	public void copiarIdentidade(CpIdentidade identidadeAntiga, CpIdentidade identidadeNova) {
