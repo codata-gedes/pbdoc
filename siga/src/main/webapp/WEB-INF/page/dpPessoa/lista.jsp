@@ -161,6 +161,17 @@
 								<label for="nmPessoa">RG (Incluindo dígito)</label>
 								<input type="text" id="identidadePesquisa" name="identidadePesquisa" value="${identidadePesquisa}" maxlength="20" class="form-control"/>
 							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-check">
+								<input class="form-check-input"
+									   type="checkbox"
+									   id="buscarInativos"
+									   name="buscarInativos"
+									   ${param['buscarInativos'] eq 'on' ? 'checked="checked"' : ''}
+								>
+								<label class="form-check-label" for="buscarInativos" title="Busca também por usuários inativados no sistema">Buscar Usuários Inativos?</label>
+							</div>
 						</div>							
 					</div>
 					<div class="row">
@@ -270,7 +281,6 @@
 				<c:url var="urlAtivarInativar" value="/app/pessoa/ativarInativar"></c:url>
 				<input type="button" value="Incluir" onclick="javascript:window.location.href='${url}'" class="btn btn-primary">
 			</div>
-			<input type="hidden" name="buscarInativos" value="true">				
 		</form>
 				
 		<siga:siga-modal id="confirmacaoModal" exibirRodape="false" tituloADireita="Confirma&ccedil;&atilde;o">
