@@ -269,7 +269,8 @@
 				<c:url var="url" value="/app/pessoa/editar"></c:url>
 				<c:url var="urlAtivarInativar" value="/app/pessoa/ativarInativar"></c:url>
 				<input type="button" value="Incluir" onclick="javascript:window.location.href='${url}'" class="btn btn-primary">
-			</div>				
+			</div>
+			<input type="hidden" name="buscarInativos" value="true">				
 		</form>
 				
 		<siga:siga-modal id="confirmacaoModal" exibirRodape="false" tituloADireita="Confirma&ccedil;&atilde;o">
