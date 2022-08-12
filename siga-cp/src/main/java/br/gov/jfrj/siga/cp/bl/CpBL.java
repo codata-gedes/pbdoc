@@ -1982,6 +1982,18 @@ public class CpBL {
 						}				
 						copiarPessoa(dpPessoa, pessoaNova);
 						dao().gravarComHistorico(pessoaNova, dpPessoa, data, identidadeCadastrante);
+						
+						List<CpIdentidade> lista = CpDao.getInstance().consultaIdentidades(dpPessoa);
+						if (lista.size() > 0) {
+							CpIdentidade identidadeAntiga = lista.get(0);
+							
+							CpIdentidade identidadeNova = new CpIdentidade();
+							identidadeNova.setDtCriacaoIdentidade(data);
+							identidadeNova.setDpPessoa(pessoaNova);
+							copiarIdentidade(identidadeAntiga, identidadeNova);
+							
+							dao().gravarComHistorico(identidadeNova, identidadeAntiga, data, identidadeCadastrante);
+						}
 					}
 				}
 			} catch (final Exception e) {
@@ -2020,6 +2032,16 @@ public class CpBL {
 		pesNova.setMatricula(pesAnt.getMatricula());
 		pesNova.setIdPessoaIni(pesAnt.getIdPessoaIni());
 		pesNova.setIdePessoa(pesAnt.getIdePessoa());
+	}
+	
+	public void copiarIdentidade(CpIdentidade identidadeAntiga, CpIdentidade identidadeNova) {
+		identidadeNova.setCpTipoIdentidade(identidadeAntiga.getCpTipoIdentidade());
+		identidadeNova.setDscSenhaIdentidade(identidadeAntiga.getDscSenhaIdentidade());
+		identidadeNova.setPinIdentidade(identidadeAntiga.getPinIdentidade());
+		identidadeNova.setNmLoginIdentidade(identidadeAntiga.getNmLoginIdentidade());
+		identidadeNova.setCpOrgaoUsuario(identidadeAntiga.getCpOrgaoUsuario());
+		identidadeNova.setHisDtIni(identidadeNova.getDtCriacaoIdentidade());
+		identidadeNova.setHisAtivo(1);
 	}
 	
 }
