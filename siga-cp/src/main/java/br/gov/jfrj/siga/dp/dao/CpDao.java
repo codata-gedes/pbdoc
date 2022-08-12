@@ -60,6 +60,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.QueryHints;
 
+import com.google.common.collect.Iterables;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -1757,12 +1758,27 @@ public class CpDao extends ModeloDao {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<CpIdentidade> consultaIdentidades(final DpPessoa pessoa) {
-		final Query qry = em().createNamedQuery("consultarIdentidades");
-		qry.setParameter("idPessoaIni", pessoa.getIdInicial());
-		final List<CpIdentidade> lista = qry.getResultList();
-		return lista;
+		return this.consultaIdentidades(pessoa, null);
+	}
+
+	public CpIdentidade consultaIdentidade(final DpPessoa pessoa) {
+		List<CpIdentidade> identidades = this.consultaIdentidades(pessoa, 1);
+		return Iterables.getFirst(identidades, null);
+	}
+
+	private List<CpIdentidade> consultaIdentidades(final DpPessoa pessoa, Integer limit) {
+		final JPAQuery<CpIdentidade> query = new JPAQuery<CpIdentidade>(em())
+				.from(qCpIdentidade)
+				.innerJoin(qCpIdentidade.dpPessoa, qDpPessoa)
+				.where(qDpPessoa.idPessoaIni.eq(pessoa.getIdInicial())
+						.and(qCpIdentidade.hisDtFim.isNull()))
+				.orderBy(qCpIdentidade.idIdentidade.desc());
+
+		if (limit != null) {
+			query.limit(limit);
+		}
+		return query.fetch();
 	}
 
 	/*

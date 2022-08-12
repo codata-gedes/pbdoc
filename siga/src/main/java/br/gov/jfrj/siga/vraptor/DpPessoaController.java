@@ -66,6 +66,7 @@ import br.gov.jfrj.siga.base.GeraMessageDigest;
 import br.gov.jfrj.siga.base.RegraNegocioException;
 import br.gov.jfrj.siga.base.SigaModal;
 import br.gov.jfrj.siga.base.util.Texto;
+import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpBL;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
@@ -235,7 +236,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Get("app/pessoa/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa, Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa,
 			boolean buscarInativos) throws Exception {
-		
+
 		result.include("request",getRequest());
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
@@ -312,21 +313,19 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	public void ativarInativar(final Long id, Integer offset, Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa, Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa) throws Exception{
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 		DpPessoa pessoaAnt = dao().consultar(id, DpPessoa.class, false).getPessoaAtual();
-		DpPessoa pessoa = new DpPessoa();
 		ou.setIdOrgaoUsu(pessoaAnt.getOrgaoUsuario().getId());
 		ou = CpDao.getInstance().consultarPorId(ou);
 
 		if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())
 				|| CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario()).getId().equals(ou.getId())) {
 			pessoaAnt = dao().consultar(id, DpPessoa.class, false).getPessoaAtual();
+
+			CpIdentidade identidadeCadastrante = getIdentidadeCadastrante();
 			// inativar
-			if (pessoaAnt.getDataFimPessoa() == null || "".equals(pessoaAnt.getDataFimPessoa())) {
-				Calendar calendar = new GregorianCalendar();
-				Date date = new Date();
-				calendar.setTime(date);
-				pessoaAnt.setDataFimPessoa(calendar.getTime());
-				pessoaAnt.setHisIdcFim(getIdentidadeCadastrante());
-				
+			if (pessoaAnt.getDataFimPessoa() == null) {
+				pessoaAnt.setDataFimPessoa(new Date());
+				pessoaAnt.setHisIdcFim(identidadeCadastrante);
+
 				try {
 					dao().iniciarTransacao();
 					dao().gravar(pessoaAnt);
@@ -345,37 +344,25 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				// não pode ativar caso já exista uma pessoa com mesmo órgão, cargo, função de
 				// confiança, lotação e cpf
 
-				DpPessoaDaoFiltro dpPessoa = new DpPessoaDaoFiltro();
-				dpPessoa.setIdOrgaoUsu(pessoaAnt.getOrgaoUsuario().getIdOrgaoUsu());
-				dpPessoa.setCargo(pessoaAnt.getCargo());
-				dpPessoa.setFuncaoConfianca(pessoaAnt.getFuncaoConfianca());
-				dpPessoa.setLotacao(pessoaAnt.getLotacao());
-				dpPessoa.setCpf(pessoaAnt.getCpfPessoa());
-				dpPessoa.setNome("");
-				dpPessoa.setId(id);
+				DpPessoaDaoFiltro pessoaFiltro = new DpPessoaDaoFiltro();
+				pessoaFiltro.setIdOrgaoUsu(pessoaAnt.getOrgaoUsuario().getIdOrgaoUsu());
+				pessoaFiltro.setCargo(pessoaAnt.getCargo());
+				pessoaFiltro.setFuncaoConfianca(pessoaAnt.getFuncaoConfianca());
+				pessoaFiltro.setLotacao(pessoaAnt.getLotacao());
+				pessoaFiltro.setCpf(pessoaAnt.getCpfPessoa());
+				pessoaFiltro.setNome("");
+				pessoaFiltro.setId(id);
+				pessoaFiltro.setBuscarFechadas(Boolean.FALSE);
 
-				dpPessoa.setBuscarFechadas(Boolean.FALSE);
-				long tamanho = dao().consultarQuantidade(dpPessoa);
-
+				long tamanho = dao().consultarQuantidade(pessoaFiltro);
 				if (tamanho > 0) {
-					throw new AplicacaoException(
-							"Já existe outro usuário ativo com estes dados: Órgão, Cargo, Função, Unidade e CPF");
+					throw new AplicacaoException("Já existe outro usuário ativo com estes dados: Órgão, Cargo, Função, Unidade e CPF");
 				}
-				pessoa.setNomePessoa(pessoaAnt.getNomePessoa());
-				pessoa.setCpfPessoa(pessoaAnt.getCpfPessoa());
-				pessoa.setCargo(pessoaAnt.getCargo());
-				pessoa.setLotacao(pessoaAnt.getLotacao());
-				pessoa.setOrgaoUsuario(pessoaAnt.getOrgaoUsuario());
-				pessoa.setFuncaoConfianca(pessoaAnt.getFuncaoConfianca());
-				pessoa.setDataNascimento(pessoaAnt.getDataNascimento());
-				pessoa.setMatricula(pessoaAnt.getMatricula());
-				pessoa.setIdePessoa(pessoaAnt.getIdePessoa());
-				pessoa.setSituacaoFuncionalPessoa(pessoaAnt.getSituacaoFuncionalPessoa());
-				pessoa.setSesbPessoa(pessoaAnt.getSesbPessoa());
-				pessoa.setEmailPessoa(pessoaAnt.getEmailPessoa());
-				pessoa.setIdInicial(pessoaAnt.getIdInicial());
+
+				final DpPessoa pessoa = DpPessoa.novaInstanciaBaseadaEm(pessoaAnt);
 				try {
-					dao().gravarComHistorico(pessoa, pessoaAnt,dao().consultarDataEHoraDoServidor(), getIdentidadeCadastrante());				
+					dao().gravarComHistorico(pessoa, pessoaAnt,dao().consultarDataEHoraDoServidor(), identidadeCadastrante);
+					Cp.getInstance().getBL().criarIdentidadeComHistorico(new Date(), pessoaAnt, pessoa, identidadeCadastrante);
 				} catch (Exception e) {
 					if(e.getCause() instanceof ConstraintViolationException &&
 	    					("CORPORATIVO.DP_PESSOA_UNIQUE_PESSOA_ATIVA".equalsIgnoreCase(((ConstraintViolationException)e.getCause()).getConstraintName()))) {

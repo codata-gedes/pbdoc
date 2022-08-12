@@ -24,6 +24,7 @@
  */
 package br.gov.jfrj.siga.dp;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -35,6 +36,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,7 +85,59 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
 	private List<List<String>> listaLotacoes = new ArrayList<List<String>>();
 
 	public DpPessoa() {
+	}
 
+	public static DpPessoa novaInstanciaBaseadaEm(DpPessoa pessoaBase) {
+		return novaInstanciaBaseadaEm(pessoaBase, null);
+	}
+
+	public static DpPessoa novaInstanciaBaseadaEm(DpPessoa pessoaBase, Date novaDataCriacao) {
+		Objects.requireNonNull(pessoaBase, () -> "Não é possível criar uma " + DpPessoa.class.getSimpleName() + " pois a pessoa base está nula");
+
+		final DpPessoa pessoaNova = new DpPessoa();
+		pessoaNova.setNomePessoa(pessoaBase.getNomePessoa());
+		pessoaNova.setNomeExibicao(pessoaBase.getNomeExibicao());
+		pessoaNova.setOrgaoUsuario(pessoaBase.getOrgaoUsuario());
+		pessoaNova.setLotacao(pessoaBase.getLotacao());
+		pessoaNova.setFuncaoConfianca(pessoaBase.getFuncaoConfianca());
+		pessoaNova.setSiglaPessoa(pessoaBase.getSiglaPessoa());
+		pessoaNova.setMatricula(pessoaBase.getMatricula());
+		pessoaNova.setCpfPessoa(pessoaBase.getCpfPessoa());
+		pessoaNova.setCargo(pessoaBase.getCargo());
+		pessoaNova.setIdePessoa(pessoaBase.getIdePessoa());
+		pessoaNova.setEmailPessoa(pessoaBase.getEmailPessoa());
+		pessoaNova.setSituacaoFuncionalPessoa(pessoaBase.getSituacaoFuncionalPessoa());
+		pessoaNova.setSesbPessoa(pessoaBase.getSesbPessoa());
+		pessoaNova.setDataNascimento(pessoaBase.getDataNascimento());
+		pessoaNova.setDataInicioPessoa(ofNullable(novaDataCriacao).orElseGet(Date::new));
+		pessoaNova.setDataExpedicaoIdentidade(pessoaBase.getDataExpedicaoIdentidade());
+		pessoaNova.setDataExercicioPessoa(pessoaBase.getDataExercicioPessoa());
+		pessoaNova.setDataNomeacao(pessoaBase.getDataNomeacao());
+		pessoaNova.setDataPosse(pessoaBase.getDataPosse());
+		pessoaNova.setDataPublicacao(pessoaBase.getDataPublicacao());
+		pessoaNova.setIdPessoaIni(pessoaBase.getIdPessoaIni());
+		pessoaNova.setIdentidade(pessoaBase.getIdentidade());
+		pessoaNova.setOrgaoIdentidade(pessoaBase.getOrgaoIdentidade());
+		pessoaNova.setUfIdentidade(pessoaBase.getUfIdentidade());
+		pessoaNova.setAtoNomeacao(pessoaBase.getAtoNomeacao());
+		pessoaNova.setCpTipoPessoa(pessoaBase.getCpTipoPessoa());
+
+		pessoaNova.setBairro(pessoaBase.getBairro());
+		pessoaNova.setCep(pessoaBase.getCep());
+		pessoaNova.setCidade(pessoaBase.getCidade());
+		pessoaNova.setEndereco(pessoaBase.getEndereco());
+		pessoaNova.setImprimeEndereco(pessoaBase.getImprimeEndereco());
+		pessoaNova.setGrauInstrucao(pessoaBase.getGrauInstrucao());
+		pessoaNova.setIdEstadoCivil(pessoaBase.getIdEstadoCivil());
+		pessoaNova.setPessoaInicial(pessoaBase.getPessoaInicial());
+		pessoaNova.setSexo(pessoaBase.getSexo());
+		pessoaNova.setTelefone(pessoaBase.getTelefone());
+		pessoaNova.setTipoSanguineo(pessoaBase.getTipoSanguineo());
+		pessoaNova.setTipoServidor(pessoaBase.getTipoServidor());
+
+		pessoaNova.setTramitarOutrosOrgaos(pessoaBase.isTramitarOutrosOrgaos());
+		pessoaNova.setHisIdIni(pessoaBase.getHisIdIni());
+		return pessoaNova;
 	}
 
 	public Long getIdLotacao() {

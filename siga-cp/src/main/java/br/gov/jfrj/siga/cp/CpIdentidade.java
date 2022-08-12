@@ -18,11 +18,14 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.cp;
 
+import static java.util.Optional.ofNullable;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -53,7 +56,31 @@ public class CpIdentidade extends AbstractCpIdentidade {
 	 */
 	private static final long serialVersionUID = 5911884614189757579L;
 	public static final long pinLength = 8L;
-	
+
+	public CpIdentidade() {
+	}
+
+	public static CpIdentidade novaInstanciaBaseadaEm(CpIdentidade identidadeBase, DpPessoa pessoaNova) {
+		return novaInstanciaBaseadaEm(identidadeBase, pessoaNova, null);
+	}
+
+	public static CpIdentidade novaInstanciaBaseadaEm(CpIdentidade identidadeBase, DpPessoa pessoaNova, Date novaDataCriacao) {
+		Objects.requireNonNull(identidadeBase, () -> "Não é possível criar uma " + CpIdentidade.class.getSimpleName() + " pois a identidade base está nula");
+		Objects.requireNonNull(pessoaNova, () -> "Não é possível criar uma " + CpIdentidade.class.getSimpleName() + " sem associação com uma " + DpPessoa.class.getSimpleName());
+		Objects.requireNonNull(pessoaNova.getId(), () -> "Não é possível criar uma " + CpIdentidade.class.getSimpleName() + " sem uma " + DpPessoa.class.getSimpleName() + " já registrada no banco de dados");
+
+		final CpIdentidade novaIdentidade = new CpIdentidade();
+		novaIdentidade.setDpPessoa(pessoaNova);
+		novaIdentidade.setDtCriacaoIdentidade(ofNullable(novaDataCriacao).orElseGet(Date::new));
+		novaIdentidade.setCpTipoIdentidade(identidadeBase.getCpTipoIdentidade());
+		novaIdentidade.setDscSenhaIdentidade(identidadeBase.getDscSenhaIdentidade());
+		novaIdentidade.setPinIdentidade(identidadeBase.getPinIdentidade());
+		novaIdentidade.setNmLoginIdentidade(identidadeBase.getNmLoginIdentidade());
+		novaIdentidade.setCpOrgaoUsuario(identidadeBase.getCpOrgaoUsuario());
+		novaIdentidade.setHisDtIni(identidadeBase.getDtCriacaoIdentidade());
+		novaIdentidade.setHisAtivo(1);
+		return novaIdentidade;
+	}
 
 	public DpPessoa getPessoaAtual() {
 		return CpDao.getInstance().consultarPorIdInicial(
@@ -156,4 +183,5 @@ public class CpIdentidade extends AbstractCpIdentidade {
 	public boolean isPinCadastrado()  {
 		return this.getPinIdentidade() != null;
 	}
+
 }
