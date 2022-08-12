@@ -89,6 +89,7 @@
                     </div>
                 </div>
             </c:if>
+            <p class="alert alert-warning"><strong>Atenção!</strong> Inclusão e Alteração de Lotações estão inativadas temporariamente para Manutenção</p>
             <h3 class="gt-table-head"><fmt:message key="usuario.lotacoes"/> cadastradas</h3>
             <table border="0" class="table table-sm table-striped">
                 <thead class="${thead_color}">
@@ -97,7 +98,7 @@
                     <th align="left">Sigla</th>
                     <th align="left">Externa</th>
                     <th align="left">Suspensa</th>
-                    <th colspan="2" align="center">Op&ccedil;&otilde;es</th>
+                    <th hidden="true" colspan="2" align="center">Op&ccedil;&otilde;es</th>
                 </tr>
                 </thead>
 
@@ -120,7 +121,7 @@
                                 <c:param name="id" value="${lotacao.id}"></c:param>
                             </c:url>
 
-                            <div class="btn-group">
+                            <div class="btn-group" hidden="true">
                                 <c:choose>
                                     <c:when test="${empty lotacao.dataFimLotacao}">
                                         <a href="${urlAtivarInativar}"
@@ -187,7 +188,7 @@
             <div class="gt-table-buttons">
                 <c:url var="url" value="/app/lotacao/editar"></c:url>
                 <c:url var="urlAtivarInativar" value="/app/lotacao/ativarInativar"></c:url>
-                <input type="button" value="Incluir" onclick="javascript:window.location.href='${url}'"
+                <input hidden="true" type="button" value="Incluir" onclick="javascript:window.location.href='${url}'"
                        class="btn btn-primary">
             </div>
         </form>
