@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006 - 2011 SJRJ.
+* Copyright (c) 2006 - 2011 SJRJ.
  * 
  *     This file is part of SIGA.
  * 
@@ -375,8 +375,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				pessoa.setEmailPessoa(pessoaAnt.getEmailPessoa());
 				pessoa.setIdInicial(pessoaAnt.getIdInicial());
 				try {
-					dao().gravarComHistorico(pessoa, pessoaAnt,dao().consultarDataEHoraDoServidor(), getIdentidadeCadastrante());
-					//Cp.getInstance().getBL().criarIdentidadeAposEditar(pessoa.getSesbPessoa() + pessoa.getMatricula(), pessoaAnt.getCpfFormatado(), identidadePesquisa);				
+					dao().gravarComHistorico(pessoa, pessoaAnt,dao().consultarDataEHoraDoServidor(), getIdentidadeCadastrante());				
 				} catch (Exception e) {
 					if(e.getCause() instanceof ConstraintViolationException &&
 	    					("CORPORATIVO.DP_PESSOA_UNIQUE_PESSOA_ATIVA".equalsIgnoreCase(((ConstraintViolationException)e.getCause()).getConstraintName()))) {
