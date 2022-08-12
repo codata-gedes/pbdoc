@@ -1897,7 +1897,7 @@ public class CpBL {
 					
 					DpPessoa pessoaNova = null;
 					for (DpPessoa dpPessoa : listPessoa) {
-						pessoaNova = new DpPessoa();
+						pessoaNova = DpPessoa.novaInstanciaBaseadaEm(dpPessoa, data);
 						if(dpPessoa.getLotacao().getIdInicial().equals(lotacaoNova.getIdLotacaoIni())) {
 							pessoaNova.setLotacao(lotacaoNova);
 						} else {
@@ -1915,20 +1915,8 @@ public class CpBL {
 								pessoaNova.setLotacao(lotacaoFilhoNova);
 							}
 						}				
-						copiarPessoa(dpPessoa, pessoaNova);
 						dao().gravarComHistorico(pessoaNova, dpPessoa, data, identidadeCadastrante);
-						
-						List<CpIdentidade> lista = CpDao.getInstance().consultaIdentidades(dpPessoa);
-						if (lista.size() > 0) {
-							CpIdentidade identidadeAntiga = lista.get(0);
-							
-							CpIdentidade identidadeNova = new CpIdentidade();
-							identidadeNova.setDtCriacaoIdentidade(data);
-							identidadeNova.setDpPessoa(pessoaNova);
-							copiarIdentidade(identidadeAntiga, identidadeNova);
-							
-							dao().gravarComHistorico(identidadeNova, identidadeAntiga, data, identidadeCadastrante);
-						}
+						criarIdentidadeComHistorico(data, dpPessoa, pessoaNova, identidadeCadastrante);
 					}
 				}
 			} catch (final Exception e) {
@@ -1948,7 +1936,14 @@ public class CpBL {
 		lotNova.setOrgaoUsuario(lotAnt.getOrgaoUsuario());
 		lotNova.setIsSuspensa(lotAnt.getIsSuspensa());
 	}
-	
+
+	/**
+	 * @deprecated usar {@link DpPessoa#novaInstanciaBaseadaEm(DpPessoa, Date)} ou {@link DpPessoa#novaInstanciaBaseadaEm(DpPessoa)}
+	 * 
+	 * @param pesAnt
+	 * @param pesNova
+	 */
+	@Deprecated
 	public void copiarPessoa(DpPessoa pesAnt, DpPessoa pesNova) {
 		pesNova.setNomePessoa(pesAnt.getNomePessoa());
 		pesNova.setCpfPessoa(pesAnt.getCpfPessoa());
@@ -1968,16 +1963,6 @@ public class CpBL {
 		pesNova.setIdPessoaIni(pesAnt.getIdPessoaIni());
 		pesNova.setIdePessoa(pesAnt.getIdePessoa());
 		pesNova.setTramitarOutrosOrgaos(pesAnt.isTramitarOutrosOrgaos());
-	}
-	
-	public void copiarIdentidade(CpIdentidade identidadeAntiga, CpIdentidade identidadeNova) {
-		identidadeNova.setCpTipoIdentidade(identidadeAntiga.getCpTipoIdentidade());
-		identidadeNova.setDscSenhaIdentidade(identidadeAntiga.getDscSenhaIdentidade());
-		identidadeNova.setPinIdentidade(identidadeAntiga.getPinIdentidade());
-		identidadeNova.setNmLoginIdentidade(identidadeAntiga.getNmLoginIdentidade());
-		identidadeNova.setCpOrgaoUsuario(identidadeAntiga.getCpOrgaoUsuario());
-		identidadeNova.setHisDtIni(identidadeNova.getDtCriacaoIdentidade());
-		identidadeNova.setHisAtivo(1);
 	}
 	
 }
