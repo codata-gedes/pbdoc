@@ -27,7 +27,7 @@ import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.SigaConstraintViolationException;
 import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.cp.CpIdentidade;
-import br.gov.jfrj.siga.cp.CpTipoIdentidade;
+import br.gov.jfrj.siga.cp.bl.CpBL;
 import br.gov.jfrj.siga.cp.bl.SituacaoFuncionalEnum;
 import br.gov.jfrj.siga.dp.CpLocalidade;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
@@ -995,40 +995,15 @@ public class Excel {
 				}
 			}
 			if(problemas == null || "".equals(problemas.toString())) {				
-				CpDao.getInstance().iniciarTransacao();
-				CpIdentidade usu = null;
-				CpIdentidade usuarioExiste = null;
-				List<CpIdentidade> lista1 = new ArrayList<CpIdentidade>();
-            	for (DpPessoa dpPessoa : lista) {
-	    			CpDao.getInstance().gravarComHistorico(dpPessoa, identidade);
-
-	    			dpPessoa.setMatricula(10000 + dpPessoa.getId());
-					dpPessoa.setIdePessoa(dpPessoa.getId().toString());
-					CpDao.getInstance().gravar(dpPessoa);
-								
-    				lista1.clear();
-    				lista1 = CpDao.getInstance().consultaIdentidadesPorCpf(dpPessoa.getCpfPessoa().toString());
-    				
-    				if(lista1.size() > 0) {
-    					usuarioExiste = lista1.get(0);
-    					usu = new CpIdentidade();
-    					usu.setCpTipoIdentidade(CpDao.getInstance().consultar(1,
-    										CpTipoIdentidade.class, false));
-    					usu.setDscSenhaIdentidade(usuarioExiste.getDscSenhaIdentidade());
-    					usu.setDtCriacaoIdentidade(CpDao.getInstance()
-    							.consultarDataEHoraDoServidor());
-    					usu.setCpOrgaoUsuario(dpPessoa.getOrgaoUsuario());
-    					usu.setHisDtIni(usu.getDtCriacaoIdentidade());
-    					usu.setHisAtivo(1);
-    					
-        				if(usu != null) {
-        					usu.setNmLoginIdentidade(dpPessoa.getSesbPessoa() + dpPessoa.getMatricula());
-        					usu.setDpPessoa(dpPessoa);
-        					CpDao.getInstance().gravarComHistorico(usu, identidade);
-        				}
-    				}
-				}
-            	CpDao.getInstance().em().getTransaction().commit();				    		
+            	for (DpPessoa pessoa : lista) {
+            		final String dataNascimento = pessoa.getDataNascimento() != null ? pessoa.getDtNascimentoDDMMYYYY() : null;
+            		final String dataExpedicaoIdentidade = pessoa.getDataExpedicaoIdentidade() != null ? pessoa.getDataExpedicaoIdentidadeDDMMYYYY() : null;
+            		
+					new CpBL().criarUsuario(null, identidade, orgaoUsuario.getId(), pessoa.getIdCargo(), pessoa.getIdFuncaoConfianca(), pessoa.getIdLotacao(), 
+							pessoa.getNomePessoa(), dataNascimento, pessoa.getCpfFormatado(), pessoa.getEmailPessoa(), 
+							pessoa.getIdentidade(), pessoa.getOrgaoIdentidade(), pessoa.getUfIdentidade(), dataExpedicaoIdentidade,
+							nomeExibicao, "", false);
+    			}
 			}
 		} catch (Exception e) {														
 			if (CpDao.getInstance().em().getTransaction().isActive()) {
