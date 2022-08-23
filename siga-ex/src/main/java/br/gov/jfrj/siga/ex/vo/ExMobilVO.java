@@ -360,7 +360,7 @@ public class ExMobilVO extends ExVO {
 							.getComp()
 							.podeIncluirDocumento(titular, lotaTitular,
 									mob), null,
-					"criandoAnexo=true&mobilPaiSel.sigla=" + getSigla(), null,
+					"criandoAnexo=false&mobilPaiSel.sigla=" + getSigla(), null,
 					null, null);
 			
 			addAcao("overlays",
