@@ -33,6 +33,7 @@ public enum TipoResponsavelEnum {
 		final Map<Integer, String> map = new TreeMap<Integer, String>();
 		map.put(MATRICULA.getId(), MATRICULA.getDescricao());
 		map.put(LOTACAO.getId(), LOTACAO.getDescricao());
+		map.put(CAMPO_LIVRE.getId(), CAMPO_LIVRE.getDescricao());
 		return map;
 	}
 	
@@ -40,6 +41,7 @@ public enum TipoResponsavelEnum {
 		final Map<Integer, String> map = new TreeMap<Integer, String>();
 		map.put(MATRICULA.getId(), MATRICULA.getDescricao());
 		map.put(LOTACAO.getId(), LOTACAO.getDescricao());
+		map.put(CAMPO_LIVRE.getId(), CAMPO_LIVRE.getDescricao());
 		return map;
 	}
 	
