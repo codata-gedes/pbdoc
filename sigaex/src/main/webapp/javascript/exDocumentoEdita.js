@@ -108,6 +108,7 @@ function validar(silencioso) {
 	var descr = document.getElementsByName('exDocumentoDTO.descrDocumento')[0].value;
 	var destinatarioLotacao = document.getElementsByName('exDocumentoDTO.lotacaoDestinatarioSel.sigla');
 	var destinatarioUsuario = document.getElementsByName('exDocumentoDTO.destinatarioSel.sigla');
+	var destinatarioCampoLivre = document.getElementsByName('exDocumentoDTO.nmDestinatario');
 	var arquivo = document.getElementsByName('arquivo');
 	var classificacao = document.getElementById('formulario_exDocumentoDTO.classificacaoSel_id');
 	var eletroHidden = document.getElementById('eletronicoHidden');
@@ -149,6 +150,12 @@ function validar(silencioso) {
 	if (destinatarioUsuario.length != 0 ) {
 		if (destinatarioUsuario == null || destinatarioUsuario[0].value == "") { 
 			aviso("Preencha o campo 'Destinatário - Usuário' antes de gravar o documento.", silencioso);
+			return false;
+		}
+	}
+	if (destinatarioCampoLivre.length != 0 ) {
+		if (destinatarioCampoLivre == null || destinatarioCampoLivre [0].value == "") { 
+			aviso("Preencha o campo 'Destinatário - Campo Livre' antes de gravar o documento.", silencioso);
 			return false;
 		}
 	}
