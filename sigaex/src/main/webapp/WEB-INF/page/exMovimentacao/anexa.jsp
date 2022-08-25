@@ -352,7 +352,7 @@
 		</div>
 	</div>
 
-	<div id="dados-assinatura" style="display: none">
+	<div id="dados-assinatura">
 
 		<input type="hidden" name="ad_url_base" value="" /> <input
 			type="hidden" name="ad_url_next"
