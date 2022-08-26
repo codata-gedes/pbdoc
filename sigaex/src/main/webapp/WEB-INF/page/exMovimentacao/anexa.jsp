@@ -9,7 +9,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Movimentação" compatibilidade="IE=EmulateIE9">
-
+	<div class="col">
+		<button type="button" name="voltar" onclick="javascript:window.location.href='/sigaex/app/expediente/doc/exibir?sigla=${mobilVO.sigla}'"class="btn btn-secondary float-right" accesskey="r">Volta<u>r</u></button>
+	</div>
 	<c:if test="${not mob.doc.eletronico}">
 		<script type="text/javascript">
 			$("html").addClass("fisico");
