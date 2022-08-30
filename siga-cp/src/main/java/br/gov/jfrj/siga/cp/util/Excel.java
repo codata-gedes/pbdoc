@@ -673,6 +673,10 @@ public class Excel {
 				i = 0;
 				email = "";
 				
+				if (isRowEmpty(row))
+					continue;
+				
+				
 				Iterator<Cell> cellIterator = row.cellIterator();
 				Cell cell;
 				
@@ -1133,5 +1137,14 @@ public class Excel {
         } catch (InputMismatchException erro) {
             return(false);
         }
+    }
+    
+    public static boolean isRowEmpty(Row row) {
+        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+            Cell cell = row.getCell(c);
+            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+                return false;
+        }
+        return true;
     }
 }
