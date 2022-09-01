@@ -367,7 +367,7 @@
 							</div>
 						</div>
 						<c:if test="${empty id}">
-							<div class="col-sm-5">
+							<div class="col-sm-5" hidden="true">
 								<input type="checkbox" class="form-check-input" id="enviarEmail" name="enviarEmail" value="1" checked /> Enviar automaticamente o e-mail com os dados de acesso para o Usuário.
 							</div>
 						</c:if>
