@@ -64,6 +64,7 @@ import br.com.caelum.vraptor.view.Results;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.GeraMessageDigest;
 import br.gov.jfrj.siga.base.RegraNegocioException;
+import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.base.SigaModal;
 import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.cp.CpIdentidade;
@@ -631,7 +632,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao,
 					idLotacao, nmPessoa, dtNascimento, cpf, email, identidade, orgaoIdentidade, ufIdentidade,
 					dataExpedicaoIdentidade, nomeExibicao, enviarEmail, toBooleanDefaultIfNull(tramitarOutrosOrgaos, false));
-			this.result.include("mensagem", "Operação realizada com sucesso!");
+			
+			String mensagem = String.format("%s\n%s", SigaMessages.getMessage("usuario.cadastro.sucesso"), SigaMessages.getMessage("usuario.cadastro.envioemail"));
+			result.include(SigaModal.ALERTA, SigaModal.mensagem(mensagem).titulo("Sucesso"));
 		} catch (RegraNegocioException e) {
 			result.include(SigaModal.ALERTA, e.getMessage());
 		}
@@ -701,7 +704,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			throw new AplicacaoException("Problemas ao salvar pessoa(s)", 0, e);	
 		}
 		if (inputStream == null) {
-			result.include(SigaModal.ALERTA, SigaModal.mensagem("Arquivo processado com sucesso!").titulo("Sucesso"));
+			String mensagem = String.format("%s\n%s", SigaMessages.getMessage("usuario.cadastro.sucesso"), SigaMessages.getMessage("usuario.cadastro.envioemail"));
+			result.include(SigaModal.ALERTA, SigaModal.mensagem(mensagem).titulo("Sucesso"));
 			carregarExcel();
 		} else {			
 			return new InputStreamDownload(inputStream, "application/text", "inconsistencias.txt");
