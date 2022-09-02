@@ -1,5 +1,7 @@
 package br.gov.jfrj.siga.cp.util;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -673,7 +675,7 @@ public class Excel {
 				i = 0;
 				email = "";
 				
-				if (isRowEmpty(row)) {
+				if (isEmpty(row)) {
 					continue;
 				}
 				
@@ -1139,12 +1141,21 @@ public class Excel {
         }
     }
     
-	public static boolean isRowEmpty(Row row) {
-		for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
-			Cell cell = row.getCell(c);
-			if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK && !cell.getStringCellValue().isEmpty()) {
+	public static boolean isEmpty(final Row row) {
+		for (Cell cell : row) {
+			if (!isEmpty(cell)) {
 				return false;
 			}
+		}
+		return true;
+	}
+
+	private static boolean isEmpty(final Cell cell) {
+		if (cell == null) {
+			return true;
+		}
+		if (cell.getCellType() != Cell.CELL_TYPE_BLANK && isNotBlank(cell.getStringCellValue())) {
+			return false;
 		}
 		return true;
 	}
