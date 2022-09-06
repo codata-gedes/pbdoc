@@ -274,6 +274,10 @@ public class Excel {
 				DpLotacao lot = new DpLotacao();
 				Row row = rowIterator.next(); //linha
 				
+				if (isEmpty(row)) {
+					continue;
+				}
+				
 				Iterator<Cell> cellIterator = row.cellIterator();
 				Cell cell;
 				
