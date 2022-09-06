@@ -5,19 +5,19 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.FileUtils;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -499,20 +499,19 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 			String nomeArquivo = arquivo.getFileName();
 			String extensao = nomeArquivo.substring(nomeArquivo.lastIndexOf("."), nomeArquivo.length());
 
-			File file = new File("arq" + extensao);
+			java.nio.file.Path tempFilePath = Files.createTempFile(UUID.randomUUID().toString(), extensao);
+			Files.copy(arquivo.getFile(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
 
-			file.createNewFile();
-			FileUtils.copyInputStreamToFile(arquivo.getFile(), file);
 
 			CpOrgaoUsuario orgaoUsuario = new CpOrgaoUsuario();
-			if (idOrgaoUsu != null && !"".equals(idOrgaoUsu)) {
+			if (idOrgaoUsu != null) {
 				orgaoUsuario.setIdOrgaoUsu(idOrgaoUsu);
 			} else {
 				orgaoUsuario = getTitular().getOrgaoUsuario();
 			}
 
 			CpBL cpbl = new CpBL();
-			inputStream = cpbl.uploadLotacao(file, orgaoUsuario, extensao, getIdentidadeCadastrante());
+			inputStream = cpbl.uploadLotacao(tempFilePath.toFile(), orgaoUsuario, extensao, getIdentidadeCadastrante());
 		} catch (Exception e) {
 			throw new AplicacaoException("Problemas ao salvar unidades", 0, e);
 		}
