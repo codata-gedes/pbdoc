@@ -99,21 +99,23 @@ public class ExMesa2Controller extends ExController {
 	@Get("app/mesa2")
 	public void lista(Boolean exibirAcessoAnterior, Long idVisualizacao, String msg) throws Exception {
 		result.include("ehPublicoExterno", AcessoConsulta.ehPublicoExterno(getTitular()));
-		try {
-			result.include("podeNovoDocumento", Cp.getInstance().getConf().podePorConfiguracao(getTitular(), getTitular().getLotacao(),
-					CpTipoConfiguracao.TIPO_CONFIG_CRIAR_NOVO_EXTERNO));
-		} catch (Exception e) {
-			throw e;
-		} 
+		result.include("podeNovoDocumento",
+				Cp.getInstance().getConf().podePorConfiguracao(getTitular(), getTitular().getLotacao(),
+				CpTipoConfiguracao.TIPO_CONFIG_CRIAR_NOVO_EXTERNO)
+		);
+
 		if (exibirAcessoAnterior != null && exibirAcessoAnterior) {
-			CpAcesso a = dao.consultarAcessoAnterior(so.getCadastrante());
-			if (a == null)
+			final CpAcesso acessoAnterior = dao.consultarAcessoAnterior(so.getCadastrante());
+			if (acessoAnterior == null) {
+				result.include("idVisualizacao", 0);
 				return;
-			String acessoAnteriorData = Data.formatDDMMYY_AS_HHMMSS(a.getDtInicio());
-			String acessoAnteriorMaquina = a.getAuditIP();
+			}
+			final String acessoAnteriorData = Data.formatDDMMYY_AS_HHMMSS(acessoAnterior.getDtInicio());
+			final String acessoAnteriorMaquina = acessoAnterior.getAuditIP();
 			result.include("acessoAnteriorData", acessoAnteriorData);
 			result.include("acessoAnteriorMaquina", acessoAnteriorMaquina);
 		}
+
 		if(idVisualizacao != null) {
 			DpVisualizacao vis = dao().consultar(idVisualizacao, DpVisualizacao.class, false);
 			if(vis != null && vis.getDelegado().equals(getTitular())) {
@@ -125,6 +127,7 @@ public class ExMesa2Controller extends ExController {
 		} else {
 			result.include("idVisualizacao", 0);
 		}
+
 		if (msg != null) {
 			result.include("mensagemCabec", msg);
 			result.include("msgCabecClass", "alert-info fade-close");
