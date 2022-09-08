@@ -202,8 +202,6 @@
 										@click="collapseGrupo(g.grupoOrdem, g.grupoNome)">
 									<i class="h5 mb-0" :class="g.grupoIcone"></i>
 									<span class="mr-3">{{g.grupoNome}}</span>
-									<!--
-									DESABILITADA REGRA QUE CONSIDERA O COUNT UMA VEZ QUE ESTÁ QUEBRADA: REABILITAR QUANDO CORRIGIR O COUNT
 									<small>
 										<span class="badge badge-light btn-sm align-middle" :class="{disabled: exibeLota}">
 											<small class="fas fa-user"></small>
@@ -216,7 +214,6 @@
 											</span>
 										</c:if>
 									</small>
-									-->
 								</h5>
 							</div>
 							<div :id="['collapsetab-' + g.grupoOrdem]" class="collapse" :key="g.grupoOrdem" v-bind:class="{show: !g.grupoCollapsed }">
