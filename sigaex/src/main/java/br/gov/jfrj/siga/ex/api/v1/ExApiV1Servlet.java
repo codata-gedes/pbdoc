@@ -212,7 +212,7 @@ public class ExApiV1Servlet extends SwaggerServlet implements IPropertyProvider 
 		addPublicProperty("conversor.html.ext", "br.gov.jfrj.itextpdf.FlyingSaucer");
 		addPublicProperty("pdf.visualizador", "pdf.js");
 		addPublicProperty("conversor.html.factory", "br.gov.jfrj.siga.ex.ext.ConversorHTMLFactory");
-		addPublicProperty("data.obrigacao.assinar.anexo.despacho", "31/12/2099");
+		addPublicProperty("data.obrigacao.assinar.anexo.despacho", "01/01/2020");
 		addPublicProperty("debug.modelo.padrao.arquivo", null);
 		addPublicProperty("dje.lista.destinatario.publicacao", null);
 		addPublicProperty("dje.servidor.data.disponivel", null);
