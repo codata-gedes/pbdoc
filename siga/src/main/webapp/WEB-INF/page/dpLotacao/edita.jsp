@@ -12,6 +12,7 @@
 		var siglaLotacao = document.getElementsByName('siglaLotacao')[0].value;		
 		var id = document.getElementsByName('id')[0].value;
 		var idLocalidade = document.getElementsByName('idLocalidade')[0].value;	
+		var unidadeReceptora = document.getElementsByName('unidadeReceptora')[0].value;
 		if (nmLotacao==null || nmLotacao=="") {
 			habilitarBotaoOk();
 			sigaModal.alerta("Preencha o nome da Lotação");
@@ -163,6 +164,16 @@
 									<input type="radio" name="situacao" value="false" id="situacaoInativo" ${not empty dtFimLotacao ? 'checked' : ''} />Inativo
 								</label>
 							</div>							
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="unidadeReceptora">Unidade Receptora</label><br/>
+							<div class="form-check-inline">
+								<label class="form-check-label">
+									<input type="checkbox" id="unidadeReceptora" name="unidadeReceptora" ${unidadeReceptora eq true ? 'checked' : ''} />									
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>

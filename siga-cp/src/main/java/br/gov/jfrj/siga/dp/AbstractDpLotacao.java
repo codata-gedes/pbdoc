@@ -184,6 +184,9 @@ public abstract class AbstractDpLotacao extends DpResponsavel implements
 	@Column(name = "IS_SUSPENSA")
 	private Integer isSuspensa;
 
+	@Column(name = "UNIDADE_RECEPTORA")
+	private Boolean unidadeReceptora;
+	
 	public Integer getIsExternaLotacao() {
 		return isExternaLotacao;
 	}
@@ -415,6 +418,14 @@ public abstract class AbstractDpLotacao extends DpResponsavel implements
 
 	public void setIsSuspensa(Integer isSuspensa) {
 		this.isSuspensa = isSuspensa;
+	}
+
+	public Boolean getUnidadeReceptora() {
+		return unidadeReceptora;
+	}
+
+	public void setUnidadeReceptora(Boolean unidadeReceptora) {
+		this.unidadeReceptora = unidadeReceptora;
 	}
 
 }
