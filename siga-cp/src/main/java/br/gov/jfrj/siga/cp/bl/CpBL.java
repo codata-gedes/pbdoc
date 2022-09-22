@@ -1769,7 +1769,7 @@ public class CpBL {
 	
 	public DpLotacao criarLotacao(final CpIdentidade identidadeCadastrante, final DpPessoa titular, final DpLotacao lotaTitular, 
 			final Long id, final String nmLotacao, final Long idOrgaoUsu, final String siglaLotacao,
-			final String situacao, final Boolean isExternaLotacao, final Long lotacaoPai, final Long idLocalidade) {
+			final String situacao, final Boolean isExternaLotacao, final Long lotacaoPai, final Long idLocalidade, final Boolean unidadeReceptora) {
 		if(nmLotacao == null)
 			throw new AplicacaoException("Nome da lotação não informado");
 		
@@ -1819,7 +1819,8 @@ public class CpBL {
 										|| (lotacaoPai != null && lotacao.getLotacaoPai() == null)
 										|| (lotacaoPai == null && lotacao.getLotacaoPai() != null)
 										|| (lotacaoPai != null && !lotacaoPai.equals(lotacao.getLotacaoPai() != null ? lotacao.getLotacaoPai().getId() : 0L))
-										|| !idLocalidade.equals(lotacao.getLocalidade().getId())))) {
+										|| !idLocalidade.equals(lotacao.getLocalidade().getId())
+										|| !unidadeReceptora.equals(lotacao.getUnidadeReceptora())))) {
 			if (id != null) {			
 				listPessoa = CpDao.getInstance().pessoasPorLotacao(id, Boolean.TRUE, Boolean.FALSE);
 				long qtdeDocumentoCriadosPosse = dao().consultarQtdeDocCriadosPossePorDpLotacao(lotacao.getIdInicial());
@@ -1862,7 +1863,7 @@ public class CpBL {
 			}
 			lotacaoNova.setNomeLotacao(Texto.removerEspacosExtra(nmLotacao).trim());
 			lotacaoNova.setSiglaLotacao(siglaLotacao.toUpperCase());
-			
+			lotacaoNova.setUnidadeReceptora(unidadeReceptora);
 			CpLocalidade localidade = new CpLocalidade();
 			localidade.setIdLocalidade(idLocalidade);
 			lotacaoNova.setLocalidade(dao().consultarLocalidade(localidade));
