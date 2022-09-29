@@ -61,6 +61,7 @@
 				this.beenSubmitted = true;
 		});
  		$('.campoData').datepicker({
+ 			minDate: '0',
            	onSelect: function(){
                    ${onSelect}
 			}
