@@ -21,7 +21,9 @@ package br.gov.jfrj.siga.dp.dao;
 import br.gov.jfrj.siga.model.dao.DaoFiltroSelecionavel;
 
 public class CpOrgaoUsuarioDaoFiltro extends DaoFiltroSelecionavel {
+
 	private String nome;
+	private Boolean ativo = Boolean.TRUE;
 
 	public String getNome() {
 		return nome;
@@ -30,4 +32,13 @@ public class CpOrgaoUsuarioDaoFiltro extends DaoFiltroSelecionavel {
 	public void setNome(final String nome) {
 		this.nome = nome;
 	}
+
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
 }
