@@ -53,7 +53,7 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements Serializa
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-	@SequenceGenerator(name = "seq", schema = "corporativo", sequenceName = "cp_orgao_usuario_id_orgao_usu_seq")
+	@SequenceGenerator(name = "seq", schema = "corporativo", sequenceName = "cp_orgao_usuario_id_orgao_usu_seq", allocationSize = 1, initialValue = 1)
 	@Column(name = "ID_ORGAO_USU", nullable = false)
 	private Long idOrgaoUsu;
 
