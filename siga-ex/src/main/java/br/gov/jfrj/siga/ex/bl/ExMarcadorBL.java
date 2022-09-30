@@ -624,8 +624,9 @@ public class ExMarcadorBL {
 
 			ExMovimentacao movRetorno = contemTransferenciaRetorno(transfComData, mobil);
 
-			if (movRetorno != null) {
+			if (movRetorno != null || !transferencias.contains(transfComData)) {
 				transferencias.remove(movRetorno);
+				transferencias.remove(transfComData);
 			} else {
 				Date dtMarca = transfComData.getDtFimMov();
 				dtMarca.setHours(23);
