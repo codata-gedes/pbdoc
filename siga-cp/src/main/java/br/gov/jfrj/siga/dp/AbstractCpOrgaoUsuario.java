@@ -25,12 +25,18 @@ package br.gov.jfrj.siga.dp;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 
+import br.gov.jfrj.siga.model.Assemelhavel;
+import br.gov.jfrj.siga.model.Historico;
 import br.gov.jfrj.siga.model.Objeto;
+import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 
 @MappedSuperclass
 @NamedQueries({
@@ -41,20 +47,21 @@ import br.gov.jfrj.siga.model.Objeto;
 		@NamedQuery(name = "consultarPorFiltroCpOrgaoUsuario", query = "from CpOrgaoUsuario org where (upper(org.nmOrgaoUsu) like upper('%' || :nome || '%'))	order by org.nmOrgaoUsu"),
 })
 
-public abstract class AbstractCpOrgaoUsuario extends Objeto implements
-		Serializable {
+public abstract class AbstractCpOrgaoUsuario extends Objeto implements Serializable, Assemelhavel, Historico {
 
 	private static final long serialVersionUID = -4788748819884158050L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+	@SequenceGenerator(name = "seq", schema = "corporativo", sequenceName = "cp_orgao_usuario_id_orgao_usu_seq")
+	@Column(name = "ID_ORGAO_USU", nullable = false)
+	private Long idOrgaoUsu;
 
 	@Column(name = "CGC_ORGAO_USU")
 	private Integer cgcOrgaoUsu;
 
 	@Column(name = "COD_ORGAO_USU")
-	private Integer codOrgaoUsu;
-
-	@Id
-	@Column(name = "ID_ORGAO_USU", nullable = false)
-	private Long idOrgaoUsu;
+	private Long codOrgaoUsu;
 
 	@Column(name = "BAIRRO_ORGAO_USU", length = 50)
 	private String bairroOrgaoUsu;
@@ -245,11 +252,18 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements
 		this.ufOrgaoUsu = ufOrgaoUsu;
 	}
 
-	public Integer getCodOrgaoUsu() {
+	public Long getCodOrgaoUsu() {
 		return codOrgaoUsu;
 	}
 
-	public void setCodOrgaoUsu(Integer codOrgaoUsu) {
+	public String getCodOrgaoUsuFormatado() {
+		if (this.getCodOrgaoUsu() == null) {
+			return null;
+		}
+		return String.format("%06d", getCodOrgaoUsu());
+	}
+
+	public void setCodOrgaoUsu(Long codOrgaoUsu) {
 		this.codOrgaoUsu = codOrgaoUsu;
 	}
 
@@ -259,6 +273,24 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements
 
 	public void setAcronimoOrgaoUsu(String acronimoOrgaoUsu) {
 		this.acronimoOrgaoUsu = acronimoOrgaoUsu;
+	}
+
+	@Override
+	public String toString() {
+		return this.getSiglaOrgaoUsuarioCompleta();
+	}
+
+	@Override
+	public boolean semelhante(Assemelhavel obj, int nivel) {
+		return SincronizavelSuporte.semelhante(this, obj, nivel);
+	}
+
+	@Override
+	public boolean equivale(Object other) {
+		if (other == null) {
+			return false;
+		}
+		return this.getIdOrgaoUsu().longValue() == ((CpOrgaoUsuario) other).getIdOrgaoUsu().longValue();
 	}
 
 }

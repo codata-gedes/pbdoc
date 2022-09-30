@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	buffer="64kb"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" buffer="64kb"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
@@ -8,46 +7,48 @@
 
 <script type="text/javascript">
 	function validar() {
-		var nmOrgaoUsuario = document.getElementsByName('nmOrgaoUsuario')[0].value;
-		var siglaOrgaoUsuario = document.getElementsByName('siglaOrgaoUsuario')[0].value;	
-		var siglaOrgaoUsuarioCompleta = document.getElementsByName('siglaOrgaoUsuarioCompleta')[0].value;
-		var id = document.getElementsByName('id')[0].value;
 
-		if (nmOrgaoUsuario==null || nmOrgaoUsuario=="") {			
+		const codOrgUsuInput = document.getElementById('codOrgUsu');
+		const codOrgUsu = codOrgUsuInput.value;
+		if (!codOrgUsu) {
+			sigaModal.alerta("Preencha o código interno do Órgão.");
+			codOrgUsuInput.focus();
+			return;
+		}
+
+		const siglaOrgaoUsuarioInput = document.getElementById('siglaOrgaoUsuario');	
+		const siglaOrgaoUsuario = siglaOrgaoUsuarioInput.value;	
+		if (!siglaOrgaoUsuario || siglaOrgaoUsuario.length != 3) {
+			sigaModal.alerta("Preencha o Acrônimo do Órgão com exatamente 3 letras. Ex.: \"ABC\"");
+			siglaOrgaoUsuarioInput.focus();
+			return;
+		}
+
+		const siglaOrgaoUsuarioCompletaInput = document.getElementById('siglaOrgaoUsuarioCompleta');
+		const siglaOrgaoUsuarioCompleta = siglaOrgaoUsuarioCompletaInput.value;
+		if (!siglaOrgaoUsuarioCompleta) {
+			sigaModal.alerta("Preencha a sigla Completa do Órgão.");
+			siglaOrgaoUsuarioCompletaInput.focus();
+			return;
+		}
+
+		const nmOrgaoUsuarioInput = document.getElementById('nmOrgaoUsuario');
+		const nmOrgaoUsuario = nmOrgaoUsuarioInput.value;
+		if (!nmOrgaoUsuario) {
 			sigaModal.alerta("Preencha o nome do Órgão.");
-			document.getElementById('nmOrgaoUsuario').focus();		
-		}else {
-			if (siglaOrgaoUsuario==null || siglaOrgaoUsuario=="") {			
-				sigaModal.alerta("Preencha a sigla do Órgão.");
-				document.getElementById('siglaOrgaoUsuario').focus();	
-			}else {
-				if (siglaOrgaoUsuarioCompleta == null || siglaOrgaoUsuarioCompleta == "") {
-					sigaModal.alerta("Preencha a sigla Completa do Órgão.");
-					document.getElementById('siglaOrgaoUsuarioCompleta').focus();
-				} else {
-					if(id==null || id=="") {
-						sigaModal.alerta("Preencha ID do Órgão.");
-						document.getElementById('id').focus();
-					} else {
-						if (siglaOrgaoUsuario.length != 3) {
-							sigaModal.alerta("Preencha sigla abreviada com exatamente 3 letras.");
-							document.getElementById('siglaOrgaoUsuario').focus();
-						} else {
-							frm.submit();
-						}
-					}
-				}
-			}
-		}			
+			nmOrgaoUsuarioInput.focus();
+			return;
+		}
+
+		frm.submit();
 	}
 
-	function somenteLetras(){
-		tecla = event.keyCode;
-		if ((tecla >= 65 && tecla <= 90) || (tecla >= 97 && tecla <= 122)){
-		    return true;
-		}else{
-		   return false;
-		}
+	function apenasLetras(event) {
+		return /^[a-z]$/i.test(event.key);
+	}
+
+	function apenasNumeros(event) {
+		return /^[0-9]$/i.test(event.key);
 	}
 </script>
 
@@ -62,63 +63,32 @@
 					<div class="row">
 						<div class="col-md-2">
 							<div class="form-group">
-								<label>ID</label>
-								<c:choose>
-								    <c:when test="${empty id}">
-								        <input type="text" id="id" name="id" value="${id}" maxlength="6" size="6" onKeypress="return verificaNumero(event);" class="form-control"/>
-								        <input type="hidden" name="acao" value="i"/>
-								    </c:when>    
-								    <c:otherwise>
-								    	<label class="form-control">${id}</label>
-								        <input type="hidden" name="id" value="${id}"/>
-								        <input type="hidden" name="acao" value="a"/>
-								    </c:otherwise>
-								</c:choose>
+								<label>Código</label>
+						        <input type="text" id="codOrgUsu" name="codOrgUsu" value="${codOrgUsu}" maxlength="6" onKeypress="return apenasNumeros(event);" class="form-control"/>
+						    	<input type="hidden" id="id" name="id" value="${id}"/>
+						        <input type="hidden" name="acao" value="${empty id ? 'i' : 'a'}"/>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Acrônimo</label>
+								<input type="text" name="siglaOrgaoUsuario" id="siglaOrgaoUsuario" value="${siglaOrgaoUsuario}" minlength="3" maxlength="3" style="text-transform: uppercase" onKeypress="return apenasLetras(event);" onkeyup="this.value = this.value.trim()" class="form-control" ${empty siglaOrgaoUsuario || podeAlterarSigla ? '' : 'title="Não é possível alterar o Acrônimo de um Órgão" readonly'} />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Sigla Oficial</label>
+								<input type="text" id="siglaOrgaoUsuarioCompleta" name="siglaOrgaoUsuarioCompleta" value="${siglaOrgaoUsuarioCompleta}" maxlength="10" class="form-control" />
+							</div>
+						</div>
+						<div class="col-md-6">
 							<div class="form-group">
 								<label>Nome</label>
-								<input type="text" id="nmOrgaoUsuario" name="nmOrgaoUsuario" value="${nmOrgaoUsuario}" maxlength="80" size="80" class="form-control"/>
+								<input type="text" id="nmOrgaoUsuario" name="nmOrgaoUsuario" value="${nmOrgaoUsuario}" maxlength="256" class="form-control"/>
 							</div>
-						</div>
-						<div class="col-md-2">
-							<div class="form-group">
-								<label>Sigla Oficial</label> <input type="text"
-									id="siglaOrgaoUsuarioCompleta"
-									name="siglaOrgaoUsuarioCompleta"
-									value="${siglaOrgaoUsuarioCompleta}"
-									maxlength="10" size="10"
-									class="form-control" />
-							</div>
-						</div>
-						<div class="col-md-1">
-							<div class="form-group">
-								<label>Sigla</label>
-								<c:choose>
-									<c:when test="${empty siglaOrgaoUsuario || podeAlterarSigla}">
-										<input type="text" name="siglaOrgaoUsuario" id="siglaOrgaoUsuario" value="${siglaOrgaoUsuario}" minlength="3" maxlength="3" size="3" style="text-transform:uppercase"  onKeypress="return somenteLetras(event);" onkeyup="this.value = this.value.trim()" class="form-control"/>	
-									</c:when>
-									<c:otherwise>
-										<label class="form-control">${siglaOrgaoUsuario}</label>
-										<input type="hidden" name="siglaOrgaoUsuario" value="${siglaOrgaoUsuario}"/>
-									</c:otherwise>
-								</c:choose>
-							</div>
-						</div>
-						<div class="col-md-2">
-							<div class="form-group">
-								<label>Data do Contrato</label>
-								<input type="text" id="dtContrato" name="dtContrato" value="${dtContrato}" 
-									 onblur="javascript:verifica_data(this,0);" class="form-control"/>
-							</div>
-						</div>
-						<div class="col-md-2" hidden="true">
-						  <label>Tipo de Órgão</label>
-						  <div class="form-check">
-						    <input type="checkbox" class="form-check-input" id="isExternoOrgaoUsu" name="isExternoOrgaoUsu" value="1" <c:if test="${isExternoOrgaoUsu == 1}">checked</c:if> />
-						    <label class="form-check-label" for="isExternoOrgaoUsu">Órgão com Acesso Externo</label>
-						  </div>
 						</div>
 					</div>
 					
