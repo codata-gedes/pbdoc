@@ -290,7 +290,7 @@
 						<div class="col-md-2">
 							<div class="form-group">
 								<label for="nmPessoa">Data de Nascimento</label>
-								<input type="text" id="dtNascimento" name="dtNascimento" value="${dtNascimento}" maxlength="10" onkeyup="this.value = mascaraData( this.value )" class="form-control campoDataNascimento" />
+								<input type="text" id="dtNascimento" name="dtNascimento" value="${dtNascimento}" maxlength="10" onkeyup="this.value = mascaraData( this.value )" onkeydown="event.preventDefault()" class="form-control campoDataNascimento" />
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -334,7 +334,7 @@
 							<div class="col-md-2">
 								<div class="form-group">
 									<label for="nmPessoa">Data de Expedição</label>
-									<input type="text" id="dataExpedicaoIdentidade" name="dataExpedicaoIdentidade" value="${dataExpedicaoIdentidade}" maxlength="10" onkeyup="this.value = mascaraData( this.value )" class="form-control campoDataNascimento" />
+									<input type="text" id="dataExpedicaoIdentidade" name="dataExpedicaoIdentidade" value="${dataExpedicaoIdentidade}" maxlength="10" onkeyup="this.value = mascaraData( this.value )" onkeydown="event.preventDefault()" class="form-control campoDataNascimento" />
 								</div>
 							</div>
 						</div>
