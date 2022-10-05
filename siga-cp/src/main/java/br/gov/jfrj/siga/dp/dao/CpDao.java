@@ -738,9 +738,25 @@ public class CpDao extends ModeloDao {
 				);
 			}
 
-			if (filtro.getIdOrgaoUsu() != null) {
-				predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
-			}
+			 if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
+	                predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+
+	                final QDpLotacao subqDpLotacaoCountUndRcpt = new QDpLotacao("subqDpLotacaoCountUnidadesReceptoras");
+	                final BooleanExpression predicateOrgaoSemUnidade = JPAExpressions
+	                        .select(subqDpLotacaoCountUndRcpt.idLotacao.count())
+	                        .from(subqDpLotacaoCountUndRcpt)
+	                        .where(subqDpLotacaoCountUndRcpt.orgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu())
+	                                .and(subqDpLotacaoCountUndRcpt.unidadeReceptora.isTrue()))
+	                        .eq(0L);
+
+	                String principal = ContextoPersistencia.getUserPrincipal();
+	                CpIdentidade identidade = consultaIdentidadeCadastrante(principal, true);
+	                DpPessoa pessoa = identidade.getPessoaAtual();
+	                
+	                if(!identidade.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
+	                	predicates.and(qDpLotacao.unidadeReceptora.isTrue());
+	                } 
+	            }
 		}
 
 		final JPAQuery<?> query = new JPAQueryFactory(em()).from(qDpLotacao);
