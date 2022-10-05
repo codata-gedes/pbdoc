@@ -66,6 +66,13 @@
                    ${onSelect}
 			}
 		});
+ 		
+ 		$('.campoDataNascimento').datepicker({
+ 			maxDate: '0',
+           	onSelect: function(){
+                   ${onSelect}
+			}
+		});
 
 		//$('.autogrow').css('overflow', 'hidden').autogrow();
 	});
