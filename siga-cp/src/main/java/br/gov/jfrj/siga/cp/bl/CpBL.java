@@ -1820,7 +1820,7 @@ public class CpBL {
 										|| (lotacaoPai == null && lotacao.getLotacaoPai() != null)
 										|| (lotacaoPai != null && !lotacaoPai.equals(lotacao.getLotacaoPai() != null ? lotacao.getLotacaoPai().getId() : 0L))
 										|| !idLocalidade.equals(lotacao.getLocalidade().getId())
-										|| !unidadeReceptora.equals(lotacao.getUnidadeReceptora())))) {
+										|| unidadeReceptora != lotacao.getUnidadeReceptora()))) {
 			if (id != null) {			
 				listPessoa = CpDao.getInstance().pessoasPorLotacao(id, Boolean.TRUE, Boolean.FALSE);
 				long qtdeDocumentoCriadosPosse = dao().consultarQtdeDocCriadosPossePorDpLotacao(lotacao.getIdInicial());
