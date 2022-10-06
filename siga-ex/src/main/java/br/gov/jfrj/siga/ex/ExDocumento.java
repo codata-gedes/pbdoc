@@ -2867,4 +2867,16 @@ public class ExDocumento extends AbstractExDocumento implements Serializable, Ca
 		return ExArquivoFilesystem.TABELA_EX_DOCUMENTO;
 	}
 
+	public boolean temDocumentoNaoAssinado() {	
+		for (ExMobil exMobil : this.getExMobilSet()) {
+			for (ExMovimentacao exMovimentacao : exMobil.getExMovimentacaoSet()) {
+				Long idTpMov = exMovimentacao.getIdTpMov();
+				if (ExTipoMovimentacao.hasDocumento(idTpMov) && !exMovimentacao.isAssinada()) {
+					return true;
+				}	
+			}
+		}
+		return false;
+	}
+
 }

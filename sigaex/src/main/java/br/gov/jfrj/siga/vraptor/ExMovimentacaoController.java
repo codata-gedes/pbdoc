@@ -1909,6 +1909,10 @@ public class ExMovimentacaoController extends ExController {
 		result.include("obsOrgao", obsOrgao);
 		result.include("protocolo", OPCAO_MOSTRAR.equals(protocolo));
 		result.include("dtDevolucaoMovString", dtDevolucaoMovString);
+		
+		if(mob.getDoc().temDocumentoNaoAssinado()) {
+			result.include(SigaModal.ALERTA, SigaModal.mensagem("Existem documentos anexados não assinados."));
+		}
 	}
 
 	@Transacional
