@@ -62,6 +62,7 @@
 						<div class="form-group">
 							<label for="idOrgaoUsu">Órgão</label>
 							<select name="idOrgaoUsu" value="${idOrgaoUsu}" class="form-control  siga-select2" >
+									<option value="${item.idOrgaoUsu}" >[Todos]</option>
 									<c:forEach items="${orgaosUsu}" var="item">
 										<option value="${item.idOrgaoUsu}"
 											${item.idOrgaoUsu == idOrgaoUsu ? 'selected' : ''}>
