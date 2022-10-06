@@ -739,15 +739,9 @@ public class CpDao extends ModeloDao {
 			}
 
 			 if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
-	                predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+				 predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
 
 	                final QDpLotacao subqDpLotacaoCountUndRcpt = new QDpLotacao("subqDpLotacaoCountUnidadesReceptoras");
-	                final BooleanExpression predicateOrgaoSemUnidade = JPAExpressions
-	                        .select(subqDpLotacaoCountUndRcpt.idLotacao.count())
-	                        .from(subqDpLotacaoCountUndRcpt)
-	                        .where(subqDpLotacaoCountUndRcpt.orgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu())
-	                                .and(subqDpLotacaoCountUndRcpt.unidadeReceptora.isTrue()))
-	                        .eq(0L);
 
 	                String principal = ContextoPersistencia.getUserPrincipal();
 	                CpIdentidade identidade = consultaIdentidadeCadastrante(principal, true);
