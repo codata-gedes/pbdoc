@@ -92,7 +92,7 @@ public class LotacoesPost implements ILotacoesPost {
 					
 				DpLotacao lota = Cp.getInstance().getBL().criarLotacao(so.getIdentidadeCadastrante(), so.getTitular(), so.getTitular().getLotacao(), 
 						null, req.nome, idOrgaoUsu, req.sigla, situacao, (req.isAcessoExterno ? true : null), 
-						idLotaPai, idLocalidade);
+						idLotaPai, idLocalidade, false);
 	
 				resp.idLotacao = lota.getId().toString();
 				resp.siglaLotacao = lota.getSigla();
