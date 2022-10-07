@@ -111,7 +111,6 @@ import br.gov.jfrj.siga.hibernate.ext.IMontadorQuery;
 import br.gov.jfrj.siga.model.Selecionavel;
 import br.gov.jfrj.siga.model.dao.ModeloDao;
 import br.gov.jfrj.siga.persistencia.ExClassificacaoDaoFiltro;
-import br.gov.jfrj.siga.persistencia.ExDocumentoDaoFiltro;
 import br.gov.jfrj.siga.persistencia.ExMobilApiBuilder;
 import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
 import br.gov.jfrj.siga.persistencia.ExModeloDaoFiltro;
@@ -1040,11 +1039,6 @@ public class ExDao extends CpDao {
 		// System.out.println("consultarQuantidadePorFiltro: " + tempoTotal
 		// / 1000000 + ", resultado: " + l);
 		return l.intValue();
-	}
-
-	public int consultarQuantidade(final ExDocumentoDaoFiltro flt) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	public ExMobil consultarPorSigla(final ExMobilDaoFiltro flt) {

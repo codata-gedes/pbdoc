@@ -218,7 +218,9 @@
 				<c:if test="${empty ocultarCodigo}">
 					${docVO.sigla}
 					<c:if test="${docVO.doc ne null}">
-						<small class="text-muted" title="Identificador Incremental Interno Único (ID)">#${docVO.doc.id}</small>
+						<small class="iiiu text-muted" title="Link Permanente: Identificador Incremental Interno Único (ID)">
+							<a href="${pageContext.request.contextPath}/app/documento/${docVO.doc.id}">#${docVO.doc.id}</a>
+						</small>
 					</c:if>
 				</c:if>
 				<button type="button" name="voltar" onclick="${(empty param.linkVolta) ? 'javascript:window.location.href=\'/siga\';' : 'javascript:'.concat(param.linkVolta) }" class="btn btn-secondary float-right" accesskey="r">Volta<u>r</u></button>				
@@ -353,12 +355,19 @@
 																idAjax="${mov.idMov}"
 																classe="${acao.classe}"
 																post="${acao.post}"
-																sufixoItemDesbotado="${
-																	not empty acao.params['movDocId']
-																		? '#'.concat(acao.params['movDocId'])
+																sufixoItemDesbotado="${(
+																				not empty acao.params['movDocId'] and
+																				not empty mov.idMov and
+																				not empty acao.nome and
+																				not empty mov.mov.nmArqMov and
+																				not empty mov.mov.conteudoTpMov and
+																				acao.nome.equals(mov.mov.nmArqMov)
+																		)
+																		? '#'.concat(mov.idMov)
 																		: null
 																}"
-																sufixoItemDesbotadoHint="Identificador Incremental Interno Único (ID)"
+																sufixoItemDesbotadoLink="${pageContext.request.contextPath}/app/anexo/${mov.idMov}"
+																sufixoItemDesbotadoHint="Link Permanente: Identificador Incremental Interno Único (ID)"
 															/>
 														</c:forEach>
 														<c:if test="${mov.idTpMov == 2}">
