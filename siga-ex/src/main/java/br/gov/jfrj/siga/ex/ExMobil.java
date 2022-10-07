@@ -89,7 +89,7 @@ public class ExMobil extends AbstractExMobil implements Serializable, Selecionav
 				+ "(?<numero>[0-9]{1,8})"
 				+ "(?<subnumero>\\.?[0-9]{1,3})??)(?:"
 				+ "(?<via>(?:-?[a-zA-Z]{1})|(?:-[0-9]{1,2}))|(?:-?V"
-				+ "(?<volume>[0-9]{1,2}))"
+				+ "(?<volume>[0-9]+))"
 				+ ")?$";
 	}
 
