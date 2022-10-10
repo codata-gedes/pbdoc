@@ -180,6 +180,23 @@ public class ExDocumento extends AbstractExDocumento implements Serializable, Ca
 		}
 		return docsFilhos;
 	}
+	
+	/**
+	 * Retorna lista com todos os mobils dos documentos que são filhos do documento atual recursivamente.
+	 */
+	public Set<ExMobil> getTodosMobilsFilhosSet() {
+		Set<ExMobil> mobils = new HashSet<ExMobil>();
+		for (ExMobil exMobil : this.getExMobilSet()) {
+			if (exMobil.getExDocumentoFilhoSet() != null) {
+				for (ExDocumento docFilho : exMobil.getExDocumentoFilhoSet()) {
+					mobils.addAll(docFilho.getExMobilSet());
+					mobils.addAll(docFilho.getTodosMobilsFilhosSet());
+				}
+			}
+		}
+		
+		return mobils;
+	}
 
 	/**
 	 * Retorna o código do documento.
@@ -2867,15 +2884,22 @@ public class ExDocumento extends AbstractExDocumento implements Serializable, Ca
 		return ExArquivoFilesystem.TABELA_EX_DOCUMENTO;
 	}
 
-	public boolean temDocumentoNaoAssinado() {	
-		for (ExMobil exMobil : this.getExMobilSet()) {
+	public boolean temDocumentoNaoAssinado() {
+		// get todos os mobils relacionados
+		Set<ExMobil> mobils = new HashSet<ExMobil>();
+		mobils.addAll(getExMobilSet());
+		mobils.addAll(getTodosMobilsFilhosSet());
+	
+		// verifica movimentacao de assinatura
+		for (ExMobil exMobil : mobils) {
 			for (ExMovimentacao exMovimentacao : exMobil.getExMovimentacaoSet()) {
 				Long idTpMov = exMovimentacao.getIdTpMov();
 				if (ExTipoMovimentacao.hasDocumento(idTpMov) && !exMovimentacao.isAssinada()) {
 					return true;
-				}	
+				}
 			}
 		}
+		
 		return false;
 	}
 
