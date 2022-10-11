@@ -420,7 +420,7 @@ public abstract class AbstractDpLotacao extends DpResponsavel implements
 		this.isSuspensa = isSuspensa;
 	}
 
-	public boolean getUnidadeReceptora() {
+	public boolean isUnidadeReceptora() {
 		return unidadeReceptora;
 	}
 
