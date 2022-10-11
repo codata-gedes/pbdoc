@@ -737,20 +737,20 @@ public class CpDao extends ModeloDao {
 								.or(qDpLotacao.nomeLotacaoAI.likeIgnoreCase(nomeLikeParam))
 				);
 			}
-			String principal = ContextoPersistencia.getUserPrincipal();
-			CpIdentidade identidade = consultaIdentidadeCadastrante(principal, true);
-			DpPessoa pessoa = identidade.getPessoaAtual();
 
-			 if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
-				 predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
-	                
-	                if(!identidade.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
-	                	predicates.and(qDpLotacao.unidadeReceptora.isTrue());
-	                } 
-            } else {
-				 predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(identidade.getCpOrgaoUsuario().getId()));
-				 predicates.or(qDpLotacao.unidadeReceptora.isTrue());
-            }
+			final String principal = ContextoPersistencia.getUserPrincipal();
+			final CpIdentidade identidadePrincipal = consultaIdentidadeCadastrante(principal, true);
+
+			if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
+				predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+
+				if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
+					predicates.and(qDpLotacao.unidadeReceptora.isTrue());
+				}
+			} else {
+				predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId()));
+				predicates.or(qDpLotacao.unidadeReceptora.isTrue());
+			}
 		}
 
 		final JPAQuery<?> query = new JPAQueryFactory(em()).from(qDpLotacao);
