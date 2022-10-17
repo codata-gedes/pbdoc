@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://localhost/libstag" prefix="f"%>
 
 <siga:pagina titulo="Lista Orgão Usuário">
 <script type="text/javascript" language="Javascript1.1">
@@ -86,6 +87,7 @@ function cpOrgaoUsuarioDesativar(id, codigoDeIntegracao, sigla) {
 				</div>
 			</div>
 		</c:if>
+
 			<!-- main content -->
 			<h5>&Oacute;rg&atilde;os cadastrados</h5>
 				<table border="0" class="table table-sm table-striped">
@@ -122,11 +124,12 @@ function cpOrgaoUsuarioDesativar(id, codigoDeIntegracao, sigla) {
 									<c:url var="url" value="/app/orgaoUsuario/editar">
 										<c:param name="id" value="${orgaoUsuario.id}"></c:param>
 									</c:url>
-									<c:if test="${administrador || (usuarioPodeAlterar && orgaoUsuarioSiglaLogado eq orgaoUsuario.sigla)}">
+									<c:if test="${administrador || usuarioPodeAlterar}">
 										<button type="button" onclick="javascript:window.location.href='${url}'" class="btn btn-sm btn-primary" style="min-width: 8em;">
 											<i class="fa fa-edit"></i>&nbsp;&nbsp;Alterar
 										</button>
 									</c:if>
+									<c:if test="${administrador || usuarioPodeAlterar}">
 									<c:choose>
 									<c:when test="${orgaoUsuario.hisAtivo == 1}">
 										<button type="button" onclick="cpOrgaoUsuarioDesativar(${orgaoUsuario.id}, ${orgaoUsuario.codOrgaoUsu}, '${orgaoUsuario.siglaOrgaoUsuarioCompleta}')" class="btn btn-sm btn-danger" style="min-width: 8em;">
@@ -137,15 +140,16 @@ function cpOrgaoUsuarioDesativar(id, codigoDeIntegracao, sigla) {
 										<button type="button" onclick="cpOrgaoUsuarioAtivar(${orgaoUsuario.id}, ${orgaoUsuario.codOrgaoUsu}, '${orgaoUsuario.siglaOrgaoUsuarioCompleta}')" class="btn btn-sm btn-success" style="min-width: 8em;">
 											<i class="fa fa-check"></i>&nbsp;&nbsp;Ativar
 										</button>
-									</c:otherwise>
+									</c:otherwise>								
 									</c:choose>
+									</c:if>
 								</td>
 							</tr>
 						</siga:paginador>
 					</tbody>
 				</table>
-			
-			<c:if test="${usuarioPodeAlterar}">
+
+			<c:if test="${administrador || usuarioPodeAlterar}">
 			<div class="gt-table-buttons">
 				<c:url var="url" value="/app/orgaoUsuario/editar"></c:url>
 				<input type="button" value="Incluir"

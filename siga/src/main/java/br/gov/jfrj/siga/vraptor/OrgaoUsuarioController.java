@@ -21,6 +21,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.util.Texto;
+import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.dp.CpContrato;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
@@ -53,6 +54,10 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	
 	@Get("app/orgaoUsuario/listar")
 	public void lista(Integer paramoffset, Integer quantidadePagina, String nome) throws Exception {
+
+		final CpConfiguracaoBL businessLogic = Cp.getInstance().getComp().getConfiguracaoBL();
+		final boolean temConfiguracao = businessLogic.podeUtilizarServicoPorConfiguracao(getTitular(), getLotaTitular(), "SIGA;GI:Módulo de Gestão de Identidade;CAD_ORGAO_USUARIO: Cadastrar Orgãos Usuário");
+
 		if (paramoffset == null) {
 			paramoffset = 0;
 		}
@@ -70,8 +75,10 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 		result.include("nome", nome);
 
 		final String siglaOrgaoTitular = getTitular().getOrgaoUsuario().getSigla();
+		final boolean administrador = CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(siglaOrgaoTitular);
+
+		result.include("usuarioPodeAlterar", administrador || temConfiguracao);
 		result.include("orgaoUsuarioSiglaLogado", siglaOrgaoTitular);
-		result.include("usuarioPodeAlterar", CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(siglaOrgaoTitular));
 		result.include("administrador", CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equalsIgnoreCase(siglaOrgaoTitular));
 
 		setItemPagina(quantidadePagina);

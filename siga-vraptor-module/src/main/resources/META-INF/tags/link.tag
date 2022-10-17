@@ -20,6 +20,7 @@
 <%@ attribute name="explicacao"%>
 <%@ attribute name="post"%>
 <%@ attribute name="sufixoItemDesbotado"%>
+<%@ attribute name="sufixoItemDesbotadoLink" %>
 <%@ attribute name="sufixoItemDesbotadoHint"%>
 
 <c:choose>
@@ -113,7 +114,16 @@
 			</c:otherwise>
 		</c:choose>
 		<c:if test="${not empty sufixoItemDesbotado}">
-			<small class="text-muted" title="${sufixoItemDesbotadoHint}">${sufixoItemDesbotado}</small>
+			<c:choose>
+				<c:when test="${not empty sufixoItemDesbotadoLink}">
+					<small title="${sufixoItemDesbotadoHint}">
+						<a href="${sufixoItemDesbotadoLink}" target="_blank">${sufixoItemDesbotado}</a>
+					</small>
+				</c:when>
+				<c:otherwise>
+					<small class="text-muted" title="${sufixoItemDesbotadoHint}">${sufixoItemDesbotado}</small>
+				</c:otherwise>
+			</c:choose>
 		</c:if>
 	</c:if>
 	${pos}
