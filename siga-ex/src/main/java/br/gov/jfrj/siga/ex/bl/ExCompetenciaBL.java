@@ -578,22 +578,22 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 	 */
 	public boolean podeAnexarArquivo(final DpPessoa titular,
 			final DpLotacao lotaTitular, final ExMobil mob) {
+
 		Boolean podePorConf = podePorConfiguracao(titular, lotaTitular,
 				ExTipoMovimentacao.TIPO_MOVIMENTACAO_ANEXACAO,
 				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR, null, null, null, null, null, null);
-	
-			return mob.doc().isFinalizado() 
-					&& !mob.isEmTransito()
-					&& (!mob.isGeral() || (mob.doc().isExterno() && !mob.doc().jaTransferido()))
-					&& !mob.isJuntado()
-					&& !mob.isArquivado()
-					&& !mob.isVolumeEncerrado()
-					&& !mob.isSobrestado()
-					&& podeMovimentar(titular, lotaTitular, mob)
-					&& !mob.doc().isSemEfeito()
-					&& podePorConf;
-			}
-		
+
+		return mob.doc().isFinalizado() 
+				&& !mob.isEmTransito()
+				&& (!mob.isGeral() || (mob.doc().isExterno() && !mob.doc().jaTransferido()))
+				&& !mob.isJuntado()
+				&& !mob.isArquivado()
+				&& !mob.isVolumeEncerrado()
+				&& !mob.isSobrestado()
+				&& podeMovimentar(titular, lotaTitular, mob)
+				&& !mob.doc().isSemEfeito()
+				&& podePorConf;
+	}
 
 	/**
 	 * Retorna se é possível incluir uma cópia a um móbil. As condições são as
