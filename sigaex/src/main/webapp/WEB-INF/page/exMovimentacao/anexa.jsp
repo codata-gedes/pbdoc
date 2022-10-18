@@ -11,9 +11,14 @@
 <siga:pagina titulo="Movimentação" compatibilidade="IE=EmulateIE9">
 	<tags:assinatura_scripts />
 
-	<div class="col">
-		<button type="button" name="voltar" onclick="javascript:window.location.href='/sigaex/app/expediente/doc/exibir?sigla=${mobilVO.sigla}'"class="btn btn-secondary float-right" accesskey="r">Volta<u>r</u></button>
+	<div class="container-fluid mb-3">
+		<div class="row">
+			<div class="col text-right">
+				<button type="button" name="voltar" onclick="javascript:window.location.href='/sigaex/app/expediente/doc/exibir?sigla=${mobilVO.sigla}'"class="btn btn-secondary" accesskey="r">Volta<u>r</u></button>
+			</div>
+		</div>
 	</div>
+
 	<c:if test="${not mob.doc.eletronico}">
 		<script type="text/javascript">
 			$("html").addClass("fisico");
@@ -306,12 +311,30 @@
 															idAjax="${mov.idMov}" />
 													</c:when>
 													<c:otherwise>
-														<siga:link title="${acao.nomeNbsp}" pre="${acao.pre}"
+														<siga:link
+															title="${acao.nomeNbsp}"
+															pre="${acao.pre}"
 															pos="${acao.pos}"
 															url="${pageContext.request.contextPath}${acao.url}"
-															test="${true}" popup="${acao.popup}"
-															confirm="${acao.msgConfirmacao}" ajax="${acao.ajax}"
-															idAjax="${mov.idMov}" />
+															test="${true}"
+															popup="${acao.popup}"
+															confirm="${acao.msgConfirmacao}"
+															ajax="${acao.ajax}"
+															idAjax="${mov.idMov}"
+															sufixoItemDesbotado="${(
+																			not empty acao.params['movDocId'] and
+																			not empty mov.idMov and
+																			not empty acao.nome and
+																			not empty mov.mov.nmArqMov and
+																			not empty mov.mov.conteudoTpMov and
+																			acao.nome.equals(mov.mov.nmArqMov)
+																	)
+																	? '#'.concat(mov.idMov)
+																	: null
+															}"
+															sufixoItemDesbotadoLink="${pageContext.request.contextPath}/app/anexo/${mov.idMov}"
+															sufixoItemDesbotadoHint="Link Permanente: Identificador Incremental Interno Único (ID)"
+														/>
 													</c:otherwise>
 												</c:choose>
 
