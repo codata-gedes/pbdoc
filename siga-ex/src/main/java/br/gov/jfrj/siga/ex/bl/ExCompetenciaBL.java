@@ -582,8 +582,8 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 				ExTipoMovimentacao.TIPO_MOVIMENTACAO_ANEXACAO,
 				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR, null, null, null, null, null, null);
 	
-		if (mob.doc().isFinalizado()) {
-			return !mob.isEmTransito()
+			return mob.doc().isFinalizado() 
+					&& !mob.isEmTransito()
 					&& (!mob.isGeral() || (mob.doc().isExterno() && !mob.doc().jaTransferido()))
 					&& !mob.isJuntado()
 					&& !mob.isArquivado()
@@ -592,13 +592,8 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 					&& podeMovimentar(titular, lotaTitular, mob)
 					&& !mob.doc().isSemEfeito()
 					&& podePorConf;
-		}
+			}
 		
-		if(mob.isGeral() && mob.doc().isProcesso())
-			return false;
-			
-		return mob.isGeral() && podePorConf;
-	}
 
 	/**
 	 * Retorna se é possível incluir uma cópia a um móbil. As condições são as
