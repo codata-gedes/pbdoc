@@ -47,10 +47,10 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements
 	private static final long serialVersionUID = -4788748819884158050L;
 
 	@Column(name = "CGC_ORGAO_USU")
-	private Integer cgcOrgaoUsu;
+	private Long cgcOrgaoUsu;
 
 	@Column(name = "COD_ORGAO_USU")
-	private Integer codOrgaoUsu;
+	private Long codOrgaoUsu;
 
 	@Id
 	@Column(name = "ID_ORGAO_USU", nullable = false)
@@ -131,7 +131,7 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements
 		return cepOrgaoUsu;
 	}
 
-	public Integer getCgcOrgaoUsu() {
+	public Long getCgcOrgaoUsu() {
 		return cgcOrgaoUsu;
 	}
 
@@ -201,7 +201,7 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements
 		this.cepOrgaoUsu = cepOrgaoUsu;
 	}
 
-	public void setCgcOrgaoUsu(Integer cgcOrgaoUsu) {
+	public void setCgcOrgaoUsu(Long cgcOrgaoUsu) {
 		this.cgcOrgaoUsu = cgcOrgaoUsu;
 	}
 
@@ -245,11 +245,11 @@ public abstract class AbstractCpOrgaoUsuario extends Objeto implements
 		this.ufOrgaoUsu = ufOrgaoUsu;
 	}
 
-	public Integer getCodOrgaoUsu() {
+	public Long getCodOrgaoUsu() {
 		return codOrgaoUsu;
 	}
 
-	public void setCodOrgaoUsu(Integer codOrgaoUsu) {
+	public void setCodOrgaoUsu(Long codOrgaoUsu) {
 		this.codOrgaoUsu = codOrgaoUsu;
 	}
 
