@@ -250,14 +250,14 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			if (idOrgaoUsu == null) {
 				final CpOrgaoUsuario primeiroOrgaoUsuario = Iterables.getFirst(list, null);
 				final Long primeiroIdOrgaoUsuario = primeiroOrgaoUsuario != null ? primeiroOrgaoUsuario.getId() : null;
-				carregarCombos(null, primeiroIdOrgaoUsuario, null, null, null, null, null, 0, Boolean.FALSE, false);
+				carregarCombos(null, primeiroIdOrgaoUsuario, null, null, null, null, null, 0, Boolean.FALSE);
 			}
 		} else {
 			ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
 			list.add(ou);
 			result.include("orgaosUsu", list);
 			if (idOrgaoUsu == null) {
-				carregarCombos(null, ou.getId(), null, null, null, null, null, 0, Boolean.FALSE, false);
+				carregarCombos(null, ou.getId(), null, null, null, null, null, 0, Boolean.FALSE);
 			}
 		}
 		if (idOrgaoUsu != null && (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())
@@ -305,7 +305,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			result.include("idLotacaoPesquisa", idLotacaoPesquisa);
 			if (getItens().size() == 0) result.include("mensagemPesquisa", "Nenhum resultado encontrado.");			
 
-			carregarCombos(null, idOrgaoUsu, null, null, null, null, cpfPesquisa, paramoffset, Boolean.FALSE, false);
+			carregarCombos(null, idOrgaoUsu, null, null, null, null, cpfPesquisa, paramoffset, Boolean.FALSE);
 		}		
 	}
 
@@ -531,7 +531,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Post("/app/pessoa/carregarCombos")
 	public void carregarCombos(final Long id, final Long idOrgaoUsu, final String nmPessoa, final String dtNascimento,
 			final String cpf, final String email, final String cpfPesquisa, final Integer paramoffset,
-			Boolean retornarEnvioEmail, final boolean comUnidadeReceptora) {
+			Boolean retornarEnvioEmail) {
 		result.include("request", getRequest());
 		result.include("id", id);
 		result.include("idOrgaoUsu", idOrgaoUsu);
@@ -739,14 +739,14 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			list.remove(0);
 			result.include("orgaosUsu", list);
 			if (idOrgaoUsu == null) {
-				carregarCombos(null, idOrgaoUsu, null, null, null, null, null, 0, Boolean.TRUE, false);
+				carregarCombos(null, idOrgaoUsu, null, null, null, null, null, 0, Boolean.TRUE);
 			}
 		} else {
 			ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
 			list.add(ou);
 			result.include("orgaosUsu", list);
 			if (idOrgaoUsu == null) {
-				carregarCombos(null, ou.getId(), null, null, null, null, null, 0, Boolean.TRUE, false);
+				carregarCombos(null, ou.getId(), null, null, null, null, null, 0, Boolean.TRUE);
 			}
 		}
 		if (idOrgaoUsu != null && (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())
@@ -781,7 +781,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			result.include("idLotacaoPesquisa", idLotacaoPesquisa);
 			result.include("idUsuarioPesquisa", idUsuarioPesquisa);
 			this.result.include("mensagem", "Operação realizada com sucesso!");
-			carregarCombos(null, idOrgaoUsu, null, null, null, null, cpfPesquisa, paramoffset, Boolean.TRUE, false);
+			carregarCombos(null, idOrgaoUsu, null, null, null, null, cpfPesquisa, paramoffset, Boolean.TRUE);
 		}
 	}
 	
@@ -915,7 +915,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 					result.include("mensagemPesquisa", "Nenhum resultado encontrado.");
 					result.include("temPermissaoParaExportarDados", temPermissaoParaExportarDados());
 
-					carregarCombos(null, idOrgaoUsu, null, null, null, null, cpfPesquisa, 0, Boolean.FALSE, false);																						
+					carregarCombos(null, idOrgaoUsu, null, null, null, null, cpfPesquisa, 0, Boolean.FALSE);																						
 			}					
 		}
 
