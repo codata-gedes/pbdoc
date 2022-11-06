@@ -2,6 +2,9 @@ package br.gov.jfrj.siga.model.dao.extended;
 
 import java.util.List;
 
+/**
+ * @author Michel Risucci
+ */
 public class Page<R> {
 
 	private int number;

@@ -596,7 +596,7 @@ public class ExMarcadorBL {
 	public void calcularMarcadoresTransferencia(Date dt) {
 		long m_aDevolverFora = CpMarcadorEnum.A_DEVOLVER_FORA_DO_PRAZO.getId();
 		long m_aDevolver = CpMarcadorEnum.A_DEVOLVER.getId();
-		long m_aguardando = CpMarcadorEnum.AGUARDANDO.getId();
+		long m_aguardando = CpMarcadorEnum.AGUARDANDO_DEVOLUCAO.getId();
 		long m_aguardandoFora = CpMarcadorEnum.AGUARDANDO_DEVOLUCAO_FORA_DO_PRAZO.getId();
 
 		List<ExMovimentacao> transferencias = mob.getMovimentacoesPorTipo(3, false);
@@ -624,8 +624,9 @@ public class ExMarcadorBL {
 
 			ExMovimentacao movRetorno = contemTransferenciaRetorno(transfComData, mobil);
 
-			if (movRetorno != null) {
+			if (movRetorno != null || !transferencias.contains(transfComData)) {
 				transferencias.remove(movRetorno);
+				transferencias.remove(transfComData);
 			} else {
 				Date dtMarca = transfComData.getDtFimMov();
 				dtMarca.setHours(23);

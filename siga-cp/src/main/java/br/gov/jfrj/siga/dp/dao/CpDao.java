@@ -57,6 +57,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.QueryHints;
 
@@ -404,17 +405,7 @@ public class CpDao extends ModeloDao {
 	}
 
 	public List<Tuple> consultarPorFiltroComContrato(final CpOrgaoUsuarioDaoFiltro filtro, final int offset, final int itensPorPagina) {
-
-		final JPAQuery<?> query = new JPAQuery<>(em())
-				.from(qCpOrgaoUsuario);
-
-		if (nonNull(filtro)) {
-			if (isNotEmpty(filtro.getNome())) {
-				final String nome = "%" + filtro.getNome().replace(' ', '%') + "%";
-				query.where(qCpOrgaoUsuario.nmOrgaoUsu.likeIgnoreCase(nome));
-			}
-		}
-
+		final JPAQuery<?> query = queryConsultarPorFiltro(filtro);
 		if (offset > 0) {
 			query.offset(offset);
 		}
@@ -472,24 +463,35 @@ public class CpDao extends ModeloDao {
 		return consultarPorSigla(o);
 	}
 
-	public long consultarQuantidade(final CpOrgaoUsuarioDaoFiltro o) {
-		final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
-		final JPAQuery<?> query = new JPAQuery<>(em())
-				.from(qCpOrgaoUsuario);
-
-		if (nonNull(o) && isNotEmpty(o.getNome())) {
-			final String nome = "%" + o.getNome().replace(' ', '%') + "%";
-			query.where(qCpOrgaoUsuario.nmOrgaoUsu.likeIgnoreCase(nome)
-					.or(qCpOrgaoUsuario.siglaOrgaoUsu.likeIgnoreCase(nome))
-					.or(qCpOrgaoUsuario.siglaOrgaoUsuCompleta.likeIgnoreCase(nome)));
-		}
-
-		return query.setHint(QueryHints.CACHEABLE, true)
+	public long consultarQuantidade(final CpOrgaoUsuarioDaoFiltro filtro) {
+		return queryConsultarPorFiltro(filtro)
+				.setHint(QueryHints.CACHEABLE, true)
 				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
 				.fetchCount();
 	}
 
-	@SuppressWarnings("unchecked")
+	private JPAQuery<?> queryConsultarPorFiltro(final CpOrgaoUsuarioDaoFiltro filtro) {
+		final JPAQuery<?> query = new JPAQuery<>(em()).from(qCpOrgaoUsuario);
+
+		final BooleanBuilder predicates = new BooleanBuilder();
+		if (filtro != null) {
+			if (filtro.getAtivo() != null) {
+				predicates.and(qCpOrgaoUsuario.hisAtivo.eq(BooleanUtils.toIntegerObject(filtro.getAtivo())));
+			}
+
+			final String paramNome = likeParamOrNull(filtro.getNome());
+			if (isNotEmpty(paramNome)) {
+				predicates.and(
+						qCpOrgaoUsuario.nmOrgaoUsu.likeIgnoreCase(paramNome)
+								.or(qCpOrgaoUsuario.siglaOrgaoUsu.likeIgnoreCase(paramNome))
+								.or(qCpOrgaoUsuario.siglaOrgaoUsuCompleta.likeIgnoreCase(paramNome))
+				);
+			}
+		}
+
+		return query.where(predicates);
+	}
+
 	public List<DpCargo> consultarPorFiltro(final DpCargoDaoFiltro o) {
 		return consultarPorFiltro(o, 0, 0);
 	}
@@ -2993,10 +2995,46 @@ public class CpDao extends ModeloDao {
 				.execute();
 	}
 
-	protected static Optional<String> normalizeUppercaseParam(final String param) {
+	public CpOrgaoUsuario consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(Long codigoDeIntegracao, String sigla) {
+		return new JPAQuery<>(em())
+				.select(qCpOrgaoUsuario)
+				.from(qCpOrgaoUsuario)
+				.where(
+						qCpOrgaoUsuario.hisAtivo.eq(1),
+						qCpOrgaoUsuario.codOrgaoUsu.eq(codigoDeIntegracao) // Ou mesmo código de integração (não é o ID)
+								.or(qCpOrgaoUsuario.siglaOrgaoUsu.equalsIgnoreCase(sigla)) // Mesma Sigla
+								.or(qCpOrgaoUsuario.acronimoOrgaoUsu.equalsIgnoreCase(sigla)) // Ou mesmo acrônimo
+				)
+				.fetchOne();
+	}
+
+	protected static Optional<String> normalizeParam(final String param) {
 		return ofNullable(param)
 				.map(StringUtils::stripToNull)
-				.map(StringUtils::normalizeSpace)
+				.map(StringUtils::normalizeSpace);
+	}
+
+	protected static Optional<String> likeParam(final String param) {
+		return normalizeParam(param)
+				.map(p -> "%" + replace(p, SPACE, "%") + "%");
+	}
+
+	protected static Optional<String> startsWithParam(final String param) {
+		return normalizeParam(param)
+				.map(p -> replace(p, SPACE, "%") + "%");
+	}
+
+	protected static Optional<String> endsWithParam(final String param) {
+		return normalizeParam(param)
+				.map(p -> "%" + replace(p, SPACE, "%"));
+	}
+
+	protected static String likeParamOrNull(final String param) {
+		return likeParam(param).orElse(null);
+	}
+
+	protected static Optional<String> normalizeUppercaseParam(final String param) {
+		return normalizeParam(param)
 				.map(StringUtils::upperCase);
 	}
 

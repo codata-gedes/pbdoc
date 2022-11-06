@@ -1,5 +1,8 @@
 package br.gov.jfrj.siga.model.dao.extended;
 
+/**
+ * @author Michel Risucci
+ */
 public class PageRequest {
 
 	private int number;

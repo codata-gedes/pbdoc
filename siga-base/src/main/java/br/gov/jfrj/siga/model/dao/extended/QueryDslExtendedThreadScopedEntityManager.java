@@ -1,7 +1,5 @@
 package br.gov.jfrj.siga.model.dao.extended;
 
-import static br.gov.jfrj.siga.model.dao.extended.TxManager.debugLogging;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +15,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.TypedQuery;
@@ -34,29 +31,15 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.AbstractJPAQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 
+/**
+ * @author Michel Risucci
+ */
 @SuppressWarnings("rawtypes")
-public final class QueryDslExtendedThreadScopedEntityManager implements EntityManager, AutoCloseable {
+public final class QueryDslExtendedThreadScopedEntityManager implements ExtendedPersistenceLayer, AutoCloseable {
 
 	private static final Logger log = Logger.getLogger(QueryDslExtendedThreadScopedEntityManager.class.getCanonicalName());
 
-	private static final String DEFAULT_EMF_PU = "default";
-
 	private static final ThreadLocal<Entry<QueryDslExtendedThreadScopedEntityManager, Integer>> THREADBINDER = new ThreadLocal<>();
-
-	private static EntityManagerFactory lazyFactory;
-
-	/**
-	 * Initializes the database connection using persistence unit definitions.
-	 * 
-	 * @return {@link EntityManagerFactory}
-	 */
-	private static EntityManagerFactory getFactory() {
-		if (lazyFactory == null) {
-			lazyFactory = Persistence.createEntityManagerFactory(DEFAULT_EMF_PU);
-			log.info("Global EntityManagerFactory successfully created.");
-		}
-		return lazyFactory;
-	}
 
 	/**
 	 * Creates an instance of {@link EntityManager} and binds it to the request
@@ -64,23 +47,18 @@ public final class QueryDslExtendedThreadScopedEntityManager implements EntityMa
 	 * 
 	 * @return
 	 */
-	public static QueryDslExtendedThreadScopedEntityManager getScopedManager() {
+	public static QueryDslExtendedThreadScopedEntityManager getScopedManager(final EntityManager delegate) {
 		Entry<QueryDslExtendedThreadScopedEntityManager, Integer> entry = THREADBINDER.get();
 		QueryDslExtendedThreadScopedEntityManager manager;
 		if (entry == null) {
-			EntityManager delegate = getFactory().createEntityManager();
 			manager = new QueryDslExtendedThreadScopedEntityManager(delegate);
 			entry = new AbstractMap.SimpleEntry<>(manager, 1); // Initializing stack index to 1.
 			THREADBINDER.set(entry);
-			if (debugLogging) {
-				log.finest("Successfully initialized thread-binded EntityManager UUID " + manager.uuid + "/" + entry.getValue() + ".");
-			}
+			log.finest("Successfully initialized thread-binded EntityManager UUID " + manager.uuid + "/" + entry.getValue() + ".");
 		} else {
 			manager = entry.getKey();
 			entry.setValue(entry.getValue() + 1); // Increasing stack index.
-			if (debugLogging) {
-				log.finest("Getting EntityManager UUID " + manager.uuid + "/" + entry.getValue() + " previously binded in this thread.");
-			}
+			log.finest("Getting EntityManager UUID " + manager.uuid + "/" + entry.getValue() + " previously binded in this thread.");
 		}
 		return manager;
 	}
@@ -99,13 +77,9 @@ public final class QueryDslExtendedThreadScopedEntityManager implements EntityMa
 					manager.delegate.close();
 				}
 				THREADBINDER.remove();
-				if (debugLogging) {
-					log.finest("Thread-binded EntityManager " + manager.uuid + "/" + entry.getValue() + " properly invalidated.");
-				}
+				log.finest("Thread-binded EntityManager " + manager.uuid + "/" + entry.getValue() + " properly invalidated.");
 			} else {
-				if (debugLogging) {
-					log.finest("Thread-binded EntityManager " + manager.uuid + "/" + entry.getValue() + " still working on this thread.");
-				}
+				log.finest("Thread-binded EntityManager " + manager.uuid + "/" + entry.getValue() + " still working on this thread.");
 			}
 		} else {
 			log.severe("EntityManager illegal state: this is likely result of a MEMORY LEAK and never should happen!");
@@ -388,20 +362,24 @@ public final class QueryDslExtendedThreadScopedEntityManager implements EntityMa
 	 * EntityManager extended methods.
 	 */
 
+	@Override
 	public <T> List<T> findAll(Class<T> type) {
 		return delegate.createQuery("SELECT x FROM " + type.getSimpleName() + " x", type).getResultList();
 	}
 
+	@Override
 	public <T> T persistAndGet(T entity) {
 		persist(entity);
 		return entity;
 	}
 
+	@Override
 	public <T> T removeAndGet(T entity) {
 		remove(entity);
 		return entity;
 	}
 
+	@Override
 	public <T> List<T> persistMany(Iterable<T> entities) {
 		List<T> results = new ArrayList<>();
 		for (Iterator<T> i = entities.iterator(); i.hasNext();) {
@@ -410,6 +388,7 @@ public final class QueryDslExtendedThreadScopedEntityManager implements EntityMa
 		return results;
 	}
 
+	@Override
 	public <T> List<T> mergeMany(Iterable<T> entities) {
 		List<T> results = new ArrayList<>();
 		for (Iterator<T> i = entities.iterator(); i.hasNext();) {
@@ -454,25 +433,30 @@ public final class QueryDslExtendedThreadScopedEntityManager implements EntityMa
 		return query.orderBy(orders);
 	}
 
+	@Override
 	public <R> Page<R> findAll(PageRequest pageRequest, EntityPath<R> root, Predicate predicates[], OrderSpecifier<? extends Comparable<?>>[] orders) {
 		JPQLQuery<R> countQuery = createQuery(root, predicates).select(root);
 		JPQLQuery<R> fetchQuery = applyPagination(pageRequest, createQuery(root, predicates).select(root));
 		return Page.of(pageRequest, applyOrders(orders, fetchQuery).fetch(), countQuery.fetchCount());
 	}
 
+	@Override
 	public <R> Page<R> findAll(PageRequest pageRequest, EntityPath<R> root, Predicate... predicates) {
 		return findAll(pageRequest, root, predicates, null);
 	}
 
+	@Override
 	public <R> List<R> findAll(EntityPath<R> root, Predicate[] predicates, OrderSpecifier<? extends Comparable<?>>[] orders) {
 		JPQLQuery<R> query = createQuery(root, predicates).select(root);
 		return applyOrders(orders, query).fetch();
 	}
 
+	@Override
 	public <R> List<R> findAll(EntityPath<R> root, Predicate... predicates) {
 		return findAll(root, predicates, null);
 	}
 
+	@Override
 	public <R> R find(EntityPath<R> root, Predicate... predicates) {
 		return createQuery(root, predicates).select(root).fetchOne();
 	}

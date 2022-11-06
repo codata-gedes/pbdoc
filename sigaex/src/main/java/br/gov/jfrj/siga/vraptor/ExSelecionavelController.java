@@ -68,7 +68,7 @@ public abstract class ExSelecionavelController<T extends Selecionavel, DaoFiltro
 				CpMarcadorEnum.A_RECEBER.getId(), 
 				CpMarcadorEnum.A_REMETER_MANUALMENTE.getId(),
 				CpMarcadorEnum.A_REMETER_PARA_PUBLICACAO.getId(),
-				CpMarcadorEnum.AGUARDANDO.getId(),
+				CpMarcadorEnum.AGUARDANDO_DEVOLUCAO.getId(),
 				CpMarcadorEnum.AGUARDANDO_DEVOLUCAO_FORA_DO_PRAZO.getId(),
 				CpMarcadorEnum.ANEXO_PENDENTE_DE_ASSINATURA.getId(),
 				CpMarcadorEnum.APENSADO.getId(), 

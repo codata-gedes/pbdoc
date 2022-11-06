@@ -114,7 +114,7 @@ public enum CpMarcadorEnum {
 	//
 	A_DEVOLVER(56, "A Devolver", "fas fa-exchange-alt", EMPTY, CpMarcadorGrupoEnum.AGUARDANDO_ANDAMENTO),
 	//
-	AGUARDANDO(57, "Aguardando", "fas fa-clock", EMPTY, CpMarcadorGrupoEnum.AGUARDANDO_ANDAMENTO),
+	AGUARDANDO_DEVOLUCAO(57, "Aguardando Devolução", "fas fa-clock", EMPTY, CpMarcadorGrupoEnum.AGUARDANDO_ANDAMENTO),
 	//
 	A_DEVOLVER_FORA_DO_PRAZO(58, "A Devolver Fora do Prazo", "fas fa-exchange-alt", EMPTY, CpMarcadorGrupoEnum.ALERTA),
 	//

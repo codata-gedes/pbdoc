@@ -34,7 +34,9 @@
 				<c:if test="${empty ocultarCodigo}">
 					${docVO.sigla}
 					<c:if test="${docVO.doc ne null}">
-						<small class="text-muted" title="Identificador Incremental Interno Único (ID)">#${docVO.doc.id}</small>
+						<small class="iiiu text-muted" title="Link Permanente: Identificador Incremental Interno Único (ID)">
+							<a href="${pageContext.request.contextPath}/app/documento/${docVO.doc.id}">#${docVO.doc.id}</a>
+						</small>
 					</c:if>
 				</c:if>
 				<a class="btn btn-secondary float-right" name="voltar" href="${pageContext.request.contextPath}/app/expediente/doc/exibir?sigla=${docVO.sigla}" accesskey="r">Volta<u>r</u></a>

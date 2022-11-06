@@ -1883,7 +1883,7 @@ public class ExMovimentacaoController extends ExController {
 		// set dtDevolucaoMovString baseado na data fim do tramite.
 		ExMobil mob = builder.getMob();
 		ExMovimentacao ultimaMovimentacao = mob.getUltimaMovimentacao(new long[] { ExTipoMovimentacao.TIPO_MOVIMENTACAO_TRANSFERENCIA}, null, mob, false, null);
-		if (ultimaMovimentacao != null && ultimaMovimentacao.getDtFimMov() != null) {
+		if (ultimaMovimentacao != null && ultimaMovimentacao.getDtFimMov() != null && !ultimaMovimentacao.isTransferenciaRetorno()) {
 			dtDevolucaoMovString = ultimaMovimentacao.getDtFimMovDDMMYYYY().toString();
 		}
 
@@ -1909,6 +1909,10 @@ public class ExMovimentacaoController extends ExController {
 		result.include("obsOrgao", obsOrgao);
 		result.include("protocolo", OPCAO_MOSTRAR.equals(protocolo));
 		result.include("dtDevolucaoMovString", dtDevolucaoMovString);
+		
+		if(mob.getDoc().temDocumentoNaoAssinado()) {
+			result.include(SigaModal.ALERTA, SigaModal.mensagem("Existem documentos anexados não assinados."));
+		}
 	}
 
 	@Transacional

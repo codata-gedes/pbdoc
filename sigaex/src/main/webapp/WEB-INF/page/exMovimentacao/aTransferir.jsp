@@ -154,7 +154,7 @@ $(function(){
 							<label>Data da devolução</label>
 							<c:choose>
 								<c:when test="${empty dtDevolucaoMovString}">
-									<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control campoData" autocomplete="off"/>
+									<input type="text" onkeydown="event.preventDefault()" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control campoData" autocomplete="off"/>
 								</c:when>
 								<c:when test="${not empty dtDevolucaoMovString}">
 									<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control" readonly="true" autocomplete="off"/>

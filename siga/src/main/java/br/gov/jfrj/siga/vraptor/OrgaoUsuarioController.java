@@ -1,15 +1,19 @@
 package br.gov.jfrj.siga.vraptor;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.logging.Logger;
+import org.apache.commons.lang3.BooleanUtils;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -17,6 +21,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.util.Texto;
+import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.dp.CpContrato;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
@@ -28,8 +33,6 @@ import br.gov.jfrj.siga.model.dao.DaoFiltroSelecionavel;
 @Controller
 public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<CpOrgaoUsuario, DaoFiltroSelecionavel>{
 
-	private static Logger log = Logger.getLogger(OrgaoUsuarioController.class);
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
@@ -40,7 +43,6 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Inject
 	public OrgaoUsuarioController(HttpServletRequest request, Result result, SigaObjects so, EntityManager em) {
 		super(request, result, CpDao.getInstance(), so, em);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -51,20 +53,35 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	}
 	
 	@Get("app/orgaoUsuario/listar")
-	public void lista(Integer paramoffset, String nome) throws Exception {
-		if(paramoffset == null) {
+	public void lista(Integer paramoffset, Integer quantidadePagina, String nome) throws Exception {
+
+		final CpConfiguracaoBL businessLogic = Cp.getInstance().getComp().getConfiguracaoBL();
+		final boolean temConfiguracao = businessLogic.podeUtilizarServicoPorConfiguracao(getTitular(), getLotaTitular(), "SIGA;GI:Módulo de Gestão de Identidade;CAD_ORGAO_USUARIO: Cadastrar Orgãos Usuário");
+
+		if (paramoffset == null) {
 			paramoffset = 0;
 		}
-		CpOrgaoUsuarioDaoFiltro orgaoUsuario = new CpOrgaoUsuarioDaoFiltro();
-		orgaoUsuario.setNome(nome);
-		setItens(CpDao.getInstance().consultarPorFiltroComContrato(orgaoUsuario, paramoffset, 15));
-		result.include("itens", getItens());
-		result.include("tamanho", dao().consultarQuantidade(orgaoUsuario));
-		result.include("nome", nome);
-		result.include("orgaoUsuarioSiglaLogado", getTitular().getOrgaoUsuario().getSigla());
-		result.include("usuarioPodeAlterar", CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla()));
+		if (quantidadePagina == null) {
+			quantidadePagina = 30;
+		}
 
-		setItemPagina(15);
+		CpOrgaoUsuarioDaoFiltro filtro = new CpOrgaoUsuarioDaoFiltro();
+		filtro.setAtivo(null); // Buscar ativos e inativos
+		filtro.setNome(nome);
+
+		setItens(CpDao.getInstance().consultarPorFiltroComContrato(filtro, paramoffset, quantidadePagina));
+		result.include("itens", getItens());
+		result.include("tamanho", dao().consultarQuantidade(filtro));
+		result.include("nome", nome);
+
+		final String siglaOrgaoTitular = getTitular().getOrgaoUsuario().getSigla();
+		final boolean administrador = CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(siglaOrgaoTitular);
+
+		result.include("usuarioPodeAlterar", administrador || temConfiguracao);
+		result.include("orgaoUsuarioSiglaLogado", siglaOrgaoTitular);
+		result.include("administrador", CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equalsIgnoreCase(siglaOrgaoTitular));
+
+		setItemPagina(quantidadePagina);
 		result.include("currentPageNumber", calculaPaginaAtual(paramoffset));
 	}
 	
@@ -73,10 +90,11 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 		if (id != null) {
 			CpContrato contrato = daoContrato(id);
 			CpOrgaoUsuario orgaoUsuario = daoOrgaoUsuario(id);
-			result.include("nmOrgaoUsuario",orgaoUsuario.getDescricao());
-			result.include("siglaOrgaoUsuario",orgaoUsuario.getSigla());
+			result.include("nmOrgaoUsuario", orgaoUsuario.getDescricao());
+			result.include("siglaOrgaoUsuario", orgaoUsuario.getSigla());
 			result.include("siglaOrgaoUsuarioCompleta", orgaoUsuario.getSiglaOrgaoUsuarioCompleta());
-			result.include("isExternoOrgaoUsu",orgaoUsuario.getIsExternoOrgaoUsu());
+			result.include("isExternoOrgaoUsu", orgaoUsuario.getIsExternoOrgaoUsu());
+			result.include("codOrgUsu", orgaoUsuario.getCodOrgaoUsu());
 			try {
 				result.include("dtContrato",contrato.getDtContratoDDMMYYYY());
 			} catch (final Exception e) {
@@ -89,8 +107,8 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 		if(listaPessoa.size() == 0) {
 			result.include("podeAlterarSigla", Boolean.TRUE);
 		}
-		result.include("request",getRequest());
-		result.include("id",id);
+		result.include("request", getRequest());
+		result.include("id", id);
 	}
 	
 	private void atualizarContrato(Long id, Date dataContrato) {
@@ -116,20 +134,25 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Transacional
 	@Post("/app/orgaoUsuario/gravar")
 	public void editarGravar(final Long id, 
+							 final Long codOrgUsu,
 							 final String nmOrgaoUsuario,
 							 final String siglaOrgaoUsuario,
 							 final String siglaOrgaoUsuarioCompleta,
 							 final String dtContrato,
-							 final String acao,
 							 final Boolean isExternoOrgaoUsu
-						) throws Exception{
+	) throws Exception {
+
 		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_ORGAO_USUARIO: Cadastrar Orgãos Usuário");
-		
-		if(nmOrgaoUsuario == null) {
+
+		if (codOrgUsu == null) {
+			throw new AplicacaoException("Código Interno do Órgão não informado");
+		}
+
+		if (isBlank(nmOrgaoUsuario)) {
 			throw new AplicacaoException("Nome do órgão usuário não informado");
 		}
 		
-		if(siglaOrgaoUsuario == null) {
+		if (isBlank(siglaOrgaoUsuario)) {
 			throw new AplicacaoException("Sigla abreviada do órgão usuário não informada");
 		}
 		
@@ -137,7 +160,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 			throw new AplicacaoException("Sigla do órgão inválida");
 		}
 		
-		if(siglaOrgaoUsuarioCompleta == null) {
+		if(isBlank(siglaOrgaoUsuarioCompleta)) {
 			throw new AplicacaoException("Sigla Oficial do órgão usuário não informada");
 		}
 		
@@ -153,78 +176,79 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 			dataContrato = formatter.parse(dtContrato);
 		}
-		
-		CpOrgaoUsuario orgaoUsuario = new CpOrgaoUsuario();
 
-		final String sigla = Texto.removerEspacosExtra(siglaOrgaoUsuario.toUpperCase().trim());
-		orgaoUsuario.setSiglaOrgaoUsu(sigla);
-		try {
-			orgaoUsuario = dao().consultarPorSigla(orgaoUsuario);
-		} catch (final Exception e) {
-			log.debugv(e, "Não foi possível encontrar o órgão pela sigla \"{0}\"", sigla);
-		}
+		final String siglaAcronimo = Texto.removerEspacosExtra(siglaOrgaoUsuario.toUpperCase().trim());
+		final String siglaCompleta = Texto.removerEspacosExtra(siglaOrgaoUsuarioCompleta.toUpperCase()).trim();
+		CpOrgaoUsuario orgaoAnterior = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(codOrgUsu, siglaAcronimo);
 
-		if((orgaoUsuario != null &&
-				!orgaoUsuario.getIdOrgaoUsu().equals(id)) || (orgaoUsuario != null &&
-				orgaoUsuario.getIdOrgaoUsu().equals(id) && acao.equalsIgnoreCase("i"))) {
-			throw new AplicacaoException("Sigla já cadastrada para outro órgão");
-		}
-		
-		orgaoUsuario = new CpOrgaoUsuario();
-		orgaoUsuario.setNmOrgaoUsu(Texto.removeAcento(Texto.removerEspacosExtra(nmOrgaoUsuario).trim()));
-		orgaoUsuario = dao().consultarPorNome(orgaoUsuario);
-		
-		if(orgaoUsuario != null && 
-				!orgaoUsuario.getIdOrgaoUsu().equals(id)) {
-			throw new AplicacaoException("Nome já cadastrado para outro órgão");
-		}
-		
-		orgaoUsuario = new CpOrgaoUsuario();
-		orgaoUsuario.setIdOrgaoUsu(id);
-		orgaoUsuario = dao().consultarPorId(orgaoUsuario);
-		
-		if(orgaoUsuario != null && !orgaoUsuario.getSiglaOrgaoUsu().equalsIgnoreCase(siglaOrgaoUsuario) &&
-				((!orgaoUsuario.getIdOrgaoUsu().equals(id) && acao.equalsIgnoreCase("a")) || (orgaoUsuario.getIdOrgaoUsu().equals(id) && acao.equalsIgnoreCase("i")))  ) {
-			throw new AplicacaoException("ID já cadastrado para outro órgão");
-		}
-		
-		if(orgaoUsuario != null && acao.equalsIgnoreCase("i") && orgaoUsuario.getIdOrgaoUsu().equals(id) &&
-				orgaoUsuario.getSiglaOrgaoUsu().equalsIgnoreCase(siglaOrgaoUsuario) && orgaoUsuario.getNmOrgaoUsu().equals(nmOrgaoUsuario)) {
-			throw new AplicacaoException("ID já cadastrado para outro órgão");
-
+		if (orgaoAnterior != null) {
+			if (!orgaoAnterior.getId().equals(id)) {
+				throw new AplicacaoException("Acrônimo ou sigla já cadastrada para outro órgão com código ativo: ["
+						+ orgaoAnterior.getCodOrgaoUsu() + "] ["
+						+ orgaoAnterior.getSiglaOrgaoUsuarioCompleta() + "] - "
+						+ orgaoAnterior.getNmOrgaoUsu());
+			}
 		}
 
-		if(orgaoUsuario == null || orgaoUsuario.getIdOrgaoUsu() == null) {
+		CpOrgaoUsuario orgaoUsuario;
+		if (orgaoAnterior == null) {
 			orgaoUsuario = new CpOrgaoUsuario();
-			orgaoUsuario.setIdOrgaoUsu(id);
+			orgaoUsuario.setAcronimoOrgaoUsu(siglaAcronimo);
+			orgaoUsuario.setSigla(siglaAcronimo);
 		} else {
-			orgaoUsuario = daoOrgaoUsuario(id);
+			orgaoUsuario = orgaoAnterior;
 		}
-		orgaoUsuario.setNmOrgaoUsu(Texto.removerEspacosExtra(nmOrgaoUsuario.trim()));
-		orgaoUsuario.setSigla(Texto.removerEspacosExtra(siglaOrgaoUsuario.toUpperCase()).trim());
-		orgaoUsuario.setSiglaOrgaoUsuarioCompleta(Texto.removerEspacosExtra(siglaOrgaoUsuarioCompleta.toUpperCase()).trim());
-		orgaoUsuario.setAcronimoOrgaoUsu(Texto.removerEspacosExtra(siglaOrgaoUsuario.toUpperCase()).trim());
-		
-		if (isExternoOrgaoUsu != null) {
-			orgaoUsuario.setIsExternoOrgaoUsu(1);
-		} else {
-			orgaoUsuario.setIsExternoOrgaoUsu(0);	
-		}
+		orgaoUsuario.setCodOrgaoUsu(codOrgUsu);
+
+		final String nomeOrgaoUsuario = Texto.removeAcento(Texto.removerEspacosExtra(nmOrgaoUsuario).trim());
+		orgaoUsuario.setNmOrgaoUsu(nomeOrgaoUsuario);
+		orgaoUsuario.setSiglaOrgaoUsuarioCompleta(siglaCompleta);
+		orgaoUsuario.setHisAtivo(1);
+
+		boolean isOrgaoExterno = BooleanUtils.toBoolean(isExternoOrgaoUsu);
+		orgaoUsuario.setIsExternoOrgaoUsu(BooleanUtils.toInteger(isOrgaoExterno));
 
 		try {
-			dao().iniciarTransacao();
+			if (orgaoUsuario.getId() == null) {
+				orgaoUsuario = dao().gravar(orgaoUsuario);
+				orgaoUsuario.setHisIdIni(orgaoUsuario.getId());
+			}
 			orgaoUsuario = dao().atualizar(orgaoUsuario);
-			atualizarContrato(id, dataContrato);
-			dao().commitTransacao();
+			atualizarContrato(orgaoUsuario.getId(), dataContrato);
+
 			this.result.include("mensagem", "Operação realizada com sucesso!");
-			this.result.redirectTo(this).lista(0, "");
+			this.result.redirectTo(this).lista(null, null, null);
 		} catch (final Exception e) {
-			dao().rollbackTransacao();
 			throw new AplicacaoException("Erro na gravação", 0, e);
 		}
 
 	}
-	
+
+	@Transacional
+	@Post("/app/orgaoUsuario/ativar")
+	public void ativar(final Long id) throws Exception {
+		CpOrgaoUsuario orgaoUsuario = dao().consultar(id, CpOrgaoUsuario.class, false);
+		CpOrgaoUsuario orgaoAnteriorAtivo = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(orgaoUsuario.getCodOrgaoUsu(), EMPTY);
+		if (orgaoAnteriorAtivo != null && !Objects.equals(orgaoUsuario.getId(), orgaoAnteriorAtivo.getId())) {
+			throw new AplicacaoException("Não foi possível ativar porque o Órgão ["
+					+ orgaoAnteriorAtivo.getCodOrgaoUsu() + "] ["
+					+ orgaoAnteriorAtivo.getSiglaOrgaoUsuarioCompleta() + "] - "
+					+ orgaoAnteriorAtivo.getNmOrgaoUsu() + " já está ativo com o mesmo código de integração");
+		}
+		orgaoUsuario.setHisAtivo(1);
+		dao().gravar(orgaoUsuario);
+		result.redirectTo(this).lista(null, null, null);
+	}
+
+	@Transacional
+	@Post("/app/orgaoUsuario/desativar")
+	public void desativar(final Long codigoDeIntegracao) throws Exception {
+		CpOrgaoUsuario orgaoUsuario = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(codigoDeIntegracao, EMPTY);
+		orgaoUsuario.setHisAtivo(0);
+		dao().gravar(orgaoUsuario);
+		result.redirectTo(this).lista(null, null, null);
+	}
+
 	private CpOrgaoUsuario daoOrgaoUsuario(long id) {
 		return dao().consultar(id, CpOrgaoUsuario.class, false);
 	}	

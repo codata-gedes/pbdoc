@@ -7,9 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.FlushMode;
-import org.hibernate.Session;
-
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.Intercepts;
@@ -19,7 +16,6 @@ import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.jpa.event.AfterCommit;
 import br.com.caelum.vraptor.jpa.event.AfterRollback;
 import br.com.caelum.vraptor.jpa.event.BeforeCommit;
-import br.com.caelum.vraptor.proxy.CDIProxies;
 import br.com.caelum.vraptor.validator.Validator;
 import br.gov.jfrj.siga.model.ContextoPersistencia;
 

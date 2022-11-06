@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1308,6 +1309,15 @@ public class ExMovimentacao extends AbstractExMovimentacao implements
 	@Override
 	public String getNomeTabela() {
 		return ExArquivoFilesystem.TABELA_EX_MOVIMENTACAO;
+	}
+	
+	public boolean isTransferenciaRetorno() {
+		if (this.getExTipoMovimentacao().getIdTpMov() != ExTipoMovimentacao.TIPO_MOVIMENTACAO_TRANSFERENCIA) {
+			return false;
+		}
+		
+		return this.mob().getDoc().getCadastrante().equals(this.getResp()) || 
+				this.mob().getDoc().getLotaCadastrante().equals(this.getLotaResp());
 	}
 
 }

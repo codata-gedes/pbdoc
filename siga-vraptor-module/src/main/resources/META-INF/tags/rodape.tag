@@ -61,8 +61,16 @@
 				this.beenSubmitted = true;
 		});
  		$('.campoData').datepicker({
+ 			minDate: '0',
            	onSelect: function(){
                    ${onSelect}
+			}
+		});
+ 		
+		$('.campoDataNascimento').datepicker({
+			maxDate: '0',
+			onSelect: function() {
+				${onSelect}
 			}
 		});
 

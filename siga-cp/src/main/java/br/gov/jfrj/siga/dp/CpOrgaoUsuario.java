@@ -16,17 +16,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with SIGA.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-/*
- * Criado em  21/12/2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package br.gov.jfrj.siga.dp;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -34,7 +26,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -44,25 +35,16 @@ import org.hibernate.annotations.Formula;
 import br.gov.jfrj.siga.cp.CpConvertableEntity;
 import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.dp.dao.CpDao;
-import br.gov.jfrj.siga.model.ActiveRecord;
-import br.gov.jfrj.siga.model.Assemelhavel;
 import br.gov.jfrj.siga.model.Selecionavel;
 import br.gov.jfrj.siga.sinc.lib.Desconsiderar;
-import br.gov.jfrj.siga.sinc.lib.SincronizavelSuporte;
 
 @Entity
 @Table(name = "corporativo.cp_orgao_usuario")
 @Cacheable
 @Cache(region = CpDao.CACHE_CORPORATIVO, usage = CacheConcurrencyStrategy.READ_ONLY)
-public class CpOrgaoUsuario extends AbstractCpOrgaoUsuario implements
-		Serializable, Selecionavel, Assemelhavel, CpConvertableEntity {
-	public static ActiveRecord<CpOrgaoUsuario> AR = new ActiveRecord<>(
-			CpOrgaoUsuario.class);
+public class CpOrgaoUsuario extends AbstractCpOrgaoUsuario implements Selecionavel, CpConvertableEntity {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5119023571728936131L;
+	private static final long serialVersionUID = -373979421641186860L;
 
 	@Formula(value = "REMOVE_ACENTO(NM_ORGAO_USU)")
 	private String nmOrgaoAI;
@@ -87,6 +69,10 @@ public class CpOrgaoUsuario extends AbstractCpOrgaoUsuario implements
 
 	@Column(name = "HIS_ATIVO")
 	private Integer hisAtivo;
+
+	@Desconsiderar
+	@Column(name = "HIS_ID_INI", nullable = false)
+	private Long idInicial;
 
 	public CpOrgaoUsuario() {
 		super();
@@ -142,12 +128,24 @@ public class CpOrgaoUsuario extends AbstractCpOrgaoUsuario implements
 		return nmOrgaoAI;
 	}
 
+	@Override
 	public Date getHisDtIni() {
 		return hisDtIni;
 	}
 
+	@Override
+	public void setHisDtIni(Date hisDtIni) {
+		this.hisDtIni = hisDtIni;
+	}
+
+	@Override
 	public Date getHisDtFim() {
 		return hisDtFim;
+	}
+
+	@Override
+	public void setHisDtFim(Date hisDtFim) {
+		this.hisDtFim = hisDtFim;
 	}
 
 	public CpIdentidade getHisIdcIni() {
@@ -158,31 +156,38 @@ public class CpOrgaoUsuario extends AbstractCpOrgaoUsuario implements
 		return hisIdcFim;
 	}
 
+	@Override
 	public Integer getHisAtivo() {
 		return hisAtivo;
 	}
 
-	public boolean equivale(Object other) {
-		if (other == null)
-			return false;
-		return this.getIdOrgaoUsu().longValue() == ((CpOrgaoUsuario) other)
-				.getIdOrgaoUsu().longValue();
-	}
-
-	public boolean semelhante(Assemelhavel obj, int nivel) {
-		return SincronizavelSuporte.semelhante(this, obj, nivel);
+	@Override
+	public void setHisAtivo(Integer hisAtivo) {
+		this.hisAtivo = hisAtivo;
 	}
 
 	@Override
-	public String toString() {
-		return getSigla();
+	public Long getIdInicial() {
+		return this.idInicial;
 	}
 
-	@PrePersist
-	private void inserirComoAtivo() {
-		if(Objects.isNull(hisAtivo)) {
-			hisAtivo = 1;
-		}
+	public void setIdInicial(Long idInicial) {
+		this.idInicial = idInicial;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.setIdOrgaoUsu(id);
+	}
+
+	@Override
+	public Long getHisIdIni() {
+		return this.getIdInicial();
+	}
+
+	@Override
+	public void setHisIdIni(Long hisIdIni) {
+		this.setIdInicial(hisIdIni);
 	}
 
 }
