@@ -300,8 +300,7 @@
 							</div>
 						</div>
 					</div>
-					<hr>
-					<!-- Alteracao cartao 1057 -->
+					
 					<fieldset class="form-group">					
 						<div class="row bg-light">
 							<div class="col-md-4">
@@ -338,6 +337,9 @@
 								</div>
 							</div>
 						</div>
+						
+						<hr>
+						
 						<div class="row bg-light">
 							<div class="col-sm-3">
 								<div class="form-group">
@@ -353,10 +355,23 @@
 										</label>
 									</div>							
 								</div>
+								<div class="form-group">
+									<label for="siglaPermissao">Usuário visível para tramitação</label><br/>
+									<div class="form-check-inline">
+										<h:
+										<label class="form-check-label">
+											<input type="radio" name="usuarioVisivelTramitacao" value="false" ${usuarioVisivelTramitacao == false  ? 'checked' : ''} /> Não
+										</label>
+									</div>							
+									<div class="form-check-inline">
+										<label class="form-check-label">
+											<input type="radio" name="usuarioVisivelTramitacao" value="true" ${usuarioVisivelTramitacao == true or usuarioVisivelTramitacao == null ? 'checked' : ''} /> Sim
+										</label>
+									</div>							
+								</div>
 							</div>
 						</div>
 					</fieldset>
-					<!-- Fim da alteracao cartao 1057 -->
 					
 					<div class="row">
 						<div class="col-sm-2">
