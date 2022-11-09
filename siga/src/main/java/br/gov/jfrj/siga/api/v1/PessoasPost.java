@@ -111,7 +111,7 @@ public class PessoasPost implements IPessoasPost {
 
 				DpPessoa pes = new CpBL().criarUsuario(null, so.getIdentidadeCadastrante(), idOrgaoUsu, idCargo, 
 						idFuncao, idLotacao, nmPessoa, dtNascimento, cpf, email, identidade,
-						orgaoIdentidade, ufIdentidade, dataExpedicaoIdentidade, nomeExibicao, enviarEmail, false);
+						orgaoIdentidade, ufIdentidade, dataExpedicaoIdentidade, nomeExibicao, enviarEmail, false, true);
 
 				resp.idPessoa = pes.getId().toString();
 				resp.siglaPessoa = pes.getSigla();
