@@ -1117,7 +1117,7 @@ public class CpBL {
 			final Long idLotacao, final String nmPessoa, final String dtNascimento, final String cpf,
 			final String email, final String identidade, final String orgaoIdentidade, final String ufIdentidade,
 			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail,
-			final boolean tramitarOutrosOrgaos) {
+			final boolean tramitarOutrosOrgaos, final boolean isUsuarioVisivelTramitacao) {
 
 		if (idOrgaoUsu == null || idOrgaoUsu == 0) {
 			throw new AplicacaoException("Órgão não informado");
@@ -1238,6 +1238,7 @@ public class CpBL {
 		pessoa.setCpfPessoa(Long.valueOf(cpf.replace("-", "").replace(".", "")));
 		pessoa.setEmailPessoa(Texto.removerEspacosExtra(email).trim().replace(" ", "").toLowerCase());
 		pessoa.setTramitarOutrosOrgaos(tramitarOutrosOrgaos);
+		pessoa.setVisivelTramitacao(isUsuarioVisivelTramitacao);
 		
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 		DpCargo cargo = new DpCargo();

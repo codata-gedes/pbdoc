@@ -136,6 +136,7 @@ public class DpPessoa extends AbstractDpPessoa implements Serializable,
 		pessoaNova.setTipoServidor(pessoaBase.getTipoServidor());
 
 		pessoaNova.setTramitarOutrosOrgaos(pessoaBase.isTramitarOutrosOrgaos());
+		pessoaNova.setVisivelTramitacao(pessoaBase.isVisivelTramitacao());
 		pessoaNova.setHisIdIni(pessoaBase.getHisIdIni());
 		return pessoaNova;
 	}

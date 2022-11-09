@@ -360,12 +360,12 @@
 									<div class="form-check-inline">
 										<h:
 										<label class="form-check-label">
-											<input type="radio" name="usuarioVisivelTramitacao" value="false" ${usuarioVisivelTramitacao == false  ? 'checked' : ''} /> Não
+											<input type="radio" name="isUsuarioVisivelTramitacao" value="false" ${isUsuarioVisivelTramitacao == false  ? 'checked' : ''} /> Não
 										</label>
 									</div>							
 									<div class="form-check-inline">
 										<label class="form-check-label">
-											<input type="radio" name="usuarioVisivelTramitacao" value="true" ${usuarioVisivelTramitacao == true or usuarioVisivelTramitacao == null ? 'checked' : ''} /> Sim
+											<input type="radio" name="isUsuarioVisivelTramitacao" value="true" ${isUsuarioVisivelTramitacao == true or isUsuarioVisivelTramitacao == null ? 'checked' : ''} /> Sim
 										</label>
 									</div>							
 								</div>

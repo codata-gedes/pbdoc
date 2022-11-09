@@ -420,6 +420,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				result.include("idOrgaoUsu", pessoa.getOrgaoUsuario().getId());
 				result.include("nmOrgaousu", pessoa.getOrgaoUsuario().getNmOrgaoUsu());
 				result.include("tramitarOutrosOrgaos", pessoa.isTramitarOutrosOrgaos());
+				result.include("isUsuarioVisivelTramitacao", pessoa.isVisivelTramitacao());
 				
 				/*
 				 * Adicao de campos RG
@@ -624,14 +625,14 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			final Long idLotacao, final String nmPessoa, final String dtNascimento, final String cpf,
 			final String email, final String identidade, final String orgaoIdentidade, final String ufIdentidade,
 			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail,
-			final Boolean tramitarOutrosOrgaos) throws Exception {
+			final Boolean tramitarOutrosOrgaos, final Boolean isUsuarioVisivelTramitacao) throws Exception {
 
 		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_PESSOA:Cadastrar Pessoa");
 
 		try {
 			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao,
 					idLotacao, nmPessoa, dtNascimento, cpf, email, identidade, orgaoIdentidade, ufIdentidade,
-					dataExpedicaoIdentidade, nomeExibicao, enviarEmail, toBooleanDefaultIfNull(tramitarOutrosOrgaos, false));
+					dataExpedicaoIdentidade, nomeExibicao, enviarEmail, toBooleanDefaultIfNull(tramitarOutrosOrgaos, false), toBooleanDefaultIfNull(isUsuarioVisivelTramitacao, true));
 			
 			String mensagem = String.format("%s\n%s", SigaMessages.getMessage("usuario.cadastro.sucesso"), SigaMessages.getMessage("usuario.cadastro.envioemail"));
 			result.include(SigaModal.ALERTA, SigaModal.mensagem(mensagem).titulo("Sucesso"));
