@@ -344,6 +344,9 @@ public abstract class AbstractDpPessoa extends DpResponsavel implements
 
 	@Column(name = "TRAMITAR_OUTROS_ORGAOS")
 	private boolean tramitarOutrosOrgaos;
+	
+	@Column(name = "VISIVEL_TRAMITACAO")
+	private boolean visivelTramitacao;
 
 	@ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="HIS_IDC_INI")
@@ -860,6 +863,14 @@ public abstract class AbstractDpPessoa extends DpResponsavel implements
 	
 	public void setTramitarOutrosOrgaos(boolean tramitarOutrosOrgaos) {
 		this.tramitarOutrosOrgaos = tramitarOutrosOrgaos;
+	}
+	
+	public boolean isVisivelTramitacao() {
+		return visivelTramitacao;
+	}
+	
+	public void setVisivelTramitacao(boolean visivelTramitacao) {
+		this.visivelTramitacao = visivelTramitacao;
 	}
 	
 	/*
