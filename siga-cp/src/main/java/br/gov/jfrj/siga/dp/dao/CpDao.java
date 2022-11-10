@@ -1514,6 +1514,10 @@ public class CpDao extends ModeloDao {
 					.map(qDpPessoa.situacaoFuncionalPessoa::eq)
 					.ifPresent(predicates::and);
 		}
+		
+		if (filtro.isBuscarApenasUsuariosVisiveisParaTramitacao()) {
+			predicates.and(qDpPessoa.visivelTramitacao.isTrue());
+		}
 
 		this.preencherPredicadosQueryConsultaPorFiltro(filtro, predicates);
 

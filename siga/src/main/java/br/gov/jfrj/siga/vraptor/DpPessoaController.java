@@ -183,6 +183,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		}
 		
 		flt.setSituacaoFuncionalPessoa("");
+		
+		boolean buscarApenasUsuariosVisiveisParaTramitacao = toBoolean(param("buscarApenasUsuariosVisiveisParaTramitacao"));
+		flt.setBuscarApenasUsuariosVisiveisParaTramitacao(toBooleanDefaultIfNull(buscarApenasUsuariosVisiveisParaTramitacao, false));
 
 		return flt;
 	}
