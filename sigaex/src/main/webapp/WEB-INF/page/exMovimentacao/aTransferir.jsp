@@ -139,7 +139,7 @@ $(function(){
 									<siga:selecao propriedade="lotaResponsavel" tema="simple" modulo="siga"/>
 								</c:when>
 								<c:when test="${tipoResponsavel == 2}">
-									<siga:selecao propriedade="responsavel" tema="simple" modulo="siga"/>
+									<siga:selecao propriedade="responsavel" paramList="buscarApenasUsuariosVisiveisParaTramitacao=true" tema="simple" modulo="siga"/>
 								</c:when>
 								<c:when test="${tipoResponsavel == 3}">
 									<siga:selecao propriedade="cpOrgao" tema="simple" modulo="siga"/>
