@@ -1,0 +1,1 @@
+ALTER TABLE dp_pessoa ADD COLUMN visivel_tramitacao BOOLEAN DEFAULT true;
