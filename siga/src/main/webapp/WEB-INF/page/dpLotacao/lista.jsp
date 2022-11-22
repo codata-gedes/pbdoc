@@ -147,43 +147,12 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <div class="dropdown-menu">
-
-                                    <c:choose>
-                                        <c:when test="${empty lotacao.isSuspensa or lotacao.isSuspensa == 0}">
-                                            <a href="${urlSuspender}"
-                                               onclick='javascript:atualizarUrl("javascript:submitPost(\"${urlSuspender}\")", "Deseja tornar a
-                                                   <fmt:message
-                                                           key="usuario.lotacao"/> Suspensa para o recebimento de Documentos?");return false;'
-                                               class="dropdown-item" role="button" aria-pressed="true"
-                                               data-siga-modal-abrir="confirmacaoModal" style="min-width: 80px;">Suspender
-                                                Tramita&ccedil;&atilde;o</a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="${urlSuspender}"
-                                               onclick='javascript:atualizarUrl("javascript:submitPost(\"${urlSuspender}\")", "Deseja desfazer a Suspensão da
-                                                   <fmt:message key="usuario.lotacao"/>");return false;'
-                                               class="dropdown-item" role="button" aria-pressed="true"
-                                               data-siga-modal-abrir="confirmacaoModal" style="min-width: 80px;">Ativar
-                                                Tramita&ccedil;&atilde;o</a>
-                                        </c:otherwise>
-                                    </c:choose>
-
                                     <a href="${url}" class="dropdown-item" role="button" aria-pressed="true">Alterar</a>
                                 </div>
                             </div>
                         </td>
                     </tr>
                 </siga:paginador>
-                <siga:siga-modal id="confirmacaoModal" exibirRodape="false" tituloADireita="Confirma&ccedil;&atilde;o">
-                    <div id="msg" class="modal-body">
-                        Deseja tornar a <fmt:message key="usuario.lotacao"/> "Suspensa" para o recebimento de
-                        Documentos?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
-                        <a href="#" class="btn btn-success btn-confirmacao" role="button" aria-pressed="true">Sim</a>
-                    </div>
-                </siga:siga-modal>
                 </tbody>
             </table>
             <div class="gt-table-buttons">
