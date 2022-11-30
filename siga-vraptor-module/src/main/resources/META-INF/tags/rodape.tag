@@ -69,6 +69,7 @@
  		
 		$('.campoDataNascimento').datepicker({
 			maxDate: '0',
+			minDate: new Date('1900/01/01'),
 			onSelect: function() {
 				${onSelect}
 			}

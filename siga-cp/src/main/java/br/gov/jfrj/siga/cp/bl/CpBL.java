@@ -1194,6 +1194,7 @@ public class CpBL {
 		}
 		
 		Date data = new Date();
+		final Date minDate = SigaCalendar.converteStringEmData("01/01/1900");
 		pessoa.setDataInicio(data);
 		pessoa.setMatricula(0L);
 		pessoa.setSituacaoFuncionalPessoa(SituacaoFuncionalEnum.APENAS_ATIVOS.getValor()[0]);
@@ -1206,8 +1207,8 @@ public class CpBL {
 			Calendar dtNasci = new GregorianCalendar();
 			dtNasci.setTime(dtNasc);
 
-			if (hj.before(dtNasci)) {
-				throw new AplicacaoException("Data de nascimento inválida");
+			if (hj.before(dtNasci) || dtNasc.before(minDate)) {
+				throw new AplicacaoException("Data de nascimento inválida ou fora dos limites.");
 			}
 			pessoa.setDataNascimento(dtNasc);
 		} else {
@@ -1222,8 +1223,8 @@ public class CpBL {
 			Calendar dtExpId = new GregorianCalendar();
 			dtExpId.setTime(dtExp);
 
-			if (hj.before(dtExpId)) {
-				throw new AplicacaoException("Data de expedição inválida");
+			if (hj.before(dtExpId) || dtExp.before(minDate)) {
+				throw new AplicacaoException("Data de expedição inválida ou fora dos limites.");
 			}
 			pessoa.setDataExpedicaoIdentidade(dtExp);
 		} else {
