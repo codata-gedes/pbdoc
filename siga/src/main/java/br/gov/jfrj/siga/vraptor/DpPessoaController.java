@@ -638,8 +638,12 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 					idLotacao, nmPessoa, dtNascimento, cpf, email, identidade, orgaoIdentidade, ufIdentidade,
 					dataExpedicaoIdentidade, nomeExibicao, enviarEmail, toBooleanDefaultIfNull(tramitarOutrosOrgaos, false), toBooleanDefaultIfNull(isUsuarioVisivelTramitacao, true));
 			
-			String mensagem = String.format("%s\n%s", SigaMessages.getMessage("usuario.cadastro.sucesso"), SigaMessages.getMessage("usuario.cadastro.envioemail"));
-			result.include(SigaModal.ALERTA, SigaModal.mensagem(mensagem).titulo("Sucesso"));
+			if (id == null) {
+				String mensagem = String.format("%s\n%s", SigaMessages.getMessage("usuario.cadastro.sucesso"), SigaMessages.getMessage("usuario.cadastro.envioemail"));
+				result.include(SigaModal.ALERTA, SigaModal.mensagem(mensagem).titulo("Sucesso"));
+			} else {
+				result.include("mensagem", "Operação realizada com sucesso!");	
+			}
 		} catch (RegraNegocioException e) {
 			result.include(SigaModal.ALERTA, e.getMessage());
 		}
