@@ -97,6 +97,12 @@
 						<div class="col-12 col-lg-6">
 							<siga:selecao titulo="Cossignatário" propriedade="cosignatario" modulo="siga" />
 						</div>
+						<div class="col-12 col-lg-6">
+							<div class="form-group">
+								<label class="col-sm-2x col-form-label">Função; Lotação; Localidade</label>
+								<input class="form-control" style="height: 30.8667px;" type="text" name="funcaoCosignatario" value="${funcaoCosignatario}" maxlength="128" />
+							</div>
+						</div>
 					</div>
 					</c:if>
 					<div class="row">
