@@ -153,6 +153,14 @@
                         </td>
                     </tr>
                 </siga:paginador>
+                <siga:siga-modal id="confirmacaoModal" exibirRodape="false" tituloADireita="Confirma&ccedil;&atilde;o">
+                    <div id="msg" class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+                        <a href="#" class="btn btn-success btn-confirmacao" role="button" aria-pressed="true">Sim</a>
+                    </div>
+                </siga:siga-modal>
                 </tbody>
             </table>
             <div class="gt-table-buttons">
