@@ -97,7 +97,6 @@
                     <th align="left">Sigla</th>
                     <th hidden="true" align="left">Externa</th>
                     <th align="left">Unidade Receptora</th>
-                    <th align="left">Suspensa</th>
                     <th colspan="2" align="center">Op&ccedil;&otilde;es</th>
                 </tr>
                 </thead>
@@ -110,7 +109,6 @@
                         <td align="left">${lotacao.sigla}</td>
                         <td align="left" style="${lotacao.unidadeReceptora == true ? 'color : red' : ''}">${lotacao.unidadeReceptora == true ? 'SIM' : 'NÃO'}</td>
                         <td hidden="true" align="left">${lotacao.isExternaLotacao == 1 ? 'SIM' : 'NÃO'}</td>
-                        <td align="left" style="${lotacao.isSuspensa == 1 ? 'color : red' : ''}">${lotacao.isSuspensa == 1 ? 'SIM' : 'NÃO'}</td>
                         <td align="left">
                             <c:url var="url" value="/app/lotacao/editar">
                                 <c:param name="id" value="${lotacao.id}"></c:param>
