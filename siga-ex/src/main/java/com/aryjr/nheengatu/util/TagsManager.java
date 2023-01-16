@@ -23,16 +23,12 @@
 package com.aryjr.nheengatu.util;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import com.aryjr.nheengatu.css2.Style;
 import com.aryjr.nheengatu.css2.StyleSheet;
 import com.aryjr.nheengatu.html.Tag;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.pdf.BaseFont;
 
 /**
  * 
@@ -45,14 +41,13 @@ import com.lowagie.text.pdf.BaseFont;
 public class TagsManager {
 	private static ThreadLocal<TagsManager> instance = new ThreadLocal<TagsManager>();
 
-	public ArrayList states = new ArrayList();
+	public ArrayList<GraphicsState> states = new ArrayList<GraphicsState>();
 
 	public TagsManager() {
 		states.add(new GraphicsState());
 	}
 
 	public static TagsManager getInstance() {
-		// The Singleton pattern [GoF]
 		if (instance.get() == null) {
 			instance.set(new TagsManager());
 		}
@@ -62,12 +57,12 @@ public class TagsManager {
 	public GraphicsState getLastState() {
 		if (states.size() == 0)
 			return null;
-		return (GraphicsState) states.get(states.size() - 1);
+		return states.get(states.size() - 1);
 	}
 
 	public void checkTag(final Tag tag) {
 		// TODO <center> is deprecated in HTML 4!!!
-		final GraphicsState state = new GraphicsState((GraphicsState) states.get(states.size() - 1));
+		final GraphicsState state = new GraphicsState(getLastState());
 		states.add(state);
 		if (tag.getPropertyValue("bgcolor") != null) {
 			state.setBgcolor(tag.getPropertyValue("bgcolor"));
@@ -96,44 +91,39 @@ public class TagsManager {
 	}
 
 	public Font getFont() {
-		return ((GraphicsState) states.get(states.size() - 1)).getFont();
+		return getLastState().getFont();
 	}
 
 	public Color getBgcolor() {
-		return ((GraphicsState) states.get(states.size() - 1)).getBgcolor();
+		return getLastState().getBgcolor();
 	}
 
 	public int getAlign() {
-		return ((GraphicsState) states.get(states.size() - 1)).getAlign();
+		return getLastState().getAlign();
 	}
 
 	public int getValign() {
-		return ((GraphicsState) states.get(states.size() - 1)).getValign();
+		return getLastState().getValign();
 	}
 
 	public float getSpacingAfter() {
-		// TODO Auto-generated method stub
-		return ((GraphicsState) states.get(states.size() - 1)).getSpacingAfter();
+		return getLastState().getSpacingAfter();
 	}
 
 	public float getSpacingBefore() {
-		// TODO Auto-generated method stub
-		return ((GraphicsState) states.get(states.size() - 1)).getSpacingBefore();
+		return getLastState().getSpacingBefore();
 	}
 
 	public float getTextIndent() {
-		// TODO Auto-generated method stub
-		return ((GraphicsState) states.get(states.size() - 1)).getTextIndent();
+		return getLastState().getTextIndent();
 	}
 
 	public float getMarginLeft() {
-		// TODO Auto-generated method stub
-		return ((GraphicsState) states.get(states.size() - 1)).getMarginLeft();
+		return getLastState().getMarginLeft();
 	}
 
 	public String getListStyleType() {
-		// TODO Auto-generated method stub
-		return ((GraphicsState) states.get(states.size() - 1)).getListStyleType();
+		return getLastState().getListStyleType();
 	}
 
 	public void back() {
@@ -157,29 +147,21 @@ public class TagsManager {
 		return false;
 	}
 
-	// Doing the HTML tags
 	private void doTag(final Tag tag) {
 		try {
 			final Method method = TagsManager.class.getMethod("do" + tag.getName().toUpperCase(), new Class[] {});
-			method.invoke(this, new String[] {});
+			method.invoke(this);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void doB() {
-		// se a fonte o ultimo state for difente de normal, criar nova fonte combinando ambos
-		GraphicsState previousState = (GraphicsState) states.get(states.size() - 2);
+		GraphicsState previousState = getPreviousState(1);
 		if (previousState != null) {
-			Font previousFont = previousState.getFont();
-			Font currentFont = ((GraphicsState) states.get(states.size() - 1)).getFont();
-			currentFont.setStyle(Font.BOLD);
-			
-			Font difference = currentFont.difference(previousFont);
-			
-			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(difference.getStyle());
+			combineHTMLTags(previousState, Font.BOLD);
 		} else {
-			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);	
+			getLastState().getFont().setStyle(Font.BOLD);	
 		}
 	}
 
@@ -188,63 +170,57 @@ public class TagsManager {
 	}
 
 	public void doBIG() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(20);
+		getLastState().getFont().setSize(20);
 	}
 
 	public void doCENTER() {
-		((GraphicsState) states.get(states.size() - 1)).setAlign("center");
+		getLastState().setAlign("center");
 	}
 
 	public void doH1() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(16);
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingBefore(8f);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingAfter(8f);
+		getLastState().getFont().setSize(16);
+		getLastState().getFont().setStyle(Font.BOLD);
+		getLastState().setSpacingBefore(8f);
+		getLastState().setSpacingAfter(8f);
 	}
 
 	public void doH2() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(14);
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingBefore(7f);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingAfter(7f);
+		getLastState().getFont().setSize(14);
+		getLastState().getFont().setStyle(Font.BOLD);
+		getLastState().setSpacingBefore(7f);
+		getLastState().setSpacingAfter(7f);
 	}
 
 	public void doH3() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(12);
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingBefore(6f);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingAfter(6f);
+		getLastState().getFont().setSize(12);
+		getLastState().getFont().setStyle(Font.BOLD);
+		getLastState().setSpacingBefore(6f);
+		getLastState().setSpacingAfter(6f);
 	}
 
 	public void doH4() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(12);
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.UNDERLINE);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingBefore(6f);
-		((GraphicsState) states.get(states.size() - 1)).setSpacingAfter(6f);
+		getLastState().getFont().setSize(12);
+		getLastState().getFont().setStyle(Font.UNDERLINE);
+		getLastState().setSpacingBefore(6f);
+		getLastState().setSpacingAfter(6f);
 	}
 
 	public void doH5() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(11);
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);
+		getLastState().getFont().setSize(11);
+		getLastState().getFont().setStyle(Font.BOLD);
 	}
 
 	public void doH6() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setSize(11);
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);
+		getLastState().getFont().setSize(11);
+		getLastState().getFont().setStyle(Font.BOLD);
 	}
 
 	public void doI() {
-		GraphicsState previousState = (GraphicsState) states.get(states.size() - 2);
+		GraphicsState previousState = getPreviousState(1);
 		if (previousState != null) {
-			Font previousFont = previousState.getFont();
-			Font currentFont = ((GraphicsState) states.get(states.size() - 1)).getFont();
-			currentFont.setStyle(Font.ITALIC);
-			
-			Font difference = currentFont.difference(previousFont);
-			
-			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(difference.getStyle());
+			combineHTMLTags(previousState, Font.ITALIC);
 		} else {
-			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.ITALIC);
+			getLastState().getFont().setStyle(Font.ITALIC);
 		}
 	}
 
@@ -253,89 +229,21 @@ public class TagsManager {
 	}
 
 	public void doU() {
-		GraphicsState previousState = (GraphicsState) states.get(states.size() - 2);
+		GraphicsState previousState = getPreviousState(1);
 		if (previousState != null) {
-			Font previousFont = previousState.getFont();
-			Font currentFont = ((GraphicsState) states.get(states.size() - 1)).getFont();
-			currentFont.setStyle(Font.UNDERLINE);
-			
-			Font difference = currentFont.difference(previousFont);
-			
-			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(difference.getStyle());
+			combineHTMLTags(previousState, Font.UNDERLINE);
 		} else {
-			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.UNDERLINE);
+			getLastState().getFont().setStyle(Font.UNDERLINE);
 		}
 	}
+	
+	private void combineHTMLTags(GraphicsState previousState, int currentStyle) {
+		Font previousFont = previousState.getFont();
+		Font currentFont = getLastState().getFont();
+		currentFont.setStyle(currentStyle);
+		Font difference = currentFont.difference(previousFont);
+		
+		getLastState().getFont().setStyle(difference.getStyle());
+	}
 }
-/**
- * 
- * $Log: TagsManager.java,v $
- * Revision 1.2  2009/05/25 21:07:16  eeh
- * *** empty log message ***
- *
- * Revision 1.1  2007/12/26 15:57:40  tah
- * *** empty log message ***
- *
- * Revision 1.9  2007/03/06 19:55:51  tah
- * *** empty log message ***
- *
- * Revision 1.8  2006/08/25 16:48:23  tah
- * *** empty log message ***
- *
- * Revision 1.7  2006/07/18 16:22:42  tah
- * *** empty log message ***
- *
- * Revision 1.6  2006/07/06 15:45:25  tah
- * *** empty log message ***
- *
- * Revision 1.5  2006/07/05 16:00:44  nts
- * Refatorando para melhorar qualidade do código
- *
- * Revision 1.4  2006/05/23 19:35:06  tah
- * *** empty log message ***
- *
- * Revision 1.3  2006/05/11 20:30:23  tah
- * *** empty log message ***
- *
- * Revision 1.2  2006/04/11 19:43:43  tah
- * *** empty log message ***
- * Revision 1.1 2006/04/03 21:30:45 tah Utilizando o
- * nheengatu
- * 
- * Revision 1.6 2006/01/01 13:45:37 aryjr Feliz 2006!!!
- * 
- * Revision 1.5 2005/12/16 14:06:37 aryjr Problem with cell heights solved!!!
- * 
- * Revision 1.4 2005/12/07 14:49:50 aryjr Bugs with the relatorio.jsp HTML code.
- * 
- * Revision 1.3 2005/11/16 12:42:18 aryjr Testes com posicionamentos absolutos.
- * 
- * Revision 1.2 2005/11/14 13:23:00 aryjr CSS Parser ok from now.
- * 
- * Revision 1.1 2005/11/14 12:17:46 aryjr Renomeando os pacotes.
- * 
- * Revision 1.3 2005/11/11 21:25:31 aryjr Trabalhando no suporte ao CSS2.
- * 
- * Revision 1.2 2005/11/11 21:09:53 aryjr Retomando o desenvolvimento e
- * trabalhando no suporte ao CSS2.
- * 
- * Revision 1.1 2005/09/26 19:41:14 aryjr Aproveitando a greve para voltar a
- * atividade.
- * 
- * Revision 1.1 2005/09/10 23:43:41 aryjr Passando para o java.net.
- * 
- * Revision 1.6 2005/07/02 01:18:57 aryjunior Site do projeto.
- * 
- * Revision 1.5 2005/06/04 13:29:25 aryjunior LGPL.
- * 
- * Revision 1.4 2005/06/04 02:24:41 aryjunior Testes com o snapshot. Um .jsp com
- * um HTML mais complexo.
- * 
- * Revision 1.3 2005/05/30 01:55:57 aryjunior Alguns detalhes no cabecalho dos
- * arquivos e fazendo alguns testes com tabelas ainhadas.
- * 
- * Revision 1.2 2005/05/28 23:21:41 aryjunior Corrigindo o cabecalho.
- * 
- * Revision 1.1.1.1 2005/05/28 21:10:29 aryjunior Initial import.
- * 
- */
+
