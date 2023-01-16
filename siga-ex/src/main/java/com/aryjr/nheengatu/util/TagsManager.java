@@ -23,12 +23,16 @@
 package com.aryjr.nheengatu.util;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import com.aryjr.nheengatu.css2.Style;
 import com.aryjr.nheengatu.css2.StyleSheet;
 import com.aryjr.nheengatu.html.Tag;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.pdf.BaseFont;
 
 /**
  * 
@@ -164,7 +168,19 @@ public class TagsManager {
 	}
 
 	public void doB() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);
+		// se a fonte o ultimo state for difente de normal, criar nova fonte combinando ambos
+		GraphicsState previousState = (GraphicsState) states.get(states.size() - 2);
+		if (previousState != null) {
+			Font previousFont = previousState.getFont();
+			Font currentFont = ((GraphicsState) states.get(states.size() - 1)).getFont();
+			currentFont.setStyle(Font.BOLD);
+			
+			Font difference = currentFont.difference(previousFont);
+			
+			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(difference.getStyle());
+		} else {
+			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.BOLD);	
+		}
 	}
 
 	public void doSTRONG() {
@@ -218,7 +234,18 @@ public class TagsManager {
 	}
 
 	public void doI() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.ITALIC);
+		GraphicsState previousState = (GraphicsState) states.get(states.size() - 2);
+		if (previousState != null) {
+			Font previousFont = previousState.getFont();
+			Font currentFont = ((GraphicsState) states.get(states.size() - 1)).getFont();
+			currentFont.setStyle(Font.ITALIC);
+			
+			Font difference = currentFont.difference(previousFont);
+			
+			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(difference.getStyle());
+		} else {
+			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.ITALIC);
+		}
 	}
 
 	public void doEM() {
@@ -226,7 +253,18 @@ public class TagsManager {
 	}
 
 	public void doU() {
-		((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.UNDERLINE);
+		GraphicsState previousState = (GraphicsState) states.get(states.size() - 2);
+		if (previousState != null) {
+			Font previousFont = previousState.getFont();
+			Font currentFont = ((GraphicsState) states.get(states.size() - 1)).getFont();
+			currentFont.setStyle(Font.UNDERLINE);
+			
+			Font difference = currentFont.difference(previousFont);
+			
+			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(difference.getStyle());
+		} else {
+			((GraphicsState) states.get(states.size() - 1)).getFont().setStyle(Font.UNDERLINE);
+		}
 	}
 }
 /**
