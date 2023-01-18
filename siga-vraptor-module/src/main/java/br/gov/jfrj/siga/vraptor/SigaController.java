@@ -62,7 +62,7 @@ import br.gov.jfrj.siga.dp.dao.CpDao;
 public class SigaController {
 
 	public static final String SIGLA_ORGAO_ROOT = "ZZZ";
-
+	public static final String SIGLA_ORGAO_PDS = "PDS";
 	protected SigaObjects so;
 
 	protected Result result;
@@ -431,6 +431,7 @@ public class SigaController {
 		final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
 		return dao().listarOrgaosUsuarios(
 				qCpOrgaoUsuario.siglaOrgaoUsu.ne(SIGLA_ORGAO_ROOT)
+					.and(qCpOrgaoUsuario.siglaOrgaoUsu.ne(SIGLA_ORGAO_PDS))
 						.and(qCpOrgaoUsuario.hisAtivo.eq(1))
 		);
 	}
