@@ -1382,48 +1382,46 @@ public class ExMovimentacaoController extends ExController {
 	public void aIncluirCosignatarioGravar(final String sigla,
 			final DpPessoaSelecao cosignatarioSel,
 			final String funcaoCosignatario, final String  unidadeCosignatario, final Integer postback) {
+		this.setPostback(postback);
 		
 		if (cosignatarioSel.empty()) {
 			result.include(SigaModal.ALERTA, SigaModal.mensagem("É necessário informar um cossignatário.").titulo("Atenção"));
 			result.forwardTo(this).incluirCosignatario(sigla);
 			return;
-		} else {
-			this.setPostback(postback);
-	
-			final BuscaDocumentoBuilder documentoBuilder = BuscaDocumentoBuilder
-					.novaInstancia()
-					.setSigla(sigla);
-	
-			final ExDocumento doc = buscarDocumento(documentoBuilder);
-	
-			String funcaoUnidadeCosignatario = funcaoCosignatario;
-			// Efetuar validação e concatenar o conteudo se for implantação GOVSP
-			if(SigaMessages.isSigaSP() && (funcaoCosignatario != null && !funcaoCosignatario.isEmpty()) && (unidadeCosignatario != null && !unidadeCosignatario.isEmpty())) {
-				funcaoUnidadeCosignatario = funcaoUnidadeCosignatario + ";" + unidadeCosignatario; 
-			}
-			
-			final ExMovimentacaoBuilder movimentacaoBuilder = ExMovimentacaoBuilder
-					.novaInstancia().setMob(documentoBuilder.getMob())
-					.setDescrMov(funcaoUnidadeCosignatario)
-					.setSubscritorSel(cosignatarioSel);
-	
-			final ExMovimentacao mov = movimentacaoBuilder.construir(dao());
-	
-			if (!Ex.getInstance().getComp().podeIncluirCosignatario(getTitular(), getLotaTitular(),
-					documentoBuilder.getMob())) {
-				throw new AplicacaoException("Não é possível incluir cossignatário");
-			}
-	
-			Ex.getInstance().getBL().incluirCosignatario(
-					getCadastrante(),
-					getLotaTitular(),
-					doc,
-					mov.getData(),
-					mov.getSubscritor(),
-					mov.getDescrMov()
-			);
-			ExDocumentoController.redirecionarParaExibir(result, mov.getExDocumento().getSigla());
 		}
+		
+		final BuscaDocumentoBuilder documentoBuilder = BuscaDocumentoBuilder
+				.novaInstancia()
+				.setSigla(sigla);
+		final ExDocumento doc = buscarDocumento(documentoBuilder);
+
+		String funcaoUnidadeCosignatario = funcaoCosignatario;
+		if(SigaMessages.isSigaSP() && (funcaoCosignatario != null && !funcaoCosignatario.isEmpty()) && (unidadeCosignatario != null && !unidadeCosignatario.isEmpty())) {
+			funcaoUnidadeCosignatario = funcaoUnidadeCosignatario + ";" + unidadeCosignatario; 
+		}
+		
+		final ExMovimentacaoBuilder movimentacaoBuilder = ExMovimentacaoBuilder
+				.novaInstancia().setMob(documentoBuilder.getMob())
+				.setDescrMov(funcaoUnidadeCosignatario)
+				.setSubscritorSel(cosignatarioSel);
+
+		final ExMovimentacao mov = movimentacaoBuilder.construir(dao());
+
+		if (!Ex.getInstance().getComp().podeIncluirCosignatario(getTitular(), getLotaTitular(),
+				documentoBuilder.getMob())) {
+			throw new AplicacaoException("Não é possível incluir cossignatário");
+		}
+
+		Ex.getInstance().getBL().incluirCosignatario(
+				getCadastrante(),
+				getLotaTitular(),
+				doc,
+				mov.getData(),
+				mov.getSubscritor(),
+				mov.getDescrMov()
+		);
+		ExDocumentoController.redirecionarParaExibir(result, mov.getExDocumento().getSigla());
+		
 	}
 
 	// Nato: Temos que substituir por uma tela que mostre os itens marcados como
