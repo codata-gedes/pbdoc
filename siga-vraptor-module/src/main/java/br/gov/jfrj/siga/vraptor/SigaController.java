@@ -11,10 +11,13 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -40,6 +43,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.querydsl.core.types.CollectionExpression;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
@@ -51,6 +55,7 @@ import br.gov.jfrj.siga.base.log.RequestExceptionLogger;
 import br.gov.jfrj.siga.base.util.Paginador;
 import br.gov.jfrj.siga.cp.CpIdentidade;
 import br.gov.jfrj.siga.cp.bl.Cp;
+import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
@@ -61,8 +66,6 @@ import br.gov.jfrj.siga.dp.dao.CpDao;
 
 public class SigaController {
 
-	public static final String SIGLA_ORGAO_ROOT = "ZZZ";
-	public static final String SIGLA_ORGAO_PDS = "PDS";
 	protected SigaObjects so;
 
 	protected Result result;
@@ -430,9 +433,8 @@ public class SigaController {
 	protected List<CpOrgaoUsuario> getOrgaosUsu() throws AplicacaoException {
 		final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
 		return dao().listarOrgaosUsuarios(
-				qCpOrgaoUsuario.siglaOrgaoUsu.ne(SIGLA_ORGAO_ROOT)
-					.and(qCpOrgaoUsuario.siglaOrgaoUsu.ne(SIGLA_ORGAO_PDS))
-						.and(qCpOrgaoUsuario.hisAtivo.eq(1))
+				qCpOrgaoUsuario.siglaOrgaoUsu.notIn(CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS)
+					.and(qCpOrgaoUsuario.hisAtivo.eq(1))
 		);
 	}
 
