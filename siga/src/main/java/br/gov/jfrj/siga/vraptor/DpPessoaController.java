@@ -481,6 +481,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				DpLotacaoDaoFiltro lotacao = new DpLotacaoDaoFiltro();
 				lotacao.setNome("");
 				lotacao.setIdOrgaoUsu(ou.getId());
+				lotacao.setBuscarParaCadastroDePessoa(true);
 				List<DpLotacao> listaLotacao = new ArrayList<DpLotacao>();
 				DpLotacao l = new DpLotacao();
 				l.setNomeLotacao("Selecione");
