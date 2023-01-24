@@ -152,19 +152,6 @@
 					  </div>
 					</div>
 					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="siglaLotacao">Situa&ccedil;&atilde;o</label><br/>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" name="situacao" value="true" id="situacaoAtivo" ${empty dtFimLotacao ? 'checked' : ''} />Ativo
-								</label>
-							</div>							
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" name="situacao" value="false" id="situacaoInativo" ${not empty dtFimLotacao ? 'checked' : ''} />Inativo
-								</label>
-							</div>							
-						</div>
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group">

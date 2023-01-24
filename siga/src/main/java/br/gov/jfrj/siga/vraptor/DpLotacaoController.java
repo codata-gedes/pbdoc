@@ -376,14 +376,14 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 
 	@Transacional
 	@Post("/app/lotacao/gravar")
-	public void editarGravar(final Long id, final String nmLotacao, final Long idOrgaoUsu, final String siglaLotacao,
-			final String situacao, final Boolean isExternaLotacao, final Long lotacaoPai, final Long idLocalidade, final boolean unidadeReceptora)
+	public void editarGravar(final Long id, final String nmLotacao, final Long idOrgaoUsu, final String siglaLotacao, 
+			final Boolean isExternaLotacao, final Long lotacaoPai, final Long idLocalidade, final boolean unidadeReceptora)
 			throws Exception {
 
 		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_LOTACAO: Cadastrar Lotação");
 
 		DpLotacao lotacaoFoiCriada = Cp.getInstance().getBL().criarLotacao(getIdentidadeCadastrante(), getTitular(), getTitular().getLotacao(), id,
-				nmLotacao, idOrgaoUsu, siglaLotacao, situacao, isExternaLotacao, lotacaoPai, idLocalidade, unidadeReceptora);
+				nmLotacao, idOrgaoUsu, siglaLotacao, isExternaLotacao, lotacaoPai, idLocalidade, unidadeReceptora);
 		
 		if (lotacaoFoiCriada != null) {		
 			this.result.include("mensagem", "Operação realizada com sucesso!");
