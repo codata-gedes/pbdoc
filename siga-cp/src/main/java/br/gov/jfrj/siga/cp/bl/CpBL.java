@@ -1935,6 +1935,7 @@ public class CpBL {
 		lotNova.setLotacaoPai(lotAnt.getLotacaoPai() != null ? lotAnt.getLotacaoPai().getLotacaoAtual() : null);
 		lotNova.setOrgaoUsuario(lotAnt.getOrgaoUsuario());
 		lotNova.setIsSuspensa(lotAnt.getIsSuspensa());
+		lotNova.setUnidadeReceptora(lotAnt.isUnidadeReceptora());
 	}
 
 	/**
