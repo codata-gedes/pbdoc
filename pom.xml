@@ -34,6 +34,7 @@
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<siga.versao>develop</siga.versao>
 		<querydsl.version>4.2.2</querydsl.version>
+		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 	</properties>
 
 	<build>
