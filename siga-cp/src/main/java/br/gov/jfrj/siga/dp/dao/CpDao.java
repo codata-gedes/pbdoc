@@ -754,6 +754,7 @@ public class CpDao extends ModeloDao {
 					}
 				} else {
 					predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId()));
+					predicates.and(qDpLotacao.dataFimLotacao.isNull());
 					predicates.or(qDpLotacao.unidadeReceptora.isTrue());
 				}
 			}
