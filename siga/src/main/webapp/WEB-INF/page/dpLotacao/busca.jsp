@@ -90,7 +90,6 @@
 				<tr>
 					<th align="center">Sigla</th>
 					<th align="left">Nome</th>
-					<th>Fim de Vigência</th>
 				</tr>
 			</thead>
 			<siga:paginador maxItens="10" maxIndices="10" totalItens="${tamanho}" itens="${itens}" var="item">
@@ -98,7 +97,6 @@
 					<td width="20%" align="left"><a
 						href="javascript: ${parteFuncao}.retorna_${propriedadeClean}('${item.id}','${item.siglaCompletaFormatada}','${item.descricao}');">${item.siglaCompletaFormatada}</a></td>
 					<td width="60%" align="left">${item.descricao}</td>
-					<td align="left" width="20%">${item.dataFimLotacao}</td>
 				</tr>
 			</siga:paginador>
 		</table>

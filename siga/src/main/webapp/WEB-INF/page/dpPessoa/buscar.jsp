@@ -104,7 +104,6 @@ function sbmt(offset) {
 					<th align="left">Nome</th>
 					<th align="center"><fmt:message key="usuario.lotacao"/></th>
 					<th align="center">Função</th>
-					<th>Fim de Vigência</th>
 				</tr>
 			</thead>
 			<siga:paginador maxItens="10" maxIndices="10" totalItens="${tamanho}"
@@ -115,7 +114,6 @@ function sbmt(offset) {
 					<td align="left">${pessoa.descricao}</td>
 					<td align="center">${pessoa.lotacao.sigla}</td>
 					<td align="center">${pessoa.funcaoConfianca.nomeFuncao}${buscarFechadas}</td>
-					<td align="left">${pessoa.dataFimPessoa}</td>
 				</tr>
 			</siga:paginador>
 		</table>
