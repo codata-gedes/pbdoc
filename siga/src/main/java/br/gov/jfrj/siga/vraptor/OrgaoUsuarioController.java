@@ -200,7 +200,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 		}
 		orgaoUsuario.setCodOrgaoUsu(codOrgUsu);
 
-		final String nomeOrgaoUsuario = Texto.removerEspacosExtra(nmOrgaoUsuario).trim();
+		final String nomeOrgaoUsuario = Texto.removerEspacosExtra(nmOrgaoUsuario).trim().replaceAll("[\"'\u201c\u201d]", "\"");
 		orgaoUsuario.setNmOrgaoUsu(nomeOrgaoUsuario);
 		orgaoUsuario.setSiglaOrgaoUsuarioCompleta(siglaCompleta);
 		orgaoUsuario.setHisAtivo(1);
