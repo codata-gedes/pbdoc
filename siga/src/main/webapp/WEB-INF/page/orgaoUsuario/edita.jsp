@@ -87,7 +87,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Nome</label>
-								<input type="text" id="nmOrgaoUsuario" name="nmOrgaoUsuario" value="${nmOrgaoUsuario}" maxlength="256" class="form-control"/>
+								<input type="text" id="nmOrgaoUsuario" name="nmOrgaoUsuario" value="<c:out value="${nmOrgaoUsuario}"/>" maxlength="256" class="form-control"/>
 							</div>
 						</div>
 					</div>
