@@ -1875,7 +1875,7 @@ public class CpBL {
 				if(lotacao != null && lotacao.getId() != null) {
 					
 					DpPessoa pessoaNova = null;
-					List<DpPessoa> listPessoa = CpDao.getInstance().pessoasPorLotacao(id, Boolean.TRUE, Boolean.FALSE);
+					List<DpPessoa> listPessoa = CpDao.getInstance().consultaPessoasPorLotacao(lotacao);
 					for (DpPessoa dpPessoa : listPessoa) {
 						pessoaNova = DpPessoa.novaInstanciaBaseadaEm(dpPessoa, data);
 						if(dpPessoa.getLotacao().getIdInicial().equals(lotacaoNova.getIdLotacaoIni())) {
