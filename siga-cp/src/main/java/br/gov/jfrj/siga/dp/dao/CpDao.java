@@ -1511,16 +1511,16 @@ public class CpDao extends ModeloDao {
 				predicates.and(qDpPessoa.dataFimPessoa.isNull());
 				predicates.and(predicadoExisteIdentidadeAtivaParaPessoa(qDpPessoa, qCpIdentidade));
 				
-				if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla())) {
-					predicates.and(qDpPessoa.lotacao.unidadeReceptora.isFalse());
-				} else {
-					if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
-						predicates.and(
-								qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-									.or(qDpPessoa.lotacao.unidadeReceptora.isTrue())
-						);						
-					} 
-				}
+//				if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla())) {
+//					predicates.and(qDpPessoa.lotacao.unidadeReceptora.isFalse());
+//				} else {
+//					if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
+//						predicates.and(
+//								qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
+//									.or(qDpPessoa.lotacao.unidadeReceptora.isTrue())
+//						);						
+//					} 
+//				}
 			
 			}
 
@@ -1828,21 +1828,23 @@ public class CpDao extends ModeloDao {
 	}
 
 	
-	public List<DpPessoa> consultaPessoasPorLotacao(final DpLotacao lotacao) {
-		return this.consultaPessoasPorLotacao(lotacao, null);
-	}
-	
-	private List<DpPessoa> consultaPessoasPorLotacao(final DpLotacao lotacao, Integer limit) {
+	public List<DpPessoa> consultaPessoasPorLotacao(final DpLotacao lotacao, boolean selecionarApenasAtivos) {
 		final JPAQuery<DpPessoa> query = new JPAQuery<DpPessoa>(em())
-				.from(qDpPessoa)
-				.where(qDpPessoa.lotacao.idLotacao.eq(lotacao.getId())
-						.and(qDpPessoa.dataFimPessoa.isNull()));
-		if (limit != null) {
-			query.limit(limit);
+				.from(qDpPessoa);
+						
+		final BooleanBuilder predicates = new BooleanBuilder(qDpPessoa.lotacao.idLotacao.eq(lotacao.getId()));
+		if (selecionarApenasAtivos) {
+			predicates.and(qDpPessoa.dataFimPessoa.isNull());
+		} else {
+			final JPQLQuery<Long> subquery = JPAExpressions
+					.select(qDpPessoa.idPessoa.max())
+					.from(qDpPessoa)
+					.groupBy(qDpPessoa.idPessoaIni);
+			predicates.and(qDpPessoa.idPessoa.in(subquery));
 		}
-		return query.fetch();
+		
+		return query.where(predicates).fetch();
 	}
-
 	
 	/*
 	 * @SuppressWarnings("unchecked") public Usuario
