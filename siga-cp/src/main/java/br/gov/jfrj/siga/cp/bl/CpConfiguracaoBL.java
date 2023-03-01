@@ -86,6 +86,34 @@ public class CpConfiguracaoBL {
 		SIGLAS_ORGAOS_OCULTADOS.add(SIGLA_ORGAO_PDS);
 	}
 	
+	
+	public static final String SIGLA_MODULO_SIGA_AQ = "SIGA-AQ";
+	public static final String SIGLA_MODULO_SIGA_BDP= "SIGA-BDP";
+	public static final String SIGLA_MODULO_SIGA_BNF= "SIGA-BNF";
+	public static final String SIGLA_MODULO_SIGA_CAD = "SIGA-CAD";
+	public static final String SIGLA_MODULO_SIGA_CST = "SIGA-CST";
+	public static final String SIGLA_MODULO_SIGA_DNC = "SIGA-DCN";
+	public static final String SIGLA_MODULO_LOT = "SIGA-LOT";
+	public static final String SIGLA_MODULO_TERC = "SIGA-TERC";
+	public static final String SIGLA_MODULO_TRN = "SIGA-TRN";
+
+	public static final List<String> MODULOS_NAO_UTILIZADOS = new ArrayList<String>();
+	
+	static {
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_AQ);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_BDP);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_BNF);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_CAD);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_CST);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_DNC);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_LOT);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_SIGA_BDP);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_TERC);
+		MODULOS_NAO_UTILIZADOS.add(SIGLA_MODULO_TRN);
+	}
+	
+	
+	
 	private final static org.jboss.logging.Logger log = org.jboss.logging.Logger.getLogger(CpConfiguracaoBL.class);
 
 	protected Date dtUltimaAtualizacaoCache = null;

@@ -90,6 +90,7 @@ import br.gov.jfrj.siga.cp.CpTipoPapel;
 import br.gov.jfrj.siga.cp.CpToken;
 import br.gov.jfrj.siga.cp.CpUnidadeMedida;
 import br.gov.jfrj.siga.cp.QCpIdentidade;
+import br.gov.jfrj.siga.cp.QCpServico;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.cp.bl.SituacaoFuncionalEnum;
@@ -160,6 +161,7 @@ public class CpDao extends ModeloDao {
 	private static final QDpFuncaoConfianca qDpFuncaoConfianca = QDpFuncaoConfianca.dpFuncaoConfianca;
 	private static final QDpCargo qDpCargo = QDpCargo.dpCargo;
 	private static final QDpLotacao qDpLotacao = QDpLotacao.dpLotacao;
+	private static final QCpServico qCpServico = QCpServico.cpServico;
 
 	protected final SigaDialect dialeto = SigaDialect.fromSystemProperty();
 
@@ -250,7 +252,7 @@ public class CpDao extends ModeloDao {
 	public void inicializarCacheDeServicos() {
 		synchronized (CpDao.class) {
 			cacheServicos = new TreeMap<>();
-			List<CpServico> l = listarTodos(CpServico.class, "siglaServico");
+			List<CpServico> l = listarServicosAtivos();
 			for (CpServico s : l) {
 				cacheServicos.put(s.getSigla(), s);
 			}
@@ -2432,6 +2434,27 @@ public class CpDao extends ModeloDao {
 		q.select(c);
 		q.where(cb().equal(c.get("cpServicoPai"), servicoPai));
 		return em().createQuery(q).getResultList();
+	}
+	
+	public List<CpServico> listarServicos(com.querydsl.core.types.Predicate... predicate) {
+		final JPAQuery<CpServico> query = new JPAQueryFactory(em())
+				.select(qCpServico)
+				.from(qCpServico);
+
+		if (predicate != null) {
+			query.where(predicate);
+		}
+
+		return query.setHint(QueryHints.CACHEABLE, true)
+				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
+				.orderBy(qCpServico.siglaServico.asc())
+				.fetch();
+	}
+	
+	public List<CpServico> listarServicosAtivos() throws AplicacaoException {
+		final QCpServico qCpServico = QCpServico.cpServico;
+		return this.listarServicos(
+				qCpServico.siglaServico.notIn(CpConfiguracaoBL.MODULOS_NAO_UTILIZADOS));
 	}
 
 	@SuppressWarnings("unchecked")
