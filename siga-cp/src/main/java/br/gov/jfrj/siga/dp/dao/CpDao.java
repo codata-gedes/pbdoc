@@ -1836,10 +1836,12 @@ public class CpDao extends ModeloDao {
 		if (selecionarApenasAtivos) {
 			predicates.and(qDpPessoa.dataFimPessoa.isNull());
 		} else {
+			final QDpPessoa subqDpPessoa = new QDpPessoa("subqDpPessoa");
 			final JPQLQuery<Long> subquery = JPAExpressions
-					.select(qDpPessoa.idPessoa.max())
-					.from(qDpPessoa)
-					.groupBy(qDpPessoa.idPessoaIni);
+					.select(subqDpPessoa.idPessoa.max())
+					.from(subqDpPessoa)
+					.where(subqDpPessoa.lotacao.idLotacao.eq(lotacao.getId()))
+					.groupBy(subqDpPessoa.idPessoaIni);
 			predicates.and(qDpPessoa.idPessoa.in(subquery));
 		}
 		
