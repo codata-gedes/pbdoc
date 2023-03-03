@@ -1829,6 +1829,27 @@ public class CpDao extends ModeloDao {
 		return query.fetch();
 	}
 
+	
+	public List<DpPessoa> consultaPessoasPorLotacao(final DpLotacao lotacao, boolean selecionarApenasAtivos) {
+		final JPAQuery<DpPessoa> query = new JPAQuery<DpPessoa>(em())
+				.from(qDpPessoa);
+						
+		final BooleanBuilder predicates = new BooleanBuilder(qDpPessoa.lotacao.idLotacao.eq(lotacao.getId()));
+		if (selecionarApenasAtivos) {
+			predicates.and(qDpPessoa.dataFimPessoa.isNull());
+		} else {
+			final QDpPessoa subqDpPessoa = new QDpPessoa("subqDpPessoa");
+			final JPQLQuery<Long> subquery = JPAExpressions
+					.select(subqDpPessoa.idPessoa.max())
+					.from(subqDpPessoa)
+					.where(subqDpPessoa.lotacao.idLotacao.eq(lotacao.getId()))
+					.groupBy(subqDpPessoa.idPessoaIni);
+			predicates.and(qDpPessoa.idPessoa.in(subquery));
+		}
+		
+		return query.where(predicates).fetch();
+	}
+	
 	/*
 	 * @SuppressWarnings("unchecked") public Usuario
 	 * consultaUsuarioCadastrante(final String nmUsuario) { try { final Query

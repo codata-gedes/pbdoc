@@ -1862,8 +1862,6 @@ public class CpBL {
 			}
 			
 			lotacaoNova.setDataInicioLotacao(data);
-			DpLotacao lotacaoFilhoNova = null;
-			DpLotacao lotacaoFilhoAntiga = null;
 			try {
 				if(lotacaoNova.getDataFimLotacao() != null) {
 					lotacao.setDataFimLotacao(lotacaoNova.getDataFimLotacao());
@@ -1874,27 +1872,16 @@ public class CpBL {
 				
 				if(lotacao != null && lotacao.getId() != null) {
 					
-					DpPessoa pessoaNova = null;
-					List<DpPessoa> listPessoa = CpDao.getInstance().pessoasPorLotacao(id, Boolean.TRUE, Boolean.FALSE);
+					List<DpPessoa> listPessoa = CpDao.getInstance().consultaPessoasPorLotacao(lotacao, false);
 					for (DpPessoa dpPessoa : listPessoa) {
-						pessoaNova = DpPessoa.novaInstanciaBaseadaEm(dpPessoa, data);
-						if(dpPessoa.getLotacao().getIdInicial().equals(lotacaoNova.getIdLotacaoIni())) {
-							pessoaNova.setLotacao(lotacaoNova);
-						} else {
-							if(dpPessoa.getLotacao().getLotacaoPai() != null && lotacaoNova.getId().equals(dpPessoa.getLotacao().getLotacaoAtual().getLotacaoPai().getId())) {
-								pessoaNova.setLotacao(dpPessoa.getLotacao().getLotacaoAtual());
-							} else {
-								//grava nova lotacao filho e setar na pessoa
-								lotacaoFilhoNova = new DpLotacao();
-								lotacaoFilhoAntiga =  dpPessoa.getLotacao().getLotacaoAtual();
-								
-								lotacaoFilhoNova.setDataInicio(data);
-								copiaLotacao(lotacaoFilhoAntiga, lotacaoFilhoNova);
-								
-								dao().gravarComHistorico(lotacaoFilhoNova, lotacaoFilhoAntiga, data, identidadeCadastrante);
-								pessoaNova.setLotacao(lotacaoFilhoNova);
-							}
-						}				
+						DpPessoa pessoaNova = DpPessoa.novaInstanciaBaseadaEm(dpPessoa, data);
+						pessoaNova.setLotacao(lotacaoNova);
+						
+						if (dpPessoa.getDataFimPessoa() != null) {
+							pessoaNova.setDataFimPessoa(data);
+							pessoaNova.setHisIdcFim(identidadeCadastrante);
+						}
+						
 						dao().gravarComHistorico(pessoaNova, dpPessoa, data, identidadeCadastrante);
 						criarIdentidadeComHistorico(data, dpPessoa, pessoaNova, identidadeCadastrante);
 					}
