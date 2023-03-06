@@ -799,29 +799,6 @@ public class CpConfiguracaoBL {
 			CpServico srvRecuperado = null;
 
 			srvRecuperado = dao().consultarCpServicoPorChave(servicoPath);
-			if (srvRecuperado == null) {
-				// Constroi uma linha completa, tipo full path
-				for (String s : servicoPath.split(";")) {
-					String[] asParts = s.split(":"); // Separa a sigla da
-														// descrição
-					String sSigla = asParts[0];
-					srv = new CpServico();
-					srv.setSiglaServico(srvPai != null ? srvPai.getSigla() + "-" + sSigla : sSigla);
-					srv.setCpServicoPai(srvPai);
-					srvRecuperado = dao().consultarPorSigla(srv);
-					if (srvRecuperado == null) {
-						CpTipoServico tpsrv = dao().consultar(CpTipoServico.TIPO_CONFIG_SISTEMA, CpTipoServico.class, false);
-						String sDesc = (asParts.length > 1 ? asParts[1] : "");
-						srv.setDscServico(sDesc);
-						srv.setCpServicoPai(srvPai);
-						srv.setCpTipoServico(tpsrv);
-						ContextoPersistencia.begin();
-						dao().acrescentarServico(srv);
-						ContextoPersistencia.commit();
-					}
-					srvPai = srvRecuperado;
-				}
-			}
 			return Cp.getInstance().getConf().podePorConfiguracao(titular, lotaTitular, srvRecuperado,
 					CpTipoConfiguracao.TIPO_CONFIG_UTILIZAR_SERVICO);
 		} catch (Exception e) {
