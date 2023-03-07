@@ -54,15 +54,17 @@ public class CpServico extends AbstractCpServico implements Selecionavel {
 	
 	public static final String ACESSO_WEBSERVICE = "SPSEMPAPEL-SIGA-WS";
 	
-	public static final String SIGLA_MODULO_SIGA_AQ = "SIGA-AQ";
-	public static final String SIGLA_MODULO_SIGA_BDP= "SIGA-BDP";
-	public static final String SIGLA_MODULO_SIGA_BNF= "SIGA-BNF";
-	public static final String SIGLA_MODULO_SIGA_CAD = "SIGA-CAD";
-	public static final String SIGLA_MODULO_SIGA_CST = "SIGA-CST";
-	public static final String SIGLA_MODULO_SIGA_DNC = "SIGA-DCN";
-	public static final String SIGLA_MODULO_LOT = "SIGA-LOT";
-	public static final String SIGLA_MODULO_TERC = "SIGA-TERC";
-	public static final String SIGLA_MODULO_TRN = "SIGA-TRN";
+	public static final String SIGLA_MODULO_ADICIONAL_QUALIFICACAO = "SIGA-AQ";
+	public static final String SIGLA_MODULO_BANCO_PERMUTAS= "SIGA-BDP";
+	public static final String SIGLA_MODULO_BENEFICIOS = "SIGA-BNF";
+	public static final String SIGLA_MODULO_CADASTRO = "SIGA-CAD";
+	public static final String SIGLA_MODULO_CONSULTAS = "SIGA-CST";
+	public static final String SIGLA_MODULO_DOCENCIA = "SIGA-DCN";
+	public static final String SIGLA_MODULO_LOTACAO = "SIGA-LOT";
+	public static final String SIGLA_MODULO_TERCEIRIZADOS = "SIGA-TERC";
+	public static final String SIGLA_MODULO_TREINAMENTO = "SIGA-TRN";
+	public static final String SIGLA_MODULO_TRANSPORTE = "SIGA-TP";
+	public static final String SIGLA_MODULO_WORKFLOW = "SIGA-WF";
 	
 
 	public CpServico() {

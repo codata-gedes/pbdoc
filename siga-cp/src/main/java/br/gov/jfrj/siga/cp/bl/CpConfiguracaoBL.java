@@ -91,16 +91,17 @@ public class CpConfiguracaoBL {
 	public static final SortedSet<String> MODULOS_NAO_UTILIZADOS;
 	static {
 		final SortedSet<String> siglasModulosNaoUtilizados = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_AQ);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_BDP);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_BNF);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_CAD);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_CST);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_DNC);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_LOT);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_SIGA_BDP);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_TERC);
-		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_TRN);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_ADICIONAL_QUALIFICACAO);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_BANCO_PERMUTAS);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_BENEFICIOS);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_CADASTRO);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_CONSULTAS);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_DOCENCIA);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_LOTACAO);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_TERCEIRIZADOS);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_TREINAMENTO);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_TRANSPORTE);
+		siglasModulosNaoUtilizados.add(CpServico.SIGLA_MODULO_WORKFLOW);
 		
 		MODULOS_NAO_UTILIZADOS = Collections.unmodifiableSortedSet(siglasModulosNaoUtilizados);
 	}
