@@ -84,7 +84,7 @@ public class CpConfiguracaoBL {
 		final SortedSet<String> siglasOrgaosOcultados = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 		siglasOrgaosOcultados.add(SIGLA_ORGAO_ROOT);
 		siglasOrgaosOcultados.add(SIGLA_ORGAO_PDS);
-		SIGLAS_ORGAOS_OCULTADOS = Collections.unmodifiableSortedSet(siglasOrgaosAdministradores);
+		SIGLAS_ORGAOS_OCULTADOS = Collections.unmodifiableSortedSet(siglasOrgaosOcultados);
 	}
 
 	private final static org.jboss.logging.Logger log = org.jboss.logging.Logger.getLogger(CpConfiguracaoBL.class);
