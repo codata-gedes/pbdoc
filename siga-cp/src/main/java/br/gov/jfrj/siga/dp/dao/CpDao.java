@@ -1511,9 +1511,7 @@ public class CpDao extends ModeloDao {
 				predicates.and(qDpPessoa.dataFimPessoa.isNull());
 				predicates.and(predicadoExisteIdentidadeAtivaParaPessoa(qDpPessoa, qCpIdentidade));
 				
-				if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla())) {
-					predicates.and(qDpPessoa.lotacao.unidadeReceptora.isFalse());
-				} else {
+				if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla())) {
 					if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
 						predicates.and(
 								qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
