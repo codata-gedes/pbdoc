@@ -293,6 +293,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 				dpPessoaFiltro.setCpf(Long.valueOf(cpfPesquisa.replace(".", EMPTY).replace("-", EMPTY)));
 			}
 			dpPessoaFiltro.setId(Long.valueOf(0));
+			dpPessoaFiltro.setBuscarParacadastroDePessoas(true);
 			setItens(CpDao.getInstance().consultarPorFiltro(dpPessoaFiltro, paramoffset, 15));
 			result.include("itens", getItens());
 			long tamanho = dao().consultarQuantidade(dpPessoaFiltro);
