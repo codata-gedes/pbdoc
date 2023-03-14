@@ -223,7 +223,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get("app/lotacao/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {
 
-		if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
 			CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -297,7 +297,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 
 			} else {
 
-				if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+				if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 					result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 				} else {
 					CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -355,7 +355,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 		}
 		result.include("listaLotacao", listaLotacaoPai);
 
-		if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
 			CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
@@ -484,7 +484,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 
 	@Get("/app/lotacao/carregarExcel")
 	public void carregarExcel() {
-		if (CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
 			result.include("nmOrgaousu", getTitular().getOrgaoUsuario().getNmOrgaoUsu());
@@ -545,7 +545,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 		result.include("idUf", idUf);
 		result.include("listaUF", dao().consultarUF());
 		
-		if(CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(getTitular().getOrgaoUsuario().getSigla()) || CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(getTitular().getOrgaoUsuario().getSigla())) {
+		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {

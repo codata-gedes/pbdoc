@@ -743,8 +743,7 @@ public class CpDao extends ModeloDao {
 			final String principal = ContextoPersistencia.getUserPrincipal();
 			final CpIdentidade identidadePrincipal = consultaIdentidadeCadastrante(principal, true);
 			
-			if((CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla()) || 
-					CpConfiguracaoBL.SIGLA_ORGAO_CODATA_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla())) && filtro.isBuscarParaCadastroDePessoa()) {
+			if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(identidadePrincipal.getCpOrgaoUsuario().getSigla()) && filtro.isBuscarParaCadastroDePessoa()) {
 					predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
 			} else {
 				if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
