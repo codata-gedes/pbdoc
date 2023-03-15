@@ -554,7 +554,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			list = dao().consultaCpOrgaoUsuario();
 
 			for (CpOrgaoUsuario cpOrgaoUsuario : list) {
-				if (!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(cpOrgaoUsuario.getSiglaOrgaoUsu()) || !CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
+				if (!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(cpOrgaoUsuario.getSiglaOrgaoUsu())) {
 					list1.add(cpOrgaoUsuario);
 				}
 			}
