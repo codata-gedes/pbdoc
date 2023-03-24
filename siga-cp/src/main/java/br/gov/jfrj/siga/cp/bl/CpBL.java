@@ -1368,7 +1368,12 @@ public class CpBL {
 	}
 
 	public CpIdentidade criarIdentidadeComHistorico(Date dataCriacaoIdentidade, DpPessoa pessoaAnterior, DpPessoa pessoaNova, CpIdentidade identidadeCadastrante) {
-		final CpIdentidade identidadeAntiga = CpDao.getInstance().consultaIdentidade(pessoaAnterior);
+		CpIdentidade identidadeAntiga = CpDao.getInstance().consultaIdentidade(pessoaAnterior);
+		if (identidadeAntiga == null) {
+			identidadeAntiga = Cp.getInstance().getBL().criarIdentidade(pessoaAnterior.getSesbPessoa() + pessoaAnterior.getMatricula(),
+					pessoaAnterior.getCpfFormatado(), identidadeCadastrante, null, new String[1], Boolean.FALSE);
+		}
+		
 		final CpIdentidade identidadeNova = CpIdentidade.novaInstanciaBaseadaEm(identidadeAntiga, pessoaNova, dataCriacaoIdentidade);
 
 		CpDao.getInstance().gravarComHistorico(identidadeNova, identidadeAntiga, dataCriacaoIdentidade, identidadeCadastrante);
