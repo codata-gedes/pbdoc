@@ -448,7 +448,7 @@ public class CpBL {
 	}
 
 	public CpIdentidade criarIdentidade(String matricula, String cpf, CpIdentidade idCadastrante,
-			final String senhaDefinida, String[] senhaGerada, boolean marcarParaSinc) throws AplicacaoException {
+			final String senhaDefinida, String[] senhaGerada, boolean marcarParaSinc, boolean enviarEmail) throws AplicacaoException {
 
 		Long longCpf = CPFUtils.getLongValueValidaSimples(cpf);
 		final List<DpPessoa> listaPessoas = dao().listarPorCpf(longCpf);
@@ -512,8 +512,10 @@ public class CpBL {
 							Correio.enviar(null,
 									destinanarios, "Novo Usuário", "", conteudoHTML);
 						} else {
-							Correio.enviar(pessoa.getEmailPessoaAtual(), "Novo Usuário",
-									textoEmailNovoUsuario(matricula, novaSenha, autenticaPeloBanco));
+							if (enviarEmail) {
+								Correio.enviar(pessoa.getEmailPessoaAtual(), "Novo Usuário",
+										textoEmailNovoUsuario(matricula, novaSenha, autenticaPeloBanco));
+							}
 						}
 						dao().commitTransacao();
 						return idNova;
@@ -1351,7 +1353,7 @@ public class CpBL {
 
 			if(enviarEmail != null && idOrgaoUsu != null && cpf != null && lista != null && lista.size() == 0) {
 				Cp.getInstance().getBL().criarIdentidade(pessoa.getSesbPessoa() + pessoa.getMatricula(),
-						pessoa.getCpfFormatado(), identidadeCadastrante, null, new String[1], Boolean.FALSE);
+						pessoa.getCpfFormatado(), identidadeCadastrante, null, new String[1], Boolean.FALSE, Boolean.TRUE);
 			}
 
 			return pessoa;
@@ -1371,7 +1373,7 @@ public class CpBL {
 		CpIdentidade identidadeAntiga = CpDao.getInstance().consultaIdentidade(pessoaAnterior);
 		if (identidadeAntiga == null) {
 			identidadeAntiga = Cp.getInstance().getBL().criarIdentidade(pessoaAnterior.getSesbPessoa() + pessoaAnterior.getMatricula(),
-					pessoaAnterior.getCpfFormatado(), identidadeCadastrante, null, new String[1], Boolean.FALSE);
+					pessoaAnterior.getCpfFormatado(), identidadeCadastrante, null, new String[1], Boolean.FALSE, Boolean.FALSE);
 		}
 		
 		final CpIdentidade identidadeNova = CpIdentidade.novaInstanciaBaseadaEm(identidadeAntiga, pessoaNova, dataCriacaoIdentidade);
