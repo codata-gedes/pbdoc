@@ -512,20 +512,13 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		}
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
-			list = dao().listarOrgaosUsuariosAtivos();
-
-			List<CpOrgaoUsuario> list1 = new ArrayList<CpOrgaoUsuario>();
-			for (CpOrgaoUsuario cpOrgaoUsuario : list) {
-				if (!CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS.contains(cpOrgaoUsuario.getSiglaOrgaoUsu()) || !CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS.contains(getTitular().getOrgaoUsuario().getSigla())) {
-					list1.add(cpOrgaoUsuario);
-				}
-			}
+			list = dao().listarOrgaosUsuariosAtivosEVisiveis();
 
 			CpOrgaoUsuario org = new CpOrgaoUsuario();
 			org.setNmOrgaoUsu("Selecione");
 			org.setIdOrgaoUsu(0L);
-			list1.add(0, org);
-			result.include("orgaosUsu", list1);
+			list.add(0, org);
+			result.include("orgaosUsu", list);
 		} else {
 			ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
 			list.add(ou);
@@ -550,14 +543,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		result.include("currentPageNumber", calculaPaginaAtual(paramoffset));
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
-			list = dao().listarOrgaosUsuariosAtivos();
-			List<CpOrgaoUsuario> list1 = new ArrayList<CpOrgaoUsuario>();
-			for (CpOrgaoUsuario cpOrgaoUsuario : list) {
-				if (!CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS.contains(cpOrgaoUsuario.getSiglaOrgaoUsu())) {
-					list1.add(cpOrgaoUsuario);
-				}
-			}
-			result.include("orgaosUsu", list1);
+			list = dao().listarOrgaosUsuariosAtivosEVisiveis();
+			result.include("orgaosUsu", list);
 		} else {
 			CpOrgaoUsuario ou = CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario());
 			list.add(ou);

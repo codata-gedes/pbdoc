@@ -2389,6 +2389,14 @@ public class CpDao extends ModeloDao {
 				.orderBy(qCpOrgaoUsuario.nmOrgaoUsu.asc())
 				.fetch();
 	}
+	
+	public List<CpOrgaoUsuario> listarOrgaosUsuariosAtivosEVisiveis() throws AplicacaoException {
+		final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
+		return this.listarOrgaosUsuarios(
+				qCpOrgaoUsuario.siglaOrgaoUsu.notIn(CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS)
+					.and(qCpOrgaoUsuario.hisAtivo.eq(1))
+		);
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<DpUnidadeDTO> lotacaoPorOrgaos(Long[] orgaos) {				
