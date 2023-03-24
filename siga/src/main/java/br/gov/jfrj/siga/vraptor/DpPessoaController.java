@@ -512,11 +512,11 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		}
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
-			list = dao().listarOrgaosUsuarios();
+			list = dao().listarOrgaosUsuariosAtivos();
 
 			List<CpOrgaoUsuario> list1 = new ArrayList<CpOrgaoUsuario>();
 			for (CpOrgaoUsuario cpOrgaoUsuario : list) {
-				if (!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(cpOrgaoUsuario.getSiglaOrgaoUsu()) || !CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
+				if (!CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS.contains(cpOrgaoUsuario.getSiglaOrgaoUsu()) || !CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS.contains(getTitular().getOrgaoUsuario().getSigla())) {
 					list1.add(cpOrgaoUsuario);
 				}
 			}
