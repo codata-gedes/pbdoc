@@ -1831,17 +1831,30 @@ public class CpDao extends ModeloDao {
 		final JPAQuery<DpPessoa> query = new JPAQuery<DpPessoa>(em())
 				.from(qDpPessoa);
 						
-		final BooleanBuilder predicates = new BooleanBuilder(qDpPessoa.lotacao.idLotacao.eq(lotacao.getId()));
+		final BooleanBuilder predicates;
 		if (selecionarApenasAtivos) {
+			predicates = new BooleanBuilder(qDpPessoa.lotacao.idLotacao.eq(lotacao.getId()));
 			predicates.and(qDpPessoa.dataFimPessoa.isNull());
 		} else {
 			final QDpPessoa subqDpPessoa = new QDpPessoa("subqDpPessoa");
-			final JPQLQuery<Long> subquery = JPAExpressions
+			final JPQLQuery<Long> subqueryPessoas = JPAExpressions
 					.select(subqDpPessoa.idPessoa.max())
 					.from(subqDpPessoa)
 					.where(subqDpPessoa.lotacao.idLotacao.eq(lotacao.getId()))
 					.groupBy(subqDpPessoa.idPessoaIni);
-			predicates.and(qDpPessoa.idPessoa.in(subquery));
+			
+			final QDpPessoa subq2DpPessoa = new QDpPessoa("subq2DpPessoa");
+			final JPQLQuery<Long> subquery = JPAExpressions
+					.selectDistinct(subq2DpPessoa.idPessoaIni)
+					.from(subq2DpPessoa)
+					.where(subq2DpPessoa.dataFimPessoa.isNull());
+					
+			BooleanBuilder subpredicate = new BooleanBuilder(subq2DpPessoa.lotacao.idLotacao.ne(lotacao.getId()));
+			subpredicate.and(subq2DpPessoa.idPessoaIni.in(subqueryPessoas));
+			JPQLQuery<Long> subqueryPessoasRealocadas = subquery.where(subpredicate);
+			
+			predicates = new BooleanBuilder(qDpPessoa.idPessoa.in(subqueryPessoas));
+			predicates.and(qDpPessoa.idPessoa.notIn(subqueryPessoasRealocadas));
 		}
 		
 		return query.where(predicates).fetch();
