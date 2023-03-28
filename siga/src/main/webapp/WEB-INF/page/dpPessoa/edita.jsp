@@ -205,6 +205,10 @@
 	<link rel="stylesheet" href="/siga/javascript/select2/select2.css" type="text/css" media="screen, projection" />
 	<link rel="stylesheet" href="/siga/javascript/select2/select2-bootstrap.css" type="text/css" media="screen, projection" />	
 
+	<c:if test="${not empty id}">
+		<c:set var="disabledLotacaoCombobox" value="disabled" />
+	</c:if>
+	
 	<!-- main content -->
 	<div class="container-fluid">
 		<div class="card bg-light mb-3" >
@@ -255,7 +259,7 @@
 						<div class="col-md-4">
 							<div class="form-group" id="idLotacaoGroup">
 								<label for="idLotacao"><fmt:message key="usuario.lotacao"/></label>
-								<select id="idLotacao" style="width: 100%" name="idLotacao" value="${idLotacao}" class="form-control  siga-select2">
+								<select ${disabledLotacaoCombobox} id="idLotacao" style="width: 100%" name="idLotacao" value="${idLotacao}" class="form-control  siga-select2">
 									<c:forEach items="${listaLotacao}" var="item">
 										<option value="${item.idLotacao}" ${item.idLotacao == idLotacao ? 'selected' : ''}>
 											<c:if test="${item.descricao ne 'Selecione'}">${item.siglaLotacao} / </c:if>${item.descricao}
