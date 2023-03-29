@@ -248,7 +248,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		result.include("temPermissaoParaExportarDados", temPermissaoParaExportarDados());
 		
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
-			list = dao().listarOrgaosUsuariosAtivos();
+			list = dao().listarOrgaosUsuariosAtivosEVisiveis();
 			result.include("orgaosUsu", list);
 			if (idOrgaoUsu == null) {
 				final CpOrgaoUsuario primeiroOrgaoUsuario = Iterables.getFirst(list, null);
