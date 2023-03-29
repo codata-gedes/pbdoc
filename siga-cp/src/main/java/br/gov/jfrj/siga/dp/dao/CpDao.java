@@ -1508,18 +1508,18 @@ public class CpDao extends ModeloDao {
 		} else {
 			if (!filtro.isBuscarFechadas()) {
 				predicates.and(qDpPessoa.dataFimPessoa.isNull());
-				predicates.and(predicadoExisteIdentidadeAtivaParaPessoa(qDpPessoa, qCpIdentidade));
-				
-				if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla()) && !filtro.isBuscarParaCadastroDePessoas()) {
-					if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
-						predicates.and(
-								qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-									.or(qDpPessoa.lotacao.unidadeReceptora.isTrue())
-						);						
-					} 
-				}
-			
 			}
+			
+			if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla()) && !filtro.isBuscarParaCadastroDePessoas()) {
+				if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
+					predicates.and(
+							qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
+								.or(qDpPessoa.lotacao.unidadeReceptora.isTrue())
+					);						
+				} 
+			}
+			
+			predicates.and(predicadoExisteIdentidadeAtivaParaPessoa(qDpPessoa, qCpIdentidade));
 
 			// ID passado no filtro é DIFERENTE do que contém no banco (exceção)
 			ofNullable(filtro.getId())
