@@ -1877,8 +1877,13 @@ public class CpBL {
 				
 				if(lotacao != null && lotacao.getId() != null) {
 					
-					List<DpPessoa> listPessoa = CpDao.getInstance().consultaPessoasPorLotacao(lotacao, false);
-					for (DpPessoa dpPessoa : listPessoa) {
+					DpPessoaDaoFiltro dpPessoaFiltro = new DpPessoaDaoFiltro();
+					dpPessoaFiltro.setBuscarFechadas(true);
+					dpPessoaFiltro.setBuscarParaCadastroDePessoas(true);
+					dpPessoaFiltro.setLotacao(lotacao);
+					
+					List<DpPessoa> pessoas = CpDao.getInstance().consultarPorFiltro(dpPessoaFiltro, 0, 0);
+					for (DpPessoa dpPessoa : pessoas) {
 						DpPessoa pessoaNova = DpPessoa.novaInstanciaBaseadaEm(dpPessoa, data);
 						pessoaNova.setLotacao(lotacaoNova);
 						
