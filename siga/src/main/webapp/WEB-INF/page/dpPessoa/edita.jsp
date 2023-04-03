@@ -223,7 +223,7 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label for="idOrgaoUsu">&Oacute;rg&atilde;o</label>
-								<select name="idOrgaoUsu" value="${idOrgaoUsu}"  onchange="carregarRelacionados(this.value)" class="form-control  siga-select2">
+								<select name="idOrgaoUsu" value="${idOrgaoUsu}"  onchange="carregarRelacionados(this.value)" class="form-control  siga-select2" data-disabled="${disabledCombobox}">
 									<c:forEach items="${orgaosUsu}" var="item">
 										<option value="${item.idOrgaoUsu}"
 											${item.idOrgaoUsu == idOrgaoUsu ? 'selected' : ''}>
