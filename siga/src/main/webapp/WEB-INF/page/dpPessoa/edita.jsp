@@ -206,7 +206,7 @@
 	<link rel="stylesheet" href="/siga/javascript/select2/select2-bootstrap.css" type="text/css" media="screen, projection" />	
 
 	<c:if test="${not empty id}">
-		<c:set var="disabledLotacaoCombobox" value="disabled" />
+		<c:set var="disabledCombobox" value="true" />
 	</c:if>
 	
 	<!-- main content -->
@@ -259,7 +259,7 @@
 						<div class="col-md-4">
 							<div class="form-group" id="idLotacaoGroup">
 								<label for="idLotacao"><fmt:message key="usuario.lotacao"/></label>
-								<select ${disabledLotacaoCombobox} id="idLotacao" style="width: 100%" name="idLotacao" value="${idLotacao}" class="form-control  siga-select2">
+								<select id="idLotacao" style="width: 100%" name="idLotacao" value="${idLotacao}" class="form-control  siga-select2" data-disabled="${disabledCombobox}">
 									<c:forEach items="${listaLotacao}" var="item">
 										<option value="${item.idLotacao}" ${item.idLotacao == idLotacao ? 'selected' : ''}>
 											<c:if test="${item.descricao ne 'Selecione'}">${item.siglaLotacao} / </c:if>${item.descricao}
@@ -422,7 +422,7 @@
 		</siga:siga-modal>				
 	</div>
 </siga:pagina>
-<script type="text/javascript" src="/siga/javascript/select2/select2.min.js"></script>
+<script type="text/javascript" src="/siga/javascript/select2/select2.full.js"></script>
 <script type="text/javascript" src="/siga/javascript/select2/i18n/pt-BR.js"></script>
 <script type="text/javascript" src="/siga/javascript/siga.select2.js"></script>
 <script>

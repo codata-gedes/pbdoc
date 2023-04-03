@@ -60,24 +60,17 @@ function transformarEmSelect2(select, idSelect, idDivContainer, descricao) {
 			}
 		};	    	    
 		
-		if (placeholder.length > 0) {
-			select.select2({
-				matcher: matcher,
-				theme: theme,
-				width: width,
-				language: language,
-				placeholder: placeholder,				
-				dropdownParent: container				
-			});
-		} else {
-			select.select2({
-				matcher: matcher,
-				theme: theme,
-				width: width,
-				language: language,
-				dropdownParent: container
-			});
-		}
+		const shouldDisable = select.data('disabled');
+		select.select2({
+			matcher: matcher,
+			theme: theme,
+			width: width,
+			language: language,
+			readonly: !!shouldDisable,
+			dropdownParent: container,
+			...(!!placeholder.length ? { placeholder: placeholder } : {}),
+			...(!!shouldDisable ? { containerCssClass: "disableCombo" } : {}),
+		});
 		
 		container.on('keyup', function(event) {
 			if (event.key == "Escape") {

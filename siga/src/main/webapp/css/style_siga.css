@@ -314,6 +314,12 @@ a.doc-sign:hover {
 }
 
 
+.disableCombo {
+	background-color: #dc3545;
+	color: #dc3545;
+	pointer-events: none;
+}
+
 /*
 ######################
 # SIGA MODAL
