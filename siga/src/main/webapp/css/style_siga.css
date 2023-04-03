@@ -315,8 +315,9 @@ a.doc-sign:hover {
 
 
 .disableCombo {
-	background-color: #5555!important;
+	background-color: #eee !important;
 	pointer-events: none;
+	cursor: default;
 }
 
 /*
