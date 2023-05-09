@@ -1514,7 +1514,8 @@ public class CpDao extends ModeloDao {
 				if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
 					predicates.and(
 							qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-								.or(qDpPessoa.lotacao.unidadeReceptora.isTrue())
+								.or(qDpPessoa.lotacao.unidadeReceptora.isTrue().and(qDpPessoa.visivelTramitacao.isTrue()))
+								.or(qDpPessoa.lotacao.unidadeReceptora.isFalse().and(qDpPessoa.visivelTramitacao.isTrue()))
 					);						
 				} 
 			}
@@ -1533,9 +1534,9 @@ public class CpDao extends ModeloDao {
 					.ifPresent(predicates::and);
 		}
 		
-		if (filtro.isBuscarApenasUsuariosVisiveisParaTramitacao()) {
-			predicates.and(qDpPessoa.visivelTramitacao.isTrue());
-		}
+//		if (filtro.isBuscarApenasUsuariosVisiveisParaTramitacao()) {
+//			predicates.and(qDpPessoa.visivelTramitacao.isTrue());
+//		}
 
 		this.preencherPredicadosQueryConsultaPorFiltro(filtro, predicates);
 
