@@ -37,6 +37,7 @@ function sbmt(offset) {
 				<input type="hidden" name="buscarFechadas" value="${param['buscarFechadas']}" />
 				<input type="hidden" name="buscarSubstitutos" value="${param['buscarSubstitutos']}" />
 				<input type="hidden" name="buscarApenasUsuariosVisiveisParaTramitacao" value="${param['buscarApenasUsuariosVisiveisParaTramitacao']}" />
+				<input type="hidden" name="buscarApenasUsuariosDeUnidadesReceptoras" value="${param['buscarApenasUsuariosDeUnidadesReceptoras']}" />
 				<input type="hidden" name="modal" value="${param['modal']}" />
 				<div class="row">
 					<div class="col-sm">

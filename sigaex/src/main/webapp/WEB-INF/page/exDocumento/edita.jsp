@@ -351,7 +351,7 @@
 								<c:when test='${exDocumentoDTO.tipoDestinatario == 1}'>
 									<input type="hidden" name="campos" value="destinatario" />
 									<label>&nbsp;&nbsp;&nbsp;</label>
-									<siga:selecao propriedade="destinatario" paramList="buscarApenasUsuariosVisiveisParaTramitacao=true;buscarApenasUsuariosDeUnidadesReceptoras=true;" inputName="exDocumentoDTO.destinatario" tema="simple" idAjax="destinatario1" reler="ajax" modulo="siga" />
+									<siga:selecao propriedade="destinatario" paramList="buscarApenasUsuariosVisiveisParaTramitacao=true;buscarApenasUsuariosDeUnidadesReceptoras=true" inputName="exDocumentoDTO.destinatario" tema="simple" idAjax="destinatario1" reler="ajax" modulo="siga" />
 										<!--  idAjax="destinatario"  -->
 								</c:when>
 								<c:when test='${exDocumentoDTO.tipoDestinatario == 2}'>
