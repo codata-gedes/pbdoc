@@ -1,7 +1,6 @@
 package br.gov.jfrj.siga.vraptor;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -13,8 +12,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.FileUtils;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
@@ -28,6 +25,7 @@ import br.com.caelum.vraptor.view.Results;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.SigaModal;
 import br.gov.jfrj.siga.base.util.Texto;
+import br.gov.jfrj.siga.cp.CpServico;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpBL;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
@@ -41,8 +39,6 @@ import br.gov.jfrj.siga.model.Selecionavel;
 @Controller
 public class DpCargoController extends
 		SigaSelecionavelControllerSupport<DpCargo, DpCargoDaoFiltro> {
-	
-	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_LOTACAO:Cadastrar Cargo";
 	
 	private Long orgaoUsu;
 
@@ -68,7 +64,7 @@ public class DpCargoController extends
 	@Path({"/app/cargo/buscar","/cargo/buscar.action"})
 	public void busca(String nome, Long idOrgaoUsu, Integer paramoffset, String postback) throws Exception{
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
 		if (postback == null)
 			orgaoUsu = getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu();
@@ -126,7 +122,7 @@ public class DpCargoController extends
 	@Path({"/app/cargo/selecionar","/cargo/selecionar.action"})
 	public void selecionar(String sigla) {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
 		this.setNome(sigla);
 		String resultado =  super.aSelecionar(sigla);
@@ -142,7 +138,7 @@ public class DpCargoController extends
 	@Get("app/cargo/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {		
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -177,7 +173,7 @@ public class DpCargoController extends
 	@Path("app/cargo/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome) throws Exception {				
 
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
  		if(idOrgaoUsu != null) {
 			DpCargoDaoFiltro dpCargo = new DpCargoDaoFiltro(nome, idOrgaoUsu);																
@@ -222,7 +218,7 @@ public class DpCargoController extends
 	@Get("/app/cargo/editar")
 	public void edita(final Long id){
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
 		if (id != null) {
 			DpCargo cargo = dao().consultar(id, DpCargo.class, false);
@@ -318,7 +314,7 @@ public class DpCargoController extends
 	@Get("/app/cargo/carregarExcel")
 	public void carregarExcel() {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -333,7 +329,7 @@ public class DpCargoController extends
 	@Post("/app/cargo/carga")
 	public Download carga( final UploadedFile arquivo, Long idOrgaoUsu) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CARGO);
 		
 		InputStream inputStream = null;
 		try {

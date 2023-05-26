@@ -21,7 +21,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.util.Texto;
-import br.gov.jfrj.siga.cp.bl.Cp;
+import br.gov.jfrj.siga.cp.CpServico;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.dp.CpContrato;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
@@ -32,8 +32,6 @@ import br.gov.jfrj.siga.model.dao.DaoFiltroSelecionavel;
 
 @Controller
 public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<CpOrgaoUsuario, DaoFiltroSelecionavel>{
-
-	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_ORGAO:Cadastrar Orgãos Usuário";
 
 	/**
 	 * @deprecated CDI eyes only
@@ -57,7 +55,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Get("app/orgaoUsuario/listar")
 	public void lista(Integer paramoffset, Integer quantidadePagina, String nome) throws Exception {
 
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_ORGAO_USUARIO);;
 		
 		if (paramoffset == null) {
 			paramoffset = 0;
@@ -89,7 +87,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Get("/app/orgaoUsuario/editar")
 	public void edita(final Long id){
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_ORGAO_USUARIO);;
 		
 		if (id != null) {
 			CpContrato contrato = daoContrato(id);
@@ -146,7 +144,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 							 final Boolean isExternoOrgaoUsu
 	) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_ORGAO_USUARIO);;
 
 		if (codOrgUsu == null) {
 			throw new AplicacaoException("Código Interno do Órgão não informado");
@@ -232,7 +230,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Post("/app/orgaoUsuario/ativar")
 	public void ativar(final Long id) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_ORGAO_USUARIO);;
 		
 		CpOrgaoUsuario orgaoUsuario = dao().consultar(id, CpOrgaoUsuario.class, false);
 		CpOrgaoUsuario orgaoAnteriorAtivo = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(orgaoUsuario.getCodOrgaoUsu(), EMPTY);
@@ -251,7 +249,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Post("/app/orgaoUsuario/desativar")
 	public void desativar(final Long codigoDeIntegracao) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_ORGAO_USUARIO);;
 		
 		CpOrgaoUsuario orgaoUsuario = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(codigoDeIntegracao, EMPTY);
 		orgaoUsuario.setHisAtivo(0);

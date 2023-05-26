@@ -6,14 +6,14 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -33,6 +33,7 @@ import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.base.SigaModal;
 import br.gov.jfrj.siga.base.util.Texto;
+import br.gov.jfrj.siga.cp.CpServico;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpBL;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
@@ -47,8 +48,6 @@ import br.gov.jfrj.siga.model.Selecionavel;
 
 @Controller
 public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLotacao, DpLotacaoDaoFiltro> {
-
-	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_LOTACAO:Cadastrar Lotação";
 	
 	private Long orgaoUsu;
 	
@@ -105,7 +104,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Path({ "/app/lotacao/buscar", "/lotacao/buscar.action" })
 	public void busca(String propriedade, String sigla, Long idOrgaoUsu, Integer paramoffset, String postback, final String primeiraVez) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		this.orgaoUsu = idOrgaoUsu;
 		if (equalsIgnoreCase("lotacaoDestinatario", propriedade)) {
@@ -228,7 +227,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get("app/lotacao/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {
 
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -265,7 +264,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Path("app/lotacao/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 
 		if (idOrgaoUsu != null) {
 			DpLotacaoDaoFiltro dpLotacao = new DpLotacaoDaoFiltro(nome, idOrgaoUsu);
@@ -328,7 +327,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get("/app/lotacao/listaLocalidades")
 	public void listaLocalidades(Integer idUf) {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		CpUF uf = new CpUF();
 		uf.setIdUF(Long.valueOf(idUf));
@@ -338,7 +337,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get("/app/lotacao/editar")
 	public void edita(final Long id){
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		Long idUf = null;
 
@@ -395,7 +394,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 			final Boolean isExternaLotacao, final Long lotacaoPai, final Long idLocalidade, final boolean unidadeReceptora)
 			throws Exception {
 
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 
 		DpLotacao lotacaoFoiCriada = Cp.getInstance().getBL().criarLotacao(getIdentidadeCadastrante(), getTitular(), getTitular().getLotacao(), id,
 				nmLotacao, idOrgaoUsu, siglaLotacao, isExternaLotacao, lotacaoPai, idLocalidade, unidadeReceptora);
@@ -413,7 +412,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Post("/app/lotacao/ativarInativar")
 	public void ativarInativar(final Long id) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		DpLotacao lotacao = dao().consultar(id, DpLotacao.class, false);
 
@@ -454,7 +453,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Post("/app/lotacao/suspender")
 	public void suspender(final Long id) throws Exception {
 
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		DpLotacao lotacao = dao().consultar(id, DpLotacao.class, false);
 		DpLotacao lotacaoNova = new DpLotacao();
@@ -505,7 +504,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Get("/app/lotacao/carregarExcel")
 	public void carregarExcel() {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -520,7 +519,7 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Post("/app/lotacao/carga")
 	public Download carga(final UploadedFile arquivo, Long idOrgaoUsu) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		InputStream inputStream = null;
 		try {

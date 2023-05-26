@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.view.Results;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.SigaModal;
 import br.gov.jfrj.siga.base.util.Texto;
+import br.gov.jfrj.siga.cp.CpServico;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpBL;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
@@ -38,11 +39,8 @@ import br.gov.jfrj.siga.model.Selecionavel;
 @Controller
 public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFuncaoConfianca, DpFuncaoConfiancaDaoFiltro>{
 
-	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_FUNCAO:Cadastrar Função de Confiança";
-	
 	private Long orgaoUsu;
 	
-
 	/**
 	 * @deprecated CDI eyes only
 	 */
@@ -91,7 +89,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Path({"/app/funcao/buscar", "/funcao/buscar.action"})
 	public void buscar(String nome, String postback, Integer paramoffset, Long idOrgaoUsu) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
 		if (postback == null){
 			orgaoUsu = getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu();
@@ -126,7 +124,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Get("app/funcao/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -161,7 +159,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Path("app/funcao/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome) throws Exception {				
 			
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
  		if(idOrgaoUsu != null) {
  			DpFuncaoConfiancaDaoFiltro dpFuncao = new DpFuncaoConfiancaDaoFiltro(nome, idOrgaoUsu);																
@@ -206,7 +204,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Get("/app/funcao/editar")
 	public void edita(final Long id){
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
 		if (id != null) {
 			DpFuncaoConfianca funcao = dao().consultar(id, DpFuncaoConfianca.class, false);
@@ -239,7 +237,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 							 final String nmFuncao, 
 							 final Long idOrgaoUsu) throws Exception{
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
 		if(nmFuncao == null)
 			throw new AplicacaoException("Nome da função não informado");
@@ -306,7 +304,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Get("/app/funcao/carregarExcel")
 	public void carregarExcel() {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -321,7 +319,7 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Post("/app/funcao/carga")
 	public Download carga( final UploadedFile arquivo, Long idOrgaoUsu) throws Exception {
 		
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_FUNCAO);
 		
 		InputStream inputStream = null;
 		try {
