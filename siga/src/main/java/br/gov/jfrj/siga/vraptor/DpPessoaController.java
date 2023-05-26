@@ -91,6 +91,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 
 	private static final Logger log = Logger.getLogger(DpPessoaController.class);
 	
+	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_PESSOA:Cadastrar Pessoa";
+	
 	private Long orgaoUsu;
 	private DpLotacaoSelecao lotacaoSel;
 	private boolean semLimiteOrgaoOrigem = true;
@@ -245,6 +247,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa, Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa,
 			boolean buscarInativos) throws Exception {
 
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		result.include("request",getRequest());
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
@@ -320,6 +324,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Transacional
 	@Get("/app/pessoa/ativarInativar")
 	public void ativarInativar(final Long id, Integer offset, Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa, Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa) throws Exception{
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 		DpPessoa pessoaAnt = dao().consultar(id, DpPessoa.class, false).getPessoaAtual();
 		ou.setIdOrgaoUsu(pessoaAnt.getOrgaoUsuario().getId());
@@ -404,6 +411,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 
 	@Get("/app/pessoa/editar")
 	public void edita(final Long id) {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 		
 		/*Carrega lista UF*/
@@ -623,7 +633,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			final String dataExpedicaoIdentidade, final String nomeExibicao, final String enviarEmail,
 			final Boolean tramitarOutrosOrgaos, final Boolean isUsuarioVisivelTramitacao) throws Exception {
 
-		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_PESSOA:Cadastrar Pessoa");
+		assertAcesso(VERIFICADOR_ACESSO);
 
 		try {
 			DpPessoa pes = new CpBL().criarUsuario(id, getIdentidadeCadastrante(), idOrgaoUsu, idCargo, idFuncao,
@@ -672,6 +682,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 
 	@Get("/app/pessoa/carregarExcel")
 	public void carregarExcel() {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
@@ -684,6 +697,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Transacional
 	@Post("/app/pessoa/carga")
 	public Download carga(final UploadedFile arquivo, Long idOrgaoUsu) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		InputStream inputStream = null;
 		try {
 			String nomeArquivo = arquivo.getFileName();
@@ -716,7 +732,10 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	
 	@Consumes("application/json")
 	@Post("/app/pessoa/usuarios/envioDeEmailPendente")
-	public void buscarUsuariosComEnvioDeEmailPendente(DpPessoaUsuarioDTO dados) {								
+	public void buscarUsuariosComEnvioDeEmailPendente(DpPessoaUsuarioDTO dados) {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		DpPessoaDaoFiltro dpPessoa = new DpPessoaDaoFiltro();
 		
 		dpPessoa.setIdOrgaoUsu(dados.getIdOrgaoUsu());		
@@ -732,6 +751,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Path({"app/pessoa/enviarEmail", "/pessoa/enviarEmail.action"})
 	public void enviaEmail(Integer paramoffset, Long idOrgaoUsu, String nome, String cpfPesquisa,
 			String idLotacaoPesquisa, String idUsuarioPesquisa, Integer paramTamanho) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		result.include("request", getRequest());
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
@@ -789,6 +811,9 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Transacional
 	@Post("app/pessoa/enviar")
 	public void enviar(Long idOrgaoUsu, String nome, String cpfPesquisa, String idLotacaoPesquisa, String idUsuarioPesquisa) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		String[] senhaGerada = new String[1];
 
 		if (idOrgaoUsu == null || idOrgaoUsu == 0)
@@ -823,6 +848,8 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Path("app/pessoa/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa,
 			Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa) throws IOException {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
 
 		CpOrgaoUsuario ou = new CpOrgaoUsuario();
 

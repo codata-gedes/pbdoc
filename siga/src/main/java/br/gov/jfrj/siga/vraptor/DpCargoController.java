@@ -42,6 +42,8 @@ import br.gov.jfrj.siga.model.Selecionavel;
 public class DpCargoController extends
 		SigaSelecionavelControllerSupport<DpCargo, DpCargoDaoFiltro> {
 	
+	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_LOTACAO:Cadastrar Cargo";
+	
 	private Long orgaoUsu;
 
 
@@ -65,6 +67,9 @@ public class DpCargoController extends
 	@Post
 	@Path({"/app/cargo/buscar","/cargo/buscar.action"})
 	public void busca(String nome, Long idOrgaoUsu, Integer paramoffset, String postback) throws Exception{
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (postback == null)
 			orgaoUsu = getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu();
 		else
@@ -120,6 +125,9 @@ public class DpCargoController extends
 	@Post
 	@Path({"/app/cargo/selecionar","/cargo/selecionar.action"})
 	public void selecionar(String sigla) {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		this.setNome(sigla);
 		String resultado =  super.aSelecionar(sigla);
 		
@@ -133,6 +141,8 @@ public class DpCargoController extends
 	
 	@Get("app/cargo/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {		
+		
+		assertAcesso(VERIFICADOR_ACESSO);
 		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
@@ -166,7 +176,9 @@ public class DpCargoController extends
 	@Post
 	@Path("app/cargo/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome) throws Exception {				
-			
+
+		assertAcesso(VERIFICADOR_ACESSO);
+		
  		if(idOrgaoUsu != null) {
 			DpCargoDaoFiltro dpCargo = new DpCargoDaoFiltro(nome, idOrgaoUsu);																
 															
@@ -209,6 +221,9 @@ public class DpCargoController extends
 	
 	@Get("/app/cargo/editar")
 	public void edita(final Long id){
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (id != null) {
 			DpCargo cargo = dao().consultar(id, DpCargo.class, false);
 			result.include("nmCargo",cargo.getNomeCargo());
@@ -238,6 +253,7 @@ public class DpCargoController extends
 	public void editarGravar(final Long id, 
 							 final String nmCargo, 
 							 final Long idOrgaoUsu) throws Exception{
+		
 		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_CARGO: Cadastrar Cargo");
 		
 		if(nmCargo == null)
@@ -301,6 +317,9 @@ public class DpCargoController extends
 
 	@Get("/app/cargo/carregarExcel")
 	public void carregarExcel() {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
@@ -313,6 +332,9 @@ public class DpCargoController extends
 	@Transacional
 	@Post("/app/cargo/carga")
 	public Download carga( final UploadedFile arquivo, Long idOrgaoUsu) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		InputStream inputStream = null;
 		try {
 			String nomeArquivo = arquivo.getFileName();

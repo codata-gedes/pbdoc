@@ -33,6 +33,8 @@ import br.gov.jfrj.siga.model.dao.DaoFiltroSelecionavel;
 @Controller
 public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<CpOrgaoUsuario, DaoFiltroSelecionavel>{
 
+	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_ORGAO:Cadastrar Orgãos Usuário";
+
 	/**
 	 * @deprecated CDI eyes only
 	 */
@@ -55,9 +57,8 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Get("app/orgaoUsuario/listar")
 	public void lista(Integer paramoffset, Integer quantidadePagina, String nome) throws Exception {
 
-		final CpConfiguracaoBL businessLogic = Cp.getInstance().getComp().getConfiguracaoBL();
-		final boolean temConfiguracao = businessLogic.podeUtilizarServicoPorConfiguracao(getTitular(), getLotaTitular(), "SIGA;GI:Módulo de Gestão de Identidade;CAD_ORGAO_USUARIO: Cadastrar Orgãos Usuário");
-
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (paramoffset == null) {
 			paramoffset = 0;
 		}
@@ -77,7 +78,7 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 		final String siglaOrgaoTitular = getTitular().getOrgaoUsuario().getSigla();
 		final boolean administrador = CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(siglaOrgaoTitular);
 
-		result.include("usuarioPodeAlterar", administrador || temConfiguracao);
+		result.include("usuarioPodeAlterar", administrador);
 		result.include("orgaoUsuarioSiglaLogado", siglaOrgaoTitular);
 		result.include("administrador", CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equalsIgnoreCase(siglaOrgaoTitular));
 
@@ -87,6 +88,9 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	
 	@Get("/app/orgaoUsuario/editar")
 	public void edita(final Long id){
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (id != null) {
 			CpContrato contrato = daoContrato(id);
 			CpOrgaoUsuario orgaoUsuario = daoOrgaoUsuario(id);
@@ -141,8 +145,8 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 							 final String dtContrato,
 							 final Boolean isExternoOrgaoUsu
 	) throws Exception {
-
-		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_ORGAO_USUARIO: Cadastrar Orgãos Usuário");
+		
+		assertAcesso(VERIFICADOR_ACESSO);
 
 		if (codOrgUsu == null) {
 			throw new AplicacaoException("Código Interno do Órgão não informado");
@@ -227,6 +231,9 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Transacional
 	@Post("/app/orgaoUsuario/ativar")
 	public void ativar(final Long id) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		CpOrgaoUsuario orgaoUsuario = dao().consultar(id, CpOrgaoUsuario.class, false);
 		CpOrgaoUsuario orgaoAnteriorAtivo = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(orgaoUsuario.getCodOrgaoUsu(), EMPTY);
 		if (orgaoAnteriorAtivo != null && !Objects.equals(orgaoUsuario.getId(), orgaoAnteriorAtivo.getId())) {
@@ -243,6 +250,9 @@ public class OrgaoUsuarioController extends SigaSelecionavelControllerSupport<Cp
 	@Transacional
 	@Post("/app/orgaoUsuario/desativar")
 	public void desativar(final Long codigoDeIntegracao) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		CpOrgaoUsuario orgaoUsuario = dao().consultarOrgaoUsuarioAtivoPorCodigoDeIntegracaoOuSigla(codigoDeIntegracao, EMPTY);
 		orgaoUsuario.setHisAtivo(0);
 		dao().gravar(orgaoUsuario);

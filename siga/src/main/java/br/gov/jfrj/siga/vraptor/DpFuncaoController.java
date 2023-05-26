@@ -38,6 +38,8 @@ import br.gov.jfrj.siga.model.Selecionavel;
 @Controller
 public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFuncaoConfianca, DpFuncaoConfiancaDaoFiltro>{
 
+	private static final String VERIFICADOR_ACESSO = "GI:Módulo de Gestão de Identidade;CAD_FUNCAO:Cadastrar Função de Confiança";
+	
 	private Long orgaoUsu;
 	
 
@@ -88,6 +90,9 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Post
 	@Path({"/app/funcao/buscar", "/funcao/buscar.action"})
 	public void buscar(String nome, String postback, Integer paramoffset, Long idOrgaoUsu) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (postback == null){
 			orgaoUsu = getLotaTitular().getOrgaoUsuario().getIdOrgaoUsu();
 		}else{
@@ -120,6 +125,9 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	
 	@Get("app/funcao/listar")
 	public void lista(Integer paramoffset, Long idOrgaoUsu, String nome) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
@@ -153,6 +161,8 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Path("app/funcao/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome) throws Exception {				
 			
+		assertAcesso(VERIFICADOR_ACESSO);
+		
  		if(idOrgaoUsu != null) {
  			DpFuncaoConfiancaDaoFiltro dpFuncao = new DpFuncaoConfiancaDaoFiltro(nome, idOrgaoUsu);																
 															
@@ -195,6 +205,9 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	
 	@Get("/app/funcao/editar")
 	public void edita(final Long id){
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if (id != null) {
 			DpFuncaoConfianca funcao = dao().consultar(id, DpFuncaoConfianca.class, false);
 			result.include("nmFuncao",funcao.getDescricao());
@@ -225,7 +238,8 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	public void editarGravar(final Long id, 
 							 final String nmFuncao, 
 							 final Long idOrgaoUsu) throws Exception{
-		assertAcesso("GI:Módulo de Gestão de Identidade;CAD_FUNCAO:Cadastrar Função de Confiança");
+		
+		assertAcesso(VERIFICADOR_ACESSO);
 		
 		if(nmFuncao == null)
 			throw new AplicacaoException("Nome da função não informado");
@@ -291,6 +305,9 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	
 	@Get("/app/funcao/carregarExcel")
 	public void carregarExcel() {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())) {
 			result.include("orgaosUsu", dao().listarOrgaosUsuarios());
 		} else {
@@ -303,6 +320,9 @@ public class DpFuncaoController extends SigaSelecionavelControllerSupport<DpFunc
 	@Transacional
 	@Post("/app/funcao/carga")
 	public Download carga( final UploadedFile arquivo, Long idOrgaoUsu) throws Exception {
+		
+		assertAcesso(VERIFICADOR_ACESSO);
+		
 		InputStream inputStream = null;
 		try {
 			String nomeArquivo = arquivo.getFileName();
