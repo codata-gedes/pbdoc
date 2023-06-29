@@ -104,9 +104,9 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 	@Path({ "/app/lotacao/buscar", "/lotacao/buscar.action" })
 	public void busca(String propriedade, String sigla, Long idOrgaoUsu, Integer paramoffset, String postback, final String primeiraVez) throws Exception {
 
-		if(!propriedade.equals("lotacaoDestinatario") && !propriedade.equals("lotacao")) {
-			assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
-		}
+//		if(!propriedade.equals("lotacaoDestinatario") && !propriedade.equals("lotacao")) {
+//			assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
+//		}
 		
 		this.orgaoUsu = idOrgaoUsu;
 		if (equalsIgnoreCase("lotacaoDestinatario", propriedade)) {
