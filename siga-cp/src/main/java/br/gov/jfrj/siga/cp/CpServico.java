@@ -56,7 +56,7 @@ public class CpServico extends AbstractCpServico implements Selecionavel {
 	public static final String VERIFICADOR_ACESSO_CADASTRO_LOTACAO = "GI:Módulo de Gestão de Identidade;CAD_LOTACAO:Cadastrar Lotação";
 	public static final String VERIFICADOR_ACESSO_CADASTRO_ORGAO_USUARIO = "GI:Módulo de Gestão de Identidade;CAD_ORGAO:Cadastrar Orgãos";
 	public static final String VERIFICADOR_ACESSO_CADASTRO_FUNCAO = "GI:Módulo de Gestão de Identidade;CAD_FUNCAO:Cadastrar Função de Confiança";
-	public static final String VERIFICADOR_ACESSO_CADASTRO_CARGO = "GI:Módulo de Gestão de Identidade;CAD_LOTACAO:Cadastrar Cargo";
+	public static final String VERIFICADOR_ACESSO_CADASTRO_CARGO = "GI:Módulo de Gestão de Identidade;CAD_CARGO:Cadastrar Cargo";
 
 	
 	public static final String ACESSO_WEBSERVICE = "SPSEMPAPEL-SIGA-WS";
