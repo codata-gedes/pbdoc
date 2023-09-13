@@ -128,6 +128,10 @@ public class Prop {
 		provider.addPublicProperty("/siga.cabecalho.logo", "/siga/imagens/logo-trf2-38px.png"); 
 		provider.addPublicProperty("/siga.cabecalho.titulo", "PBdoc");
 		
+		provider.addPublicProperty("/siga.rodape.logo", "/siga/imagens/governo-paraiba.svg"); 
+		provider.addPublicProperty("/siga.rodape.href", "//paraiba.pb.gov.br/");
+		provider.addPublicProperty("/siga.rodape.alt", "Governo do Estado da Paraíba");
+		
 		provider.addPublicProperty("/siga.email.logo", "/siga/imagens/logo-siga-novo-38px.png"); 
 		provider.addPublicProperty("/siga.email.titulo", provider.getProp("/siga.cabecalho.titulo"));
 		

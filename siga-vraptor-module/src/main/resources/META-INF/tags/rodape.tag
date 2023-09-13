@@ -119,7 +119,7 @@
 						<a href="//codata.pb.gov.br/" role="link" target="_blank"><img class="mx-auto d-block" src="/siga/imagens/codata.png" style="max-width: 12rem;"></a>
 					</div>
 					<div class="col-md-4 align-self-center">
-						<a href="//paraiba.pb.gov.br/" role="link" target="_Blank"><img class="mx-auto d-block" src="/siga/imagens/governo-paraiba.svg" alt="Governo do Estado da Paraíba" style="max-width: 10rem;"></a></p>
+						<a href="${f:resource('/siga.rodape.href')}" role="link" target="_Blank"><img class="mx-auto d-block" src="${f:resource('/siga.rodape.logo')}" alt="${f:resource('/siga.rodape.alt')}" style="max-width: 10rem;"></a></p>
 					</div>
 				</div>
 			</div>
