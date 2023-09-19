@@ -114,7 +114,10 @@ public class ExRelatorioController extends ExController {
 	private static final String ACESSO_RELDEVPROGRAMADA = "RELDEVPROGRAMADA:Relatório de documentos devolção programada";
 	private static final String ACESSO_TRAMESP = "TRAMESP: Tempo Médio de Tramitação Por Espécie Documental";
 	private static final String ACESSO_VOLTRAMMOD = "VOLTRAMMOD: Volume de Tramitação Por Nome do Documento";
+	private static final String ACESSO_REL_DESP_TRANS = "DSPEXP:Relação de despachos e transferências";
 	private static final String ACESSO_RELTEMPOMEDIOSITUACAO = "RELTEMPOMEDIOSITUACAO:Tempo médio por Situação";
+	private static final String ACESSO_REL_DOCCRD = "DOCCRD:Relação de documentos criados";
+	private static final String ACESSO_REL_MOVLOT = "MOVLOT: Relação de movimentações";
 	private static final String APPLICATION_PDF = "application/pdf";
 
 	/**
@@ -137,7 +140,8 @@ public class ExRelatorioController extends ExController {
 			final String primeiraVez, DpLotacaoSelecao lotacaoDestinatarioSel,
 			DpLotacaoSelecao lotacaoSel, DpPessoaSelecao usuarioSel,
 			String dataInicial, String dataFinal) {
-
+		
+	
 		if (lotacaoDestinatarioSel == null) {
 			lotacaoDestinatarioSel = new DpLotacaoSelecao();
 		}
@@ -153,34 +157,46 @@ public class ExRelatorioController extends ExController {
 		result.include("nomeArquivoRel", nomeArquivoRel);
 
 		if (nomeArquivoRel.equals("relDocumentosSubordinados.jsp")) {
+			assertAcesso(ACESSO_SUBORD);
 			fazerResultsParaRelDocumentosSubordinados(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relClassificacao.jsp")) {
+			assertAcesso(ACESSO_CLSD);
 			fazerResultsParaRelClassificacao();
 		} else if (nomeArquivoRel.equals("relConsultaDocEntreDatas.jsp")) {
+			assertAcesso(ACESSO_DATAS);
 			fazerResultsParaRelConsultaDocEntreDatas(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relCrDocSubordinados.jsp")) {
+			assertAcesso(ACESSO_CRSUB);
 			fazerResultsParaRelCrDocSubordinados(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relDocsClassificados.jsp")) {
+			assertAcesso(ACESSO_CLSD_DOCS);
 			fazerResultsParaRelDocClassificados(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relExpedientes.jsp")) {
 			fazerResultsParaRelExpedientes(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relFormularios.jsp")) {
+			assertAcesso(ACESSO_FORMS);
 			fazerResultsParaRelFormularios();
 		} else if (nomeArquivoRel.equals("relModelos.jsp")) {
 			fazerResultsParaRelModelos();
 		} else if (nomeArquivoRel.equals("relMovCad.jsp")) {
+			assertAcesso(ACESSO_MOVCAD);
 			fazerResultsParaRelMovCad(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relMovimentacao.jsp")) {
+			assertAcesso(ACESSO_REL_MOVLOT);
 			fazerResultsParaRelMovimentacao(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relMovimentacaoDocSubordinados.jsp")) {
+			assertAcesso(ACESSO_MVSUB);
 			fazerResultsParaRelMovimentacaoDosSubordinados(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relMovInconsistentes.jsp")) {
 			fazerResultsParaRelMovInconsistentes(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relMovProcesso.jsp")) {
+			assertAcesso(ACESSO_RELMVP);
 			fazerResultsParaRelMovProcesso(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relOrgao.jsp")) {
+			assertAcesso(ACESSO_REL_DESP_TRANS);
 			fazerResultsParaRelOrgao(lotacaoDestinatarioSel);
 		} else if (nomeArquivoRel.equals("relTipoDoc.jsp")) {
+			assertAcesso(ACESSO_REL_DOCCRD);
 			fazerResultsParaRelTipoDoc(lotacaoDestinatarioSel);
 		} else {
 			throw new AplicacaoException("Modelo de relatório não definido!");
