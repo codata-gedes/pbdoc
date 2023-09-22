@@ -440,6 +440,11 @@ nav.navbar a.nav-link:hover {
     color: #ffffff !important;
 }
 
+.navbar_siga_versao {
+	color: white;
+	margin-left: -10px;
+}
+
 /* Bootstrap CARD com body collapsible */
 .card.card__collapsible-body > .card-header.card-header__flex {
 	display: flex;

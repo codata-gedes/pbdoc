@@ -133,10 +133,14 @@ ${meta}
 		<c:set var="thead_color" value="thead-light" scope="request" />
 
 		<c:set var="ico_siga" value="${f:resourceOrDefault('/siga.favicon', '/siga/imagens/siga.ico')}" />
+		
 		<c:set var="menu_class" value="bg-danger" /> 
 		<c:set var="sub_menu_class" value="bg-dark text-white" />
-		
 		<c:set var="navbar_class" value="navbar-dark bg-danger" />
+		<c:if test="${f:resource('/siga.prefeitura')}">
+			<c:set var="menu_class" value="${f:resource('/siga.prefeitura.tema.cor')}" />
+		</c:if>
+		
 		<c:if test="${f:resource('/siga.ambiente') != 'prod'}">
 			<c:set var="navbar_class" value="navbar-dark bg-secondary" />
 		</c:if>
@@ -174,6 +178,12 @@ ${meta}
 			<a class="navbar-brand pt-0 pb-0" href="/siga">
 			<img src="${navbar_logo}" alt="${f:resource('/siga.cabecalho.titulo')}" title="${f:resource('/siga.cabecalho.titulo')}" height="${navbar_logo_size}">
 			</a>
+			
+			<c:if test="${f:resource('/siga.prefeitura') and not empty siga_version}">
+				<span class="navbar_siga_versao">
+					(${siga_version})
+				</span>
+			</c:if>
 			
 			<c:if test="${siga_cliente != 'GOVSP'}">
 				<c:choose>
@@ -365,7 +375,14 @@ ${meta}
 							<c:if test="${not empty titular.orgaoUsuario.descricao}"><span style="white-space: nowrap;"> <i class="fa fa-angle-double-right"></i> ${titular.orgaoUsuario.descricao} |</span></h6></c:if>
 						</c:catch>
 						<span class="titulo-versao">
-							<strong>${f:resource('/siga.cabecalho.titulo')} ${siga_version}</strong>
+							<c:choose>
+								<c:when test="${f:resource('/siga.prefeitura')}">
+									<strong>${f:resource('/siga.prefeitura.cabecalho')}</strong>
+								</c:when>    
+								<c:otherwise>
+									<strong>${f:resource('/siga.cabecalho.titulo')} ${siga_version}</strong>
+								</c:otherwise>
+							</c:choose>
 						</span>
 						<c:if test="${f:resource('/siga.ambiente') ne 'prod'}">
 							<span class="badge bg-danger">
