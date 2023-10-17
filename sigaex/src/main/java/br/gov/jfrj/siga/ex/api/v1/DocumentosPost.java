@@ -275,11 +275,11 @@ public class DocumentosPost implements IDocumentosPost {
 						        		value + "&";
 						    }
 						}
-					} else {
-		    			throw new AplicacaoException("O parâmetro entrevista não foi informado.");
 					}
-					if (camposModelo.length() > 0)
+
+					if (camposModelo.length() > 0) {
 						camposModelo = camposModelo.substring(0, camposModelo.length() - 1);
+					}
 					baos.write(camposModelo.getBytes());
 					doc.setConteudoTpDoc("application/zip");
 					doc.setConteudoBlobForm(baos.toByteArray());

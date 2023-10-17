@@ -3516,6 +3516,7 @@ public class ExBL extends CpBL {
 			// + (System.currentTimeMillis() - tempoIni));
 			tempoIni = System.currentTimeMillis();
 		} catch (final Exception e) {
+			log.error("Não foi possível gravar o documento", e);
 			cancelarAlteracao();
 			Throwable t = e.getCause();
 			if (t != null && t instanceof InvocationTargetException)
@@ -5419,11 +5420,11 @@ public class ExBL extends CpBL {
 			ou = doc.getOrgaoUsuario();
 		if (mov != null && mov.getResp() != null && mov.getResp().getOrgaoUsuario() != null)
 			ou = mov.getResp().getOrgaoUsuario();
-		String s = p.processarModelo(ou, attrs, params);
 
-		// System.out.println(System.currentTimeMillis() + " - FIM
-		// processarModelo");
-		return s;
+		if (doc.isCapturado()) {
+			return StringUtils.LF;
+		}
+		return p.processarModelo(ou, attrs, params);
 	}
 
 	private void juntarAoDocumentoPai(final DpPessoa cadastrante, final DpLotacao lotaCadastrante,
