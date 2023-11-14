@@ -137,12 +137,13 @@ ${meta}
 		<c:set var="menu_class" value="bg-danger" /> 
 		<c:set var="sub_menu_class" value="bg-dark text-white" />
 		<c:set var="navbar_class" value="navbar-dark bg-danger" />
-		<c:if test="${f:resource('/siga.prefeitura')}">
-			<c:set var="menu_class" value="${f:resource('/siga.prefeitura.tema.cor')}" />
-		</c:if>
-		
 		<c:if test="${f:resource('/siga.ambiente') != 'prod'}">
 			<c:set var="navbar_class" value="navbar-dark bg-secondary" />
+		</c:if>
+		
+		<c:if test="${f:resource('/siga.prefeitura')}">
+			<c:set var="navbar_class" value="navbar-dark" />
+			<c:set var="menu_class" value="${f:resource('/siga.prefeitura.tema.cor')}" />
 		</c:if>
 		
 		<c:set var="navbar_logo" value="${f:resource('/siga.cabecalho.logo')}" />
