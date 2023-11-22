@@ -3950,6 +3950,13 @@ public class ExBL extends CpBL {
 		// break;
 		// }
 		// }
+		
+		// remove referencias desta movimentação
+		
+		if (mov.getExTipoMovimentacao().getIdTpMov() == ExTipoMovimentacao.TIPO_MOVIMENTACAO_INCLUSAO_DE_COSIGNATARIO) {
+			dao().removerReferenciasParaExcluirMovimentacao(mov);
+		}
+		
 		dao().excluir(mov);
 		mov.getExMobil().getExMovimentacaoSet().remove(mov);
 		for (ExMovimentacao m : mov.getExMobil().getExMovimentacaoSet()) {
