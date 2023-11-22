@@ -156,6 +156,8 @@ public class Prop {
 		provider.addPublicProperty("/siga.smtp.starttls.enable", "false");
 
 		provider.addPublicProperty("/siga.prefeitura", "false");
+		provider.addPublicProperty("/siga.brasao.width", "65");
+		provider.addPublicProperty("/siga.brasao.height", "70");
 		
 		provider.addPublicProperty("/siga.recaptcha.key", null);
 		provider.addPrivateProperty("/siga.recaptcha.pwd", null);
