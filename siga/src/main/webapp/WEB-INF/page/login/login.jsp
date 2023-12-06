@@ -137,6 +137,13 @@
 									</div>
 								</div>
 							</div>
+							<div class="row mt-1">
+								<div class="col">
+									<div style="float: right;">
+										<a href="//consultas.pbdoc.pb.gov.br" target="_blank" class="btn btn-sm btn-link">Consulta de Processos</a>
+									</div>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>
