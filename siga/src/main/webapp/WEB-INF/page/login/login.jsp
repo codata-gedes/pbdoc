@@ -137,6 +137,15 @@
 									</div>
 								</div>
 							</div>
+							<c:if test="${f:resource('consulta.processos') == 'true'}">
+								<div class="row mt-1">
+									<div class="col">
+										<div style="float: right;">
+											<a href="//${f:resource('consulta.processos.link')}" target="_blank" class="btn btn-sm btn-link">Consulta de Processos</a>
+										</div>
+									</div>
+								</div>
+							</c:if>
 						</form>
 					</div>
 				</div>
