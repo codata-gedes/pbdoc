@@ -158,6 +158,8 @@ public class Prop {
 		provider.addPublicProperty("/siga.prefeitura", "false");
 		provider.addPublicProperty("/siga.brasao.width", "65");
 		provider.addPublicProperty("/siga.brasao.height", "70");
+		provider.addPublicProperty("/siga.consulta.processos", "false");
+		provider.addPublicProperty("/siga.consulta.processos.link", "consultas.pbdoc.pb.gov.br");
 		
 		provider.addPublicProperty("/siga.recaptcha.key", null);
 		provider.addPrivateProperty("/siga.recaptcha.pwd", null);
