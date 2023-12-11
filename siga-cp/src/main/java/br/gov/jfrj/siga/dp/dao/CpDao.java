@@ -752,10 +752,12 @@ public class CpDao extends ModeloDao {
 						predicates.and(qDpLotacao.unidadeReceptora.isTrue());
 					}
 				} else {
-					predicates.and(
-							qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-							.or(qDpLotacao.unidadeReceptora.isTrue())
-					);
+					if(!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains("PDS")) {
+						predicates.and(
+								qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
+								.or(qDpLotacao.unidadeReceptora.isTrue())
+						);
+					}
 				}
 			}
 		}
