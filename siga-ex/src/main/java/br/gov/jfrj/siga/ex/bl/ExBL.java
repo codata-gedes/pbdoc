@@ -5428,7 +5428,7 @@ public class ExBL extends CpBL {
 		if (mov != null && mov.getResp() != null && mov.getResp().getOrgaoUsuario() != null)
 			ou = mov.getResp().getOrgaoUsuario();
 
-		if (doc.isCapturado()) {
+		if (doc.isCapturado() && doc.getLotaCadastrante().getSigla().startsWith(CpConfiguracaoBL.SIGLA_ORGAO_PDS)) {
 			return StringUtils.LF;
 		}
 		return p.processarModelo(ou, attrs, params);
