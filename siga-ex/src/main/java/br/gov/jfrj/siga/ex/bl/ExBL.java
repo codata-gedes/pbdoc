@@ -18,8 +18,11 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.ex.bl;
 
+import static br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL.SIGLA_ORGAO_PDS;
 import static br.gov.jfrj.siga.ex.ExMobil.isMovimentacaoComOrigemPeloBotaoDeRestricaoDeAcesso;
+import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,6 +47,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -5428,7 +5432,7 @@ public class ExBL extends CpBL {
 		if (mov != null && mov.getResp() != null && mov.getResp().getOrgaoUsuario() != null)
 			ou = mov.getResp().getOrgaoUsuario();
 
-		if (doc.isCapturado() && doc.getLotaCadastrante().getSigla().startsWith(CpConfiguracaoBL.SIGLA_ORGAO_PDS)) {
+		if (isDocumentoOrigemPDS(doc)) {
 			return StringUtils.LF;
 		}
 		return p.processarModelo(ou, attrs, params);
@@ -7668,6 +7672,14 @@ public class ExBL extends CpBL {
 		}
 	}
 
-	
+	private boolean isDocumentoOrigemPDS(final ExDocumento doc) {
+		final String docSiglaOrgao = ofNullable(doc.getOrgaoUsuario())
+				.map(CpOrgaoUsuario::getSigla)
+				.map(String::toUpperCase)
+				.orElse(EMPTY);
+
+		return doc.isCapturado() && SIGLA_ORGAO_PDS.equalsIgnoreCase(docSiglaOrgao);
+	}
+
 }
 
