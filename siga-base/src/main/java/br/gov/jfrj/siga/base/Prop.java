@@ -13,6 +13,7 @@ public class Prop {
 	public static final String DEFAULT_URL = "http://localhost:8080";
 
 	private static final long DEFAULT_TTL_JWT_TOKEN = Duration.of(30, ChronoUnit.MINUTES).getSeconds();
+	private static final String DEFAULT_IMAGEM_FOLDER = "/opt/pbdoc/imagens";
 
 	public interface IPropertyProvider {
 		String getProp(String nome);
@@ -86,14 +87,18 @@ public class Prop {
 	public static void defineGlobalProperties() {
 		provider.addPublicProperty("/siga.base.url", DEFAULT_URL);
 		provider.addPublicProperty("/siga.local.base.url", DEFAULT_URL);
-
+		
+		provider.addPublicProperty("/siga.base.imagem", DEFAULT_IMAGEM_FOLDER);
+		provider.addPublicProperty("/siga.base.imagem.endpoint", "app/imagem/brasao");
+		
 		String base = get("/siga.base.url");
 
 		provider.addPublicProperty("/siga.hibernate.dialect");
 		
 		provider.addPublicProperty("/siga.gsa.url", null);
 
-		provider.addPublicProperty("/siga.relat.brasao", "brasao.png");
+		provider.addPublicProperty("modelos.cabecalho.brasao", "contextpath/" + provider.getProp("/siga.base.imagem.endpoint") );
+		provider.addPublicProperty("/siga.relat.brasao",  "contextpath/" + provider.getProp("/siga.base.imagem.endpoint"));
 		provider.addPublicProperty("/siga.relat.titulo", "PBdoc");
 		provider.addPublicProperty("/siga.relat.subtitulo", "Sistema de Gestão Documental");
 		provider.addPublicProperty("/siga.relat.secao.usuario", "Governo do Estado da Paraíba");
