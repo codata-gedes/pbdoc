@@ -89,7 +89,7 @@ order by descr_forma_doc,nm_mod]]></queryString>
 					</textElement>
 					<textFieldExpression   class="java.lang.String"><![CDATA[$P{titulo}.toString()]]></textFieldExpression>
 				</textField>
-				<image  scaleImage="RetainShape" vAlign="Middle" hAlign="Center" isUsingCache="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image isLazy="true" scaleImage="RetainShape" vAlign="Middle" hAlign="Center" isUsingCache="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
 						x="1"
@@ -101,7 +101,7 @@ order by descr_forma_doc,nm_mod]]></queryString>
 						key="image-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.lang.String"><![CDATA[$P{brasao}]]></imageExpression>
+					<imageExpression><![CDATA[new java.io.ByteArrayInputStream(javax.xml.bind.DatatypeConverter.parseBase64Binary($P{brasao}))]]></imageExpression>
 				</image>
 				<textField isStretchWithOverflow="false">
 					<reportElement

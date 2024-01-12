@@ -19,7 +19,10 @@
 package br.gov.jfrj.relatorio.dinamico;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Map;
 
@@ -27,7 +30,9 @@ import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
 import ar.com.fdvs.dj.domain.builders.DJBuilderException;
 import ar.com.fdvs.dj.domain.constants.VerticalAlign;
 import br.gov.jfrj.siga.base.AplicacaoException;
+import br.gov.jfrj.siga.base.Contexto;
 import br.gov.jfrj.siga.base.Prop;
+import br.gov.jfrj.siga.base.util.Utils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -315,7 +320,7 @@ public abstract class RelatorioTemplate extends RelatorioRapido {
 	public static void configurarParametrosPadraoSistema(Map<String, String> parametros) {
 		parametros.put("titulo", Prop.get("/siga.relat.titulo"));
 		parametros.put("subtitulo", Prop.get("/siga.relat.subtitulo"));
-		parametros.put("brasao", Prop.get("/siga.relat.brasao"));
+		parametros.put("brasao", Base64.getEncoder().encodeToString(Utils.getImagemBrasao()));
 	}
 
 }
