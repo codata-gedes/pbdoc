@@ -96,9 +96,13 @@ public class Prop {
 		provider.addPublicProperty("/siga.email.logo", "/siga/imagens/logo-siga-novo-38px.png"); 
 		provider.addPublicProperty("/siga.email.titulo", get("/siga.cabecalho.titulo"));
 		
-		provider.addPublicProperty("/sigaex.modelos.cabecalho.brasao", "contextpath/imagens/paraiba.png");
+		provider.addPublicProperty("/siga.base.imagem", DEFAULT_FOLDER + "/imagens");
+		provider.addPublicProperty("/siga.base.imagem.url", "app/imagem/brasao");
+		
+		provider.addPublicProperty("/sigaex.modelos.cabecalho.brasao", "contextpath/" + get("/siga.base.imagem.url"));
 		provider.addPublicProperty("/sigaex.modelos.cabecalho.titulo", "ESTADO DA PARAÍBA");
 		provider.addPublicProperty("/sigaex.modelos.cabecalho.subtitulo", "GOVERNO DO ESTADO");
+		provider.addPublicProperty("/sigaex.carimbo.texto.superior", "Governo do Estado da Paraíba");
 		
 		provider.addPublicProperty("/siga.relat.brasao", get("/sigaex.modelos.cabecalho.brasao"));
 		provider.addPublicProperty("/siga.relat.titulo", "PBdoc");
@@ -111,14 +115,7 @@ public class Prop {
 		provider.addPublicProperty("/siga.consulta.processos.link", "consultas.pbdoc.pb.gov.br");
 		
 		provider.addPublicProperty("/siga.prefeitura", "false");
-		if (Boolean.parseBoolean(get("/siga.prefeitura"))) {
-			provider.addPublicProperty("/siga.base.imagem", DEFAULT_FOLDER + "/imagens");
-			provider.addPublicProperty("/siga.base.imagem.url", "app/imagem/brasao");
-			
-			provider.addPublicProperty("modelos.cabecalho.brasao", "contextpath/" + get("/siga.base.imagem.url") );
-			provider.addPublicProperty("/siga.relat.brasao", "contextpath/" + get("/siga.base.imagem.url"));
-		}
-
+	
 		/* proxy properties */
 		provider.addRestrictedProperty("/http.proxyHost", null);
 		if (get("/http.proxyHost") != null)
