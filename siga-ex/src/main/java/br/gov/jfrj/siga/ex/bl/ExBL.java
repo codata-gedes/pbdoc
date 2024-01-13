@@ -18,8 +18,11 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.ex.bl;
 
+import static br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL.SIGLA_ORGAO_PDS;
 import static br.gov.jfrj.siga.ex.ExMobil.isMovimentacaoComOrigemPeloBotaoDeRestricaoDeAcesso;
+import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,6 +47,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -3516,6 +3520,7 @@ public class ExBL extends CpBL {
 			// + (System.currentTimeMillis() - tempoIni));
 			tempoIni = System.currentTimeMillis();
 		} catch (final Exception e) {
+			log.error("Não foi possível gravar o documento", e);
 			cancelarAlteracao();
 			Throwable t = e.getCause();
 			if (t != null && t instanceof InvocationTargetException)
@@ -3950,6 +3955,13 @@ public class ExBL extends CpBL {
 		// break;
 		// }
 		// }
+		
+		// remove referencias desta movimentação
+		
+		if (mov.getExTipoMovimentacao().getIdTpMov() == ExTipoMovimentacao.TIPO_MOVIMENTACAO_INCLUSAO_DE_COSIGNATARIO) {
+			dao().removerReferenciasParaExcluirMovimentacao(mov);
+		}
+		
 		dao().excluir(mov);
 		mov.getExMobil().getExMovimentacaoSet().remove(mov);
 		for (ExMovimentacao m : mov.getExMobil().getExMovimentacaoSet()) {
@@ -5419,11 +5431,11 @@ public class ExBL extends CpBL {
 			ou = doc.getOrgaoUsuario();
 		if (mov != null && mov.getResp() != null && mov.getResp().getOrgaoUsuario() != null)
 			ou = mov.getResp().getOrgaoUsuario();
-		String s = p.processarModelo(ou, attrs, params);
 
-		// System.out.println(System.currentTimeMillis() + " - FIM
-		// processarModelo");
-		return s;
+		if (isDocumentoOrigemPDS(doc)) {
+			return StringUtils.LF;
+		}
+		return p.processarModelo(ou, attrs, params);
 	}
 
 	private void juntarAoDocumentoPai(final DpPessoa cadastrante, final DpLotacao lotaCadastrante,
@@ -7660,6 +7672,14 @@ public class ExBL extends CpBL {
 		}
 	}
 
-	
+	private boolean isDocumentoOrigemPDS(final ExDocumento doc) {
+		final String docSiglaOrgao = ofNullable(doc.getOrgaoUsuario())
+				.map(CpOrgaoUsuario::getSigla)
+				.map(String::toUpperCase)
+				.orElse(EMPTY);
+
+		return doc.isCapturado() && SIGLA_ORGAO_PDS.equalsIgnoreCase(docSiglaOrgao);
+	}
+
 }
 

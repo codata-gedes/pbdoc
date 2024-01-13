@@ -60,6 +60,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Prop;
@@ -2508,4 +2509,19 @@ public class ExDao extends CpDao {
 		return l;
 	}
 
+	public long removerReferenciasParaExcluirMovimentacao(final ExMovimentacao exMovimentacao) {
+		
+		long referenciasRemovidas = new JPAUpdateClause(em(), qExMovimentacao)
+				.setNull(qExMovimentacao.exMovimentacaoRef.idMov)
+				.where(qExMovimentacao.exMovimentacaoRef.idMov.eq(exMovimentacao.getId())
+						.and(qExMovimentacao.exTipoMovimentacao.id.in(
+								ExTipoMovimentacao.TIPO_MOVIMENTACAO_CANCELAMENTO_DE_MOVIMENTACAO,
+								ExTipoMovimentacao.TIPO_MOVIMENTACAO_CANCELAMENTO_JUNTADA
+						)))
+				.execute();
+
+		log.infov("Referências de movimentação removidas: {0}", referenciasRemovidas);
+		return referenciasRemovidas;
+	}
+	
 }

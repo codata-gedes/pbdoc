@@ -9,8 +9,7 @@ public enum Ambiente {
 	PRODUCAO("prod"),
 	HOMOLOGACAO("homolo"),
 	TREINAMENTO("treina"),
-	DESENVOLVIMENTO("desenv"),
-	;
+	DESENVOLVIMENTO("desenv");
 
 	private final String valor;
 

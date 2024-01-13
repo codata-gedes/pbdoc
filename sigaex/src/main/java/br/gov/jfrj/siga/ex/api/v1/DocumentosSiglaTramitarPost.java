@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.crivano.swaggerservlet.PresentableUnloggedException;
 import com.crivano.swaggerservlet.SwaggerException;
@@ -30,6 +32,8 @@ import br.gov.jfrj.siga.hibernate.ExDao;
 import br.gov.jfrj.siga.vraptor.SigaObjects;
 
 public class DocumentosSiglaTramitarPost implements IDocumentosSiglaTramitarPost {
+
+	private static final Logger log = LoggerFactory.getLogger(DocumentosSiglaTramitarPost.class);
 
 	private void validarPreenchimentoDestino(DocumentosSiglaTramitarPostRequest req, DocumentosSiglaTramitarPostResponse resp)
 			throws AplicacaoException {
@@ -164,6 +168,7 @@ public class DocumentosSiglaTramitarPost implements IDocumentosSiglaTramitarPost
 				resp.status = "OK";
 			} catch (RegraNegocioException | AplicacaoException e) {
 				ctx.rollback(e);
+				log.error("Não foi possível concluir a tramitação", e);
 				throw new SwaggerException(e.getMessage(), 400, null, req, resp, null);
 			} catch (Exception e) {
 				ctx.rollback(e);

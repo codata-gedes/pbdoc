@@ -6,7 +6,7 @@
         <mirror>
           <id>codata</id>
           <name>CODATA Public Repository</name>
-          <url>http://nexus-cicd-tools.apps.codatahml.pb.gov.br/repository/maven-public/</url>
+          <url>http://nexus.codata.pb.gov.br/repository/maven-public/</url>
           <mirrorOf>*</mirrorOf>
         </mirror>        
       </mirrors>
@@ -20,7 +20,7 @@
             <repository>
               <id>codata-public-with-snapshots</id>
               <name>CODATA Public Repository</name>
-              <url>http://nexus-cicd-tools.apps.codatahml.pb.gov.br/repository/maven-public/</url>
+              <url>http://nexus.codata.pb.gov.br/repository/maven-public/</url>
               <releases>
                 <enabled>true</enabled>
               </releases>

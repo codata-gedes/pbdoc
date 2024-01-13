@@ -106,21 +106,24 @@
 			<div class="content">
 				<div class="row py-3">
 					<div class="col-md-4 align-self-center">
-						<div class="logo">
-							<a href="//portal.pbdoc.pb.gov.br/" target="_blank" role="link">
-								<img src="/siga/imagens/pbdoc.png" style="max-width: 12rem;"/>
-							</a>
-						</div>
-						<div class="versao">
-							<small>${siga_version}</small>
-						</div>
+						<c:if test="${not f:resource('/siga.prefeitura')}">
+							<div class="logo">
+								<a href="//portal.pbdoc.pb.gov.br/" target="_blank" role="link">
+									<img src="/siga/imagens/pbdoc.png" style="max-width: 12rem;"/>
+								</a>
+							</div>
+						</c:if>
 					</div>
+					
 					<div class="col-md-4 align-self-center">
 						<a href="//codata.pb.gov.br/" role="link" target="_blank"><img class="mx-auto d-block" src="/siga/imagens/codata.png" style="max-width: 12rem;"></a>
 					</div>
-					<div class="col-md-4 align-self-center">
-						<a href="//paraiba.pb.gov.br/" role="link" target="_Blank"><img class="mx-auto d-block" src="/siga/imagens/governo-paraiba.svg" alt="Governo do Estado da Paraíba" style="max-width: 10rem;"></a></p>
-					</div>
+					
+					<c:if test="${not f:resource('/siga.prefeitura')}">
+						<div class="col-md-4 align-self-center">
+							<a href="//paraiba.pb.gov.br/" role="link" target="_Blank"><img class="mx-auto d-block" src="/siga/imagens/governo-paraiba.svg" alt="Governo do Estado da Paraíba" style="max-width: 10rem;"></a></p>
+						</div>
+					</c:if>
 				</div>
 			</div>
 		</div>

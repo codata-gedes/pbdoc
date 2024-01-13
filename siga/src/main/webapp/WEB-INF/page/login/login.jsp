@@ -119,13 +119,11 @@
 											<div class="d-flex justify-content-between">
 												<a href="/siga/public/app/usuario/esqueci_senha" class="btn btn-sm btn-link"><strong>Esqueci Minha Senha</strong></a>
 												<a href="//portal.pbdoc.pb.gov.br" target="_blank" class="btn btn-sm btn-link">Sobre o PBdoc</a>
-												
 											</div>
 											<div style="float: right">
 												<a href="//portal.pbdoc.pb.gov.br/manuais" target="_blank" class="btn btn-sm btn-link">Manual do PBdoc</a>
 											</div>
 										</div>
-										
 										<c:choose>
 											<c:when test="${siga_cliente_sso}">
 												<hr class="my-2">
@@ -134,8 +132,19 @@
 												<a href="/siga/public/app/loginSSO"class="btn btn-lg btn-dark btn-block">${siga_cliente_sso_btn_txt}</a>
 											</c:when>
 										</c:choose>
+
+										</div>
 									</div>
 								</div>
+							<c:if test="${f:resource('consulta.processos') == 'true'}">
+								<div class="row mt-0">
+									<div class="col">
+										<div style="float: right;">
+											<a href="//${f:resource('consulta.processos.link')}" target="_blank" class="btn btn-sm btn-link"><fmt:message key = "consulta.processos"/></a>
+										</div>
+									</div>
+								</div>
+							</c:if>
 							</div>
 						</form>
 					</div>

@@ -205,7 +205,7 @@ public class CpDaoTest extends TestCase {
 
 		// Cria uma nova identidade
 		CpIdentidade idNova = Cp.getInstance().getBL()
-				.criarIdentidade(LOGIN, CPF, null, null, null, false);
+				.criarIdentidade(LOGIN, CPF, null, null, null, false, false);
 		assertTrue(idNova.getDscSenhaIdentidade().length() > 0);
 
 		// Altera a identidade

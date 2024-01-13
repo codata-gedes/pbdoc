@@ -314,6 +314,12 @@ a.doc-sign:hover {
 }
 
 
+.disableCombo {
+	background-color: #eee !important;
+	pointer-events: none;
+	cursor: default;
+}
+
 /*
 ######################
 # SIGA MODAL
@@ -432,6 +438,11 @@ article p em {
 nav.navbar a.nav-link,
 nav.navbar a.nav-link:hover {
     color: #ffffff !important;
+}
+
+.navbar_siga_versao {
+	color: white;
+	margin-left: -10px;
 }
 
 /* Bootstrap CARD com body collapsible */

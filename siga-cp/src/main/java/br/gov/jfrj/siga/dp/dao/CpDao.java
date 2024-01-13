@@ -752,10 +752,12 @@ public class CpDao extends ModeloDao {
 						predicates.and(qDpLotacao.unidadeReceptora.isTrue());
 					}
 				} else {
-					predicates.and(
-							qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-							.or(qDpLotacao.unidadeReceptora.isTrue())
-					);
+					if(!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains("PDS")) {
+						predicates.and(
+								qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
+								.or(qDpLotacao.unidadeReceptora.isTrue())
+						);
+					}
 				}
 			}
 		}
@@ -1508,18 +1510,18 @@ public class CpDao extends ModeloDao {
 		} else {
 			if (!filtro.isBuscarFechadas()) {
 				predicates.and(qDpPessoa.dataFimPessoa.isNull());
-				predicates.and(predicadoExisteIdentidadeAtivaParaPessoa(qDpPessoa, qCpIdentidade));
-				
-				if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla()) && !filtro.isBuscarParaCadastroDePessoas()) {
-					if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
-						predicates.and(
-								qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-									.or(qDpPessoa.lotacao.unidadeReceptora.isTrue())
-						);						
-					} 
-				}
-			
 			}
+			
+			if(!CpConfiguracaoBL.SIGLA_ORGAO_ROOT.equals(identidadePrincipal.getCpOrgaoUsuario().getSigla()) && !filtro.isBuscarParaCadastroDePessoas()) {
+				if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
+					predicates.and(
+							qDpPessoa.orgaoUsuario.codOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
+							.or(qDpPessoa.lotacao.unidadeReceptora.isTrue().and(qDpPessoa.visivelTramitacao.isTrue()))
+					);						
+				} 
+			}
+			
+			predicates.and(predicadoExisteIdentidadeAtivaParaPessoa(qDpPessoa, qCpIdentidade));
 
 			// ID passado no filtro é DIFERENTE do que contém no banco (exceção)
 			ofNullable(filtro.getId())
@@ -1531,10 +1533,6 @@ public class CpDao extends ModeloDao {
 					.map(StringUtils::stripToNull)
 					.map(qDpPessoa.situacaoFuncionalPessoa::eq)
 					.ifPresent(predicates::and);
-		}
-		
-		if (filtro.isBuscarApenasUsuariosVisiveisParaTramitacao()) {
-			predicates.and(qDpPessoa.visivelTramitacao.isTrue());
 		}
 
 		this.preencherPredicadosQueryConsultaPorFiltro(filtro, predicates);
@@ -1620,7 +1618,9 @@ public class CpDao extends ModeloDao {
 			predicates.and(qDpPessoa.visivelTramitacao.isTrue());
 		}
 		
-		predicates.and(qDpPessoa.lotacao.unidadeReceptora.isTrue());
+		if (filtro.isBuscarApenasUsuariosDeUnidadesReceptoras()) {
+			predicates.and(qDpPessoa.lotacao.unidadeReceptora.isTrue());
+		}
 		
 		return consultarPessoa(predicates);
 	}
@@ -1826,26 +1826,6 @@ public class CpDao extends ModeloDao {
 		return query.fetch();
 	}
 
-	
-	public List<DpPessoa> consultaPessoasPorLotacao(final DpLotacao lotacao, boolean selecionarApenasAtivos) {
-		final JPAQuery<DpPessoa> query = new JPAQuery<DpPessoa>(em())
-				.from(qDpPessoa);
-						
-		final BooleanBuilder predicates = new BooleanBuilder(qDpPessoa.lotacao.idLotacao.eq(lotacao.getId()));
-		if (selecionarApenasAtivos) {
-			predicates.and(qDpPessoa.dataFimPessoa.isNull());
-		} else {
-			final QDpPessoa subqDpPessoa = new QDpPessoa("subqDpPessoa");
-			final JPQLQuery<Long> subquery = JPAExpressions
-					.select(subqDpPessoa.idPessoa.max())
-					.from(subqDpPessoa)
-					.where(subqDpPessoa.lotacao.idLotacao.eq(lotacao.getId()))
-					.groupBy(subqDpPessoa.idPessoaIni);
-			predicates.and(qDpPessoa.idPessoa.in(subquery));
-		}
-		
-		return query.where(predicates).fetch();
-	}
 	
 	/*
 	 * @SuppressWarnings("unchecked") public Usuario
@@ -2388,6 +2368,14 @@ public class CpDao extends ModeloDao {
 				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
 				.orderBy(qCpOrgaoUsuario.nmOrgaoUsu.asc())
 				.fetch();
+	}
+	
+	public List<CpOrgaoUsuario> listarOrgaosUsuariosAtivosEVisiveis() throws AplicacaoException {
+		final QCpOrgaoUsuario qCpOrgaoUsuario = QCpOrgaoUsuario.cpOrgaoUsuario;
+		return this.listarOrgaosUsuarios(
+				qCpOrgaoUsuario.siglaOrgaoUsu.notIn(CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS)
+					.and(qCpOrgaoUsuario.hisAtivo.eq(1))
+		);
 	}
 
 	@SuppressWarnings("unchecked")
