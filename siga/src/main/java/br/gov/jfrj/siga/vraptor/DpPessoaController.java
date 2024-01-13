@@ -863,17 +863,17 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 			dpPessoa.setNomePessoa(Texto.removeAcento(nome != null ? nome : ""));
 			dpPessoa.setEmailPessoa(Texto.removeAcento(emailPesquisa != null ? emailPesquisa : ""));	
 			dpPessoa.setIdentidade(identidadePesquisa);
-			if (idCargoPesquisa != null) {
+			if (idCargoPesquisa != null && idCargoPesquisa != 0) {
 				DpCargo cargo = new DpCargo();
 				cargo.setId(idCargoPesquisa);
 				dpPessoa.setCargo(cargo);
 			}
-			if (idLotacaoPesquisa != null) {
+			if (idLotacaoPesquisa != null && idCargoPesquisa != 0) {
 				DpLotacao lotacao = new DpLotacao();
 				lotacao.setId(idLotacaoPesquisa);
 				dpPessoa.setLotacao(lotacao);
 			}
-			if (idFuncaoPesquisa != null) {
+			if (idFuncaoPesquisa != null && idCargoPesquisa != 0) {
 				DpFuncaoConfianca funcao = new DpFuncaoConfianca();
 				funcao.setIdFuncao(idFuncaoPesquisa);
 				dpPessoa.setFuncaoConfianca(funcao);

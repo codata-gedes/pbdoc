@@ -1573,7 +1573,7 @@ public class CpDao extends ModeloDao {
 	public List<DpPessoa> consultarPessoaComOrgaoFuncaoCargo(final DpPessoa pes) {
 		return em().createNamedQuery("consultarPessoaComOrgaoFuncaoCargo")
 			.setParameter("nome", queryParamOuStringVazia(pes.getNomePessoa()))
-			.setParameter("identidade", queryParamOuStringVazia(pes.getIdentidade()))
+//			.setParameter("identidade", queryParamOuStringVazia(pes.getIdentidade()))
 			.setParameter("email", queryParamOuStringVazia(pes.getEmailPessoa()))
 			.setParameter("cpf", queryParamOuZeroLong(pes.getCpfPessoa()))
 			.setParameter("idOrgaoUsu", queryParamOuZeroLong(ofNullable(pes.getOrgaoUsuario()).map(CpOrgaoUsuario::getId)))

@@ -135,7 +135,7 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
 				+ " and (:cargo = null or :cargo = 0L or pes.cargo.idCargo = :cargo) "
 				+ " and (:funcao = null or :funcao = 0L or pes.funcaoConfianca.idFuncao = :funcao) "
 				+ " and (:email = null or (upper(pes.emailPessoa) like upper('%' || :email || '%'))) "
-				+ " and (:identidade = null or (upper(pes.identidade) like upper('%' || :identidade || '%'))) "
+//				+ " and (:identidade = null or (upper(pes.identidade) like upper('%' || :identidade || '%'))) "
 				+ "	group by pes.idPessoaIni) order by pes.nomePessoaAI"),
 		@NamedQuery(name = "consultarQuantidadeDpPessoaInclusiveFechadas", query = "select count(distinct pes.idPessoaIni)"
 				+ "		from DpPessoa pes"
