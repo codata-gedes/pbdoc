@@ -1,9 +1,12 @@
 package br.gov.jfrj.siga.base.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,6 +14,9 @@ import java.util.regex.Pattern;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import org.jboss.logging.Logger;
+
+import br.gov.jfrj.siga.base.AplicacaoException;
+import br.gov.jfrj.siga.base.Prop;
 
 public class Utils {
 
@@ -75,5 +81,18 @@ public class Utils {
 		             .map(Cookie::getValue)
 		             .orElse(null);		
 	} 
+	
+	public static byte[] getImagemBrasao(){
+		final String brasaoPath= Prop.get("/siga.base.imagem");
+		final String brasaoFilename = "brasao.png";
+
+        File brasaoFile = new File(brasaoPath, brasaoFilename);
+        
+        try {
+			return Files.readAllBytes(brasaoFile.toPath());
+		} catch (IOException exception) {
+			throw new AplicacaoException("Não foi possível carregar a imagem do brasão", 0, exception);
+		}
+	}
 	
 }

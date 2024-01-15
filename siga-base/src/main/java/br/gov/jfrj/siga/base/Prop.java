@@ -13,6 +13,7 @@ public class Prop {
 	public static final String DEFAULT_URL = "http://localhost:8080";
 
 	private static final long DEFAULT_TTL_JWT_TOKEN = Duration.of(30, ChronoUnit.MINUTES).getSeconds();
+	private static final String DEFAULT_FOLDER = "/opt/pbdoc";
 
 	public interface IPropertyProvider {
 		String getProp(String nome);
@@ -86,18 +87,35 @@ public class Prop {
 	public static void defineGlobalProperties() {
 		provider.addPublicProperty("/siga.base.url", DEFAULT_URL);
 		provider.addPublicProperty("/siga.local.base.url", DEFAULT_URL);
+		String base = get("/siga.base.url");	
 
-		String base = get("/siga.base.url");
-
-		provider.addPublicProperty("/siga.hibernate.dialect");
+		// propriedades de identidade visual
+		provider.addPublicProperty("/siga.cabecalho.logo", "/siga/imagens/pbdoc-b.png"); 
+		provider.addPublicProperty("/siga.cabecalho.titulo", "PBdoc");
 		
-		provider.addPublicProperty("/siga.gsa.url", null);
-
-		provider.addPublicProperty("/siga.relat.brasao", "brasao.png");
+		provider.addPublicProperty("/siga.email.logo", "/siga/imagens/logo-siga-novo-38px.png"); 
+		provider.addPublicProperty("/siga.email.titulo", get("/siga.cabecalho.titulo"));
+		
+		provider.addPublicProperty("/siga.base.imagem", DEFAULT_FOLDER + "/imagens");
+		provider.addPublicProperty("/siga.base.imagem.url", "app/imagem/brasao");
+		
+		provider.addPublicProperty("/sigaex.modelos.cabecalho.brasao", "contextpath/" + get("/siga.base.imagem.url"));
+		provider.addPublicProperty("/sigaex.modelos.cabecalho.titulo", "ESTADO DA PARAÍBA");
+		provider.addPublicProperty("/sigaex.modelos.cabecalho.subtitulo", "GOVERNO DO ESTADO");
+		provider.addPublicProperty("/sigaex.carimbo.texto.superior", "Governo do Estado da Paraíba");
+		
+		provider.addPublicProperty("/siga.relat.brasao", get("/sigaex.modelos.cabecalho.brasao"));
 		provider.addPublicProperty("/siga.relat.titulo", "PBdoc");
 		provider.addPublicProperty("/siga.relat.subtitulo", "Sistema de Gestão Documental");
 		provider.addPublicProperty("/siga.relat.secao.usuario", "Governo do Estado da Paraíba");
-
+		
+		provider.addPublicProperty("/siga.brasao.width", "65");
+		provider.addPublicProperty("/siga.brasao.height", "70");
+		provider.addPublicProperty("/siga.consulta.processos", "false");
+		provider.addPublicProperty("/siga.consulta.processos.link", "consultas.pbdoc.pb.gov.br");
+		
+		provider.addPublicProperty("/siga.prefeitura", "false");
+	
 		/* proxy properties */
 		provider.addRestrictedProperty("/http.proxyHost", null);
 		if (get("/http.proxyHost") != null)
@@ -124,14 +142,11 @@ public class Prop {
 		/* Parâmetros para ativação de Login por SSO OAuth2/OIDC */
 
 		provider.addPublicProperty("/siga.omitir.metodo2", "true");
-
-		provider.addPublicProperty("/siga.cabecalho.logo", "/siga/imagens/logo-trf2-38px.png"); 
-		provider.addPublicProperty("/siga.cabecalho.titulo", "PBdoc");
-		
-		provider.addPublicProperty("/siga.email.logo", "/siga/imagens/logo-siga-novo-38px.png"); 
-		provider.addPublicProperty("/siga.email.titulo", provider.getProp("/siga.cabecalho.titulo"));
 		
 		provider.addPublicProperty("/sigawf.ativo", "true");
+		
+		provider.addPublicProperty("/siga.hibernate.dialect");
+		provider.addPublicProperty("/siga.gsa.url", null);
 
 		provider.addPublicProperty("/siga.ldap.ambiente", null);
 		provider.addPublicProperty("/siga.ldap.dn.usuarios", null);
@@ -154,12 +169,6 @@ public class Prop {
 		provider.addRestrictedProperty("/siga.ldap.ws.endereco.busca", null);
 		provider.addRestrictedProperty("/siga.ldap.ws.endereco.troca.senha", null);
 		provider.addPublicProperty("/siga.smtp.starttls.enable", "false");
-
-		provider.addPublicProperty("/siga.prefeitura", "false");
-		provider.addPublicProperty("/siga.brasao.width", "65");
-		provider.addPublicProperty("/siga.brasao.height", "70");
-		provider.addPublicProperty("/siga.consulta.processos", "false");
-		provider.addPublicProperty("/siga.consulta.processos.link", "consultas.pbdoc.pb.gov.br");
 		
 		provider.addPublicProperty("/siga.recaptcha.key", null);
 		provider.addPrivateProperty("/siga.recaptcha.pwd", null);
