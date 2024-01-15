@@ -523,6 +523,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		result.include("cpf", cpf);
 		result.include("email", email);
 		result.include("cpfPesquisa", cpfPesquisa);
+		result.include("temPermissaoParaExportarDados", temPermissaoParaExportarDados());
 		setItemPagina(15);
 		result.include("currentPageNumber", calculaPaginaAtual(paramoffset));
 		List<CpOrgaoUsuario> list = new ArrayList<CpOrgaoUsuario>();
