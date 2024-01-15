@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.cp.CpConfiguracao;
+import br.gov.jfrj.siga.cp.CpServico;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoComparator;
@@ -20,7 +21,6 @@ import br.gov.jfrj.siga.cp.model.DpCargoSelecao;
 import br.gov.jfrj.siga.cp.model.DpFuncaoConfiancaSelecao;
 import br.gov.jfrj.siga.cp.model.DpLotacaoSelecao;
 import br.gov.jfrj.siga.cp.model.DpPessoaSelecao;
-import br.gov.jfrj.siga.cp.model.enm.CpParamCfg;
 import br.gov.jfrj.siga.cp.model.enm.CpTipoDeConfiguracao;
 import br.gov.jfrj.siga.cp.model.enm.ITipoDeConfiguracao;
 import br.gov.jfrj.siga.dp.CpOrgaoUsuario;
@@ -28,8 +28,6 @@ import br.gov.jfrj.siga.dp.dao.CpDao;
 
 @Controller
 public class ConfiguracaoController extends SigaController {
-
-	private static final String VERIFICADOR_ACESSO = "FE:Ferramentas;CFG:Cadastrar Configurações";
 
 	/**
 	 * @deprecated CDI eyes only
@@ -46,7 +44,7 @@ public class ConfiguracaoController extends SigaController {
 
 	@Get("app/configuracao/listar")
 	public void lista(Long idTpConfiguracao, Long idOrgaoUsu) throws Exception {
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CONFIGURACOES);
 		if (idTpConfiguracao == null)
 			idTpConfiguracao = CpTipoDeConfiguracao.CADASTRAR_QUALQUER_SUBST.getId();
 		ITipoDeConfiguracao tpconf = CpTipoDeConfiguracao.getById(idTpConfiguracao);
@@ -59,7 +57,7 @@ public class ConfiguracaoController extends SigaController {
 	@Get("app/configuracao/listar_cadastradas")
 	public void listaCadastradas(Long idTpConfiguracao, Long idOrgaoUsu, Long idTpMov, Long idFormaDoc, Long idMod,
 			String nmTipoRetorno, boolean campoFixo) throws Exception {
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CONFIGURACOES);;
 
 		CpConfiguracao config = new CpConfiguracao();
 
@@ -95,7 +93,7 @@ public class ConfiguracaoController extends SigaController {
 			DpFuncaoConfiancaSelecao funcaoSel, DpPessoaSelecao pessoaObjetoSel, DpLotacaoSelecao lotacaoObjetoSel,
 			DpCargoSelecao cargoObjetoSel, DpFuncaoConfiancaSelecao funcaoObjetoSel, Long idOrgaoObjeto,
 			Long idTpLotacao, String nmTipoRetorno, Long idDefinicaoDeProcedimento) throws Exception {
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CONFIGURACOES);;
 		CpConfiguracao config = new CpConfiguracao();
 
 		if (id != null) {
@@ -128,7 +126,7 @@ public class ConfiguracaoController extends SigaController {
 	@Transacional
 	@Get("app/configuracao/excluir")
 	public void excluir(Long id, String nmTipoRetorno, Long idMod, Long idFormaDoc) throws Exception {
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CONFIGURACOES);;
 
 		if (id != null) {
 			CpConfiguracao config = dao().consultar(id, CpConfiguracao.class, false);
@@ -150,7 +148,7 @@ public class ConfiguracaoController extends SigaController {
 			DpLotacaoSelecao lotacaoObjeto_lotacaoSel, DpCargoSelecao cargoObjeto_cargoSel,
 			DpFuncaoConfiancaSelecao funcaoObjeto_funcaoSel, Long idOrgaoObjeto, Long idTpLotacao, String nmTipoRetorno,
 			boolean campoFixo) throws Exception {
-		assertAcesso(VERIFICADOR_ACESSO);
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_CONFIGURACOES);;
 		final CpConfiguracao config = new CpConfiguracaoBuilder(CpConfiguracao.class, dao).setId(id)
 				.setIdSituacao(idSituacao).setIdTpConfiguracao(idTpConfiguracao).setPessoaSel(pessoaSel)
 				.setLotacaoSel(lotacaoSel).setCargoSel(cargoSel).setFuncaoSel(funcaoSel).setIdOrgaoObjeto(idOrgaoObjeto)

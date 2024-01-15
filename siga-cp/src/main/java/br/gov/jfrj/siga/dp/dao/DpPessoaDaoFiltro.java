@@ -41,6 +41,7 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 	private boolean buscarSubstitutos;
 	private boolean buscarSemLimitarOrgaoOrigem;
 	private boolean buscarApenasUsuariosVisiveisParaTramitacao;
+	private boolean buscarApenasUsuariosDeUnidadesReceptoras;
 	private boolean buscarParaCadastroDePessoas;
 	
 	private String situacaoFuncionalPessoa;
@@ -83,6 +84,14 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 
 	public void setBuscarApenasUsuariosVisiveisParaTramitacao(boolean buscarApenasUsuariosVisiveisParaTramitacao) {
 		this.buscarApenasUsuariosVisiveisParaTramitacao = buscarApenasUsuariosVisiveisParaTramitacao;
+	}
+	
+	public boolean isBuscarApenasUsuariosDeUnidadesReceptoras() {
+		return buscarApenasUsuariosDeUnidadesReceptoras;
+	}
+
+	public void setBuscarApenasUsuariosDeUnidadesReceptoras(boolean buscarApenasUsuariosDeUnidadesReceptoras) {
+		this.buscarApenasUsuariosDeUnidadesReceptoras = buscarApenasUsuariosDeUnidadesReceptoras;
 	}
 	
 	public Long getIdOrgaoUsu() {
@@ -210,4 +219,5 @@ public class DpPessoaDaoFiltro extends DaoFiltroSelecionavel {
 			}
 		}
 	}
+	
 }
