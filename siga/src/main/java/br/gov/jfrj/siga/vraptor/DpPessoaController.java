@@ -271,35 +271,7 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		}
 		if (idOrgaoUsu != null && (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())
 				|| CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario()).getId().equals(idOrgaoUsu))) {
-			DpPessoaDaoFiltro dpPessoaFiltro = new DpPessoaDaoFiltro();
-			dpPessoaFiltro.setBuscarFechadas(buscarInativos);
-			if (paramoffset == null) {
-				paramoffset = 0;
-			}
-			dpPessoaFiltro.setIdOrgaoUsu(idOrgaoUsu);
-			dpPessoaFiltro.setNome(isNotBlank(nome) ? Texto.removeAcento(nome) : EMPTY);
-			dpPessoaFiltro.setEmail(isNotBlank(emailPesquisa) ? Texto.removeAcento(emailPesquisa) : EMPTY);
-			dpPessoaFiltro.setIdentidade(identidadePesquisa);
-			if(idCargoPesquisa != null) {
-				DpCargo cargo = new DpCargo();
-				cargo.setId(idCargoPesquisa);
-				dpPessoaFiltro.setCargo(cargo);
-			}
-			if (idLotacaoPesquisa != null) {
-				DpLotacao lotacao = new DpLotacao();
-				lotacao.setId(idLotacaoPesquisa);
-				dpPessoaFiltro.setLotacao(lotacao);
-			}
-			if (idFuncaoPesquisa != null) {
-				DpFuncaoConfianca funcao = new DpFuncaoConfianca();
-				funcao.setIdFuncao(idFuncaoPesquisa);
-				dpPessoaFiltro.setFuncaoConfianca(funcao);
-			}
-			if (isNotBlank(cpfPesquisa)) {
-				dpPessoaFiltro.setCpf(Long.valueOf(cpfPesquisa.replace(".", EMPTY).replace("-", EMPTY)));
-			}
-			dpPessoaFiltro.setId(Long.valueOf(0));
-			dpPessoaFiltro.setBuscarParaCadastroDePessoas(true);
+			DpPessoaDaoFiltro dpPessoaFiltro = setupDpPessoaDaoFiltro(idOrgaoUsu, nome, cpfPesquisa, idCargoPesquisa, idFuncaoPesquisa, idLotacaoPesquisa, emailPesquisa, identidadePesquisa, buscarInativos);
 			setItens(CpDao.getInstance().consultarPorFiltro(dpPessoaFiltro, paramoffset, 15));
 			result.include("itens", getItens());
 			long tamanho = dao().consultarQuantidade(dpPessoaFiltro);
@@ -845,44 +817,16 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 	@Post
 	@Path("app/pessoa/exportarCsv")
 	public Download exportarCsv(Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa,
-			Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa) throws IOException {
-		
-		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_PESSOA);;
 
-		CpOrgaoUsuario ou = new CpOrgaoUsuario();
+    Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa, boolean buscarInativos) throws IOException {
+		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_PESSOA);
 
 		if (idOrgaoUsu != null && (CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(getTitular().getOrgaoUsuario().getSigla())
 				|| CpDao.getInstance().consultarPorSigla(getTitular().getOrgaoUsuario()).getId().equals(idOrgaoUsu))) {
-			DpPessoa dpPessoa = new DpPessoa();
-
-			if (ou.getId() == null) {
-				ou.setIdOrgaoUsu(idOrgaoUsu);
-				ou = CpDao.getInstance().consultarPorId(ou);
-			}
-			dpPessoa.setOrgaoUsuario(ou);
-			dpPessoa.setNomePessoa(Texto.removeAcento(nome != null ? nome : ""));
-			dpPessoa.setEmailPessoa(Texto.removeAcento(emailPesquisa != null ? emailPesquisa : ""));	
-			dpPessoa.setIdentidade(identidadePesquisa);
-			if (idCargoPesquisa != null) {
-				DpCargo cargo = new DpCargo();
-				cargo.setId(idCargoPesquisa);
-				dpPessoa.setCargo(cargo);
-			}
-			if (idLotacaoPesquisa != null) {
-				DpLotacao lotacao = new DpLotacao();
-				lotacao.setId(idLotacaoPesquisa);
-				dpPessoa.setLotacao(lotacao);
-			}
-			if (idFuncaoPesquisa != null) {
-				DpFuncaoConfianca funcao = new DpFuncaoConfianca();
-				funcao.setIdFuncao(idFuncaoPesquisa);
-				dpPessoa.setFuncaoConfianca(funcao);
-			}
-			if (cpfPesquisa != null && !"".equals(cpfPesquisa)) {
-				dpPessoa.setCpfPessoa(Long.valueOf(cpfPesquisa.replace(".", "").replace("-", "")));
-			}
-			dpPessoa.setId(Long.valueOf(0));
-			List<DpPessoa> lista = CpDao.getInstance().consultarPessoaComOrgaoFuncaoCargo(dpPessoa);
+			
+			DpPessoaDaoFiltro dpPessoaFiltro = setupDpPessoaDaoFiltro(idOrgaoUsu, nome, cpfPesquisa, idCargoPesquisa, idFuncaoPesquisa, idLotacaoPesquisa, emailPesquisa, identidadePesquisa, buscarInativos);
+			
+			List<DpPessoa> lista = CpDao.getInstance().consultarPorFiltro(dpPessoaFiltro, 0, 0);
 			
 			if (lista.size() > 0) {
 				StringBuilder texto = new StringBuilder()
@@ -946,6 +890,41 @@ public class DpPessoaController extends SigaSelecionavelControllerSupport<DpPess
 		}
 
 		return null;
+	}
+
+	
+	private DpPessoaDaoFiltro setupDpPessoaDaoFiltro(Long idOrgaoUsu, String nome, String cpfPesquisa, Long idCargoPesquisa,
+			Long idFuncaoPesquisa, Long idLotacaoPesquisa, String emailPesquisa, String identidadePesquisa, boolean buscarInativos) {
+		
+		DpPessoaDaoFiltro dpPessoaFiltro = new DpPessoaDaoFiltro();
+		
+		dpPessoaFiltro.setBuscarFechadas(buscarInativos);
+		dpPessoaFiltro.setIdOrgaoUsu(idOrgaoUsu);
+		dpPessoaFiltro.setNome(isNotBlank(nome) ? Texto.removeAcento(nome) : EMPTY);
+		dpPessoaFiltro.setEmail(isNotBlank(emailPesquisa) ? Texto.removeAcento(emailPesquisa) : EMPTY);
+		dpPessoaFiltro.setIdentidade(identidadePesquisa);
+		if(idCargoPesquisa != null) {
+			DpCargo cargo = new DpCargo();
+			cargo.setId(idCargoPesquisa);
+			dpPessoaFiltro.setCargo(cargo);
+		}
+		if (idLotacaoPesquisa != null) {
+			DpLotacao lotacao = new DpLotacao();
+			lotacao.setId(idLotacaoPesquisa);
+			dpPessoaFiltro.setLotacao(lotacao);
+		}
+		if (idFuncaoPesquisa != null) {
+			DpFuncaoConfianca funcao = new DpFuncaoConfianca();
+			funcao.setIdFuncao(idFuncaoPesquisa);
+			dpPessoaFiltro.setFuncaoConfianca(funcao);
+		}
+		if (isNotBlank(cpfPesquisa)) {
+			dpPessoaFiltro.setCpf(Long.valueOf(cpfPesquisa.replace(".", EMPTY).replace("-", EMPTY)));
+		}
+		dpPessoaFiltro.setId(Long.valueOf(0));
+		dpPessoaFiltro.setBuscarParaCadastroDePessoas(true);
+		
+		return dpPessoaFiltro;
 	}
 	
 	/*
