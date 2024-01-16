@@ -56,3 +56,7 @@ COPY /docker/standalone.xml ${PBDOC_HOME}
 
 # OPENSHIFT (config maps do standalone.xml com volume montado em $PBDOC_SCRIPTS_HOME)
 RUN ln -s ${PBDOC_HOME}/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
+
+COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
+
+CMD [ "/entrypoint.sh" ]
