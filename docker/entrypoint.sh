@@ -4,6 +4,15 @@ set -e
 
 standalone_xml=$JBOSS_HOME/standalone/configuration/standalone.xml
 
+is_true() {
+    if [ -n "$1" ] && [ "$1" != "0" ] && [ $(echo "$1" | tr '[:upper:]' '[:lower:]') != "false" ]
+    then
+        return 0 # true
+    fi
+
+    return 1 # false
+}
+
 configure() {
     if [ -n "$DATABASE_URL" ]; then
         if [ -z "$DATABASE_USERNAME" ]; then
@@ -39,7 +48,7 @@ configure() {
         sed --in-place --regexp-extended "s|<property name=\"sigaex.modelos.cabecalho.subtitulo\" value=\".*?\"/>|<property name=\"sigaex.modelos.cabecalho.titulo\" value=\"$PBDOC_CABECALHO_SUBTITULO\"/>|" $standalone_xml
     fi
 
-    if [ -n "$PBDOC_PREFEITURA" ]; then
+    if is_true "$PBDOC_PREFEITURA"; then
         sed --in-place --regexp-extended 's|<property name="siga.prefeitura" value=".*?"/>|<property name="siga.prefeitura" value="true"/>|' $standalone_xml
     fi
 
@@ -63,7 +72,7 @@ configure() {
         sed --in-place --regexp-extended "s|<property name=\"sigaex.carimbo.texto.superior\" value=\".*?\"/>|<property name=\"sigaex.carimbo.texto.superior\" value=\"$PBDOC_CARIMBO_TEXTO_SUPERIOR\"/>|" $standalone_xml
     fi
 
-    if [ -n "$PBDOC_FLYWAY_MIGRATE" ]; then
+    if is_true "$PBDOC_FLYWAY_MIGRATE"; then
         sed --in-place --regexp-extended 's|<property name="siga.flyway.migrate" value=".*?"/>|<property name="siga.flyway.migrate" value="true"/>|' $standalone_xml
     fi
 }

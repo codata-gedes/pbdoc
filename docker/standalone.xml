@@ -69,8 +69,8 @@
         <property name="siga.ambiente" value="desenv" />
         <property name="siga.base.url" value="http://localhost:8080" />
         <property name="sigaex.diretorio.armazenamento.arquivos" value="/tmp/.pbdoc" />
-        <property name="siga.prefeitura" value="true"/>
-        <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL DE CAJAZEIRAS"/>
+        <property name="siga.prefeitura" value="false"/>
+        <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>
         <property name="siga.prefeitura.tema.cor" value="bg-danger"/>
     </system-properties>
     <management>
