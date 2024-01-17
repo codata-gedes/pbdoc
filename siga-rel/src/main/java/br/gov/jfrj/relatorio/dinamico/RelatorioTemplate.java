@@ -320,7 +320,7 @@ public abstract class RelatorioTemplate extends RelatorioRapido {
 	public static void configurarParametrosPadraoSistema(Map<String, String> parametros) {
 		parametros.put("titulo", Prop.get("/siga.relat.titulo"));
 		parametros.put("subtitulo", Prop.get("/siga.relat.subtitulo"));
-		parametros.put("brasao", Base64.getEncoder().encodeToString(Utils.getImagemBrasao()));
+		parametros.put("brasao", Prop.get("/siga.relat.brasao").replace("contextpath", Contexto.urlBaseLocal() + "/sigaex"));
 	}
 
 }
