@@ -1,5 +1,6 @@
-Dockerfile
-.dockerignore
-.git
-.gitignore
-.gitlab-ci.yml
+*
+!docker
+!siga*
+!pom.xml
+!settings.xml
+/*/target/
