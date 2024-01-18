@@ -47,6 +47,9 @@ RUN wget https://jdbc.postgresql.org/download/${JDBC_DRIVER_FILENAME} -O ${JBOSS
 COPY docker/postgresql-module.xml ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
 RUN sed -i "s/\${JDBC_DRIVER_FILENAME}/${JDBC_DRIVER_FILENAME}/" ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
 
+# Diretório imagens
+COPY imagens /opt/pbdoc/imagens
+
 
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
 COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
