@@ -44,15 +44,16 @@ RUN wget https://github.com/assijus/assijus/releases/download/v4.1.4/assijus.war
 ENV JDBC_DRIVER_FILENAME 'postgresql-42.2.23.jar'
 RUN mkdir -p ${JBOSS_HOME}/modules/org/postgresql/main
 RUN wget https://jdbc.postgresql.org/download/${JDBC_DRIVER_FILENAME} -O ${JBOSS_HOME}/modules/org/postgresql/main/${JDBC_DRIVER_FILENAME}
-RUN touch ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
-RUN echo "<?xml version=\"1.0\" ?><module xmlns=\"urn:jboss:module:1.1\" name=\"org.postgresql\"><resources><resource-root path=\"${JDBC_DRIVER_FILENAME}\"/></resources><dependencies><module name=\"javax.api\"/><module name=\"javax.transaction.api\"/></dependencies></module>" \
-  > ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
+COPY docker/postgresql-module.xml ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
+RUN sed -i "s/\${JDBC_DRIVER_FILENAME}/${JDBC_DRIVER_FILENAME}/" ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
 
+# Diretório imagens
+COPY imagens /opt/pbdoc/imagens
 
 
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
-RUN mv ${JBOSS_HOME}/standalone/configuration/standalone.xml ${PBDOC_HOME}/standalone.xml.original
-COPY /docker/standalone.xml ${PBDOC_HOME}
+COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
 
-# OPENSHIFT (config maps do standalone.xml com volume montado em $PBDOC_SCRIPTS_HOME)
-RUN ln -s ${PBDOC_HOME}/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
+COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
+
+CMD [ "/entrypoint.sh" ]
