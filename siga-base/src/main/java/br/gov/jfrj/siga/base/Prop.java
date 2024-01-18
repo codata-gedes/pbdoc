@@ -97,7 +97,7 @@ public class Prop {
 		provider.addPublicProperty("/siga.email.titulo", get("/siga.cabecalho.titulo"));
 		
 		provider.addPublicProperty("/siga.base.imagem", DEFAULT_FOLDER + "/imagens");
-		provider.addPublicProperty("/siga.base.imagem.url", "app/imagem/brasao");
+		provider.addPublicProperty("/siga.base.imagem.url", "public/app/imagem/brasao");
 		
 		provider.addPublicProperty("/sigaex.modelos.cabecalho.brasao", "contextpath/" + get("/siga.base.imagem.url"));
 		provider.addPublicProperty("/sigaex.modelos.cabecalho.titulo", "ESTADO DA PARAÍBA");
