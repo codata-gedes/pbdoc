@@ -46,10 +46,8 @@
         <property name="siga.cabecalho.logo" value="/siga/imagens/pbdoc-b.png"/>
         <property name="sigaex.modelos.cabecalho.titulo" value="Paraíba"/>
         <property name="sigaex.modelos.cabecalho.subtitulo" value="Governo do Estado"/>
-        <property name="sigaex.modelos.cabecalho.brasao" value="contextpath/imagens/paraiba.png"/>
         <property name="siga.relat.titulo" value="Paraíba"/>
         <property name="siga.relat.subtitulo" value="Governo do Estado da Paraíba"/>
-        <property name="siga.relat.brasao" value="paraiba.png"/>
         <property name="sigaex.carimbo.texto.superior" value="Governo do Estado da Paraíba"/>
         <property name="siga.smtp" value="emailserver"/>
         <property name="siga.smtp.porta" value="1025"/>
@@ -73,7 +71,6 @@
         <property name="sigaex.diretorio.armazenamento.arquivos" value="/tmp/.pbdoc"/>
         <property name="siga.prefeitura" value="false"/>
         <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>
-        <property name="siga.prefeitura.tema.cor" value="bg-danger"/>
         <property name="siga.brasao.width" value="65"/>
         <property name="siga.brasao.height" value="70"/>
         <property name="siga.consulta.processos" value="false"/>

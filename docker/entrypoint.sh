@@ -87,10 +87,6 @@ configure() {
         sed_replace 'siga.brasao.height' "$PBDOC_BRASAO_HEIGHT"
     fi
 
-    if [ -n "$PBDOC_PREFEITURA_TEMA_COR" ]; then
-        sed_replace 'siga.prefeitura.tema.cor' "$PBDOC_PREFEITURA_TEMA_COR"
-    fi
-
     if [ -n "$PBDOC_RELATORIO_TITULO" ]; then
         sed_replace 'siga.relat.titulo' "$PBDOC_RELATORIO_TITULO"
     fi
