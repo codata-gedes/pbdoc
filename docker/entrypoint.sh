@@ -48,7 +48,19 @@ configure() {
     fi
 
     if [ -n "$PBDOC_BASE_URL" ]; then
-        sed_replace 'sigaex.modelos.cabecalho.titulo' "$PBDOC_CABECALHO_TITULO"
+        sed_replace 'siga.base.url' "$PBDOC_BASE_URL"
+    fi
+
+     if [ -n "$PBDOC_AMBIENTE" ]; then
+        sed_replace 'siga.ambiente' "$PBDOC_AMBIENTE"
+    fi
+
+    if is_true "$PBDOC_PREFEITURA"; then
+        sed_replace 'siga.prefeitura' "true"
+    fi
+
+    if is_true "$PBDOC_CONSULTA_PROCESSOS"; then
+        sed_replace 'siga.consulta.processos' "true"
     fi
 
     if [ -n "$PBDOC_CABECALHO_TITULO" ]; then
@@ -59,12 +71,20 @@ configure() {
         sed_replace 'sigaex.modelos.cabecalho.subtitulo' "$PBDOC_CABECALHO_SUBTITULO"
     fi
 
-    if is_true "$PBDOC_PREFEITURA"; then
-        sed_replace 'siga.prefeitura' "true"
+    if [ -n "$PBDOC_CARIMBO_TEXTO_SUPERIOR" ]; then
+        sed_replace 'sigaex.carimbo.texto.superior' "$PBDOC_CARIMBO_TEXTO_SUPERIOR"
     fi
 
     if [ -n "$PBDOC_PREFEITURA_CABECALHO" ]; then
         sed_replace 'siga.prefeitura.cabecalho' "$PBDOC_PREFEITURA_CABECALHO"
+    fi
+
+    if [ -n "$PBDOC_BRASAO_WIDTH" ]; then
+        sed_replace 'siga.brasao.width' "$PBDOC_BRASAO_WIDTH"
+    fi
+
+    if [ -n "$PBDOC_BRASAO_HEIGHT" ]; then
+        sed_replace 'siga.brasao.height' "$PBDOC_BRASAO_HEIGHT"
     fi
 
     if [ -n "$PBDOC_PREFEITURA_TEMA_COR" ]; then
@@ -77,10 +97,6 @@ configure() {
 
     if [ -n "$PBDOC_RELATORIO_SUBTITULO" ]; then
         sed_replace 'siga.relat.subtitulo' "$PBDOC_RELATORIO_SUBTITULO"
-    fi
-
-    if [ -n "$PBDOC_CARIMBO_TEXTO_SUPERIOR" ]; then
-        sed_replace 'sigaex.carimbo.texto.superior' "$PBDOC_CARIMBO_TEXTO_SUPERIOR"
     fi
 
     if [ -n "$PBDOC_JWT_SECRET" ]; then

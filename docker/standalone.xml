@@ -74,6 +74,9 @@
         <property name="siga.prefeitura" value="false"/>
         <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>
         <property name="siga.prefeitura.tema.cor" value="bg-danger"/>
+        <property name="siga.brasao.width" value="65"/>
+        <property name="siga.brasao.height" value="70"/>
+        <property name="siga.consulta.processos" value="false"/>
     </system-properties>
     <management>
         <security-realms>
