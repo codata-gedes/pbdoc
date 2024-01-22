@@ -141,11 +141,6 @@ ${meta}
 			<c:set var="navbar_class" value="navbar-dark bg-secondary" />
 		</c:if>
 		
-		<c:if test="${f:resource('/siga.prefeitura')}">
-			<c:set var="navbar_class" value="navbar-dark" />
-			<c:set var="menu_class" value="${f:resource('/siga.prefeitura.tema.cor')}" />
-		</c:if>
-		
 		<c:set var="navbar_logo" value="${f:resource('/siga.cabecalho.logo')}" />
 		<c:set var="navbar_logo2" value="${f:resource('/siga.cabecalho.logo2')}" />
 		<c:set var="navbar_logo_size" value="32" />
