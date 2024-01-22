@@ -118,6 +118,14 @@ configure() {
     if is_true "$PBDOC_FLYWAY_MIGRATE"; then
         sed_replace 'siga.flyway.migrate' "true"
     fi
+
+    if [ -n "$PBDOC_VIZSERVICE_URL" ]; then
+        sed_replace 'vizservice.url' "$PBDOC_VIZSERVICE_URL"
+    fi
+
+    if [ -n "$PBDOC_BLUCSERVICE_URL" ]; then
+        sed_replace 'blucservice.url' "$PBDOC_BLUCSERVICE_URL"
+    fi
 }
 
 configure
