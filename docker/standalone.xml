@@ -68,6 +68,8 @@
         <property name="pdf.tamanho.maximo" value="50000000"/>
         <property name="siga.ambiente" value="desenv"/>
         <property name="siga.base.url" value="http://localhost:8080"/>
+        <property name="vizservice.url" value="http://vizservice:8080" />
+        <property name="blucservice.url" value="http://blucservice:8080/blucservice/api/v1" />
         <property name="sigaex.diretorio.armazenamento.arquivos" value="/tmp/.pbdoc"/>
         <property name="siga.prefeitura" value="false"/>
         <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>

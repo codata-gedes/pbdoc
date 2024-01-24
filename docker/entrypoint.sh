@@ -20,7 +20,19 @@ sed_replace() {
     sed --in-place --regexp-extended "s|<property name=\"($property)\" value=\".*?\"\s*/>|<property name=\"\\1\" value=\"$replacement\"/>|" $standalone_xml
 }
 
-configure() {
+configure_ambiente() {
+    if [ "$AMBIENTE" = "prd" ]; then
+        sed_replace 'siga.ambiente' "prod"
+    fi
+    if [ "$AMBIENTE" = "hml" ]; then
+        sed_replace 'siga.ambiente' "homolo"
+    fi
+    if [ "$AMBIENTE" = "trn" ]; then
+        sed_replace 'siga.ambiente' "treina"
+    fi
+}
+
+configure_database() {
     if [ -n "$DATABASE_URL" ]; then
         if [ -z "$DATABASE_USERNAME" ]; then
             echo 'Faltando $DATABASE_USERNAME'
@@ -46,12 +58,14 @@ configure() {
     if [ -n "$DATABASE_MAX_POOL_SIZE" ]; then
         sed --in-place --regexp-extended "s|<max-pool-size>.*?</max-pool-size>|<max-pool-size>$DATABASE_MAX_POOL_SIZE</max-pool-size>|" $standalone_xml
     fi
+}
 
+configure_pbdoc() {
     if [ -n "$PBDOC_BASE_URL" ]; then
         sed_replace 'siga.base.url' "$PBDOC_BASE_URL"
     fi
 
-     if [ -n "$PBDOC_AMBIENTE" ]; then
+    if [ -n "$PBDOC_AMBIENTE" ]; then
         sed_replace 'siga.ambiente' "$PBDOC_AMBIENTE"
     fi
 
@@ -118,8 +132,18 @@ configure() {
     if is_true "$PBDOC_FLYWAY_MIGRATE"; then
         sed_replace 'siga.flyway.migrate' "true"
     fi
+
+    if [ -n "$PBDOC_VIZSERVICE_URL" ]; then
+        sed_replace 'vizservice.url' "$PBDOC_VIZSERVICE_URL"
+    fi
+
+    if [ -n "$PBDOC_BLUCSERVICE_URL" ]; then
+        sed_replace 'blucservice.url' "$PBDOC_BLUCSERVICE_URL"
+    fi
 }
 
-configure
+configure_ambiente
+configure_database
+configure_pbdoc
 
 exec $JBOSS_HOME/bin/standalone.sh -b 0.0.0.0
