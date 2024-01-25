@@ -42,6 +42,7 @@
         <property name="sigaex.webdav.senha" value="968e9163-49a5-4e7b-8a1d-c200e0ec98a9"/>
         <property name="siga.recaptcha.key" value="6LfVjNEZAAAAAKb0EH7HNaDVwsIevTC53yqy_EFz"/>
         <property name="siga.recaptcha.pwd" value="6LfVjNEZAAAAAKb0EH7HNaDVwsIevTC53yqy_EFz"/>
+        <property name="siga.doc.acesso.limitado" value="true"/>
         <property name="siga.cabecalho.titulo" value="PBdoc"/>
         <property name="siga.cabecalho.logo" value="/siga/imagens/pbdoc-b.png"/>
         <property name="sigaex.modelos.cabecalho.titulo" value="Paraíba"/>
@@ -52,6 +53,7 @@
         <property name="siga.smtp" value="emailserver"/>
         <property name="siga.smtp.porta" value="1025"/>
         <property name="siga.smtp.auth" value="true"/>
+        <property name="siga.smtp.starttls.enable" value="false" />
         <property name="siga.smtp.auth.usuario" value="siga"/>
         <property name="siga.smtp.auth.senha" value="siga"/>
         <property name="siga.smtp.debug" value="false"/>
@@ -61,6 +63,7 @@
         <property name="siga.flyway.migrate" value="false"/>
         <property name="siga.flyway.db" value="postgresql"/>
         <property name="siga.hibernate.dialect" value="br.gov.jfrj.siga.base.FixedPostgreSQL95Dialect"/>
+        <property name="sigaex.pdf.visualizador" value="default"/>
         <property name="sigaex.assinador.externo.popup.url" value="https://ittrufusion.appspot.com"/>
         <property name="sigaex.carimbo.sistema" value="siga-docker"/>
         <property name="sigaex.carimbo.url" value="https://ittrufusion.appspot.com/api/v1"/>
