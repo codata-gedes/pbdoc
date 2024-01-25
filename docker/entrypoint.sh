@@ -130,7 +130,7 @@ configure_pbdoc() {
         sed_replace 'blucservice.url' "$PBDOC_BLUCSERVICE_URL"
     fi
 
-    fi [ -n "$PBDOC_ARMAZENAMENTO_ARQUIVOS" ]; then
+    if [ -n "$PBDOC_ARMAZENAMENTO_ARQUIVOS" ]; then
         sed_replace 'sigaex.diretorio.armazenamento.arquivos' "$PBDOC_ARMAZENAMENTO_ARQUIVOS"
     fi
 }
