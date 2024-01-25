@@ -20,18 +20,6 @@ sed_replace() {
     sed --in-place --regexp-extended "s|<property name=\"($property)\" value=\".*?\"\s*/>|<property name=\"\\1\" value=\"$replacement\"/>|" $standalone_xml
 }
 
-configure_ambiente() {
-    if [ "$AMBIENTE" = "prd" ]; then
-        sed_replace 'siga.ambiente' "prod"
-    fi
-    if [ "$AMBIENTE" = "hml" ]; then
-        sed_replace 'siga.ambiente' "homolo"
-    fi
-    if [ "$AMBIENTE" = "trn" ]; then
-        sed_replace 'siga.ambiente' "treina"
-    fi
-}
-
 configure_database() {
     if [ -n "$DATABASE_URL" ]; then
         if [ -z "$DATABASE_USERNAME" ]; then
@@ -142,7 +130,6 @@ configure_pbdoc() {
     fi
 }
 
-configure_ambiente
 configure_database
 configure_pbdoc
 
