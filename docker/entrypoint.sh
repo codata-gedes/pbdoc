@@ -51,6 +51,7 @@ configure_database() {
 configure_pbdoc() {
     if [ -n "$PBDOC_BASE_URL" ]; then
         sed_replace 'siga.base.url' "$PBDOC_BASE_URL"
+        sed_replace 'siga.pagina.inicial.url' "$PBDOC_BASE_URL/sigaex/app/mesa"
     fi
 
     if [ -n "$PBDOC_AMBIENTE" ]; then
