@@ -4,20 +4,21 @@ set -e
 
 standalone_xml=$JBOSS_HOME/standalone/configuration/standalone.xml
 
-is_true() {
-    if [ -n "$1" ] && [ "$1" != "0" ] && [ $(echo "$1" | tr '[:upper:]' '[:lower:]') != "false" ]
-    then
-        return 0 # true
-    fi
-
-    return 1 # false
-}
-
 sed_replace() {
     property=$1
     replacement=$2
     shift 2
-    sed --in-place --regexp-extended "s|<property name=\"($property)\" value=\".*?\"\s*/>|<property name=\"\\1\" value=\"$replacement\"/>|" $standalone_xml
+
+    if [ -n "$replacement" ]; then
+        # escapa contra barra
+        replacement="${replacement//\\/\\\\}"
+        # escapa E comercial
+        replacement="${replacement//&/\\&}"
+
+        spec=$(printf 's|<property name="(%s)" value=".*?"\s*/>|<property name="\\1" value="%s"/>|' "$property" "${replacement//&/\&}")
+
+        sed --in-place --regexp-extended "$spec" $standalone_xml
+    fi
 }
 
 configure_database() {
@@ -49,118 +50,35 @@ configure_database() {
 }
 
 configure_pbdoc() {
-    if [ -n "$PBDOC_BASE_URL" ]; then
-        sed_replace 'siga.base.url' "$PBDOC_BASE_URL"
-        sed_replace 'siga.pagina.inicial.url' "$PBDOC_BASE_URL/sigaex/app/mesa"
-    fi
-
-    if [ -n "$PBDOC_AMBIENTE" ]; then
-        sed_replace 'siga.ambiente' "$PBDOC_AMBIENTE"
-    fi
-
-    if is_true "$PBDOC_PREFEITURA"; then
-        sed_replace 'siga.prefeitura' "true"
-    fi
-
-    if is_true "$PBDOC_CONSULTA_PROCESSOS"; then
-        sed_replace 'siga.consulta.processos' "true"
-    fi
-
-    if [ -n "$PBDOC_CABECALHO_TITULO" ]; then
-        sed_replace 'sigaex.modelos.cabecalho.titulo' "$PBDOC_CABECALHO_TITULO"
-    fi
-
-    if [ -n "$PBDOC_CABECALHO_SUBTITULO" ]; then
-        sed_replace 'sigaex.modelos.cabecalho.subtitulo' "$PBDOC_CABECALHO_SUBTITULO"
-    fi
-
-    if [ -n "$PBDOC_CARIMBO_TEXTO_SUPERIOR" ]; then
-        sed_replace 'sigaex.carimbo.texto.superior' "$PBDOC_CARIMBO_TEXTO_SUPERIOR"
-    fi
-
-    if [ -n "$PBDOC_PREFEITURA_CABECALHO" ]; then
-        sed_replace 'siga.prefeitura.cabecalho' "$PBDOC_PREFEITURA_CABECALHO"
-    fi
-
-    if [ -n "$PBDOC_BRASAO_WIDTH" ]; then
-        sed_replace 'siga.brasao.width' "$PBDOC_BRASAO_WIDTH"
-    fi
-
-    if [ -n "$PBDOC_BRASAO_HEIGHT" ]; then
-        sed_replace 'siga.brasao.height' "$PBDOC_BRASAO_HEIGHT"
-    fi
-
-    if [ -n "$PBDOC_RELATORIO_TITULO" ]; then
-        sed_replace 'siga.relat.titulo' "$PBDOC_RELATORIO_TITULO"
-    fi
-
-    if [ -n "$PBDOC_RELATORIO_SUBTITULO" ]; then
-        sed_replace 'siga.relat.subtitulo' "$PBDOC_RELATORIO_SUBTITULO"
-    fi
-
-    if [ -n "$PBDOC_JWT_SECRET" ]; then
-        sed_replace 'siga.jwt.secret' "$PBDOC_JWT_SECRET"
-    fi
-
-    if [ -n "$PBDOC_SINC_PASSWORD" ]; then
-        sed_replace 'siga.sinc.password' "$PBDOC_SINC_PASSWORD"
-    fi
-
-    if [ -n "$PBDOC_WEBDAV_SENHA" ]; then
-        sed_replace 'sigaex.webdav.senha' "$PBDOC_WEBDAV_SENHA"
-    fi
-
-    if [ -n "$PBDOC_RECAPTCHA_KEY" ]; then
-        sed_replace 'siga.recaptcha.key' "$PBDOC_RECAPTCHA_KEY"
-    fi
-
-    if [ -n "$PBDOC_RECAPTCHA_PASSWORD" ]; then
-        sed_replace 'siga.recaptcha.pwd' "$PBDOC_RECAPTCHA_PASSWORD"
-    fi
-
-    if is_true "$PBDOC_FLYWAY_MIGRATE"; then
-        sed_replace 'siga.flyway.migrate' "true"
-    fi
-
-    if [ -n "$PBDOC_VIZSERVICE_URL" ]; then
-        sed_replace 'vizservice.url' "$PBDOC_VIZSERVICE_URL"
-    fi
-
-    if [ -n "$PBDOC_BLUCSERVICE_URL" ]; then
-        sed_replace 'blucservice.url' "$PBDOC_BLUCSERVICE_URL"
-    fi
-
-    if [ -n "$PBDOC_ARMAZENAMENTO_ARQUIVOS" ]; then
-        sed_replace 'sigaex.diretorio.armazenamento.arquivos' "$PBDOC_ARMAZENAMENTO_ARQUIVOS"
-    fi
-
-    if [ -n "$PBDOC_SMTP" ]; then
-        sed_replace 'siga.smtp' "$PBDOC_SMTP"
-    fi
-
-    if [ -n "$PBDOC_SMTP_PORTA" ]; then
-        sed_replace 'siga.smtp.porta' "$PBDOC_SMTP_PORTA"
-    fi
-
-    if [ -n "$PBDOC_SMTP_AUTH" ]; then
-        sed_replace 'siga.smtp.auth' "$PBDOC_SMTP_AUTH"
-    fi
-
-    if [ -n "$PBDOC_SMTP_AUTH_USUARIO" ]; then
-        sed_replace 'siga.smtp.auth.usuario' "$PBDOC_SMTP_AUTH_USUARIO"
-    fi
-
-    if [ -n "$PBDOC_SMTP_AUTH_SENHA" ]; then
-        sed_replace 'siga.smtp.auth.senha' "$PBDOC_SMTP_AUTH_SENHA"
-    fi
-
-    if [ -n "$PBDOC_SMTP_DEBUG" ]; then
-        sed_replace 'siga.smtp.debug' "$PBDOC_SMTP_DEBUG"
-    fi
-
-    if [ -n "$PBDOC_SMTP_USUARIO_REMETENTE" ]; then
-        sed_replace 'siga.smtp.usuario.remetente' "$PBDOC_SMTP_USUARIO_REMETENTE"
-    fi
+    sed_replace 'siga.base.url' "$PBDOC_BASE_URL"
+    sed_replace 'siga.pagina.inicial.url' "$PBDOC_BASE_URL/sigaex/app/mesa"
+    sed_replace 'siga.ambiente' "$PBDOC_AMBIENTE"
+    sed_replace 'siga.prefeitura' "$PBDOC_PREFEITURA"
+    sed_replace 'siga.consulta.processos' "$PBDOC_CONSULTA_PROCESSOS"
+    sed_replace 'sigaex.modelos.cabecalho.titulo' "$PBDOC_CABECALHO_TITULO"
+    sed_replace 'sigaex.modelos.cabecalho.subtitulo' "$PBDOC_CABECALHO_SUBTITULO"
+    sed_replace 'sigaex.carimbo.texto.superior' "$PBDOC_CARIMBO_TEXTO_SUPERIOR"
+    sed_replace 'siga.prefeitura.cabecalho' "$PBDOC_PREFEITURA_CABECALHO"
+    sed_replace 'siga.brasao.width' "$PBDOC_BRASAO_WIDTH"
+    sed_replace 'siga.brasao.height' "$PBDOC_BRASAO_HEIGHT"
+    sed_replace 'siga.relat.titulo' "$PBDOC_RELATORIO_TITULO"
+    sed_replace 'siga.relat.subtitulo' "$PBDOC_RELATORIO_SUBTITULO"
+    sed_replace 'siga.jwt.secret' "$PBDOC_JWT_SECRET"
+    sed_replace 'siga.sinc.password' "$PBDOC_SINC_PASSWORD"
+    sed_replace 'sigaex.webdav.senha' "$PBDOC_WEBDAV_SENHA"
+    sed_replace 'siga.recaptcha.key' "$PBDOC_RECAPTCHA_KEY"
+    sed_replace 'siga.recaptcha.pwd' "$PBDOC_RECAPTCHA_PASSWORD"
+    sed_replace 'siga.flyway.migrate' "$PBDOC_FLYWAY_MIGRATE"
+    sed_replace 'vizservice.url' "$PBDOC_VIZSERVICE_URL"
+    sed_replace 'blucservice.url' "$PBDOC_BLUCSERVICE_URL"
+    sed_replace 'sigaex.diretorio.armazenamento.arquivos' "$PBDOC_ARMAZENAMENTO_ARQUIVOS"
+    sed_replace 'siga.smtp' "$PBDOC_SMTP"
+    sed_replace 'siga.smtp.porta' "$PBDOC_SMTP_PORTA"
+    sed_replace 'siga.smtp.auth' "$PBDOC_SMTP_AUTH"
+    sed_replace 'siga.smtp.auth.usuario' "$PBDOC_SMTP_AUTH_USUARIO"
+    sed_replace 'siga.smtp.auth.senha' "$PBDOC_SMTP_AUTH_SENHA"
+    sed_replace 'siga.smtp.debug' "$PBDOC_SMTP_DEBUG"
+    sed_replace 'siga.smtp.usuario.remetente' "$PBDOC_SMTP_USUARIO_REMETENTE"
 }
 
 configure_database
