@@ -133,6 +133,34 @@ configure_pbdoc() {
     if [ -n "$PBDOC_ARMAZENAMENTO_ARQUIVOS" ]; then
         sed_replace 'sigaex.diretorio.armazenamento.arquivos' "$PBDOC_ARMAZENAMENTO_ARQUIVOS"
     fi
+
+    if [ -n "$PBDOC_SMTP" ]; then
+        sed_replace 'siga.smtp' "$PBDOC_SMTP"
+    fi
+
+    if [ -n "$PBDOC_SMTP_PORTA" ]; then
+        sed_replace 'siga.smtp.porta' "$PBDOC_SMTP_PORTA"
+    fi
+
+    if [ -n "$PBDOC_SMTP_AUTH" ]; then
+        sed_replace 'siga.smtp.auth' "$PBDOC_SMTP_AUTH"
+    fi
+
+    if [ -n "$PBDOC_SMTP_AUTH_USUARIO" ]; then
+        sed_replace 'siga.smtp.auth.usuario' "$PBDOC_SMTP_AUTH_USUARIO"
+    fi
+
+    if [ -n "$PBDOC_SMTP_AUTH_SENHA" ]; then
+        sed_replace 'siga.smtp.auth.senha' "$PBDOC_SMTP_AUTH_SENHA"
+    fi
+
+    if [ -n "$PBDOC_SMTP_DEBUG" ]; then
+        sed_replace 'siga.smtp.debug' "$PBDOC_SMTP_DEBUG"
+    fi
+
+    if [ -n "$PBDOC_SMTP_USUARIO_REMETENTE" ]; then
+        sed_replace 'siga.smtp.usuario.remetente' "$PBDOC_SMTP_USUARIO_REMETENTE"
+    fi
 }
 
 configure_database
