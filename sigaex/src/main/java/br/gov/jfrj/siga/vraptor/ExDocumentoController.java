@@ -601,10 +601,11 @@ public class ExDocumentoController extends ExController {
 				
 				if (modeloDefault == null) {
 					for (ExModelo mod : exDocumentoDTO.getModelos()) {
-						if ("Memorando".equals(mod.getNmMod())) {
+						if ("Oficio Interno".equals(mod.getNmMod()) && mod.getHisDtFim() == null) {
 							modeloDefault = mod;
 							break;
 						}
+						
  					}
  				}
 				
