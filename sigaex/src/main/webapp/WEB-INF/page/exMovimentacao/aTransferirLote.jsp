@@ -107,17 +107,19 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label>Data da devolução</label> <input type="text"
-									name="dtDevolucaoMovString"
-									onblur="javascript:verifica_data(this,0);"
-									value="${dtDevolucaoMovString}" class="form-control" /> <small
-									class="form-text text-muted">Atenção: somente preencher
-									a data de devolução se a intenção for, realmente, que o
-									documento seja devolvido até esta data.</small>
+						<!--
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Data da devolução</label> <input type="text"
+										name="dtDevolucaoMovString"
+										onblur="javascript:verifica_data(this,0);"
+										value="${dtDevolucaoMovString}" class="form-control" /> <small
+										class="form-text text-muted">Atenção: somente preencher
+										a data de devolução se a intenção for, realmente, que o
+										documento seja devolvido até esta data.</small>
+								</div>
 							</div>
-						</div>
+						-->
 						<div class="col-sm-3">
 
 							<div class="form-group campo-orgao-externo"

@@ -147,27 +147,29 @@ $(function(){
 							</c:choose></td>
 						</div>
 					</div>
-				</div>				
-				<div class="row">
-					<div class="col col-3">
-						<div class="form-group mb-0">
-							<label>Data da devolução</label>
-							<c:choose>
-								<c:when test="${empty dtDevolucaoMovString}">
-									<input type="text" onkeydown="event.preventDefault()" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control campoData" autocomplete="off"/>
-								</c:when>
-								<c:when test="${not empty dtDevolucaoMovString}">
-									<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control" readonly="true" autocomplete="off"/>
-								</c:when>
-							</c:choose>
+				</div>
+					<!--			
+					<div class="row">
+						<div class="col col-3">
+							<div class="form-group mb-0">
+								<label>Data da devolução</label>
+								<c:choose>
+									<c:when test="${empty dtDevolucaoMovString}">
+										<input type="text" onkeydown="event.preventDefault()" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control campoData" autocomplete="off"/>
+									</c:when>
+									<c:when test="${not empty dtDevolucaoMovString}">
+										<input type="text" name="dtDevolucaoMovString" onblur="javascript:verifica_data(this,0);" value="${dtDevolucaoMovString}" class="form-control" readonly="true" autocomplete="off"/>
+									</c:when>
+								</c:choose>
+							</div>
 						</div>
-					</div>
-				</div>				
-				<div class="row">
-					<div class="col col-12">
-							<small class="form-text text-muted">Atenção: somente preencher a data de devolução se a intenção for, realmente, que o documento seja devolvido até esta data.</small>
 					</div>				
-				</div>				
+					<div class="row">
+						<div class="col col-12">
+								<small class="form-text text-muted">Atenção: somente preencher a data de devolução se a intenção for, realmente, que o documento seja devolvido até esta data.</small>
+						</div>				
+					</div>	
+				-->	
 				<div class="row">
 					<div class="col col-9">
 						<div class="form-check form-check-inline mt-3 mb-3">
