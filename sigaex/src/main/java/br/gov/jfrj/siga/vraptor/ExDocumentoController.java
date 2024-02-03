@@ -84,6 +84,7 @@ import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.base.util.Utils;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
 import br.gov.jfrj.siga.cp.bl.Cp;
+import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 import br.gov.jfrj.siga.cp.model.DpLotacaoSelecao;
 import br.gov.jfrj.siga.cp.model.DpPessoaSelecao;
 import br.gov.jfrj.siga.dp.CpOrgao;
@@ -1753,8 +1754,7 @@ public class ExDocumentoController extends ExController {
 				lotaDestina = String.valueOf(exDocumentoDTO.getLotacaoDestinatarioSel().getObjeto()).substring(0, 3);
 			}
 
-			if(!getCadastrante().getLotacao().getSigla().equalsIgnoreCase("PDS")) {
-				
+			if(!getCadastrante().getLotacao().getSigla().equalsIgnoreCase(CpConfiguracaoBL.SIGLA_ORGAO_PDS)) {				
 				if (!getCadastrante().isTramitarOutrosOrgaos()
 						&& !equalsIgnoreCase(lotaDestina, getCadastrante().getOrgaoUsuario().getSiglaOrgaoUsu())) {
 					throw new AplicacaoException("Você não tem permissão para enviar documento(s) para outros órgãos");

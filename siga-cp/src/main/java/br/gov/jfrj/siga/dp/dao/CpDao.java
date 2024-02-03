@@ -752,7 +752,7 @@ public class CpDao extends ModeloDao {
 						predicates.and(qDpLotacao.unidadeReceptora.isTrue());
 					}
 				} else {
-					if(!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains("PDS")) {
+					if(!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(CpConfiguracaoBL.SIGLA_ORGAO_PDS)) {
 						predicates.and(
 								qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
 								.or(qDpLotacao.unidadeReceptora.isTrue())

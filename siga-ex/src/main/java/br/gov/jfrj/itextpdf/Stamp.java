@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -44,6 +45,7 @@ import br.gov.jfrj.itextpdf.LocalizaAnotacao.LocalizaAnotacaoResultado;
 import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.base.SigaHTTP;
 import br.gov.jfrj.siga.base.SigaMessages;
+import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 
 public class Stamp {
 	private static final String VALIDAR_ASSINATURA_URL = "/sigaex/app/validar-assinatura?pessoa=";
@@ -125,7 +127,8 @@ public class Stamp {
 				// do my transformations :
 				cb.transform(AffineTransform.getScaleInstance(scale, scale));
 
-				if (!internoProduzido) {
+				boolean isDocumentoPDS = StringUtils.startsWithIgnoreCase(sigla, CpConfiguracaoBL.SIGLA_ORGAO_PDS);
+				if (!internoProduzido && !isDocumentoPDS) {
 					cb.transform(AffineTransform.getTranslateInstance(pw * SAFETY_MARGIN, ph * SAFETY_MARGIN));
 					cb.transform(AffineTransform.getScaleInstance(1.0f - 2 * SAFETY_MARGIN, 1.0f - 2 * SAFETY_MARGIN));
 				}
