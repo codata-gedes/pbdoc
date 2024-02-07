@@ -179,7 +179,7 @@ public class Prop {
 		provider.addPublicProperty("/siga.smtp.porta", "25");
 		provider.addPublicProperty("/siga.smtp.usuario.remetente", "siga@projeto-siga.github.com");
 		provider.addPublicProperty("/siga.ambiente", "desenv");
-		provider.addPublicProperty("/siga.base.teste", "true");
+		provider.addPublicProperty("/siga.base.teste", String.valueOf(!isAmbienteReal()));
 		provider.addPublicProperty("/siga.devolucao.dias", null);
 		provider.addPublicProperty("/siga.jwt.cookie.domain", null);
 		provider.addPrivateProperty("/siga.jwt.secret");
