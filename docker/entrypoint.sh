@@ -55,6 +55,7 @@ configure_pbdoc() {
     sed_replace 'siga.ambiente' "$PBDOC_AMBIENTE"
     sed_replace 'siga.prefeitura' "$PBDOC_PREFEITURA"
     sed_replace 'siga.consulta.processos' "$PBDOC_CONSULTA_PROCESSOS"
+    sed_replace 'siga.consulta.processos.link' "$PBDOC_CONSULTA_PROCESSOS_LINK"
     sed_replace 'sigaex.modelos.cabecalho.titulo' "$PBDOC_CABECALHO_TITULO"
     sed_replace 'sigaex.modelos.cabecalho.subtitulo' "$PBDOC_CABECALHO_SUBTITULO"
     sed_replace 'sigaex.carimbo.texto.superior' "$PBDOC_CARIMBO_TEXTO_SUPERIOR"
