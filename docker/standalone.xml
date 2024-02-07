@@ -81,6 +81,7 @@
         <property name="siga.brasao.width" value="65"/>
         <property name="siga.brasao.height" value="70"/>
         <property name="siga.consulta.processos" value="false"/>
+        <property name="siga.consulta.processos.link" value="consultas.pbdoc.pb.gov.br"/>
     </system-properties>
     <management>
         <security-realms>
