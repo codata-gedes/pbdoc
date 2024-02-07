@@ -82,6 +82,20 @@
         <property name="siga.brasao.height" value="70"/>
         <property name="siga.consulta.processos" value="false"/>
         <property name="siga.consulta.processos.link" value="consultas.pbdoc.pb.gov.br"/>
+
+        <!-- URL serviços chamados via WS (opcionais porque existe autodetecção) -->
+        <property name="siga.service.endpoint" value="http://127.0.0.1:8080/siga/servicos/GiService?wsdl" />
+        <property name="siga.service.url" value="http://127.0.0.1:8080/siga/servicos/GiService" />
+
+        <property name="sigaex.service.endpoint" value="http://127.0.0.1:8080/sigaex/servicos/ExService?wsdl" />
+        <property name="sigaex.service.url" value="http://127.0.0.1:8080//sigaex/servicos/ExService" />
+
+        <property name="sigawf.service.endpoint" value="http://127.0.0.1:8080/sigawf/servicos/WfService?wsdl" />
+        <property name="sigawf.service.url" value="http://127.0.0.1:8080/sigawf/servicos/WfService" />
+
+        <property name="sigagc.service.endpoint" value="http://127.0.0.1:8080/sigagc/servicos/GcService?wsdl" />
+        <property name="sigagc.service.url" value="http://127.0.0.1:8080/sigagc/servicos/GcService" />
+        <!-- /URL serviços chamados via WS (opcionais porque existe autodetecção) -->
     </system-properties>
     <management>
         <security-realms>
