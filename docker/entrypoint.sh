@@ -4,6 +4,7 @@ set -e
 
 standalone_xml=$JBOSS_HOME/standalone/configuration/standalone.xml
 glowroot_properties=$JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
+jboss_standalone_conf=$JBOSS_HOME/bin/standalone.conf
 
 sed_replace() {
     property=$1
@@ -56,10 +57,10 @@ configure_glowroot() {
         exit 1
     fi
 
-    echo "# Configurações do Glowroot" >> glowroot_properties
-    echo "collector.address=${GLOWROOT_URL}" >> glowroot_properties
-    echo "collector.port=8181" >> glowroot_properties
-    echo 'JAVA_OPTS="$JAVA_OPTS -javaagent:${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.jar -Dglowroot.central.collector.address=${GLOWROOT_URL} -Dglowroot.agent.id=PBdoc-${PBDOC_AMBIENTE}:: -Dglowroot.properties.file=${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties"' >> ${JBOSS_HOME}/bin/standalone.conf
+    echo "# Configurações do Glowroot" >> $glowroot_properties
+    echo "collector.address=${GLOWROOT_URL}" >> $glowroot_properties
+    echo "collector.port=8181" >> $glowroot_properties
+    echo 'JAVA_OPTS="$JAVA_OPTS -javaagent:${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.jar -Dglowroot.central.collector.address=${GLOWROOT_URL} -Dglowroot.agent.id=PBdoc-${PBDOC_AMBIENTE}:: -Dglowroot.properties.file=${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties"' >> $jboss_standalone_conf
 }
 
 configure_pbdoc() {
