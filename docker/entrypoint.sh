@@ -53,9 +53,11 @@ configure_database() {
 
 configure_glowroot() {
     if [ -z "$GLOWROOT_URL" ]; then
-        echo 'Faltando $GLOWROOT_URL'
-        exit 1
+        echo 'Saltando configuração do Glowroot'
+        return
     fi
+
+    echo 'Configurando do Glowroot'
 
     echo "# Configurações do Glowroot" >> $glowroot_properties
     echo "collector.address=${GLOWROOT_URL}" >> $glowroot_properties
