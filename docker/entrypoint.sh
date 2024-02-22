@@ -3,6 +3,7 @@
 set -e
 
 standalone_xml=$JBOSS_HOME/standalone/configuration/standalone.xml
+glowroot_properties=$JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
 
 sed_replace() {
     property=$1
@@ -49,6 +50,18 @@ configure_database() {
     fi
 }
 
+configure_glowroot() {
+    if [ -z "$GLOWROOT_URL" ]; then
+        echo 'Faltando $GLOWROOT_URL'
+        exit 1
+    fi
+
+    echo "# Configurações do Glowroot" >> glowroot_properties
+    echo "collector.address=${GLOWROOT_URL}" >> glowroot_properties
+    echo "collector.port=8181" >> glowroot_properties
+    echo 'JAVA_OPTS="$JAVA_OPTS -javaagent:${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.jar -Dglowroot.central.collector.address=${GLOWROOT_URL} -Dglowroot.agent.id=PBdoc-${PBDOC_AMBIENTE}:: -Dglowroot.properties.file=${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties"' >> ${JBOSS_HOME}/bin/standalone.conf
+}
+
 configure_pbdoc() {
     sed_replace 'siga.base.url' "$PBDOC_BASE_URL"
     sed_replace 'siga.pagina.inicial.url' "$PBDOC_BASE_URL/sigaex/app/mesa"
@@ -83,6 +96,7 @@ configure_pbdoc() {
 }
 
 configure_database
+configure_glowroot
 configure_pbdoc
 
 exec $JBOSS_HOME/bin/standalone.sh -b 0.0.0.0

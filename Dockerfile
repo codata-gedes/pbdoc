@@ -50,6 +50,10 @@ RUN sed -i "s/\${JDBC_DRIVER_FILENAME}/${JDBC_DRIVER_FILENAME}/" ${JBOSS_HOME}/m
 # Diretório imagens
 COPY imagens /opt/pbdoc/imagens
 
+# config glowroot APM
+RUN curl -L https://github.com/glowroot/glowroot/releases/download/v0.14.1/glowroot-0.14.1-dist.zip -o /tmp/glowroot.zip && \
+unzip /tmp/glowroot.zip -d ${JBOSS_HOME}/standalone/lib/ext && \
+rm /tmp/glowroot.zip
 
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
 COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
