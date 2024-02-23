@@ -6,41 +6,21 @@ USER root
 
 WORKDIR /pbdoc
 
-COPY siga ./siga
-COPY siga-assinador ./siga-assinador
-COPY siga-autenticidade ./siga-autenticidade
 COPY siga-base ./siga-base
-COPY siga-cp ./siga-cp
-COPY siga-cp-sinc ./siga-cp-sinc
-COPY siga-documentacao ./siga-documentacao
-COPY siga-dump ./siga-dump
-COPY siga-ex ./siga-ex
-COPY sigaex ./sigaex
-COPY siga-ex-gsa ./siga-ex-gsa
-COPY siga-ex-sinc ./siga-ex-sinc
-COPY siga-ext ./siga-ext
-COPY siga-ext-cd-bluc ./siga-ext-cd-bluc
-COPY sigagc ./sigagc
-COPY siga-gc-gsa ./siga-gc-gsa
-COPY siga-integration-test ./siga-integration-test
-COPY siga-jwt ./siga-jwt
-COPY siga-ldap ./siga-ldap
-COPY siga-ldap-cli ./siga-ldap-cli
-COPY siga-le ./siga-le
-COPY siga-oidc ./siga-oidc
-COPY siga-play-proxy ./siga-play-proxy
-COPY sigapp ./sigapp
-COPY siga-rel ./siga-rel
-COPY siga-relarmaz ./siga-relarmaz
-COPY sigari ./sigari
-COPY siga-sinc-lib ./siga-sinc-lib
-COPY sigasr ./sigasr
-COPY sigatp ./sigatp
-COPY siga-vraptor-module ./siga-vraptor-module
-COPY siga-vraptor-module-old ./siga-vraptor-module-old
-COPY siga-wf ./siga-wf
-COPY sigawf ./sigawf
 COPY siga-ws ./siga-ws
+COPY siga-rel ./siga-rel
+COPY siga-cp ./siga-cp
+COPY siga-sinc-lib ./siga-sinc-lib
+COPY siga-ldap ./siga-ldap
+COPY siga-vraptor-module ./siga-vraptor-module
+COPY siga ./siga
+COPY sigawf ./sigawf
+COPY siga-wf ./siga-wf
+COPY sigaex ./sigaex
+COPY siga-ext ./siga-ext
+COPY siga-ex ./siga-ex
+COPY siga-jwt ./siga-jwt
+COPY siga-oidc ./siga-oidc
 
 COPY pom.xml settings.xml ./
 
@@ -90,19 +70,13 @@ COPY imagens /opt/pbdoc/imagens
 
 # config glowroot APM
 RUN curl -L https://github.com/glowroot/glowroot/releases/download/v0.14.1/glowroot-0.14.1-dist.zip -o /tmp/glowroot.zip && \
-unzip /tmp/glowroot.zip -d ${JBOSS_HOME}/standalone/lib/ext && \
-rm /tmp/glowroot.zip
+    unzip /tmp/glowroot.zip -d ${JBOSS_HOME}/standalone/lib/ext && \
+    rm /tmp/glowroot.zip && \
+    chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot && \
+    chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot
 
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
 COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
-
-RUN touch ${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties && \
-    chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties && \
-    chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
-
-RUN mkdir ${JBOSS_HOME}/standalone/lib/ext/glowroot/tmp && \
-    chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot/tmp && \
-    chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot/tmp
 
 COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
 
