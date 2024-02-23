@@ -95,9 +95,14 @@ rm /tmp/glowroot.zip
 
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
 COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
+
 RUN touch ${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties && \
     chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties && \
     chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
+
+RUN mkdir ${JBOSS_HOME}/standalone/lib/ext/glowroot/tmp && \
+    chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot/tmp && \
+    chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot/tmp
 
 COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
 
