@@ -4,8 +4,46 @@ ARG SIGA_VERSAO=develop
 
 USER root
 
-COPY . /pbdoc/
 WORKDIR /pbdoc
+
+COPY siga ./siga
+COPY siga-assinador ./siga-assinador
+COPY siga-autenticidade ./siga-autenticidade
+COPY siga-base ./siga-base
+COPY siga-cp ./siga-cp
+COPY siga-cp-sinc ./siga-cp-sinc
+COPY siga-documentacao ./siga-documentacao
+COPY siga-dump ./siga-dump
+COPY siga-ex ./siga-ex
+COPY sigaex ./sigaex
+COPY siga-ex-gsa ./siga-ex-gsa
+COPY siga-ex-sinc ./siga-ex-sinc
+COPY siga-ext ./siga-ext
+COPY siga-ext-cd-bluc ./siga-ext-cd-bluc
+COPY sigagc ./sigagc
+COPY siga-gc-gsa ./siga-gc-gsa
+COPY siga-integration-test ./siga-integration-test
+COPY siga-jwt ./siga-jwt
+COPY siga-ldap ./siga-ldap
+COPY siga-ldap-cli ./siga-ldap-cli
+COPY siga-le ./siga-le
+COPY siga-oidc ./siga-oidc
+COPY siga-play-proxy ./siga-play-proxy
+COPY sigapp ./sigapp
+COPY siga-rel ./siga-rel
+COPY siga-relarmaz ./siga-relarmaz
+COPY sigari ./sigari
+COPY siga-sinc-lib ./siga-sinc-lib
+COPY sigasr ./sigasr
+COPY sigatp ./sigatp
+COPY siga-vraptor-module ./siga-vraptor-module
+COPY siga-vraptor-module-old ./siga-vraptor-module-old
+COPY siga-wf ./siga-wf
+COPY sigawf ./sigawf
+COPY siga-ws ./siga-ws
+
+COPY pom.xml settings.xml ./
+
 RUN mvn clean package -Dmaven.test.skip -Dsiga.versao=${SIGA_VERSAO} -s settings.xml
 
 FROM docker.io/daggerok/jboss-eap-7.2:7.2.5-alpine
@@ -57,6 +95,9 @@ rm /tmp/glowroot.zip
 
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
 COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
+RUN touch ${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties && \
+    chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties && \
+    chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
 
 COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
 
