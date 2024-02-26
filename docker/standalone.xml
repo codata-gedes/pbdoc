@@ -155,7 +155,7 @@
     <profile>
         <subsystem xmlns="urn:jboss:domain:logging:6.0">
             <console-handler name="CONSOLE">
-                <level name="INFO"/>
+                <level name="WARN"/>
                 <formatter>
                     <named-formatter name="COLOR-PATTERN"/>
                 </formatter>
@@ -169,22 +169,25 @@
                 <append value="true"/>
             </periodic-rotating-file-handler>
             <logger category="io.undertow.request">
-                <level name="OFF"/>
+                <level name="WARN"/>
             </logger>
             <logger category="com.arjuna">
                 <level name="WARN"/>
             </logger>
             <logger category="org.jboss.as.config">
-                <level name="DEBUG"/>
+                <level name="ERROR"/>
             </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
             <logger category="jboss.jdbc.spy">
-                <level name="TRACE"/>
+                <level name="ERROR"/>
             </logger>
             <logger category="org.apache.cxf">
-                <level name="TRACE" />
+                <level name="WARN" />
+            </logger>
+            <logger category="br.gov.jfrj.siga">
+                <level name="INFO" />
             </logger>
             <root-logger>
                 <level name="INFO"/>
@@ -215,12 +218,12 @@
         <subsystem xmlns="urn:jboss:domain:core-management:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:5.0">
             <datasources>
-                <datasource jndi-name="java:/jboss/datasources/SigaCpDS" pool-name="SigaCpDS" enabled="true" spy="true">
+                <datasource jndi-name="java:/jboss/datasources/SigaCpDS" pool-name="SigaCpDS" enabled="true" spy="false">
                     <connection-url>jdbc:postgresql://172.17.0.1:5432/pbdoc</connection-url>
                     <driver>postgresql</driver>
                     <pool>
-                        <min-pool-size>4</min-pool-size>
-                        <max-pool-size>16</max-pool-size>
+                        <min-pool-size>8</min-pool-size>
+                        <max-pool-size>24</max-pool-size>
                     </pool>
                     <security>
                         <user-name>postgres</user-name>
@@ -236,12 +239,12 @@
                         <idle-timeout-minutes>5</idle-timeout-minutes>
                     </timeout>
                 </datasource>
-                <datasource jndi-name="java:/jboss/datasources/SigaExDS" pool-name="SigaExDS" enabled="true" spy="true">
+                <datasource jndi-name="java:/jboss/datasources/SigaExDS" pool-name="SigaExDS" enabled="true" spy="false">
                     <connection-url>jdbc:postgresql://172.17.0.1:5432/pbdoc</connection-url>
                     <driver>postgresql</driver>
                     <pool>
-                        <min-pool-size>4</min-pool-size>
-                        <max-pool-size>16</max-pool-size>
+                        <min-pool-size>8</min-pool-size>
+                        <max-pool-size>24</max-pool-size>
                     </pool>
                     <security>
                         <user-name>postgres</user-name>
@@ -257,11 +260,11 @@
                         <idle-timeout-minutes>5</idle-timeout-minutes>
                     </timeout>
                 </datasource>
-                <datasource jndi-name="java:/jboss/datasources/SigaWfDS" pool-name="SigaWfDS" enabled="true" spy="true">
+                <datasource jndi-name="java:/jboss/datasources/SigaWfDS" pool-name="SigaWfDS" enabled="true" spy="false">
                     <connection-url>jdbc:postgresql://172.17.0.1:5432/pbdoc</connection-url>
                     <driver>postgresql</driver>
                     <pool>
-                        <min-pool-size>4</min-pool-size>
+                        <min-pool-size>8</min-pool-size>
                         <max-pool-size>16</max-pool-size>
                     </pool>
                     <security>
@@ -601,7 +604,7 @@
                 <rewrite name="home" target="/siga" redirect="true" />
             </filters>
             <servlet-container name="default">
-                <jsp-config development="false"/>
+                <jsp-config development="false" tag-pooling="false" />
                 <websockets/>
             </servlet-container>
         </subsystem>
