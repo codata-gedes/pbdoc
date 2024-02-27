@@ -37,58 +37,82 @@
         <extension module="org.wildfly.extension.undertow"/>
     </extensions>
     <system-properties>
-        <property name="siga.jwt.secret" value="968e9163-49a5-4e7b-8a1d-c200e0ec98a9"/>
-        <property name="siga.sinc.password" value="968e9163-49a5-4e7b-8a1d-c200e0ec98a9"/>
-        <property name="sigaex.webdav.senha" value="968e9163-49a5-4e7b-8a1d-c200e0ec98a9"/>
-        <property name="siga.recaptcha.key" value="6LfVjNEZAAAAAKb0EH7HNaDVwsIevTC53yqy_EFz"/>
-        <property name="siga.recaptcha.pwd" value="6LfVjNEZAAAAAKb0EH7HNaDVwsIevTC53yqy_EFz"/>
-        <property name="siga.doc.acesso.limitado" value="true"/>
+        <property name="siga.consulta.processos" value="false"/>
+        <property name="siga.consulta.processos.link" value="consultas.pbdoc.pb.gov.br"/>
+        <property name="siga.jwt.secret" value="XXX"/>
+        <property name="siga.sinc.password" value="XXX"/>
+        <property name="sigaex.webdav.senha" value="XXX"/>
+        <property name="siga.recaptcha.key" value="XXX"/>
+        <property name="siga.recaptcha.pwd" value="XXX"/>
         <property name="siga.cabecalho.titulo" value="PBdoc"/>
         <property name="siga.cabecalho.logo" value="/siga/imagens/pbdoc-b.png"/>
-        <property name="sigaex.modelos.cabecalho.titulo" value="Paraíba"/>
-        <property name="sigaex.modelos.cabecalho.subtitulo" value="Governo do Estado"/>
+        <property name="siga.doc.acesso.limitado" value="true"/>
+        <property name="sigaex.modelos.cabecalho.titulo" value="ESTADO DA PARAÍBA"/>
+        <property name="sigaex.modelos.cabecalho.subtitulo" value="GOVERNO DO ESTADO"/>
+        <property name="sigaex.pdf.visualizador" value="default"/>
         <property name="siga.relat.titulo" value="Paraíba"/>
         <property name="siga.relat.subtitulo" value="Governo do Estado da Paraíba"/>
         <property name="sigaex.carimbo.texto.superior" value="Governo do Estado da Paraíba"/>
-        <property name="siga.smtp" value="emailserver"/>
-        <property name="siga.smtp.porta" value="1025"/>
+
+        <!-- Redis (cache opcional utilizada na API) -->
+        <!--
+        <property name="sigaex.redis.database" value="1"/>
+        <property name="sigaex.redis.master.host" value="redisserver"/>
+        <property name="sigaex.redis.master.port" value="6379"/>
+        <property name="sigaex.redis.password" value="XXX"/>
+        <property name="sigaex.redis.slave.host" value="redisserver"/>
+        <property name="sigaex.redis.slave.port" value="6379"/>
+        -->
+        <!-- /Redis (cache opcional utilizada na API) -->
+
+        <!-- Configuração de envios de e-mail -->
+        <property name="siga.smtp" value="gerencia.webmail.pb.gov.br"/>
+        <property name="siga.smtp.porta" value="587"/>
         <property name="siga.smtp.auth" value="true"/>
         <property name="siga.smtp.starttls.enable" value="false" />
-        <property name="siga.smtp.auth.usuario" value="siga"/>
-        <property name="siga.smtp.auth.senha" value="siga"/>
+        <property name="siga.smtp.auth.usuario" value="siga@codata.pb.gov.br"/>
+        <property name="siga.smtp.auth.senha" value="XXX"/>
         <property name="siga.smtp.debug" value="false"/>
-        <property name="siga.smtp.usuario.remetente" value="Administrador do PBdoc&lt;pbdoc@codata.pb.gov.br&gt;"/>
+        <property name="siga.smtp.usuario.remetente" value="Administrador do PBdoc&lt;siga@codata.pb.gov.br&gt;"/>
+        <!-- /Configuração de envios de e-mail -->
+
         <property name="siga.armazenamento.arquivo.tipo" value="TABELA"/>
         <property name="sigaex.upload.dir.temp" value="/tmp"/>
+
+        <!-- Flyway -->
         <property name="siga.flyway.migrate" value="false"/>
         <property name="siga.flyway.db" value="postgresql"/>
+        <!-- /Flyway -->
+
         <property name="siga.hibernate.dialect" value="br.gov.jfrj.siga.base.FixedPostgreSQL95Dialect"/>
-        <property name="sigaex.pdf.visualizador" value="default"/>
-        <property name="sigaex.assinador.externo.popup.url" value="http://127.0.0.1/assijus"/>
-        <property name="sigaex.carimbo.sistema" value="siga-docker"/>
-        <property name="sigaex.carimbo.url" value="http://127.0.0.1/assijus/api/v1"/>
-        <property name="sigaex.carimbo.public.key" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAllav1+eJ3w5Idge/vQ1zZSziGiuOUBviZhcw0JZ9Bg90zG7Uz3wFGQeKnG0DNTBKwjC3MHI7AZy4G+ji35J+gp+0aZLDkuwx17JDuJfuJe6gHRlfcm50McuLL0vaU5gQ2InAo7FssjuOuLp9c3FGBGmiDFK1vUhKwdvY14inYzrZaHSVsppSYX9zjnhQiQxRnLzFzkZsZkl/Orz2O9rvmJx048lcmnOiLvm3ge7Jq2KZHIYzdsw5F3VGtlhLFBZ49g6Rmp4ClgPtpwDOGj78oyJVxLW3XXN1VP1JnActFkNlmBNi+8cUZ8IX15j+FDOL9+tQR+FMC7wtHypshR5zVQIDAQAB"/>
-        <property name="pdf.tamanho.maximo" value="50000000"/>
-        <property name="siga.ambiente" value="desenv"/>
+
+        <!-- Assinatura digital de documentos -->
+        <property name="sigaex.assinador.externo.popup.url" value="http://127.0.0.1:8080/assijus"/>
+        <property name="sigaex.carimbo.sistema" value="pbdoc"/>
+        <property name="sigaex.carimbo.url" value="http://127.0.0.1:8080/assijus/api/v1"/>
+        <property name="sigaex.carimbo.public.key" value="XXX"/>
+
+        <property name="assijus.timestamp.issuer" value="http://127.0.0.1:8080/assijus" />
+        <property name="assijus.timestamp.private.key" value="XXX" />
+        <property name="assijus.timestamp.public.key" value="XXX" />
+        <!-- /Assinatura digital de documentos -->
+
+        <!-- Tamanho limite para upload de documentos externos -->
+        <property name="sigaex.pdf.tamanho.maximo" value="10485760" />
+        <!-- /Tamanho limite para upload de documentos externos -->
+
+        <property name="siga.ambiente" value="prod"/>
         <property name="siga.base.url" value="http://localhost:8080"/>
-        <property name="siga.favicon" value="/siga/imagens/pbdoc-favicon.ico"/>
-        <property name="siga.pagina.inicial.url" value="http://localhost:8080/sigaex/app/mesa"/>
+        <property name="siga.local.base.url" value="http://127.0.0.1:8080" />
         <property name="vizservice.url" value="http://127.0.0.1:8080/vizservice" />
         <property name="blucservice.url" value="http://127.0.0.1:8080/blucservice/api/v1" />
-        <property name="sigaex.diretorio.armazenamento.arquivos" value="/data/documentos"/>
-        <property name="siga.prefeitura" value="false"/>
-        <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>
-        <property name="siga.brasao.width" value="65"/>
-        <property name="siga.brasao.height" value="70"/>
-        <property name="siga.consulta.processos" value="false"/>
-        <property name="siga.consulta.processos.link" value="consultas.pbdoc.pb.gov.br"/>
 
         <!-- URL serviços chamados via WS (opcionais porque existe autodetecção) -->
         <property name="siga.service.endpoint" value="http://127.0.0.1:8080/siga/servicos/GiService?wsdl" />
         <property name="siga.service.url" value="http://127.0.0.1:8080/siga/servicos/GiService" />
 
         <property name="sigaex.service.endpoint" value="http://127.0.0.1:8080/sigaex/servicos/ExService?wsdl" />
-        <property name="sigaex.service.url" value="http://127.0.0.1:8080/sigaex/servicos/ExService" />
+        <property name="sigaex.service.url" value="http://127.0.0.1:8080//sigaex/servicos/ExService" />
 
         <property name="sigawf.service.endpoint" value="http://127.0.0.1:8080/sigawf/servicos/WfService?wsdl" />
         <property name="sigawf.service.url" value="http://127.0.0.1:8080/sigawf/servicos/WfService" />
@@ -97,8 +121,18 @@
         <property name="sigagc.service.url" value="http://127.0.0.1:8080/sigagc/servicos/GcService" />
         <!-- /URL serviços chamados via WS (opcionais porque existe autodetecção) -->
 
-        <property name="assijus.timestamp.private.key" value=""/>
-        <property name="assijus.timestamp.public.key" value=""/>
+        <property name="sigaex.diretorio.armazenamento.arquivos" value="/data/documentos"/>
+        <property name="siga.favicon" value="/siga/imagens/pbdoc-favicon.ico"/>
+        <property name="siga.pagina.inicial.url" value="http://localhost:8080/sigaex/app/mesa"/>
+        <property name="siga.base.teste" value="false" />
+
+        <!-- Prefeituras -->
+        <property name="siga.prefeitura" value="false"/>
+        <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>
+        <property name="siga.brasao.width" value="65"/>
+        <property name="siga.brasao.height" value="70"/>
+        <!-- /Prefeituras -->
+
     </system-properties>
     <management>
         <security-realms>
