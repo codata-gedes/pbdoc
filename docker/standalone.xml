@@ -64,9 +64,9 @@
         <property name="siga.flyway.db" value="postgresql"/>
         <property name="siga.hibernate.dialect" value="br.gov.jfrj.siga.base.FixedPostgreSQL95Dialect"/>
         <property name="sigaex.pdf.visualizador" value="default"/>
-        <property name="sigaex.assinador.externo.popup.url" value="https://ittrufusion.appspot.com"/>
+        <property name="sigaex.assinador.externo.popup.url" value="http://127.0.0.1/assijus"/>
         <property name="sigaex.carimbo.sistema" value="siga-docker"/>
-        <property name="sigaex.carimbo.url" value="https://ittrufusion.appspot.com/api/v1"/>
+        <property name="sigaex.carimbo.url" value="http://127.0.0.1/assijus/api/v1"/>
         <property name="sigaex.carimbo.public.key" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAllav1+eJ3w5Idge/vQ1zZSziGiuOUBviZhcw0JZ9Bg90zG7Uz3wFGQeKnG0DNTBKwjC3MHI7AZy4G+ji35J+gp+0aZLDkuwx17JDuJfuJe6gHRlfcm50McuLL0vaU5gQ2InAo7FssjuOuLp9c3FGBGmiDFK1vUhKwdvY14inYzrZaHSVsppSYX9zjnhQiQxRnLzFzkZsZkl/Orz2O9rvmJx048lcmnOiLvm3ge7Jq2KZHIYzdsw5F3VGtlhLFBZ49g6Rmp4ClgPtpwDOGj78oyJVxLW3XXN1VP1JnActFkNlmBNi+8cUZ8IX15j+FDOL9+tQR+FMC7wtHypshR5zVQIDAQAB"/>
         <property name="pdf.tamanho.maximo" value="50000000"/>
         <property name="siga.ambiente" value="desenv"/>
