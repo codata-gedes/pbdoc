@@ -13,8 +13,11 @@ import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
+import org.jboss.logging.Logger;
 
 public class LocalizaAnotacao {
+
+	private static final Logger log = Logger.getLogger(LocalizaAnotacao.class);
 
 	public static List<LocalizaAnotacaoResultado> localizar(PDDocument doc, List<String> seek) {
 		List<LocalizaAnotacaoResultado> l = new ArrayList<>();
@@ -59,7 +62,7 @@ public class LocalizaAnotacao {
 									l.add(r);
 								}
 							}
-							System.out.println("Page " + pageNum + ":" + uri);
+							log.debugv("Page {0}: {1}", pageNum, uri);
 						}
 
 						// System.out.println("Page " + pageNum + ":'" + urlText.trim() + "'=" +

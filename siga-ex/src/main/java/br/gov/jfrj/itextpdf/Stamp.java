@@ -1,5 +1,7 @@
 package br.gov.jfrj.itextpdf;
 
+import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
+
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -18,6 +20,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.jboss.logging.Logger;
 
 import com.lowagie.text.Annotation;
 import com.lowagie.text.Document;
@@ -48,6 +51,9 @@ import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
 
 public class Stamp {
+
+	private static final Logger log = Logger.getLogger(Stamp.class);
+
 	private static final String VALIDAR_ASSINATURA_URL = "/sigaex/app/validar-assinatura?pessoa=";
 	private static float QRCODE_LEFT_MARGIN_IN_CM = 3.0f;
 	private static float QRCODE_SIZE_IN_CM = 1.5f;
@@ -452,21 +458,19 @@ public class Stamp {
 			Set<String> set = new HashSet<>();
 
 			for (LocalizaAnotacaoResultado i : l) {
-				System.out.println("achei: " + i.page + ", (" + i.lowerLeftX + ", " + i.upperRightY + ")");
-				if (set.contains(i.uri))
+				log.debugv("Stamp: {0}, ({1}, {2})", i.page, i.lowerLeftX, i.upperRightY);
+				if (set.contains(i.uri)) {
 					continue;
+				}
 				set.add(i.uri);
-				System.out.println("processando: " + i.page + ", (" + i.lowerLeftX + ", " + i.upperRightY + ")");
 
 				PDPage page = doc.getPage(i.page - 1);
-
-				PDPageContentStream contents = new PDPageContentStream(doc, page, true, true);
+				PDPageContentStream contents = new PDPageContentStream(doc, page, APPEND, true);
 				float height = i.height * 1.2f;
 				float width = pdImage.getWidth() * (height / pdImage.getHeight());
 				float lowerLeftX = (i.lowerLeftX + i.width / 2) - width / 2;
 				float upperRightY = i.upperRightY;
 				contents.drawImage(pdImage, lowerLeftX, upperRightY, width, height);
-				System.out.println("Image inserted");
 				contents.close();
 			}
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -477,7 +481,6 @@ public class Stamp {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
 	}
 
 	public static java.awt.Image createQRCodeImage(String url) {

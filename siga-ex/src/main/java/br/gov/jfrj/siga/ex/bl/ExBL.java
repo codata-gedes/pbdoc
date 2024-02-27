@@ -22,7 +22,6 @@ import static br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL.SIGLA_ORGAO_PDS;
 import static br.gov.jfrj.siga.ex.ExMobil.isMovimentacaoComOrigemPeloBotaoDeRestricaoDeAcesso;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,7 +46,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -401,11 +399,10 @@ public class ExBL extends CpBL {
 				DpPessoa pess = mov.getResp();
 				DpLotacao lota = mov.getLotaResp();
 
-				System.out.println();
-				System.out.println(doc.getCodigo() + " (" + doc.getIdDoc() + ")");
+				log.debug(doc.getCodigo() + " (" + doc.getIdDoc() + ")");
 
 				if (!Ex.getInstance().getComp().podeArquivarCorrente(pess, lota, doc.getMobilGeral()))
-					System.out.println("NAO PODE");
+					log.debug("NAO PODE");
 				else if (efetivar)
 					Ex.getInstance().getBL().arquivarCorrente(pess, lota, doc.getMobilGeral(), mov.getDtIniMov(), null,
 							pess, false);
@@ -414,7 +411,7 @@ public class ExBL extends CpBL {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(index + " itens; " + (System.currentTimeMillis() - ini) + " ms");
+		log.debug(index + " itens; " + (System.currentTimeMillis() - ini) + " ms");
 	}
 
 	public void marcar(ExDocumento doc) {
@@ -446,7 +443,7 @@ public class ExBL extends CpBL {
 		try {
 			ExDao.commitTransacao();
 		} catch (Throwable e) {
-			System.out.println("Erro ao contar o número de páginas do documento." + doc);
+			log.debug("Erro ao contar o número de páginas do documento." + doc);
 			e.printStackTrace();
 		}
 
@@ -469,7 +466,7 @@ public class ExBL extends CpBL {
 		try {
 			ExDao.commitTransacao();
 		} catch (Throwable e) {
-			System.out.println("Erro ao contar o número de páginas da movimentação." + mov);
+			log.debug("Erro ao contar o número de páginas da movimentação." + mov);
 			e.printStackTrace();
 		}
 
@@ -497,7 +494,7 @@ public class ExBL extends CpBL {
 						dao().gravar(m);
 					}
 				} catch (Throwable e) {
-					System.out.println("Erro ao marcar o doc " + doc);
+					log.debug("Erro ao marcar o doc " + doc);
 					e.printStackTrace();
 				}
 				if (index % 50 == 0) {
@@ -508,8 +505,7 @@ public class ExBL extends CpBL {
 			dao().em().getTransaction().commit();
 			dao().em().clear();
 			long duracao = System.currentTimeMillis() - inicio;
-			System.out.println();
-			System.out.println(new SimpleDateFormat("HH:mm:ss").format(new Date()) + " " + String.valueOf(index)
+			log.debug(new SimpleDateFormat("HH:mm:ss").format(new Date()) + " " + String.valueOf(index)
 					+ " numerados");
 		} while (list.size() > 0);
 
@@ -2118,7 +2114,6 @@ public class ExBL extends CpBL {
 				break;
 			String p = s.substring(start, end + 8);
 			ps += p;
-			// System.out.println(p);
 		}
 		ExPartes partes = ExPartes.unmarshall("<partes>" + ps + "</partes>");
 		return partes;
@@ -3332,7 +3327,7 @@ public class ExBL extends CpBL {
 			try {
 				Correio.enviar(null, destinatario, assunto, assunto, conteudoHTML);
 			} catch (Exception e) {
-				System.out.println("Problemas ao enviar e-mail para usuário externo assinar documento. Erro: " + e.getMessage());
+				log.debug("Problemas ao enviar e-mail para usuário externo assinar documento. Erro: " + e.getMessage());
 			}
 		}				
 	}
@@ -3383,7 +3378,6 @@ public class ExBL extends CpBL {
 			
 			Date dt = dao().dt();
 
-			// System.out.println(System.currentTimeMillis() + " - INI gravar");
 			iniciarAlteracao();
 
 			if (doc.getCadastrante() == null) {
@@ -3442,16 +3436,9 @@ public class ExBL extends CpBL {
 			//try {
 				processar(doc, false, false);
 			//} catch (Throwable t) {
-			//	System.out.println("gravação doc " + doc.getCodigo() + ", "
-			//			+ new Date().toString() + " - erro na formatação - "
-			//			+ t.getMessage());
 			//	t.printStackTrace();
 			//}
 
-			// System.out.println("monitorando gravacao IDDoc " + doc.getIdDoc()
-			// + ", PESSOA " + doc.getCadastrante().getIdPessoa()
-			// + ". Terminou processar: "
-			// + (System.currentTimeMillis() - tempoIni));
 			tempoIni = System.currentTimeMillis();
 
 			processarResumo(doc);
@@ -3514,10 +3501,6 @@ public class ExBL extends CpBL {
 			 * fim da alteracao
 			 */
 
-			// System.out.println("monitorando gravacao IDDoc " + doc.getIdDoc()
-			// + ", PESSOA " + doc.getCadastrante().getIdPessoa()
-			// + ". Terminou commit gravacao: "
-			// + (System.currentTimeMillis() - tempoIni));
 			tempoIni = System.currentTimeMillis();
 		} catch (final Exception e) {
 			log.error("Não foi possível gravar o documento", e);
@@ -3530,7 +3513,6 @@ public class ExBL extends CpBL {
 			else
 				throw new RuntimeException("Erro na gravação", e);
 		}
-		// System.out.println(System.currentTimeMillis() + " - FIM gravar");
 		return doc;
 	}
 
@@ -5334,9 +5316,6 @@ public class ExBL extends CpBL {
 		Map<String, Object> params = new TreeMap<String, Object>();
 		ProcessadorModelo p = getProcessadorModeloJsp();
 
-		// System.out.println(System.currentTimeMillis() + " - INI
-		// processarModelo");
-
 		// Parsear o registro de dados da entrevista que esta urlencoded
 		// e gravar cada um dos valores no mapa de parametros
 		if (formParams != null) {
@@ -7060,8 +7039,6 @@ public class ExBL extends CpBL {
 			}
 		}
 		if (clazz.getSuperclass().getSuperclass() != null) {
-			// System.out.println("*** Classe: " + clazz.getName() + " - "
-			// + clazz.getSuperclass().getName());
 			getImplementationDeep(o, clazz.getSuperclass(), set);
 		}
 		return o;
