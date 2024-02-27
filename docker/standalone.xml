@@ -73,8 +73,8 @@
         <property name="siga.base.url" value="http://localhost:8080"/>
         <property name="siga.favicon" value="/siga/imagens/pbdoc-favicon.ico"/>
         <property name="siga.pagina.inicial.url" value="http://localhost:8080/sigaex/app/mesa"/>
-        <property name="vizservice.url" value="http://vizservice:8080" />
-        <property name="blucservice.url" value="http://blucservice:8080/blucservice/api/v1" />
+        <property name="vizservice.url" value="http://127.0.0.1:8080/vizservice" />
+        <property name="blucservice.url" value="http://127.0.0.1:8080/blucservice/api/v1" />
         <property name="sigaex.diretorio.armazenamento.arquivos" value="/data/documentos"/>
         <property name="siga.prefeitura" value="false"/>
         <property name="siga.prefeitura.cabecalho" value="PREFEITURA MUNICIPAL"/>
@@ -88,7 +88,7 @@
         <property name="siga.service.url" value="http://127.0.0.1:8080/siga/servicos/GiService" />
 
         <property name="sigaex.service.endpoint" value="http://127.0.0.1:8080/sigaex/servicos/ExService?wsdl" />
-        <property name="sigaex.service.url" value="http://127.0.0.1:8080//sigaex/servicos/ExService" />
+        <property name="sigaex.service.url" value="http://127.0.0.1:8080/sigaex/servicos/ExService" />
 
         <property name="sigawf.service.endpoint" value="http://127.0.0.1:8080/sigawf/servicos/WfService?wsdl" />
         <property name="sigawf.service.url" value="http://127.0.0.1:8080/sigawf/servicos/WfService" />
@@ -96,6 +96,9 @@
         <property name="sigagc.service.endpoint" value="http://127.0.0.1:8080/sigagc/servicos/GcService?wsdl" />
         <property name="sigagc.service.url" value="http://127.0.0.1:8080/sigagc/servicos/GcService" />
         <!-- /URL serviços chamados via WS (opcionais porque existe autodetecção) -->
+
+        <property name="assijus.timestamp.private.key" value=""/>
+        <property name="assijus.timestamp.public.key" value=""/>
     </system-properties>
     <management>
         <security-realms>
