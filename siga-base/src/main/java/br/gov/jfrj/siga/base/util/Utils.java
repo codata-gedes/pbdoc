@@ -21,8 +21,22 @@ import br.gov.jfrj.siga.base.Prop;
 public class Utils {
 
 	private static final Logger log = Logger.getLogger(Utils.class);
-
+	private static final byte[] brasao;
+	
 	private Utils() {}
+	
+	static {
+		final String brasaoPath= Prop.get("/siga.base.imagem");
+		final String brasaoFilename = "brasao.png";
+
+		File brasaoFile = new File(brasaoPath, brasaoFilename);
+
+		try {
+			brasao = Files.readAllBytes(brasaoFile.toPath());
+		} catch (IOException exception) {
+			throw new AplicacaoException("Não foi possível carregar a imagem do brasão", 0, exception);
+		}
+	}
 
 	/**
 	 * @param map
@@ -83,16 +97,7 @@ public class Utils {
 	} 
 	
 	public static byte[] getImagemBrasao(){
-		final String brasaoPath= Prop.get("/siga.base.imagem");
-		final String brasaoFilename = "brasao.png";
-
-        File brasaoFile = new File(brasaoPath, brasaoFilename);
-        
-        try {
-			return Files.readAllBytes(brasaoFile.toPath());
-		} catch (IOException exception) {
-			throw new AplicacaoException("Não foi possível carregar a imagem do brasão", 0, exception);
-		}
+		return brasao;
 	}
 	
 }
