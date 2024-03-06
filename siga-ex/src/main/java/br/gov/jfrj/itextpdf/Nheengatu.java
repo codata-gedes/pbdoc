@@ -22,15 +22,24 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import com.aryjr.nheengatu.pdf.HTML2PDFParser;
 import com.aryjr.nheengatu.pdf.PDFDocument;
+
+import org.jboss.logging.Logger;
 
 import br.gov.jfrj.siga.base.util.Texto;
 
 public class Nheengatu implements ConversorHtml {
 
 	private final HTML2PDFParser parser;
+	private static final Logger log = Logger.getLogger(Nheengatu.class);
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public Nheengatu() {
 		parser = new HTML2PDFParser();
@@ -46,26 +55,28 @@ public class Nheengatu implements ConversorHtml {
 						"FIM PRIMEIRO RODAPE -->"), extract(sHtml,
 						"<!-- INICIO CABECALHO", "FIM CABECALHO -->"), extract(
 						sHtml, "<!-- INICIO RODAPE", "FIM RODAPE -->"));
-
-		
 		
 		final PDFDocument pdf = parser.getPdf();
-		// pdf.generateFile(response.getOutputStream());
-
-//		System.out.println("Processamento: terminou nheengatu extract cabecalhos");
 		
-		pdf.generateFile(bo);
+		final Future<?> future = executor.submit(() -> {
+			try {
+				pdf.generateFile(bo);
+			} catch (Exception e) {
+				log.debug("Erro na geração do PDF: " + e.getMessage());
+			}
+		});
+        try {
+            future.get(5, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            log.debug("Erro na geração do PDF: timeout exception. " + e.getMessage());
+			throw new Exception(e);
+        } finally {
+            executor.shutdown();
+        }
 
-//		System.out.println("Processamento: terminou nheengatu generate file");
-		
-		// System.out.println(System.currentTimeMillis() + " - FIM
-		// generatePdf");
 		return bo.toByteArray();
 		} catch(Throwable t){
-//			System.out.println("Processamento: stacktrace nheengatu.converter");
-//			System.out.println("mensagem::::" + t.getMessage());
-//			System.out.println("causa::::" + t.getCause());
-//			t.printStackTrace();
 			throw new Exception(t);
 		}
 	}
