@@ -211,7 +211,9 @@ public class PDFDocument extends com.aryjr.nheengatu.document.Document {
 			final PdfWriter writer = PdfWriter.getInstance(document, out);
 			writer.setPageEvent(new PDFPageBreak(writer, document,
 					headFirstPage, footFirstPage, head, foot));
-			document.open();
+			if (!document.isOpen()) {
+				document.open();
+			}
 			final MultiColumnText mct = new MultiColumnText();
 			// set up 3 even columns with 10pt space between
 			mct.addRegularColumns(document.left(), document.right(), 0f, 1);
@@ -221,7 +223,7 @@ public class PDFDocument extends com.aryjr.nheengatu.document.Document {
 
 			// Extracting the document content
 			extractVisibleComponents(body, document, mct, null, null);
-
+	
 			document.add(mct);
 			document.close();
 		} catch (final DocumentException de) {
