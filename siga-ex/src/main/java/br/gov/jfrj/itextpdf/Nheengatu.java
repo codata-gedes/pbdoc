@@ -39,14 +39,13 @@ public class Nheengatu implements ConversorHtml {
 
 	private final HTML2PDFParser parser;
 	private static final Logger log = Logger.getLogger(Nheengatu.class);
-	private final ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final int TIMEOUT_SECONDS = 5;
 
 	public Nheengatu() {
 		parser = new HTML2PDFParser();
 	}
 
 	public byte[] converter(String sHtml, byte output) throws Exception {
-		// TODO Auto-generated method stub
 		try (ByteArrayOutputStream bo = new ByteArrayOutputStream()) {
 		parser.parse(new ByteArrayInputStream(sHtml.getBytes("utf-8")),
 				extract(sHtml, "<!-- INICIO PRIMEIRO CABECALHO",
@@ -58,6 +57,7 @@ public class Nheengatu implements ConversorHtml {
 		
 		final PDFDocument pdf = parser.getPdf();
 		
+		final ExecutorService executor = Executors.newSingleThreadExecutor();
 		final Future<?> future = executor.submit(() -> {
 			try {
 				pdf.generateFile(bo);
@@ -66,13 +66,16 @@ public class Nheengatu implements ConversorHtml {
 			}
 		});
         try {
-            future.get(5, TimeUnit.SECONDS);
+            future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
             future.cancel(true);
             log.debug("Erro na geração do PDF: timeout exception. " + e.getMessage());
-			throw new Exception(e);
+			throw new Exception("Timeout na geração do PDF. " + e.getMessage(), e);
+        } catch (Exception e) {
+            future.cancel(true);
+			throw new Exception("Erro na geração do PDF. " + e.getMessage(), e);
         } finally {
-            executor.shutdown();
+        	shutdownAndAwaitTermination(executor);
         }
 
 		return bo.toByteArray();
@@ -89,5 +92,19 @@ public class Nheengatu implements ConversorHtml {
 			return null;
 		return new ByteArrayInputStream(sResult.getBytes("utf-8"));
 	}
-
+	
+	
+	void shutdownAndAwaitTermination(ExecutorService executor) {
+		executor.shutdown();
+		try {
+			if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
+				executor.shutdownNow();
+				if (!executor.awaitTermination(1, TimeUnit.SECONDS))
+					log.debug("Erro na geração do PDF: timeout exception.");
+				}
+			} catch (InterruptedException ie) {
+				executor.shutdownNow();
+				Thread.currentThread().interrupt();
+				}
+		 }
 }

@@ -1974,7 +1974,7 @@ public class ExDocumentoController extends ExController {
 			}
 
 		} catch (final Exception e) {
-			throw new RuntimeException("Erro na gravação", e);
+			throw new AplicacaoException(e.getMessage());
 		}
 
 		if (param("ajax") != null && param("ajax").equals("true")) {

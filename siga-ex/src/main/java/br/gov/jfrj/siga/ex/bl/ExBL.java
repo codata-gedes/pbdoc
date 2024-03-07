@@ -3505,13 +3505,7 @@ public class ExBL extends CpBL {
 		} catch (final Exception e) {
 			log.error("Não foi possível gravar o documento", e);
 			cancelarAlteracao();
-			Throwable t = e.getCause();
-			if (t != null && t instanceof InvocationTargetException)
-				t = t.getCause();
-			if (t != null && t instanceof AplicacaoException)
-				throw (AplicacaoException) t;
-			else
-				throw new RuntimeException("Erro na gravação", e);
+			throw new RuntimeException("Erro na gravação. " + e.getMessage(), e);
 		}
 		return doc;
 	}
@@ -5272,9 +5266,10 @@ public class ExBL extends CpBL {
 					try {
 						pdf = Documento.generatePdf(strHtml, conversor);
 					} catch (Exception e) {
-						throw new RuntimeException(
-								"Erro na geração do PDF. Por favor, verifique se existem recursos de formatação não suportados. Para eliminar toda a formatação do texto clique em voltar e depois, no editor, clique no botõo de 'Selecionar Tudo' e depois no botão de 'Remover Formatação'.",
-								e);
+						throw new AplicacaoException("Erro na geração do PDF. "
+								+ "Por favor, verifique se existem recursos de formatação não suportados. "
+								+ "Para eliminar toda a formatação do texto clique em voltar e depois, no editor, clique no botão de 'Selecionar Tudo' "
+								+ "e depois no botão de 'Remover Formatação'.");
 					}
 					doc.setConteudoBlobPdf(pdf);
 				}
@@ -5296,7 +5291,7 @@ public class ExBL extends CpBL {
 			if (gravar && transacao) {
 				cancelarAlteracao();
 			}
-			throw new RuntimeException("Erro na gravação", e);
+			throw new RuntimeException("Erro na gravação. " + e.getMessage(), e);
 		}
 	}
 
