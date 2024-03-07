@@ -5267,7 +5267,7 @@ public class ExBL extends CpBL {
 						pdf = Documento.generatePdf(strHtml, conversor);
 					} catch (Exception e) {
 						throw new AplicacaoException("Erro na geração do PDF. "
-								+ "Por favor, verifique se existem recursos de formatação não suportados. "
+								+ "Por favor, evitar colar texto formato em outro editor, pois há recursos de formatação não suportados pelo PBdoc. "
 								+ "Para eliminar toda a formatação do texto clique em voltar e depois, no editor, clique no botão de 'Selecionar Tudo' "
 								+ "e depois no botão de 'Remover Formatação'.");
 					}
