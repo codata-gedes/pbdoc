@@ -39,7 +39,7 @@ public class Nheengatu implements ConversorHtml {
 
 	private final HTML2PDFParser parser;
 	private static final Logger log = Logger.getLogger(Nheengatu.class);
-	private final int TIMEOUT_SECONDS = 5;
+	private final int TIMEOUT_SECONDS = 32;
 
 	public Nheengatu() {
 		parser = new HTML2PDFParser();
@@ -65,6 +65,7 @@ public class Nheengatu implements ConversorHtml {
 				log.debug("Erro na geração do PDF: " + e.getMessage());
 			}
 		});
+
         try {
             future.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
@@ -105,6 +106,6 @@ public class Nheengatu implements ConversorHtml {
 			} catch (InterruptedException ie) {
 				executor.shutdownNow();
 				Thread.currentThread().interrupt();
-				}
+			}
 		 }
 }
