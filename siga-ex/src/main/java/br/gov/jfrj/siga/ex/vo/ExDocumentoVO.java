@@ -725,8 +725,9 @@ public class ExDocumentoVO extends ExVO {
 			// documentos finalizados
 			if (mob.temAnexos()) {
 				vo.addAcao("script_key", "Assinar Anexos da Via",
-						"/app/expediente/mov", "assinarAnexos", true, null,
-						"assinandoAnexosGeral=true&sigla=" + getSigla(), null,
+						"/app/expediente/mov", "assinarAnexos", 
+						Ex.getInstance().getComp().podeAssinar(titular, lotaTitular, mob), 
+						null, "assinandoAnexosGeral=true&sigla=" + getSigla(), null,
 						null, null);
 			}
 		}
