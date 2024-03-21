@@ -2360,7 +2360,7 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 				   || mob.doc().getLotaCadastrante().equivale(lotaTitular)				        
 				   || (mob.doc().getLotaSubscritor() != null && mob.doc().getLotaSubscritor().equivale(lotaTitular))
 			       || (mob.doc().getSubscritor() != null &&  mob.doc().getSubscritor().equivale(titular))) // subscritor é null para documentos externos
-		       && getConf().podePorConfiguracao(mob.doc().getExModelo(), CpTipoConfiguracao.TIPO_CONFIG_CRIAR_VIA);
+				&& getConf().podePorConfiguracao(titular, lotaTitular, mob.doc().getExFormaDocumento(), CpTipoConfiguracao.TIPO_CONFIG_CRIAR_VIA);
 	}
 
 	/**

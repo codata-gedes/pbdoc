@@ -78,14 +78,14 @@ function sbmt(offset) {
 <br>
 <table  class="table table-sm table-striped">
 	<thead class="${thead_color}">
-		<th align="center">Sigla</th>
+		<th align="center">ID</th>
 		<th align="left">Nome</th>
 	</thead>
 	<siga:paginador maxItens="10" maxIndices="10" totalItens="${tamanho}"
 		itens="${itens}" var="item">
 		<tr class="${evenorodd}">
 			<td width="10%" align="center"><a
-				href="javascript: ${parteFuncao}.retorna_${propriedadeClean}('${item.id}','${item.sigla}','${item.descricao}');">${item.sigla}</a></td>
+				href="javascript: ${parteFuncao}.retorna_${propriedadeClean}('${item.id}','${item.sigla}','${item.descricao}');">${item.id}</a></td>
 			<td width="90%" align="left">${item.descricao}</td>
 		</tr>
 	</siga:paginador>
