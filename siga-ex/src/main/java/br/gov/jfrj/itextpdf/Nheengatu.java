@@ -20,6 +20,7 @@ package br.gov.jfrj.itextpdf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutorService;
@@ -63,6 +64,7 @@ public class Nheengatu implements ConversorHtml {
 				pdf.generateFile(bo);
 			} catch (Exception e) {
 				log.debug("Erro na geração do PDF: " + e.getMessage());
+				throw new RuntimeException("Erro na geração do PDF. " + e.getMessage(), e);
 			}
 		});
 
