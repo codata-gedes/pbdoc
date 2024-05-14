@@ -118,6 +118,8 @@ import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
 import br.gov.jfrj.siga.util.ListaHierarquica;
 import br.gov.jfrj.siga.util.ListaHierarquicaItem;
 import br.gov.jfrj.siga.vraptor.builder.BuscaDocumentoBuilder;
+import br.gov.jfrj.siga.base.log.*;
+import br.gov.jfrj.siga.base.log.AccessLogger;
 
 @Controller
 public class ExDocumentoController extends ExController {
@@ -1461,7 +1463,12 @@ public class ExDocumentoController extends ExController {
 	@Get({ "/app/expediente/doc/exibir", "/expediente/doc/exibir.action" })
 	public void exibe(final boolean conviteEletronico, final String sigla,
 			final ExDocumentoDTO exDocumentoDTO, final Long idmob, final Long idVisualizacao, boolean exibirReordenacao)
-			throws Exception {		
+			throws Exception {
+		
+		//log aqui
+		AccessLogger loggerInstance = new AccessLogger();
+		loggerInstance.accessUser();
+		
 		final boolean recebimentoAutomatico = Prop.getBool("recebimento.automatico");
 		boolean recebimentoPendente = false;
 		
@@ -1548,6 +1555,11 @@ public class ExDocumentoController extends ExController {
 		result.include("recebimentoPendente", recebimentoPendente);		
 		result.include("subscritorSel", subscritorSel);
 		result.include("lotaSubscritorSel", lotaSubscritorSel);
+	}
+
+	private void AcessoLogger() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Get("app/expediente/doc/exibirProcesso")
