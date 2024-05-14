@@ -72,6 +72,7 @@ import br.gov.jfrj.siga.base.RegraNegocioException;
 import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.base.SigaModal;
 import br.gov.jfrj.siga.base.TipoResponsavelEnum;
+import br.gov.jfrj.siga.base.log.AccessLogger;
 import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.base.util.Utils;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
@@ -187,12 +188,11 @@ public class ExMovimentacaoController extends ExController {
 
 	@Get("app/expediente/mov/assinarAnexos")
 	public void assinarAnexos(final String sigla, final boolean assinandoAnexosGeral) {
+		AccessLogger.logAcesso(getRequest(), sigla);
+		
 		final BuscaDocumentoBuilder documentoBuilder = BuscaDocumentoBuilder.novaInstancia().setSigla(sigla);
-
 		buscarDocumento(documentoBuilder);
 		final ExMobil mob = documentoBuilder.getMob();
-
-		final ExMovimentacaoBuilder movimentacaoBuilder = ExMovimentacaoBuilder.novaInstancia().setMob(mob);
 
 		final ExMobilVO mobilVO = new ExMobilVO(mob, getCadastrante(), getTitular(),
 				getLotaTitular(), true, ExTipoMovimentacao.TIPO_MOVIMENTACAO_ANEXACAO, false);
@@ -618,9 +618,9 @@ public class ExMovimentacaoController extends ExController {
 	@Transacional
 	@Get("app/expediente/mov/assinar")
 	public void aAssinar(String sigla, Boolean autenticando) throws Exception {
-		BuscaDocumentoBuilder builder = BuscaDocumentoBuilder.novaInstancia()
-				.setSigla(sigla);
-
+		AccessLogger.logAcesso(getRequest(), sigla);
+		
+		BuscaDocumentoBuilder builder = BuscaDocumentoBuilder.novaInstancia().setSigla(sigla);
 		ExDocumento doc = buscarDocumento(builder);
 		
 		if (Strings.isNullOrEmpty(doc.getDescrDocumento()))
