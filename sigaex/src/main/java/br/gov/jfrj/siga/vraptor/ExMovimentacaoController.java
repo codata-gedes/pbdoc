@@ -272,32 +272,21 @@ public class ExMovimentacaoController extends ExController {
 		} catch (IOException ex) {
 			throw new AplicacaoException("Falha ao manipular aquivo", 1, ex);
 		}
-
-		Integer numPaginas = mov.getContarNumeroDePaginas();
 		
 		if (mov.getContarNumeroDePaginas() == null || mov.getArquivoComStamp() == null) {
-			result.include("mensagemUsuario", "O arquivo "+  arquivo.getFileName() + " está corrompido. Favor gerá-lo novamente antes de anexar.");
-			result.redirectTo(MessageFormat.format("anexar?sigla={0}", sigla));
-			return;
+			throw new AplicacaoException("O arquivo '"+  arquivo.getFileName() + "' está corrompido ou protegido. Favor gerá-lo novamente antes de anexar.");
 		}
 
 		if (mob.isVolumeEncerrado()) {
-			result.include("mensagemUsuario", "Não é possível anexar arquivo em volume encerrado.");
-			result.redirectTo(MessageFormat.format("anexar?sigla={0}", sigla));
-			return;
+			throw new AplicacaoException("Não é possível anexar arquivo em volume encerrado.");
 		}
 
 		if (!Ex.getInstance().getComp().podeAnexarArquivo(getTitular(), getLotaTitular(), mob)) {
-
-			result.include("mensagemUsuario", "Arquivo não pode ser anexado.");
-			result.redirectTo(MessageFormat.format("anexar?sigla={0}", sigla));
-			return;
+			throw new AplicacaoException("Arquivo não pode ser anexado.");
 		}
 
 		if (!arquivo.getContentType().equals("application/pdf")) {
-			result.include("mensagemUsuario", "Somente é permitido anexar arquivo PDF.");
-			result.redirectTo(MessageFormat.format("anexar?sigla={0}", sigla));
-			return;
+			throw new AplicacaoException("Somente é permitido anexar arquivo PDF.");
 		}
 
 		// Obtem as pendencias que serÃ£o resolvidas
