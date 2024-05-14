@@ -1,5 +1,6 @@
 package br.gov.jfrj.siga.base.log;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
@@ -11,7 +12,16 @@ public class AccessLogger {
 	
 	private static final Logger logger = Logger.getLogger(AccessLogger.class.getName());
 	
-	public static void logAcesso(HttpServletRequest httpReq, String sigla, Long idmob) {
+	private static final ArrayList<String> atributosOcultos = new ArrayList<String>() {
+		{
+		add("meusDelegados");
+		add("meusTitulares");
+		add("identidadeCadastrante");
+		}
+	};
+
+	
+	public static void logAcesso(HttpServletRequest httpReq, String sigla) {
 		
 		StringBuffer caminho = httpReq.getRequestURL();
 		String parametros = httpReq.getQueryString() == null ? "" : "?" + httpReq.getQueryString();
@@ -21,7 +31,7 @@ public class AccessLogger {
 
 		requestInfo.append("\n\n ----- Detalhes do Acesso -----\n");
 		
-		requestInfo.append("\nCaminho: ");
+		requestInfo.append("\nURL: ");
 		requestInfo.append(caminho);
 		requestInfo.append("\n");
 
@@ -48,27 +58,16 @@ public class AccessLogger {
 		requestInfo.append("Remote Host: ");
 		requestInfo.append(httpReq.getRemoteHost());
 		requestInfo.append("\n");
-
-		requestInfo.append("Parâmetros: \n");
-		Enumeration<String> params = httpReq.getParameterNames();
 		
 		requestInfo.append("Sigla: ");
 		requestInfo.append(sigla);
-		requestInfo.append("\n");
-		
-		requestInfo.append("IdMob: ");
-		requestInfo.append(idmob);
-		requestInfo.append("\n");
-		
-		requestInfo.append("Data e Hora: ");
-		requestInfo.append(ContextoPersistencia.dt());
 		requestInfo.append("\n");
 
 		requestInfo.append("Atributos: \n");
 		Enumeration<String> attrs = httpReq.getAttributeNames();
 		while (attrs.hasMoreElements()) {
 			String name = attrs.nextElement();
-			if (name.startsWith("org.jboss.weld"))
+			if (name.startsWith("org.jboss.weld") || atributosOcultos.contains(name)) 
 				continue;
 			requestInfo.append("\t");
 			requestInfo.append(name);
@@ -82,19 +81,6 @@ public class AccessLogger {
 				requestInfo.append("não foi possível determinar: ");
 				requestInfo.append(e.getMessage());
 			}
-			requestInfo.append("\n");
-		}
-
-		requestInfo.append("Headers:  \n");
-		Enumeration<String> headers = httpReq.getHeaderNames();
-		while (headers.hasMoreElements()) {
-			String name = headers.nextElement();
-			if ("authorization".equalsIgnoreCase(name))
-				continue;
-			requestInfo.append("\t");
-			requestInfo.append(name);
-			requestInfo.append(" : ");
-			requestInfo.append(httpReq.getHeader(name));
 			requestInfo.append("\n");
 		}
 		

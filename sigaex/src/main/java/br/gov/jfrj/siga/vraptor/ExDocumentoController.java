@@ -1465,7 +1465,7 @@ public class ExDocumentoController extends ExController {
 			final ExDocumentoDTO exDocumentoDTO, final Long idmob, final Long idVisualizacao, boolean exibirReordenacao)
 			throws Exception {
 		
-		AccessLogger.logAcesso(getRequest(), sigla, idmob);
+		AccessLogger.logAcesso(getRequest(), sigla);
 		
 		final boolean recebimentoAutomatico = Prop.getBool("recebimento.automatico");
 		boolean recebimentoPendente = false;
@@ -1553,11 +1553,6 @@ public class ExDocumentoController extends ExController {
 		result.include("recebimentoPendente", recebimentoPendente);		
 		result.include("subscritorSel", subscritorSel);
 		result.include("lotaSubscritorSel", lotaSubscritorSel);
-	}
-
-	private void AcessoLogger() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Get("app/expediente/doc/exibirProcesso")
