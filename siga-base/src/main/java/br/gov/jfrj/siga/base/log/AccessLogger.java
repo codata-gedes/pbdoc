@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import br.gov.jfrj.siga.model.ContextoPersistencia;
-
 public class AccessLogger {
 	
 	private static final Logger logger = Logger.getLogger(AccessLogger.class.getName());
@@ -17,6 +15,9 @@ public class AccessLogger {
 		add("meusDelegados");
 		add("meusTitulares");
 		add("identidadeCadastrante");
+		add("vmessages");
+		add("cadastrante");
+		add("lotaCadastrante");
 		}
 	};
 
@@ -28,48 +29,25 @@ public class AccessLogger {
 		caminho.append(parametros);
 
 		StringBuffer requestInfo = new StringBuffer();
-
 		requestInfo.append("\n\n ----- Detalhes do Acesso -----\n");
 		
 		requestInfo.append("\nURL: ");
 		requestInfo.append(caminho);
 		requestInfo.append("\n");
 
-		requestInfo.append("Método: ");
-		requestInfo.append(httpReq.getMethod());
-		requestInfo.append("\n");
-
 		requestInfo.append("Session ID: ");
 		requestInfo.append(httpReq.getRequestedSessionId() == null ? "indefinido" : httpReq.getRequestedSessionId());
 		requestInfo.append("\n");
-
-		requestInfo.append("User Principal: ");
-		requestInfo.append(ContextoPersistencia.getUserPrincipal() == null ? "indefinido": ContextoPersistencia.getUserPrincipal());
-		requestInfo.append("\n");
-
-		requestInfo.append("Thread ID: ");
-		requestInfo.append(Thread.currentThread().getId());
-		requestInfo.append("\n");
-
-		requestInfo.append("Thread Name: ");
-		requestInfo.append(Thread.currentThread().getName());
-		requestInfo.append("\n");
-
-		requestInfo.append("Remote Host: ");
-		requestInfo.append(httpReq.getRemoteHost());
-		requestInfo.append("\n");
-		
+	
 		requestInfo.append("Sigla: ");
 		requestInfo.append(sigla);
 		requestInfo.append("\n");
 
-		requestInfo.append("Atributos: \n");
 		Enumeration<String> attrs = httpReq.getAttributeNames();
 		while (attrs.hasMoreElements()) {
 			String name = attrs.nextElement();
 			if (name.startsWith("org.jboss.weld") || atributosOcultos.contains(name)) 
 				continue;
-			requestInfo.append("\t");
 			requestInfo.append(name);
 			requestInfo.append(" : ");
 			try {
