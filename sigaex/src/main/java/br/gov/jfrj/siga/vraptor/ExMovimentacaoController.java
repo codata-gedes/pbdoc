@@ -188,8 +188,6 @@ public class ExMovimentacaoController extends ExController {
 
 	@Get("app/expediente/mov/assinarAnexos")
 	public void assinarAnexos(final String sigla, final boolean assinandoAnexosGeral) {
-		AccessLogger.logAcesso(getRequest(), sigla);
-		
 		final BuscaDocumentoBuilder documentoBuilder = BuscaDocumentoBuilder.novaInstancia().setSigla(sigla);
 		buscarDocumento(documentoBuilder);
 		final ExMobil mob = documentoBuilder.getMob();
@@ -618,8 +616,6 @@ public class ExMovimentacaoController extends ExController {
 	@Transacional
 	@Get("app/expediente/mov/assinar")
 	public void aAssinar(String sigla, Boolean autenticando) throws Exception {
-		AccessLogger.logAcesso(getRequest(), sigla);
-		
 		BuscaDocumentoBuilder builder = BuscaDocumentoBuilder.novaInstancia().setSigla(sigla);
 		ExDocumento doc = buscarDocumento(builder);
 		

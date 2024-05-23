@@ -113,9 +113,6 @@ public class ExArquivoController extends ExController {
 			String hash, final String HASH_ALGORITHM, final String certificadoB64, boolean completo,
 			final boolean semmarcas, final boolean volumes, final Long idVisualizacao, boolean exibirReordenacao) {
 		try {
-			
-			AccessLogger.logAcesso(getRequest(), sigla);
-			
 			final String servernameport = getRequest().getServerName() + ":" + getRequest().getServerPort();
 			final String contextpath = getRequest().getContextPath();
 			final String acceptHeader = getRequest().getHeader("Accept");

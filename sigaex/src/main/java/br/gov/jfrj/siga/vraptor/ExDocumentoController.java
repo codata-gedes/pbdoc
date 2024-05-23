@@ -1465,8 +1465,6 @@ public class ExDocumentoController extends ExController {
 			final ExDocumentoDTO exDocumentoDTO, final Long idmob, final Long idVisualizacao, boolean exibirReordenacao)
 			throws Exception {
 		
-		AccessLogger.logAcesso(getRequest(), sigla);
-		
 		final boolean recebimentoAutomatico = Prop.getBool("recebimento.automatico");
 		boolean recebimentoPendente = false;
 		
