@@ -30,6 +30,7 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.replace;
+import static org.apache.commons.lang3.StringUtils.replaceOnce;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -695,7 +696,7 @@ public class CpDao extends ModeloDao {
 	private JPAQuery<?> queryConsultarPorFiltro(final DpLotacaoDaoFiltro filtro) {
 		final BooleanBuilder predicates = new BooleanBuilder();
 		final String nomeParam = normalizeUppercaseParam(filtro.getNome())
-				.map(p -> replace(p, DASH, EMPTY))
+				.map(p -> replaceOnce(p, DASH, EMPTY))
 				.filter(StringUtils::isNotBlank)
 				.orElse(null);
 
