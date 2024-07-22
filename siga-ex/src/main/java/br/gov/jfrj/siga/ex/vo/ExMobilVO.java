@@ -373,7 +373,7 @@ public class ExMobilVO extends ExVO {
 			if (mob.temAnexos()) {
 				addAcao("script_key", "Assinar Anexos " + (mob.isVia() ? "da Via" : "do Volume"),
 						"/app/expediente/mov", "assinarAnexos", 
-						Ex.getInstance().getComp().podeAssinarComSenha(titular, lotaTitular, mob), 
+						Ex.getInstance().getComp().podeAssinarAnexosComSenha(titular, lotaTitular, mob), 
 						null, "assinandoAnexosGeral=true&sigla=" + getSigla(), null,
 						null, null);
 			}

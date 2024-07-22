@@ -1306,6 +1306,18 @@ public class ExCompetenciaBL extends CpCompetenciaBL {
 				CpTipoConfiguracao.TIPO_CONFIG_MOVIMENTAR);
 	}
 	
+	/*
+	 * Retorna se é possível assinar anexos de um documento:
+	 * 
+	 * @param titular
+	 * @param lotaTitular
+	 * @param mob
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean podeAssinarAnexosComSenha(final DpPessoa titular, final DpLotacao lotaTitular, final ExMobil mob) {
+		return podeAssinarComSenha(titular, lotaTitular, mob) && !mob.isEmTransito();
+	}
 	
 	/*
 	 * Retorna se é default assinar um documento com senha:
