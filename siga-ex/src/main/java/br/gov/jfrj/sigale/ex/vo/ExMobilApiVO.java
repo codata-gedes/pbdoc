@@ -323,7 +323,7 @@ public class ExMobilApiVO extends ExApiVO {
 
 			if (mob.temAnexos()) {
 				addAcao("script_key", "Assinar Anexos " + (mob.isVia() ? "da Via" : "do Volume"), "/app/expediente/mov",
-						"assinarAnexos", true, null, "assinandoAnexosGeral=true&sigla=" + getSigla(), null, null, null);
+						"assinarAnexos", Ex.getInstance().getComp().podeAssinarAnexosComSenha(titular, lotaTitular, mob), null, "assinandoAnexosGeral=true&sigla=" + getSigla(), null, null, null);
 			}
 		}
 		addAcao("page_white_error", "Desentranhar", "/app/expediente/mov", "cancelar_juntada",

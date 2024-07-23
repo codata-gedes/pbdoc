@@ -411,7 +411,8 @@ public class ExDocumentoApiVO extends ExApiVO {
 		if (doc.isFinalizado() && doc.getNumExpediente() != null) {
 			// documentos finalizados
 			if (mob.temAnexos()) {
-				vo.addAcao("script_key", "Assinar Anexos da Via", "/app/expediente/mov", "assinarAnexos", true, null,
+				vo.addAcao("script_key", "Assinar Anexos da Via", "/app/expediente/mov", "assinarAnexos", 
+						Ex.getInstance().getComp().podeAssinarAnexosComSenha(titular, lotaTitular, mob), null,
 						"assinandoAnexosGeral=true&sigla=" + getSigla(), null, null, null);
 			}
 		}
