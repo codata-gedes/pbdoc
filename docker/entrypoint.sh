@@ -5,7 +5,7 @@ set -e
 standalone_xml=$JBOSS_HOME/standalone/configuration/standalone.xml
 glowroot_properties=$JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
 jboss_standalone_conf=$JBOSS_HOME/bin/standalone.conf
-jboss_glowroot_config='JAVA_OPTS="$JAVA_OPTS -javaagent:${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.jar -Dglowroot.central.collector.address=${GLOWROOT_URL} -Dglowroot.agent.id=PBdoc-${PBDOC_AMBIENTE}:: -Dglowroot.properties.file=${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties"'
+jboss_glowroot_config='JAVA_OPTS="$JAVA_OPTS $JAVA_OPTS_EXTRA -javaagent:${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.jar -Dglowroot.central.collector.address=${GLOWROOT_URL} -Dglowroot.agent.id=PBdoc-${PBDOC_AMBIENTE}:: -Dglowroot.properties.file=${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties"'
 
 sed_replace() {
     property=$1
