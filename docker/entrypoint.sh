@@ -6,6 +6,7 @@ standalone_xml=$JBOSS_HOME/standalone/configuration/standalone.xml
 glowroot_properties=$JBOSS_HOME/standalone/lib/ext/glowroot/glowroot.properties
 jboss_standalone_conf=$JBOSS_HOME/bin/standalone.conf
 jboss_glowroot_config='JAVA_OPTS="$JAVA_OPTS $JAVA_OPTS_EXTRA -javaagent:${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.jar -Dglowroot.central.collector.address=${GLOWROOT_URL} -Dglowroot.agent.id=PBdoc-${PBDOC_AMBIENTE}:: -Dglowroot.properties.file=${JBOSS_HOME}/standalone/lib/ext/glowroot/glowroot.properties"'
+jboss_elastic_apm_config='JAVA_OPTS="$JAVA_OPTS $JAVA_OPTS_EXTRA -javaagent:${JBOSS_HOME}/standalone/lib/ext/elastic/elastic-apm-agent.jar'
 
 sed_replace() {
     property=$1
@@ -53,7 +54,7 @@ configure_database() {
 }
 
 configure_glowroot() {
-    if [ -z "$GLOWROOT_URL" ]; then
+    if [ -z "$GLOWROOT_URL" ] || [ -n "$ELASTIC_APM_SERVER_URL" ]; then
         echo 'Saltando configuração do Glowroot'
         return
     fi
@@ -64,6 +65,27 @@ configure_glowroot() {
     echo "collector.address=${GLOWROOT_URL}" >> $glowroot_properties
     echo "collector.port=8181" >> $glowroot_properties
     echo "$jboss_glowroot_config" >> $jboss_standalone_conf
+}
+
+configure_elastic_apm() {
+    if [ -z "$ELASTIC_APM_SERVER_URL" ]; then
+        echo 'Saltando configuração do Elastic APM'
+        return
+    fi
+
+    if [ -z "ELASTIC_APM_SERVICE_NAME" ]; then
+        export ELASTIC_APM_SERVICE_NAME="gedes-pbdoc-pbdoc"
+    fi
+
+    if [ -z "ELASTIC_APM_ENVIRONMENT" ]; then
+        export ELASTIC_APM_ENVIRONMENT="$AMBIENTE"
+    fi
+
+    if [ -z "ELASTIC_APM_SERVICE_VERSION" ]; then
+        export ELASTIC_APM_SERVICE_VERSION="$TAG_GIT"
+    fi
+
+    echo "$jboss_elastic_apm_config" >> $jboss_standalone_conf
 }
 
 configure_pbdoc() {
@@ -104,6 +126,7 @@ configure_pbdoc() {
 
 configure_database
 configure_glowroot
+configure_elastic_apm
 configure_pbdoc
 
 exec $JBOSS_HOME/bin/standalone.sh -b 0.0.0.0

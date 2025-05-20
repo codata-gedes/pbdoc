@@ -75,6 +75,10 @@ RUN curl -L https://github.com/glowroot/glowroot/releases/download/v0.14.1/glowr
     chown jboss:nogroup $JBOSS_HOME/standalone/lib/ext/glowroot && \
     chmod 777 $JBOSS_HOME/standalone/lib/ext/glowroot
 
+# config elastic APM
+RUN mkdir $JBOSS_HOME/standalone/lib/ext/elastic
+COPY --chown=jboss:nogroup --from=docker.elastic.co/observability/apm-agent-java:1.52.2 /usr/agent/elastic-apm-agent.jar $JBOSS_HOME/standalone/lib/ext/elastic/elastic-apm-agent.jar
+
 COPY --from=builder /pbdoc/target/*.war $DEPLOYMENTS_HOME/
 COPY --chown=jboss:nogroup /docker/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
 
