@@ -1445,7 +1445,22 @@ CKEDITOR.replace( '${var}',
 								window.onload = function() {
 								    $("textarea.editor").each(function(index) {
 								        CKEDITOR.replace(this, {
-								            toolbar: 'SigaToolbar'
+								            toolbar: 'SigaToolbar',
+								            on: {
+										        instanceReady: function(evt) {
+										            var editor = evt.editor;
+										            editor.on('afterPaste', function(evt) {
+										                const links = editor.document.find('a');
+										                for (let i = 0; i < links.count(); i++) {
+										                    var link = links.getItem(i);
+										                    if (!link.getAttribute('target')) {
+										                        link.setAttribute('target', '_blank');
+										                        link.setAttribute('rel', 'noopener noreferrer');
+										                    }
+										                }
+										            });
+										        }
+										    }
 								        });
 								    });
 								}
