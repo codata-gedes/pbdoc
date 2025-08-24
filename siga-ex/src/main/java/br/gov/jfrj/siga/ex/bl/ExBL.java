@@ -5630,12 +5630,12 @@ public class ExBL extends CpBL {
 			SwaggerAsyncResponse<TimestampPostResponse> resp = SwaggerCall.callAsync("obter timestamp", null, "POST",
 					timestampUrl + "/timestamp", req, TimestampPostResponse.class)
 					.get(HASH_TIMEOUT_MILLISECONDS, TimeUnit.MILLISECONDS);
-//			if (resp != null && resp.getException() != null)
-//				throw new RuntimeException("Exceção obtendo carimbo de tempo para a assinatura com senha",
-//						resp.getException());
-//			if (resp == null || resp.getResp() == null || resp.getResp() == null)
-//				throw new RuntimeException("Carimbo de tempo para a assinatura com senha indisponível");
-			mov.setAuditHash("");
+			if (resp != null && resp.getException() != null)
+				throw new RuntimeException("Exceção obtendo carimbo de tempo para a assinatura com senha",
+						resp.getException());
+			if (resp == null || resp.getResp() == null || resp.getResp() == null)
+				throw new RuntimeException("Carimbo de tempo para a assinatura com senha indisponível");
+			mov.setAuditHash(resp.getResp().jwt);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new RuntimeException("Erro obtendo o carimbo de tempo para a assinatura com senha", e);
