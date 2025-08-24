@@ -22,7 +22,6 @@
 
 package br.gov.jfrj.siga.vraptor;
 
-import static java.util.Collections.singletonList;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
@@ -73,10 +72,7 @@ public class ExMesa2Controller extends ExController {
 	private static final TypeReference<Map<String, SelGrupo>> RESPONSE_SERIALIZATION_VALUE_TYPE_REF = new TypeReference<Map<String, Mesa2.SelGrupo>>() {};
 
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
-	private static final List<Long> MARCAS_IGNORAR_PADRAO = singletonList(
-			CpMarcadorEnum.CANCELADO.getId()
-	);
-	private static final List<Long> MARCAS_IGNORAR_SIGA_SP = Arrays.asList(
+	private static final List<Long> MARCAS_IGNORAR_PADRAO = Arrays.asList(
 			CpMarcadorEnum.CANCELADO.getId(),
 			CpMarcadorEnum.ARQUIVADO_CORRENTE.getId(),
 			CpMarcadorEnum.ARQUIVADO_INTERMEDIARIO.getId(),
@@ -184,8 +180,7 @@ public class ExMesa2Controller extends ExController {
 		if (trazerCancelados) {
 			return Collections.emptyList();
 		}
-
-		return SigaMessages.isSigaSP() ? MARCAS_IGNORAR_SIGA_SP : MARCAS_IGNORAR_PADRAO;
+		return MARCAS_IGNORAR_PADRAO;
 	}
 
 	private DpPessoa getTitular(final Long idVisualizacao) throws Exception {
