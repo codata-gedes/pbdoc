@@ -96,8 +96,6 @@
 			<groupId>org.glowroot</groupId>
 			<artifactId>glowroot-agent-api</artifactId>
 			<version>0.14.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/glowroot-agent-api-0.14.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>siga</groupId>
