@@ -46,6 +46,14 @@
 						<label class="form-check-label" for="trazerAnotacoes"><small>Trazer anotações nos docs.</small></label>
 					</div>            
 	            </div>
+	            <div class="form-group my-1 border-bottom">
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="trazerArquivados" v-model="trazerArquivados" :disabled="carregando">
+						<label class="form-check-label" for="trazerArquivados">
+							<small>Exibir Arquivo Corrente</small>
+						</label>
+					</div>
+	            </div>
 	            <div class="form-group my-1 border-bottom" style="display: none;">
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="trazerComposto" v-model="trazerComposto" :disabled="carregando">
@@ -59,14 +67,6 @@
 						<input type="checkbox" class="form-check-input" id="trazerCancelados" v-model="trazerCancelados" :disabled="carregando">
 						<label class="form-check-label" for="trazerCancelados">
 							<small>Exibir vias canceladas</small>
-						</label>
-					</div>            
-	            </div>
-	            <div class="form-group my-1 border-bottom" style="display: none;">
-					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="trazerArquivados" v-model="trazerArquivados" :disabled="carregando">
-						<label class="form-check-label" for="trazerArquivados">
-							<small>Exibir pasta Aguardando Ação de Temporalidade</small>
 						</label>
 					</div>            
 	            </div>

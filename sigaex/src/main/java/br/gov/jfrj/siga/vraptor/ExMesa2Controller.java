@@ -29,8 +29,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,12 +71,6 @@ public class ExMesa2Controller extends ExController {
 	private static final TypeReference<Map<String, SelGrupo>> RESPONSE_SERIALIZATION_VALUE_TYPE_REF = new TypeReference<Map<String, Mesa2.SelGrupo>>() {};
 
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
-	private static final List<Long> MARCAS_IGNORAR_PADRAO = Arrays.asList(
-			CpMarcadorEnum.CANCELADO.getId(),
-			CpMarcadorEnum.ARQUIVADO_CORRENTE.getId(),
-			CpMarcadorEnum.ARQUIVADO_INTERMEDIARIO.getId(),
-			CpMarcadorEnum.ARQUIVADO_PERMANENTE.getId()
-	);
 
 	/**
 	 * @deprecated CDI eyes only
@@ -157,7 +150,16 @@ public class ExMesa2Controller extends ExController {
 					? JSON_MAPPER.readValue(parms, RESPONSE_SERIALIZATION_VALUE_TYPE_REF)
 					: null;
 
-			final List<Long> marcasIgnorar = getMarcasIgnorar(trazerCancelados);
+			final List<Long> marcasIgnorar = new ArrayList<>();
+			if (!trazerCancelados) {
+				marcasIgnorar.add(CpMarcadorEnum.CANCELADO.getId());
+			}
+			if (!trazerArquivados) {
+				marcasIgnorar.add(CpMarcadorEnum.ARQUIVADO_CORRENTE.getId());
+				marcasIgnorar.add(CpMarcadorEnum.ARQUIVADO_INTERMEDIARIO.getId());
+				marcasIgnorar.add(CpMarcadorEnum.ARQUIVADO_PERMANENTE.getId());
+			}
+
 			final DpPessoa titular = getTitular(idVisualizacao);
 
 			final List<Mesa2.GrupoItem> mesa = Mesa2.getContadores(dao(), titular, titular.getLotacao(), selGrupos, exibeLotacao, marcasIgnorar);
@@ -174,13 +176,6 @@ public class ExMesa2Controller extends ExController {
 		} catch (Exception e) {
 			throw e;
 		} 
-	}
-
-	private List<Long> getMarcasIgnorar(final boolean trazerCancelados) {
-		if (trazerCancelados) {
-			return Collections.emptyList();
-		}
-		return MARCAS_IGNORAR_PADRAO;
 	}
 
 	private DpPessoa getTitular(final Long idVisualizacao) throws Exception {
