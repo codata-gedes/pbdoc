@@ -114,7 +114,6 @@ var appMesa = new Vue({
 			this.recarregarMesa();
 		},
 		trazerArquivados: function() {
-			setParmUser('trazerArquivados', this.trazerArquivados);
 			setValueGrupo('Aguardando Ação de Temporalidade', 'hide', !this.trazerArquivados);
 			this.recarregarMesa();
 		},
@@ -136,12 +135,10 @@ var appMesa = new Vue({
 			var self = this
 			this.trazerAnotacoes = (getParmUser('trazerAnotacoes') == null ? false : getParmUser('trazerAnotacoes'));
 			this.trazerComposto = (getParmUser('trazerComposto') == null ? false : getParmUser('trazerComposto'));
-			this.trazerArquivados = (getParmUser('trazerArquivados') == null ? false : getParmUser('trazerArquivados'));
 			this.trazerCancelados = (getParmUser('trazerCancelados') == null ? false : getParmUser('trazerCancelados'));
 			this.ordemCrescenteData = (getParmUser('ordemCrescenteData') == null ? false : getParmUser('ordemCrescenteData'));
 			this.usuarioPosse = (getParmUser('usuarioPosse') == null ? false : getParmUser('usuarioPosse'));
 			setValueGrupo('Aguardando Ação de Temporalidade', 'hide', !this.trazerArquivados);
-			
 
 			/* clean toast container before reload notification */
 			$('#toastContainer').empty();
@@ -252,7 +249,6 @@ var appMesa = new Vue({
 			this.trazerArquivados = false;
 			sessionStorage.removeItem('trazerAnotacoes' + getUser());
 			sessionStorage.removeItem('trazerComposto' + getUser());
-			sessionStorage.removeItem('trazerArquivados' + getUser());
 			sessionStorage.removeItem('trazerCancelados' + getUser());
 			sessionStorage.removeItem('ordemCrescenteData' + getUser());
 			sessionStorage.removeItem('usuarioPosse' + getUser());
