@@ -22,7 +22,10 @@
 package br.gov.jfrj.siga.ex;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
@@ -72,12 +75,18 @@ public class ExNivelAcesso extends AbstractExNivelAcesso implements
 	public static final long NIVEL_ACESSO_PESSOAL = 100;
 
 	public static final long ID_LIMITADO_AO_ORGAO = 1;
-	public static final long ID_LIMITADO_SUBSEC_PARA_PESSOA = 2;
+	@Deprecated public static final long ID_LIMITADO_SUBSEC_PARA_PESSOA = 2;
 	public static final long ID_LIMITADO_ENTRE_LOTACOES = 3;
 	// ID 4 - NÃO MAPEADO
-	public static final long ID_LIMITADO_ENTRE_PESSOAS = 5;
+	@Deprecated public static final long ID_LIMITADO_ENTRE_PESSOAS = 5;
 	public static final long ID_PUBLICO = 6;
-	public static final long ID_LIMITADO_PESSOA_PARA_SUBSEC = 7;
+	@Deprecated public static final long ID_LIMITADO_PESSOA_PARA_SUBSEC = 7;
+
+	public static final Set<Long> NIVEIS_ACESSO_PERMITIDOS = new TreeSet<>(Arrays.asList(
+			ID_LIMITADO_AO_ORGAO,
+			ID_LIMITADO_ENTRE_LOTACOES,
+			ID_PUBLICO
+	));
 
 	public ExNivelAcesso() {
 	}

@@ -18,13 +18,12 @@
  ******************************************************************************/
 package br.gov.jfrj.siga.vraptor;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
@@ -33,9 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.com.caelum.vraptor.Result;
 import br.gov.jfrj.siga.base.AplicacaoException;
-import br.gov.jfrj.siga.base.CurrentRequest;
-import br.gov.jfrj.siga.base.RequestInfo;
-import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.base.TipoResponsavelEnum;
 import br.gov.jfrj.siga.cp.CpConfiguracao;
 import br.gov.jfrj.siga.cp.CpSituacaoConfiguracao;
@@ -102,6 +98,8 @@ public class ExController extends SigaController {
 
 	protected  List<ExNivelAcesso> getListaNivelAcesso(ExTipoDocumento exTpDoc, ExFormaDocumento forma, ExModelo exMod, ExClassificacao classif) {
 		List<ExNivelAcesso> listaNiveis = ExDao.getInstance().listarOrdemNivel();
+		Set<Long> niveisAcessoPermitidos = ExNivelAcesso.NIVEIS_ACESSO_PERMITIDOS;
+
 		ArrayList<ExNivelAcesso> niveisFinal = new ArrayList<ExNivelAcesso>();
 		Date dt = ExDao.getInstance().consultarDataEHoraDoServidor();
 
@@ -138,7 +136,7 @@ public class ExController extends SigaController {
 			int nivelMaximo = exConfiguracaoMax.getExNivelAcesso().getGrauNivelAcesso();
 
 			for (ExNivelAcesso nivelAcesso : listaNiveis) {
-				if (nivelAcesso.getGrauNivelAcesso() >= nivelMinimo && nivelAcesso.getGrauNivelAcesso() <= nivelMaximo) {
+				if (nivelAcesso.getGrauNivelAcesso() >= nivelMinimo && nivelAcesso.getGrauNivelAcesso() <= nivelMaximo && niveisAcessoPermitidos.contains(nivelAcesso.getIdNivelAcesso())) {
 					niveisFinal.add(nivelAcesso);
 				}
 			}
