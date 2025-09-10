@@ -85,7 +85,7 @@ function montarUrlDocPDF(url, visualizador) {
 	if(visualizador == "pdf.js") {
 		return "/siga/pdfjs/web/viewer.html?file="+encodeURIComponent(url);
 	} else {
-		return url + '#toolbar=0&view=FitH';
+		return url;
 	}
 }
 
