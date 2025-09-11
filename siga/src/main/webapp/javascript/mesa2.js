@@ -206,7 +206,11 @@ var appMesa = new Vue({
 						self.errormsg = response.responseText;
 						self.carregando = false;
 					} else {
-						if (response.status > 300) {
+						if (response.status === 429) { // Rate Limiter
+							self.carregando = false;
+							var notifications = JSON.parse(response.responseText);
+							toaster(notifications);
+						} else if (response.status > 300) {
 							if (cType != null && cType.indexOf('text/html') !== -1) {
 								document.write(response.responseText);
 							} else {
@@ -224,21 +228,6 @@ var appMesa = new Vue({
 					self.carregando = false;
 					self.showError(response.responseText, self);
 				},
-				success: function() {	
-					$.ajax({
-				        url: "/siga/api/v1/notificacoes",
-				        contentType: "application/json",
-				        dataType: 'json',
-				        success: function(result){
-							if (result.list.length > 0) {
-								toaster(result.list);
-							}
-				        },
-						error: function(result){	
-				        	console.log(result.errormsg);
-				        },
-				   });
-			   }
 			})
 		},
 		resetaStorage: function() {
