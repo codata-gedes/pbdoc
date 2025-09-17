@@ -22,7 +22,9 @@
 
 package br.gov.jfrj.siga.vraptor;
 
+import static br.gov.jfrj.siga.util.RateLimiter.buildRateLimiterToasterNotification;
 import static br.gov.jfrj.siga.util.RateLimiter.isWithinRateLimiterTimeout;
+import static java.util.Collections.singletonList;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
@@ -63,20 +65,18 @@ import br.gov.jfrj.siga.ex.bl.AcessoConsulta;
 import br.gov.jfrj.siga.ex.bl.Mesa2;
 import br.gov.jfrj.siga.ex.bl.Mesa2.SelGrupo;
 import br.gov.jfrj.siga.hibernate.ExDao;
-import br.gov.jfrj.siga.util.ToasterNotification;
 
 @Controller
 public class ExMesa2Controller extends ExController {
 
 	private static final Logger log = Logger.getLogger(ExMesa2Controller.class);
 
-	private static final long RATE_LIMITER_TIMEOUT_MILLIS = 3_000;
-	private static final String RATE_LIMITER_TITLE = "Alerta de limitação de tráfego";
-	private static final String RATE_LIMITER_MESSAGE = "Aguarde um pouco antes de requisitar novamente a mesa.";
-
 	private static final TypeReference<Map<String, SelGrupo>> RESPONSE_SERIALIZATION_VALUE_TYPE_REF = new TypeReference<Map<String, Mesa2.SelGrupo>>() {};
 
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+
+	private static final String RATE_LIMITER_MESSAGE = "Aguarde um pouco antes de requisitar novamente a mesa.";
+	private static final String RATE_LIMIT_NOTIFICATION = gson.toJson(singletonList(buildRateLimiterToasterNotification(RATE_LIMITER_MESSAGE)));
 
 	/**
 	 * @deprecated CDI eyes only
@@ -134,12 +134,10 @@ public class ExMesa2Controller extends ExController {
 			boolean trazerComposto, boolean trazerCancelados, boolean ordemCrescenteData, 
 			boolean usuarioPosse, String parms) throws Exception {
 
-		if (!isWithinRateLimiterTimeout("ExMesa2Controller#json", RATE_LIMITER_TIMEOUT_MILLIS)) {
-			final ToasterNotification[] notifications = { new ToasterNotification("fa fa-exclamation-triangle", RATE_LIMITER_TITLE, null, RATE_LIMITER_MESSAGE) };
-			final String jsonNotificacoes = ExAssinadorExternoController.gson.toJson(notifications);
+		if (!isWithinRateLimiterTimeout("ExMesa2Controller#json")) {
 			result.use(Results.http())
 				.addHeader(CONTENT_TYPE, APPLICATION_JSON)
-				.body(jsonNotificacoes)
+				.body(RATE_LIMIT_NOTIFICATION)
 				.setStatusCode(429);
             return;
         }

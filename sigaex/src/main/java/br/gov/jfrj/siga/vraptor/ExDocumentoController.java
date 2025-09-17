@@ -22,6 +22,7 @@
  */
 package br.gov.jfrj.siga.vraptor;
 
+import static br.gov.jfrj.siga.util.RateLimiter.isWithinRateLimiterTimeout;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -80,6 +81,7 @@ import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.base.RegraNegocioException;
 import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.base.SigaModal;
+import br.gov.jfrj.siga.base.log.AccessLogger;
 import br.gov.jfrj.siga.base.util.Texto;
 import br.gov.jfrj.siga.base.util.Utils;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
@@ -117,9 +119,8 @@ import br.gov.jfrj.siga.model.Selecao;
 import br.gov.jfrj.siga.persistencia.ExMobilDaoFiltro;
 import br.gov.jfrj.siga.util.ListaHierarquica;
 import br.gov.jfrj.siga.util.ListaHierarquicaItem;
+import br.gov.jfrj.siga.util.RateLimiter;
 import br.gov.jfrj.siga.vraptor.builder.BuscaDocumentoBuilder;
-import br.gov.jfrj.siga.base.log.*;
-import br.gov.jfrj.siga.base.log.AccessLogger;
 
 @Controller
 public class ExDocumentoController extends ExController {
@@ -1264,6 +1265,11 @@ public class ExDocumentoController extends ExController {
 	@Get("app/expediente/doc/exibirAntigo")
 	public void aExibirAntigo(final String sigla, final boolean popup,
 			final boolean exibirCompleto) throws Exception {
+
+		if (!isWithinRateLimiterTimeout("ExDocumentoController#aExibirAntigo")) {
+			throw new AplicacaoException(RateLimiter.DEFAULT_RATE_LIMITER_MESSAGE);
+        }
+
 		assertAcesso("");
 
 		final ExDocumentoDTO exDocumentoDTO = new ExDocumentoDTO();
@@ -1464,7 +1470,11 @@ public class ExDocumentoController extends ExController {
 	public void exibe(final boolean conviteEletronico, final String sigla,
 			final ExDocumentoDTO exDocumentoDTO, final Long idmob, final Long idVisualizacao, boolean exibirReordenacao)
 			throws Exception {
-		
+
+		if (!isWithinRateLimiterTimeout("ExDocumentoController#exibe")) {
+			throw new AplicacaoException(RateLimiter.DEFAULT_RATE_LIMITER_MESSAGE);
+        }
+
 		AccessLogger.logAcesso(getRequest(), sigla);
 		
 		final boolean recebimentoAutomatico = Prop.getBool("recebimento.automatico");
