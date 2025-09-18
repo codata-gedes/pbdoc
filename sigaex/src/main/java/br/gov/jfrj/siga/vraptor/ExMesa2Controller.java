@@ -33,8 +33,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -59,12 +62,14 @@ import br.gov.jfrj.siga.cp.CpAcesso;
 import br.gov.jfrj.siga.cp.CpTipoConfiguracao;
 import br.gov.jfrj.siga.cp.bl.Cp;
 import br.gov.jfrj.siga.cp.model.enm.CpMarcadorEnum;
+import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.dp.DpVisualizacao;
 import br.gov.jfrj.siga.ex.bl.AcessoConsulta;
 import br.gov.jfrj.siga.ex.bl.Mesa2;
 import br.gov.jfrj.siga.ex.bl.Mesa2.SelGrupo;
 import br.gov.jfrj.siga.hibernate.ExDao;
+import br.gov.jfrj.siga.util.ToasterNotification;
 
 @Controller
 public class ExMesa2Controller extends ExController {
@@ -77,6 +82,13 @@ public class ExMesa2Controller extends ExController {
 
 	private static final String RATE_LIMITER_MESSAGE = "Aguarde um pouco antes de requisitar novamente a mesa.";
 	private static final String RATE_LIMIT_NOTIFICATION = gson.toJson(singletonList(buildRateLimiterToasterNotification(RATE_LIMITER_MESSAGE)));
+
+	public static final SortedSet<String> SIGLAS_LOTACOES_OCULTADAS;
+	static {
+		final SortedSet<String> siglasLotacoesOcultadas = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+		siglasLotacoesOcultadas.add("DTR-AUDIT-DIGITAL");
+		SIGLAS_LOTACOES_OCULTADAS = Collections.unmodifiableSortedSet(siglasLotacoesOcultadas);
+	}
 
 	/**
 	 * @deprecated CDI eyes only
@@ -175,9 +187,18 @@ public class ExMesa2Controller extends ExController {
 			}
 
 			final DpPessoa titular = getTitular(idVisualizacao);
+			final DpLotacao lotacaoTitular = titular.getLotacao();
+			if (SIGLAS_LOTACOES_OCULTADAS.contains(String.join("-", lotacaoTitular.getOrgaoUsuario().getAcronimoOrgaoUsu(), lotacaoTitular.getSigla()))) {
+				ToasterNotification notification = new ToasterNotification("fa fa-exclamation-triangle", "Lotação Desativada", null, "Esta lotação foi desativada administrativamente.");
+				result.use(Results.http())
+					.addHeader(CONTENT_TYPE, APPLICATION_JSON)
+					.body(gson.toJson(singletonList(notification)))
+					.setStatusCode(429);
+				return;
+			}
 
-			final List<Mesa2.GrupoItem> mesa = Mesa2.getContadores(dao(), titular, titular.getLotacao(), selGrupos, exibeLotacao, marcasIgnorar);
-			Mesa2.popularDocumentos(dao(), titular, titular.getLotacao(), selGrupos, mesa, exibeLotacao, trazerAnotacoes, trazerComposto, ordemCrescenteData, usuarioPosse, marcasIgnorar);
+			final List<Mesa2.GrupoItem> mesa = Mesa2.getContadores(dao(), titular, lotacaoTitular, selGrupos, exibeLotacao, marcasIgnorar);
+			Mesa2.popularDocumentos(dao(), titular, lotacaoTitular, selGrupos, mesa, exibeLotacao, trazerAnotacoes, trazerComposto, ordemCrescenteData, usuarioPosse, marcasIgnorar);
 
 			final String jsonMesa = ExAssinadorExternoController.gson.toJson(mesa);
 			result.use(Results.http())
