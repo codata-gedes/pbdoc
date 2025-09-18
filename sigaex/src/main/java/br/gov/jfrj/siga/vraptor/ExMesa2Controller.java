@@ -189,7 +189,7 @@ public class ExMesa2Controller extends ExController {
 			final DpPessoa titular = getTitular(idVisualizacao);
 			final DpLotacao lotacaoTitular = titular.getLotacao();
 			if (SIGLAS_LOTACOES_OCULTADAS.contains(String.join("-", lotacaoTitular.getOrgaoUsuario().getAcronimoOrgaoUsu(), lotacaoTitular.getSigla()))) {
-				ToasterNotification notification = new ToasterNotification("fa fa-exclamation-triangle", "Lotação Desativada", null, "Esta lotação foi desativada administrativamente.");
+				ToasterNotification notification = new ToasterNotification("fa fa-exclamation-triangle", "Lotação Desativada", null, "Esta mesa virtual foi desativada administrativamente.");
 				result.use(Results.http())
 					.addHeader(CONTENT_TYPE, APPLICATION_JSON)
 					.body(gson.toJson(singletonList(notification)))
