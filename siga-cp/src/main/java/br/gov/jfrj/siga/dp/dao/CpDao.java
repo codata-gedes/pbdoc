@@ -2660,6 +2660,16 @@ public class CpDao extends ModeloDao {
 				.fetchOne();
 	}
 
+	public String obterUltimoEmailPorCPF(final Long cpf) {
+		return new JPAQuery<DpPessoa>(em())
+				.from(qDpPessoa)
+				.where(qDpPessoa.dataFimPessoa.isNull()
+						.and(qDpPessoa.cpfPessoa.eq(cpf)))
+				.select(qDpPessoa.emailPessoa)
+				.orderBy(qDpPessoa.dataInicioPessoa.desc())
+				.fetchFirst();
+	}
+
 	public CpIdentidade obterIdentidadeAtual(final CpIdentidade u) {
 		final Query qry = em().createNamedQuery("consultarIdentidadeAtualPelaInicial");
 		qry.setParameter("idIni", u.getHisIdIni());

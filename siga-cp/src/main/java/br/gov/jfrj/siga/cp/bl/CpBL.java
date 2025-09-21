@@ -419,7 +419,8 @@ public class CpBL {
 										+ "<p><span style='color: #aaa;'><strong>Aten&ccedil;&atilde;o:</strong> esta &eacute; uma mensagem autom&aacute;tica. Por favor n&atilde;o responda&nbsp;</span></p>"
 										+ "</td>" + "</tr>" + "</tbody>" + "</table>");
 					} else {
-						Correio.enviar(pessoa.getEmailPessoaAtual(), "Alteração de senha ",
+						String email = CpDao.getInstance().obterUltimoEmailPorCPF(pessoa.getCpfPessoa());
+						Correio.enviar(email, "Alteração de senha ",
 								"\n" + idNova.getDpPessoa().getNomePessoa() + "\nMatricula: "
 										+ idNova.getDpPessoa().getSigla() + "\n" + "\nSua senha foi alterada para: "
 										+ novaSenha + "\n\n Atenção: esta é uma "
