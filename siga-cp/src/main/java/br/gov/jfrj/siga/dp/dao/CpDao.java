@@ -23,6 +23,7 @@
  */
 package br.gov.jfrj.siga.dp.dao;
 
+import static br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL.SIGLAS_ORGAOS_OCULTADOS;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -730,6 +731,7 @@ public class CpDao extends ModeloDao {
 		} else {
 			joinOrgao = true;
 			predicates.and(qDpLotacao.dataFimLotacao.isNull());
+			predicates.and(qCpOrgaoUsuario.siglaOrgaoUsu.notIn(SIGLAS_ORGAOS_OCULTADOS));
 
 			if (nomeParam != null) {
 				final StringExpression siglaOrgaoComLotacao = qCpOrgaoUsuario.acronimoOrgaoUsu.append(qDpLotacao.siglaLotacao);
@@ -741,24 +743,13 @@ public class CpDao extends ModeloDao {
 				);
 			}
 
-			final String principal = ContextoPersistencia.getUserPrincipal();
-			final CpIdentidade identidadePrincipal = consultaIdentidadeCadastrante(principal, true);
-			
-			if(CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(identidadePrincipal.getCpOrgaoUsuario().getSigla()) && filtro.isBuscarParaCadastroDePessoa()) {
-					predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
-			} else {
-				if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
-					predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
-					if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
-						predicates.and(qDpLotacao.unidadeReceptora.isTrue());
-					}
-				} else {
-					if(!CpConfiguracaoBL.SIGLAS_ORGAOS_ADMINISTRADORES.contains(CpConfiguracaoBL.SIGLA_ORGAO_PDS)) {
-						predicates.and(
-								qCpOrgaoUsuario.idOrgaoUsu.eq(identidadePrincipal.getCpOrgaoUsuario().getId())
-								.or(qDpLotacao.unidadeReceptora.isTrue())
-						);
-					}
+			if (filtro.getIdOrgaoUsu() != null && filtro.getIdOrgaoUsu().longValue() > 0) {
+				predicates.and(qCpOrgaoUsuario.idOrgaoUsu.eq(filtro.getIdOrgaoUsu()));
+
+				final String principal = ContextoPersistencia.getUserPrincipal();
+				final CpIdentidade identidadePrincipal = consultaIdentidadeCadastrante(principal, true);
+				if (!identidadePrincipal.getCpOrgaoUsuario().getId().equals(filtro.getIdOrgaoUsu())) {
+					predicates.and(qDpLotacao.unidadeReceptora.isTrue());
 				}
 			}
 		}

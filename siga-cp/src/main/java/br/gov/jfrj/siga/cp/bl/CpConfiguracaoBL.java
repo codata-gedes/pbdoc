@@ -72,6 +72,7 @@ public class CpConfiguracaoBL {
 	public static final String SIGLA_ORGAO_CODATA_ROOT = "COD";
 	public static final String SIGLA_ORGAO_PDS = "PDS";
 	public static final String SIGLA_ORGAO_SAD = "SAD";
+	public static final String SIGLA_ORGAO_EXT = "EXT";
 
 	public static final SortedSet<String> SIGLAS_ORGAOS_ADMINISTRADORES;
 	public static final SortedSet<String> SIGLAS_ORGAOS_OCULTADOS;
@@ -86,6 +87,7 @@ public class CpConfiguracaoBL {
 		final SortedSet<String> siglasOrgaosOcultados = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 		siglasOrgaosOcultados.add(SIGLA_ORGAO_ROOT);
 		siglasOrgaosOcultados.add(SIGLA_ORGAO_PDS);
+		siglasOrgaosOcultados.add(SIGLA_ORGAO_EXT);
 		SIGLAS_ORGAOS_OCULTADOS = Collections.unmodifiableSortedSet(siglasOrgaosOcultados);
 	}
 
