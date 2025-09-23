@@ -218,10 +218,18 @@ ${meta}
 						<!-- search -->
 						<c:if test="${desabilitarbusca != 'sim'}">
 							<form class="form-inline my-2 my-lg-0">
-								<siga:selecao propriedade="buscar" tipo="generico" tema="simple"
-									ocultardescricao="sim" buscar="nao" siglaInicial=""
-									modulo="siga/public" urlAcao="buscar" urlSelecionar="selecionar"
-									matricula="${titular.siglaCompleta}" />
+								<siga:selecao
+									propriedade="buscar"
+									tipo="generico"
+									tema="simple"
+									ocultardescricao="sim"
+									buscar="nao"
+									siglaInicial=""
+									modulo="siga/public"
+									urlAcao="buscar"
+									urlSelecionar="selecionar"
+									matricula="${titular.siglaCompleta}"
+								/>
 								<button class="btn btn-sm ${button_class_busca} ml-2 my-2 my-sm-0" type="button" onclick="javascript:buscarDocumentoPorCodigo();">Buscar</button>
 								<c:if test="${siga_cliente eq 'GOVSP'}">
 									<button id="btnTutorial" class="btn btn-outline-success ml-2 my-2 my-sm-0" type="button">Tutoriais</button>

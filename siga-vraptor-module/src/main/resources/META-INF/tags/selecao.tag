@@ -258,7 +258,7 @@ self.resposta_ajax_${propriedade}${tipoSel} = function(response, d1, d2, d3) {
 	</c:choose>
 }
 
-self.ajax_${propriedade}${tipoSel} = function() {
+self.ajax_${propriedade}${tipoSel} = async function() {
 	var sigla = $.trim(document.getElementsByName('${inputNameTipoSel}.sigla')[0].value);
 	if (sigla == '') {
 		return retorna_${propriedade}${tipoSel}('', '', '');
@@ -275,16 +275,9 @@ self.ajax_${propriedade}${tipoSel} = function() {
 	url = url + '&matricula=${matricula}';
 	</c:if>
 	url = url + '&sigla=' + sigla;
-	/*
-	Siga.ajax(url, null, "GET", function(response){
-		resposta_ajax_${propriedade}${tipoSel}(response);
-	});	*/
-	$.get( url, function(response){
-		resposta_ajax_${propriedade}${tipoSel}(response);
-	});
 
-	//PassAjaxResponseToFunction(url, 'resposta_ajax_${propriedade}${tipoSel}', false);
-	
+	const response = await $.get(url);
+	resposta_ajax_${propriedade}${tipoSel}(response);
 }
 
 </script>
@@ -306,33 +299,27 @@ self.ajax_${propriedade}${tipoSel} = function() {
 	<c:set var="onblur" value="${onchange}"></c:set>
 </c:if>
 
-	<input type="hidden" name="req${inputNameTipoSel}" value=""
-		id="formulario_req${inputNameTipoSel}" /> <input type="hidden"
-		name="alterouSel" value="" id="alterouSel" /> <input type="hidden"
-		name="${inputNameTipoSel}.id"
-		value="<c:out value="${requestScope[propriedadeTipoSel].id}"/>"
-		id="formulario_${inputNameTipoSel}_id" /> <input type="hidden"
-		name="${inputNameTipoSel}.descricao"
-		value="<c:out value="${requestScope[propriedadeTipoSel].descricao}"/>"
-		id="formulario_${inputNameTipoSel}_descricao" /> <input type="hidden"
-		name="${inputNameTipoSel}.buscar"
-		value="<c:out value="${requestScope[propriedadeTipoSel].buscar}"/>"
-		id="formulario_${inputNameTipoSel}_buscar" /> 
-<div class="input-group input-group-sm"><input type="search"
+<input type="hidden" name="req${inputNameTipoSel}" value="" id="formulario_req${inputNameTipoSel}" />
+<input type="hidden" name="alterouSel" value="" id="alterouSel" />
+<input type="hidden" name="${inputNameTipoSel}.id" value="<c:out value="${requestScope[propriedadeTipoSel].id}"/>" id="formulario_${inputNameTipoSel}_id" />
+<input type="hidden" name="${inputNameTipoSel}.descricao" value="<c:out value="${requestScope[propriedadeTipoSel].descricao}"/>" id="formulario_${inputNameTipoSel}_descricao" />
+<input type="hidden" name="${inputNameTipoSel}.buscar" value="<c:out value="${requestScope[propriedadeTipoSel].buscar}"/>" id="formulario_${inputNameTipoSel}_buscar" />
+<div class="input-group input-group-sm">
+	<input
+		type="search"
 		name="${inputNameTipoSel}.sigla"
 		value="<c:out value="${requestScope[propriedadeTipoSel].sigla}"/>"
 		id="formulario_${inputNameTipoSel}_sigla"
 		onkeypress="return handleEnter(this, event)" ${requiredValue}
-		onblur="javascript: ajax_${propriedade}${tipoSel}();"
-		<c:if test="${not empty onblur}">${onblur};</c:if>
+		onblur="javascript: ajax_${propriedade}${tipoSel}();" <c:if test="${not empty onblur}">${onblur};</c:if>
 		onchange="<c:if test="${not empty onchange}">javascript: ${onchange};</c:if>"
-		class="form-control" style="width: 1%;" ${disabledTxt} />
+		class="form-control"
+		style="width: 1%;"
+		${disabledTxt}
+	/>
 	<c:if test="${buscar != 'nao'}">
 		<div class="input-group-append">
-			<input type="button" id="${propriedade}${tipoSel}SelButton"
-				value="..."
-				onclick="javascript: popitup_${propriedade}${tipoSel}('');"
-				${disabledBtn} class="btn btn-secondary" style="border-bottom-right-radius: 0.25em;border-top-right-radius: 0.25em;">
+			<input type="button" id="${propriedade}${tipoSel}SelButton" value="..." onclick="javascript: popitup_${propriedade}${tipoSel}('');" ${disabledBtn} class="btn btn-secondary" style="border-bottom-right-radius: 0.25em;border-top-right-radius: 0.25em;">
 		</div>
 	</c:if>
 	<c:if test="${ocultardescricao != 'sim'}">
