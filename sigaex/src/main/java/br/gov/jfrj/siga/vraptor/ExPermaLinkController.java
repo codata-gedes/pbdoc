@@ -3,10 +3,15 @@ package br.gov.jfrj.siga.vraptor;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Result;
+import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 import br.gov.jfrj.siga.ex.ExDocumento;
 import br.gov.jfrj.siga.ex.ExMovimentacao;
+import br.gov.jfrj.siga.util.RateLimiter;
+
 import com.google.common.net.HttpHeaders;
+
+import static br.gov.jfrj.siga.util.RateLimiter.isWithinRateLimiterTimeout;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -40,6 +45,11 @@ public class ExPermaLinkController extends ExController {
 
 	@Get({ "/app/anexo/{id}" })
 	public void exibeMovimentacaoPorId(final Long id) {
+
+		if (!isWithinRateLimiterTimeout("ExPermaLinkController#exibeMovimentacaoPorId", 2_000)) {
+            throw new AplicacaoException(RateLimiter.DEFAULT_RATE_LIMITER_MESSAGE);
+        }
+
 		final ExMovimentacao movimentacao = dao().consultar(id, ExMovimentacao.class, false);
 
 		// Previne controle de etag causando HTTP 304
