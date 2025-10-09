@@ -2054,6 +2054,19 @@ public class CpDao extends ModeloDao {
 		return em().createQuery(q).getResultList();
 	}
 
+	public <T> List<T> listarTodosComCache(Class<T> clazz, String orderBy) {
+		CriteriaQuery<T> q = cb().createQuery(clazz);
+		Root<T> c = q.from(clazz);
+		q.select(c);
+		if (orderBy != null) {
+			q.orderBy(cb().asc(c.get(orderBy)));
+		}
+		return em().createQuery(q)
+				.setHint(QueryHints.CACHEABLE, true)
+				.setHint(QueryHints.CACHE_REGION, CACHE_QUERY_HOURS)
+				.getResultList();
+	}
+
 	public <T> List<T> listarTodosPorIdInicial(Class<T> clazz, Long hisIdIni, String campoOrderBy, Boolean isDescendente) {
 		CriteriaQuery<T> q = cb().createQuery(clazz);
 		Root<T> c = q.from(clazz);

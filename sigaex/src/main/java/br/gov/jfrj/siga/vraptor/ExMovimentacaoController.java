@@ -3,6 +3,8 @@ package br.gov.jfrj.siga.vraptor;
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.gov.jfrj.siga.ex.ExMobil.adicionarIndicativoDeMovimentacaoComOrigemPeloBotaoDeRestricaoDeAcesso;
 import static br.gov.jfrj.siga.ex.ExMobil.removerIndicativoDeMovimentacaoComOrigemPeloBotaoDeRestricaoDeAcesso;
+import static br.gov.jfrj.siga.ex.ExPapel.PAPEL_GESTOR;
+import static br.gov.jfrj.siga.ex.ExPapel.PAPEL_INTERESSADO;
 import static javax.ws.rs.core.HttpHeaders.ACCEPT;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -17,6 +19,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +51,7 @@ import org.jboss.logging.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Paragraph;
@@ -124,6 +128,7 @@ public class ExMovimentacaoController extends ExController {
 	private static final int DEFAULT_POSTBACK = 1;
 	private static final Logger log = Logger.getLogger(ExMovimentacaoController.class);
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+	private static final Set<Long> PAPEIS_PERMITIDOS_PBDOC = Sets.newTreeSet(Arrays.asList(PAPEL_GESTOR, PAPEL_INTERESSADO));
 	
 	private static final int MAX_ITENS_PAGINA_TRAMITACAO_LOTE = 50;
 	
@@ -4470,9 +4475,15 @@ public class ExMovimentacaoController extends ExController {
 		return tiposDespacho;
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<ExPapel> getListaExPapel() {
-		return (List<ExPapel>) dao.listarTodos(ExPapel.class, null);
+		List<ExPapel> papeis = dao.listarTodosComCache(ExPapel.class, null);
+		List<ExPapel> papeisPermitidos = new ArrayList<ExPapel>();
+		for (ExPapel papel : papeis) {
+			if (PAPEIS_PERMITIDOS_PBDOC.contains(papel.getIdPapel())) {
+				papeisPermitidos.add(papel);
+			}
+		}
+		return papeisPermitidos;
 	}
 
 	private ExModelo getModeloDespachoAutomatico() {
