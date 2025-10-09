@@ -1563,11 +1563,6 @@ public class ExDocumentoController extends ExController {
 
 	@Get("app/expediente/doc/exibirProcesso")
 	public void exibeProcesso(final String sigla, final boolean podeExibir, Long idVisualizacao, boolean exibirReordenacao) throws Exception {
-
-		if (!isWithinRateLimiterTimeout("ExDocumentoController#exibeProcesso")) {
-			throw new AplicacaoException(RateLimiter.DEFAULT_RATE_LIMITER_MESSAGE);
-		}
-
 		exibe(false, sigla, null, null, idVisualizacao, exibirReordenacao);					
 	}
 

@@ -1,7 +1,5 @@
 package br.gov.jfrj.siga.ex.api.v1;
 
-import static br.gov.jfrj.siga.util.RateLimiter.isWithinRateLimiterTimeout;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,22 +13,16 @@ import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 
-import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.ex.api.v1.IExApiV1.DownloadJwtFilenameGetRequest;
 import br.gov.jfrj.siga.ex.api.v1.IExApiV1.DownloadJwtFilenameGetResponse;
 import br.gov.jfrj.siga.ex.api.v1.IExApiV1.IDownloadJwtFilenameGet;
-import br.gov.jfrj.siga.util.RateLimiter;
 
 @AcessoPublico
 public class DownloadJwtFilenameGet implements IDownloadJwtFilenameGet {
 
 	@Override
 	public void run(DownloadJwtFilenameGetRequest req, DownloadJwtFilenameGetResponse resp) throws Exception {
-
-		if (!isWithinRateLimiterTimeout("DownloadJwtFilenameGet#run")) {
-			throw new AplicacaoException(RateLimiter.DEFAULT_RATE_LIMITER_MESSAGE);
-		}
 
 		Map<String, Object> map = verify(req.jwt);
 

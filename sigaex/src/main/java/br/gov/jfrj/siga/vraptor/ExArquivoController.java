@@ -22,7 +22,6 @@
  */
 package br.gov.jfrj.siga.vraptor;
 
-import static br.gov.jfrj.siga.util.RateLimiter.isWithinRateLimiterTimeout;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
@@ -72,7 +71,6 @@ import br.gov.jfrj.siga.ex.api.v1.IExApiV1.DocumentosSiglaArquivoGetResponse;
 import br.gov.jfrj.siga.ex.bl.Ex;
 import br.gov.jfrj.siga.hibernate.ExDao;
 import br.gov.jfrj.siga.model.ContextoPersistencia;
-import br.gov.jfrj.siga.util.RateLimiter;
 import br.gov.jfrj.siga.vraptor.builder.ExDownloadRTF;
 import br.gov.jfrj.siga.vraptor.builder.ExDownloadZip;
 import br.gov.jfrj.siga.vraptor.builder.ExInputStreamDownload;
@@ -114,10 +112,6 @@ public class ExArquivoController extends ExController {
 	public Download aExibir(final String sigla, final boolean popup, final String arquivo, byte[] certificado,
 			String hash, final String HASH_ALGORITHM, final String certificadoB64, boolean completo,
 			final boolean semmarcas, final boolean volumes, final Long idVisualizacao, boolean exibirReordenacao) {
-
-		if (!isWithinRateLimiterTimeout("ExArquivoController#aExibir")) {
-            throw new AplicacaoException(RateLimiter.DEFAULT_RATE_LIMITER_MESSAGE);
-        }
 
 		try {
 			
