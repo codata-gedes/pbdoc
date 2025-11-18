@@ -20,6 +20,7 @@ package br.gov.jfrj.siga.base;
 
 import static br.gov.jfrj.siga.base.Prop.getAmbiente;
 import static br.gov.jfrj.siga.base.Prop.isAmbienteReal;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,9 +28,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -139,7 +142,7 @@ public class Correio {
 		// Cria sessão. setDebug(true) é interessante pois
 		// mostra os passos do envio da mensagem e o
 		// recebimento da mensagem do servidor no console.
-		Session session = null;
+		final Session session;
 		if (Prop.getBool("/siga.smtp.auth")) {
 			props.put("mail.smtp.auth", "true");
 			final String usuario = Prop.get("/siga.smtp.auth.usuario");
@@ -190,20 +193,15 @@ public class Correio {
 		Boolean isVersionTest;
 		try {
 			isVersionTest = Prop.getBool("/siga.versao.teste");
-			
-		} catch (Exception ex) 
-		{
+		} catch (Exception ex) {
 			isVersionTest = false;
 		}
-		
-		
+
 		if (isVersionTest) {
 			msg.setSubject(assunto + " - AMBIENTE DE TESTE FAVOR DESCONSIDERAR", "utf-8");
-		}
-		else {
+		} else {
 			msg.setSubject(assunto, "utf-8");
 		}
-		
 
 		if (conteudoHTML == null) {
 			// msg.setText(conteudo);
@@ -216,38 +214,45 @@ public class Correio {
 			InternetHeaders ihs = new InternetHeaders();
 			ihs.addHeader("Content-Type", "text/plain; charset=UTF-8");
 			ihs.addHeader("Content-Transfer-Encoding", "base64");
-			MimeBodyPart mb1 = new MimeBodyPart(ihs, Base64.encode(conteudo
-					.getBytes("utf-8")));
+			MimeBodyPart mb1 = new MimeBodyPart(ihs, Base64.encode(conteudo.getBytes(UTF_8)));
 			mp.addBodyPart(mb1);
 
 			// Do the same with the HTML part
 			InternetHeaders ihs2 = new InternetHeaders();
 			ihs2.addHeader("Content-Type", "text/html; charset=UTF-8");
 			ihs2.addHeader("Content-Transfer-Encoding", "base64");
-			MimeBodyPart mb2 = new MimeBodyPart(ihs2,
-					Base64.encode(conteudoHTML.getBytes("utf-8")));
+			MimeBodyPart mb2 = new MimeBodyPart(ihs2, Base64.encode(conteudoHTML.getBytes(UTF_8)));
 			mp.addBodyPart(mb2);
 
 			// Set the content for the message and transmit
 			msg.setContent(mp);
 		}
 
-		// Envia mensagem.
-		// Transport.send(msg);
-
-		Transport tr = new br.gov.jfrj.siga.base.SMTPTransport(session,
-				null);
-		tr.connect(servidorEmail, Prop.getInt("/siga.smtp.porta"), null, null);
-		msg.saveChanges(); // don't forget this
-		tr.sendMessage(msg, msg.getAllRecipients());
-		tr.close();
-
-		log.info("Email enviado para " + Arrays.asList(destSet).toString() + "[" + assunto + "]");
-		log.debug("Detalhes do e-mail enviado:"
-					+ "\nAssunto: " + assunto
-					+ "\nDe: " + remetente
-					+ "\nPara: " + Arrays.asList(destinatarios).toString()
-					+ "\nTexto: " + (conteudoHTML == null?conteudo:conteudoHTML));
+		Executors.newSingleThreadExecutor().execute(() -> {
+			Transport transport = null;
+			try {
+				transport = new SMTPTransport(session, null);
+				transport.connect(servidorEmail, Prop.getInt("/siga.smtp.porta"), null, null);
+				msg.saveChanges();
+				transport.sendMessage(msg, msg.getAllRecipients());
+				log.info("Email sendo enviado em nova THREAD para " + destSet + "[" + assunto + "]");
+				log.debug("Detalhes do e-mail enviado:"
+							+ "\nAssunto: " + assunto
+							+ "\nDe: " + remetente
+							+ "\nPara: " + destSet
+							+ "\nTexto: " + ( conteudoHTML == null ? conteudo : conteudoHTML ));
+			} catch (Exception e) {
+				log.error("Não foi possível enviar a mensagem via SMTP", e);
+			} finally {
+				if (transport != null) {
+					try {
+						transport.close();
+					} catch (MessagingException e) {
+						log.error("Não foi possível liberar a conexão de transporte SMTP", e);
+					}
+				}
+			}
+		});
 	}
 
 	public static void enviar(String remetente, String[] destinatarios,
