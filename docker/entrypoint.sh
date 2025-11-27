@@ -21,7 +21,7 @@ sed_replace() {
 
         spec=$(printf 's|<property name="(%s)" value=".*?"\s*/>|<property name="\\1" value="%s"/>|' "$property" "${replacement//&/\&}")
 
-        sed --in-place --regexp-extended "$spec" $standalone_xml
+        sed --in-place --regexp-extended --expression "$spec" $standalone_xml
     fi
 }
 
@@ -118,6 +118,7 @@ configure_pbdoc() {
     sed_replace 'siga.smtp.auth'                          "$PBDOC_SMTP_AUTH"
     sed_replace 'siga.smtp.auth.usuario'                  "$PBDOC_SMTP_AUTH_USUARIO"
     sed_replace 'siga.smtp.auth.senha'                    "$PBDOC_SMTP_AUTH_SENHA"
+    sed_replace 'siga.smtp.starttls.enable'               "$PBDOC_SMTP_STARTTLS"
     sed_replace 'siga.smtp.debug'                         "$PBDOC_SMTP_DEBUG"
     sed_replace 'siga.smtp.usuario.remetente'             "$PBDOC_SMTP_USUARIO_REMETENTE"
     sed_replace 'assijus.timestamp.private.key'           "$PBDOC_ASSIJUS_TIMESTAMP_PRIVATE_KEY"
