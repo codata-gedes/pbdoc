@@ -78,14 +78,15 @@ public class ExNivelAcesso extends AbstractExNivelAcesso implements
 	@Deprecated public static final long ID_LIMITADO_SUBSEC_PARA_PESSOA = 2;
 	public static final long ID_LIMITADO_ENTRE_LOTACOES = 3;
 	// ID 4 - NÃO MAPEADO
-	@Deprecated public static final long ID_LIMITADO_ENTRE_PESSOAS = 5;
+	public static final long ID_LIMITADO_ENTRE_PESSOAS = 5;
 	public static final long ID_PUBLICO = 6;
 	@Deprecated public static final long ID_LIMITADO_PESSOA_PARA_SUBSEC = 7;
 
 	public static final Set<Long> NIVEIS_ACESSO_PERMITIDOS = new TreeSet<>(Arrays.asList(
 			ID_LIMITADO_AO_ORGAO,
 			ID_LIMITADO_ENTRE_LOTACOES,
-			ID_PUBLICO
+			ID_PUBLICO,
+			ID_LIMITADO_ENTRE_PESSOAS
 	));
 
 	public ExNivelAcesso() {
