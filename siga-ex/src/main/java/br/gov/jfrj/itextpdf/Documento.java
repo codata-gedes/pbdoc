@@ -420,17 +420,27 @@ public class Documento {
 					sigla = an.getMobil().getSigla();
 				}
 
-				byte[] ab = !estampar ? an.getArquivo().getPdf() : Stamp.stamp(an
-						.getArquivo().getPdf(), sigla, an.getArquivo()
-						.isRascunho(), an.isCopia(), an.getArquivo().isCancelado(), an
-						.getArquivo().isSemEfeito(), an.getArquivo()
-						.isInternoProduzido(), an.getArquivo().getQRCode(), an
-						.getArquivo().getMensagem(), an.getPaginaInicial(),
-						an.getPaginaFinal(), an.getOmitirNumeracao(),
-						Prop.get("carimbo.texto.superior"),
-						mob.getExDocumento().getOrgaoUsuario().getSiglaOrgaoUsuarioCompleta(),
-						mob.getExDocumento().getMarcaDagua(),
-						an.getMobil().getDoc().getIdsDeAssinantes());
+				byte[] ab = !estampar
+						? an.getArquivo().getPdf()
+						: Stamp.stamp(
+								an.getArquivo(),
+								an.getArquivo().getPdf(),
+								sigla,
+								an.getArquivo().isRascunho(),
+								an.isCopia(),
+								an.getArquivo().isCancelado(),
+								an.getArquivo().isSemEfeito(),
+								an.getArquivo().isInternoProduzido(),
+								an.getArquivo().getQRCode(),
+								an.getArquivo().getMensagem(),
+								an.getPaginaInicial(),
+								an.getPaginaFinal(),
+								an.getOmitirNumeracao(),
+								Prop.get("carimbo.texto.superior"),
+								mob.getExDocumento().getOrgaoUsuario().getSiglaOrgaoUsuarioCompleta(),
+								mob.getExDocumento().getMarcaDagua(),
+								an.getMobil().getDoc().getIdsDeAssinantes()
+						);
 
 				bytes += ab.length;
 

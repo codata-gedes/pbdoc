@@ -1,5 +1,6 @@
 package br.gov.jfrj.itextpdf;
 
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
 
 import java.awt.Color;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -49,6 +49,8 @@ import br.gov.jfrj.siga.base.Prop;
 import br.gov.jfrj.siga.base.SigaHTTP;
 import br.gov.jfrj.siga.base.SigaMessages;
 import br.gov.jfrj.siga.cp.bl.CpConfiguracaoBL;
+import br.gov.jfrj.siga.ex.ExArquivo;
+import br.gov.jfrj.siga.ex.ExMovimentacao;
 
 public class Stamp {
 
@@ -75,10 +77,25 @@ public class Stamp {
 
 	}
 
-	public static byte[] stamp(byte[] abPdf, String sigla, boolean rascunho, boolean copia, boolean cancelado,
-			boolean semEfeito, boolean internoProduzido, String qrCode, String mensagem, Integer paginaInicial,
-			Integer paginaFinal, Integer cOmitirNumeracao, String instancia, String orgaoUsu, String marcaDaguaDoModelo,
-			List<Long> idsAssinantes) throws DocumentException, IOException {
+	public static byte[] stamp(
+			ExArquivo arquivo,
+			byte[] abPdf,
+			String sigla,
+			boolean rascunho,
+			boolean copia,
+			boolean cancelado,
+			boolean semEfeito,
+			boolean internoProduzido,
+			String qrCode,
+			String mensagem,
+			Integer paginaInicial,
+			Integer paginaFinal,
+			Integer cOmitirNumeracao,
+			String instancia,
+			String orgaoUsu,
+			String marcaDaguaDoModelo,
+			List<Long> idsAssinantes
+	) throws DocumentException, IOException {
 
 		if (idsAssinantes != null && idsAssinantes.size() > 0 && Prop.getBool("assinatura.estampar"))
 			abPdf = estamparAssinaturas(abPdf, idsAssinantes);
@@ -133,8 +150,13 @@ public class Stamp {
 				// do my transformations :
 				cb.transform(AffineTransform.getScaleInstance(scale, scale));
 
-				boolean isDocumentoPDS = StringUtils.startsWithIgnoreCase(sigla, CpConfiguracaoBL.SIGLA_ORGAO_PDS);
-				if (!internoProduzido && !isDocumentoPDS) {
+				// Center the scaled content on the page
+				cb.transform(AffineTransform.getTranslateInstance(
+						((pw / scale) - w) / 2, ((ph / scale) - h) / 2));
+
+				boolean isNotPDS = !startsWithIgnoreCase(sigla, CpConfiguracaoBL.SIGLA_ORGAO_PDS);
+				boolean isAnexo = arquivo != null && arquivo instanceof ExMovimentacao;
+				if (!internoProduzido && (isNotPDS || isAnexo)) {
 					cb.transform(AffineTransform.getTranslateInstance(pw * SAFETY_MARGIN, ph * SAFETY_MARGIN));
 					cb.transform(AffineTransform.getScaleInstance(1.0f - 2 * SAFETY_MARGIN, 1.0f - 2 * SAFETY_MARGIN));
 				}

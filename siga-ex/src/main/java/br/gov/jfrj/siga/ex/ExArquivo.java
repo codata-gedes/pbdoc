@@ -87,7 +87,7 @@ public abstract class ExArquivo extends Objeto implements ExArquivoFilesystem {
 
 			// Verifica se é possível estampar o documento
 			try {
-				byte[] documentoComStamp = Stamp.stamp(abPdf, "", true,
+				byte[] documentoComStamp = Stamp.stamp(null, abPdf, "", true,
 						false, false, false, false, null, null, null, null, null,
 						null, null, "", null);
 
