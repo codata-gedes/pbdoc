@@ -58,7 +58,7 @@ public class Stamp {
 
 	private static final String VALIDAR_ASSINATURA_URL = "/sigaex/app/validar-assinatura?pessoa=";
 	private static float QRCODE_LEFT_MARGIN_IN_CM = 3.0f;
-	private static float QRCODE_SIZE_IN_CM = 1.5f;
+	private static float QRCODE_SIZE_IN_CM = 1.35f;
 	private static float BARCODE_HEIGHT_IN_CM = 2.0f;
 	private static int TEXT_TO_CIRCLE_INTERSPACE = 2;
 	private static int TEXT_HEIGHT = 5;
@@ -303,14 +303,18 @@ public class Stamp {
 				// mask.getScaledHeight() * 8, 100, 450);
 
 				if (qrCode != null) {
+					// Offset to vertically adjust QR code position (positive = up, negative = down)
+					float qrCodeYOffset = -0.380f * CM_UNIT;
+
 					java.awt.Image imgQRCode = createQRCodeImage(qrCode);
 					Image imageQRCode = Image.getInstance(imgQRCode, Color.BLACK, true);
 					imageQRCode.scaleAbsolute(QRCODE_SIZE_IN_CM * CM_UNIT, QRCODE_SIZE_IN_CM * CM_UNIT);
-					imageQRCode.setAbsolutePosition(QRCODE_LEFT_MARGIN_IN_CM * CM_UNIT, PAGE_BORDER_IN_CM * CM_UNIT);
+					imageQRCode.setAbsolutePosition(QRCODE_LEFT_MARGIN_IN_CM * CM_UNIT,
+							PAGE_BORDER_IN_CM * CM_UNIT + qrCodeYOffset);
 
 					over.setRGBColorFill(255, 255, 255);
 					mask.setAbsolutePosition((QRCODE_LEFT_MARGIN_IN_CM - STAMP_BORDER_IN_CM) * CM_UNIT,
-							(PAGE_BORDER_IN_CM - STAMP_BORDER_IN_CM) * CM_UNIT);
+							(PAGE_BORDER_IN_CM - STAMP_BORDER_IN_CM) * CM_UNIT + qrCodeYOffset);
 					mask.scaleAbsolute((QRCODE_SIZE_IN_CM + 2 * STAMP_BORDER_IN_CM) * CM_UNIT,
 							(QRCODE_SIZE_IN_CM + 2 * STAMP_BORDER_IN_CM) * CM_UNIT);
 					over.addImage(mask);
@@ -324,7 +328,7 @@ public class Stamp {
 					table.setTotalWidth(r.getWidth() - image39.getHeight() - (QRCODE_LEFT_MARGIN_IN_CM
 							+ QRCODE_SIZE_IN_CM + 4 * STAMP_BORDER_IN_CM + PAGE_BORDER_IN_CM) * CM_UNIT);
 					PdfPCell cell = new PdfPCell(new Paragraph(mensagem,
-							FontFactory.getFont(FontFactory.HELVETICA, 8, Font.NORMAL, Color.BLACK)));
+							FontFactory.getFont(FontFactory.HELVETICA, 6f, Font.NORMAL, Color.BLACK)));
 					cell.setBorderWidth(0);
 					table.addCell(cell);
 
