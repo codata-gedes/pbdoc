@@ -28,6 +28,7 @@ import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.SPACE;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.replace;
@@ -59,6 +60,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.QueryHints;
@@ -433,15 +435,22 @@ public class CpDao extends ModeloDao {
 
 	@SuppressWarnings("unchecked")
 	public CpOrgaoUsuario consultarPorSigla(final CpOrgaoUsuario o) {
+
+		if (o == null || isBlank(o.getSiglaOrgaoUsu())) {
+			return null;
+		}
+
 		final Query query = em().createNamedQuery("consultarSiglaOrgaoUsuario");
 		query.setParameter("sigla", o.getSiglaOrgaoUsu());
 
 		query.setHint("org.hibernate.cacheable", true);
 		query.setHint("org.hibernate.cacheRegion", CACHE_QUERY_HOURS);
 
+		query.setMaxResults(1);
 		final List<CpOrgaoUsuario> l = query.getResultList();
-		if (l.size() != 1)
+		if (CollectionUtils.isEmpty(l)) {
 			return null;
+		}
 		return l.get(0);
 	}
 
