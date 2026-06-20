@@ -43,6 +43,7 @@ import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 import br.gov.jfrj.siga.dp.dao.DpLotacaoDaoFiltro;
+import br.gov.jfrj.siga.dp.dao.DpPessoaDaoFiltro;
 import br.gov.jfrj.siga.model.GenericoSelecao;
 import br.gov.jfrj.siga.model.Selecionavel;
 
@@ -417,12 +418,25 @@ public class DpLotacaoController extends SigaSelecionavelControllerSupport<DpLot
 		assertAcesso(CpServico.VERIFICADOR_ACESSO_CADASTRO_LOTACAO);
 		
 		DpLotacao lotacao = dao().consultar(id, DpLotacao.class, false);
-
+		
 		// ativar
 		if (lotacao.getDataFimLotacao() != null && !"".equals(lotacao.getDataFimLotacao())) {
 			DpLotacao lotacaoNova = new DpLotacao();
-			Cp.getInstance().getBL().copiaLotacao(lotacao, lotacaoNova);
+			Cp.getInstance().getBL().copiaLotacao(lotacao, lotacaoNova);			
 			dao().gravarComHistorico(lotacaoNova, lotacao, null, getIdentidadeCadastrante());
+			
+			// setar a nova lotacao nos usuarios 
+			DpPessoaDaoFiltro dpPessoaFiltro = new DpPessoaDaoFiltro();
+			dpPessoaFiltro.setBuscarFechadas(true); // obter usuarios inativos. preciso obter os ativos também?
+			dpPessoaFiltro.setLotacao(lotacao);
+			List<DpPessoa> pessoas = CpDao.getInstance().consultarPorFiltro(dpPessoaFiltro, 0, 0);
+			
+			for (DpPessoa pessoa : pessoas) {
+				final DpPessoa pessoaNova = DpPessoa.novaInstanciaBaseadaEm(pessoa); // a nova instancia é criada ativa 
+				pessoaNova.setLotacao(lotacaoNova);
+				dao().gravarComHistorico(pessoaNova, pessoa, dao().consultarDataEHoraDoServidor(), getIdentidadeCadastrante());
+			}
+			
 		} else {// inativar
 			Integer qtdePessoa = CpDao.getInstance().pessoasPorLotacao(id, Boolean.TRUE, Boolean.FALSE).size();
 			long qtdeDocumentoCriadosPosse = dao().consultarQtdeDocCriadosPossePorDpLotacao(lotacao.getIdInicial());
