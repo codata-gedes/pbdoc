@@ -157,7 +157,7 @@ public class AcessoController extends GiControllerSupport {
 			List<CpServico> l = null;
 			
 			if (servicoPai == null) {
-				l = dao().listarServicos();
+				l = dao().listarServicosAtivos();
 			} else {
 				l = new ArrayList<CpServico>(); 
 			//	CpServico cpServicoPai = dao().consultarCpServicoPorChave(servicoPai);
